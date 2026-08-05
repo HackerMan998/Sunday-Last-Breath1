@@ -104,7 +104,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<!-- UUID://7063291B-129B-4B6B-B05D-A2968060E9C0// --><tw-storydata name="Sunday&#39;s Last Breath" startnode="14" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="7063291B-129B-4B6B-B05D-A2968060E9C0" zoom="0.3" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/***********************************************************************
+	<!-- UUID://7063291B-129B-4B6B-B05D-A2968060E9C0// --><tw-storydata name="Sunday&#39;s Last Breath" startnode="71" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="7063291B-129B-4B6B-B05D-A2968060E9C0" zoom="0.3" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/***********************************************************************
  * TWINE SURVIVAL UI - MASTER STYLESHEET
  ***********************************************************************/
 
@@ -1108,6 +1108,240 @@ body[data-tags~="splash-screen"] #story {
     0% { opacity: 0.3; }
     50% { opacity: 1; color: var(--accent-gold); }
     100% { opacity: 0.3; }
+}
+
+/* =================================================================
+   TRUE VISUAL NOVEL (VN) DIALOGUE BOX & CLICK-TO-ADVANCE
+================================================================= */
+
+/* Lock viewport & remove outer scrollbars */
+#story, #passages, .passage {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+  overflow: hidden !important;
+}
+
+.vn-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100vh - 55px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.vn-stage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.tv-static-img {
+  max-height: 28vh;
+  width: auto;
+  border: 2px solid #444;
+  border-radius: 4px;
+  display: block;
+  margin: 0 auto;
+}
+
+.glitch {
+  color: #e74c3c;
+  margin-top: 6px;
+  font-size: 1.8em;
+  text-align: center;
+}
+
+/* Clickable Dialogue Box */
+.vn-dialogue-box {
+  height: 36vh;
+  width: 100%;
+  background: rgba(12, 12, 18, 0.95);
+  border-top: 2px solid #e74c3c;
+  padding: 16px 24px 35px 24px;
+  box-sizing: border-box;
+  position: relative;
+  color: #e0e0e0;
+  font-size: 1.1em;
+  line-height: 1.5;
+  cursor: pointer; /* Indicates whole box is clickable */
+  user-select: none;
+}
+
+.vn-speaker {
+  font-weight: bold;
+  color: #e74c3c;
+  font-size: 0.9em;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+#vn-text {
+  max-width: 95%;
+}
+
+/* Subtle VN Prompt Indicator (Pulsing at bottom right inside box) */
+.vn-prompt-text {
+  position: absolute;
+  bottom: 12px;
+  right: 24px;
+  color: #888;
+  font-size: 0.85em;
+  font-style: italic;
+  animation: pulse-prompt 1.5s infinite;
+}
+
+@keyframes pulse-prompt {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+/* Glowing Choice Button at the End */
+.vn-choice-btn {
+  background: rgba(231, 76, 60, 0.2) !important;
+  border: 1px solid #e74c3c !important;
+  color: #ffffff !important;
+  padding: 10px 24px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  border-radius: 4px !important;
+  font-size: 0.95em !important;
+  letter-spacing: 1px !important;
+  box-shadow: 0 0 10px rgba(231, 76, 60, 0.4);
+  transition: all 0.2s ease !important;
+}
+
+.vn-choice-btn:hover {
+  background: #e74c3c !important;
+  box-shadow: 0 0 18px rgba(231, 76, 60, 0.8);
+  transform: scale(1.03);
+}
+
+/* Advance Prompt Link inside Dialogue Box */
+#vn-advance {
+  position: absolute;
+  bottom: 14px;
+  right: 24px;
+  z-index: 9999;
+}
+
+#vn-advance a {
+  color: #aaaaaa !important;
+  font-size: 0.85em;
+  font-style: italic;
+  text-decoration: none !important;
+  animation: pulse-prompt 1.5s infinite;
+  display: inline-block;
+  padding: 4px 8px;
+}
+
+#vn-advance a:hover {
+  color: #ff5252 !important;
+}
+
+@keyframes pulse-prompt {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+/* Floating Floor Items Badge (Top-Right) */
+#floor-items-toggle {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 9999;
+  background: rgba(231, 76, 60, 0.95);
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.85em;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(231, 76, 60, 0.6);
+  transition: all 0.2s ease;
+}
+
+#floor-items-toggle:hover {
+  background: #ff5252;
+  transform: scale(1.05);
+}
+
+/* Sliding Drawer Overlay (Sits ON TOP of the screen) */
+#floor-items-drawer {
+  position: fixed;
+  top: 0;
+  right: -320px; /* Off-screen when closed */
+  width: 300px;
+  height: 100vh;
+  background: rgba(12, 12, 18, 0.96);
+  border-left: 2px solid #e74c3c;
+  z-index: 10000;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.8);
+  color: #e0e0e0;
+}
+
+/* Added when opened by clicking the badge */
+#floor-items-drawer.open {
+  right: 0;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #e74c3c;
+  letter-spacing: 1px;
+}
+
+.drawer-close-btn {
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #aaa;
+}
+
+.drawer-close-btn:hover {
+  color: #fff;
+}
+
+/* Item List Card */
+.floor-item-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.floor-item-card a {
+  background: #27ae60;
+  color: #fff !important;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-decoration: none !important;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+
+.floor-item-card a:hover {
+  background: #2ecc71;
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "engines.js" */
 /* =================================================================
    SUNDAY'S LAST BREATH -- STORY JAVASCRIPT
@@ -14778,9 +15012,7 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
 
 &lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="54" name="PassageFooter" tags="" position="0,100" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* =================================================================
-   DYNAMIC FLOOR LOOT UI
-   This block renders a visual interface for items currently on the 
-   ground in the player&#39;s current location.
+   DYNAMIC FLOOR LOOT UI - SLIDING DRAWER OVERLAY
 ================================================================= */
 
 /* 1. SETUP: Identify current location */
@@ -14788,48 +15020,55 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
 
 /* 2. VALIDATION: Check if the floor array exists and has items */
 &lt;&lt;if def $floorItems[_currentRoom] and $floorItems[_currentRoom].length &gt; 0&gt;&gt;
-    
-    &lt;br&gt;&lt;br&gt;
-    
-    /* --- Main Container --- */
-    &lt;div class=&quot;loot-container&quot;&gt;
+
+    /* --- 3. FLOATING BADGE (Top Right, Floating) --- */
+    &lt;div id=&quot;floor-items-toggle&quot; onclick=&quot;document.getElementById(&#39;floor-items-drawer&#39;).classList.add(&#39;open&#39;)&quot;&gt;
+        📦 Floor Items (&lt;&lt;print $floorItems[_currentRoom].length&gt;&gt;)
+    &lt;/div&gt;
+
+    /* --- 4. SLIDING OVERLAY DRAWER --- */
+    &lt;div id=&quot;floor-items-drawer&quot;&gt;
         
-        /* Section Header */
-        &lt;div class=&quot;loot-header&quot;&gt;⚠️ ITEMS ON GROUND&lt;/div&gt;
+        /* Drawer Header &amp; Close Button */
+        &lt;div class=&quot;drawer-header&quot;&gt;
+            &lt;span&gt;⚠️ ITEMS ON GROUND&lt;/span&gt;
+            &lt;span class=&quot;drawer-close-btn&quot; onclick=&quot;document.getElementById(&#39;floor-items-drawer&#39;).classList.remove(&#39;open&#39;)&quot;&gt;✖&lt;/span&gt;
+        &lt;/div&gt;
+
+        &lt;div id=&quot;drawer-item-list&quot;&gt;
+            /* 5. GENERATION: Loop through room items using your existing logic */
+            &lt;&lt;for _i, _item range $floorItems[_currentRoom]&gt;&gt;
+                
+                /* Pull master data from setup.items database */
+                &lt;&lt;set _db to setup.items[_item.id]&gt;&gt;
+                
+                /* --- Your Existing Item Card Layout --- */
+                &lt;div class=&quot;loot-item&quot;&gt;
+                    
+                    /* Visual: Item Icon */
+                    &lt;div class=&quot;loot-icon&quot;&gt;
+                        &lt;&lt;print _db.icon&gt;&gt;
+                    &lt;/div&gt;
+                    
+                    /* Text: Item Name and Quantity */
+                    &lt;div class=&quot;loot-name&quot;&gt;
+                        &lt;&lt;print _db.name or _item.id&gt;&gt;&lt;br&gt;
+                        (x&lt;&lt;print _item.qty&gt;&gt;)
+                    &lt;/div&gt;
+                    
+                    /* 6. ACTION: Your Existing Pickup Function */
+                    &lt;&lt;capture _i&gt;&gt;
+                        &lt;button class=&quot;loot-btn&quot; @onclick=&quot;&#39;window.pickupItem(&#39; + _i + &#39;)&#39;&quot;&gt;
+                            GRAB
+                        &lt;/button&gt;
+                    &lt;&lt;/capture&gt;&gt;
+                    
+                &lt;/div&gt; /* End loot-item */
+                
+            &lt;&lt;/for&gt;&gt;
+        &lt;/div&gt;
         
-        /* 3. GENERATION: Loop through every item in the room&#39;s array */
-        &lt;&lt;for _i, _item range $floorItems[_currentRoom]&gt;&gt;
-            
-            /* Pull master data (icons, etc.) from setup.items database */
-            &lt;&lt;set _db to setup.items[_item.id]&gt;&gt;
-            
-            /* --- Item Card --- */
-            &lt;div class=&quot;loot-item&quot;&gt;
-                
-                /* Visual: Item Icon */
-                &lt;div class=&quot;loot-icon&quot;&gt;
-                    &lt;&lt;print _db.icon&gt;&gt;
-                &lt;/div&gt;
-                
-                /* Text: Item Name and Quantity */
-                &lt;div class=&quot;loot-name&quot;&gt;
-                    &lt;&lt;print _item.id&gt;&gt;&lt;br&gt;
-                    (x&lt;&lt;print _item.qty&gt;&gt;)
-                &lt;/div&gt;
-                
-                /* 4. ACTION: Grab Button */
-                /* Capture the current index (_i) so the button knows which item to pick up */
-                &lt;&lt;capture _i&gt;&gt;
-                    &lt;button class=&quot;loot-btn&quot; @onclick=&quot;&#39;window.pickupItem(&#39; + _i + &#39;)&#39;&quot;&gt;
-                        GRAB
-                    &lt;/button&gt;
-                &lt;&lt;/capture&gt;&gt;
-                
-            &lt;/div&gt; /* End loot-item */
-            
-        &lt;&lt;/for&gt;&gt;
-        
-    &lt;/div&gt; /* End loot-container */
+    &lt;/div&gt; /* End floor-items-drawer */
 
 &lt;&lt;/if&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="55" name="PassageHeader" tags="" position="200,100" size="100,100">&lt;!-- This renders automatically at the top of every passage --&gt;
@@ -15351,70 +15590,76 @@ It seems the &quot;Second Life&quot; didn&#39;t care about the soldier&#39;s min
         
     &lt;&lt;/button&gt;&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="61" name="Prologue_WakeUp" tags="" position="500,0" size="100,100">&lt;&lt;set $inventory to []&gt;&gt;
-    &lt;&lt;set $gameClockActive to false&gt;&gt; /* Time is frozen during intro */
-    
+&lt;&lt;set $gameClockActive to false&gt;&gt; /* Time is frozen during intro */
+&lt;&lt;set $step to 1&gt;&gt;
+
 &lt;&lt;script&gt;&gt;
     /* STATIC STARTS (ID: static) */
     setup.sound.play(&quot;static&quot;, &quot;audio/sfx/static.mp3&quot;, true, 0.4);
 &lt;&lt;/script&gt;&gt;
 
-&lt;center&gt;
-&lt;div class=&quot;tv-container&quot;&gt;
-    &lt;img src=&quot;image/static.gif&quot;&gt;
-&lt;/div&gt;
-&lt;br&gt;
-&lt;div class=&quot;glitch&quot; style=&quot;font-size: 2.5em;&quot;&gt;SSSHHHHHKKKKK...&lt;/div&gt;
-&lt;/center&gt;
-&lt;br&gt;&lt;br&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    /* Top Stage: Fixed TV Image Overhead */
+    &lt;div class=&quot;vn-stage&quot;&gt;
+        &lt;div class=&quot;tv-container&quot; style=&quot;text-align: center;&quot;&gt;
+            &lt;img src=&quot;image/static.gif&quot; alt=&quot;TV Static&quot; class=&quot;tv-static-img&quot;&gt;
+            &lt;div class=&quot;glitch&quot;&gt;SSSHHHHHKKKKK...&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
 
-&lt;&lt;timed 1s&gt;&gt;
-The sound cuts through your dreams like a saw blade. White noise.
-&lt;&lt;/timed&gt;&gt;
+    /* Bottom Fixed Dialogue Box */
+    &lt;div class=&quot;vn-dialogue-box&quot;&gt;
+        &lt;div class=&quot;vn-speaker&quot;&gt;SYSTEM / NARRATION&lt;/div&gt;
 
-&lt;&lt;timed 3s&gt;&gt;
-You jolt awake. The living room is bathed in the cold, flickering glow of the television.
-&lt;&lt;/timed&gt;&gt;
+        &lt;div id=&quot;vn-text&quot;&gt;
+            A harsh, jagged tearing sound shreds through the tail end of your nightmare. Not a sound from your mind—relentless, cold white noise.
+        &lt;/div&gt;
 
-&lt;&lt;timed 6s&gt;&gt;
-But the power is on. The lights on the modem are blinking frantically. 
-&lt;&lt;/timed&gt;&gt;
-
-&lt;&lt;timed 10s&gt;&gt;
-&lt;&lt;script&gt;&gt;
-    /* SIRENS FADE IN (ID: siren) */
-    setup.sound.play(&quot;siren&quot;, &quot;audio/sfx/sirens.mp3&quot;, true, 0.3);
-&lt;&lt;/script&gt;&gt;
-
-Outside the window, beyond the thin glass, you hear it. A distant, rising chorus of sirens. 
-&lt;&lt;/timed&gt;&gt;
-
-&lt;&lt;timed 14s&gt;&gt;
-&lt;&lt;script&gt;&gt;
-    /* SHORT SCREAM (ID: scream) - Loop is FALSE */
-    setup.sound.play(&quot;scream&quot;, &quot;audio/sfx/scream.mp3&quot;, false, 0.9);
-&lt;&lt;/script&gt;&gt;
-
-And underneath that... &lt;span style=&quot;color:red&quot;&gt;screaming.&lt;/span&gt;
-&lt;&lt;/timed&gt;&gt;
-
-&lt;&lt;timed 18s&gt;&gt;
-You stumble to the balcony door. You catch your reflection in the darkened glass.
-&lt;br&gt;&lt;br&gt;
-
-&lt;div style=&quot;text-align:center;&quot;&gt;
-    &lt;&lt;button &quot;Focus on your reflection...&quot;&gt;&gt;
-        &lt;&lt;script&gt;&gt;
-            /* Fade out atmosphere over 2 seconds */
-            setup.sound.fade(&quot;static&quot;, 2000);
-            setup.sound.fade(&quot;siren&quot;, 2000);
-            
-            setTimeout(function() {
-                Engine.play(&quot;Create_Gender&quot;);
-            }, 2000);
-        &lt;&lt;/script&gt;&gt;
-    &lt;&lt;/button&gt;&gt;
-&lt;/div&gt;
-&lt;&lt;/timed&gt;&gt;</tw-passagedata><tw-passagedata pid="62" name="SelectHobby" tags="" position="900,100" size="100,100">&lt;&lt;nobr&gt;&gt;
+        /* Native SugarCube Click Prompt */
+        &lt;div id=&quot;vn-advance&quot;&gt;
+            &lt;&lt;link &quot;(Click here to continue ▶)&quot;&gt;&gt;
+                &lt;&lt;set $step++&gt;&gt;
+                &lt;&lt;if $step is 2&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;Your eyes snap open as you jolt upright. The living room is drowning in the cold, chaotic strobe of an untuned television set.&lt;&lt;/replace&gt;&gt;
+                &lt;&lt;elseif $step is 3&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;The main power is miraculously still running, but the modem beside the TV is flashing its status LEDs in a frantic, uncoordinated pulse—searching for a signal that isn&#39;t there.&lt;&lt;/replace&gt;&gt;
+                &lt;&lt;elseif $step is 4&gt;&gt;
+                    &lt;&lt;script&gt;&gt;
+                        /* SIRENS FADE IN */
+                        setup.sound.play(&quot;siren&quot;, &quot;audio/sfx/sirens.mp3&quot;, true, 0.3);
+                    &lt;&lt;/script&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;Then, beyond the thin glass of the balcony door, another sound bleeds through from the city below—a rising, mournful chorus of distant emergency sirens echoing across the night.&lt;&lt;/replace&gt;&gt;
+                &lt;&lt;elseif $step is 5&gt;&gt;
+                    &lt;&lt;script&gt;&gt;
+                        /* SHORT SCREAM */
+                        setup.sound.play(&quot;scream&quot;, &quot;audio/sfx/scream.mp3&quot;, false, 0.9);
+                    &lt;&lt;/script&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;And buried deep beneath the mechanical wail of the sirens... a raw, terrifying human &lt;span style=&quot;color:#e74c3c; font-weight:bold;&quot;&gt;scream&lt;/span&gt; cut short in the dark.&lt;&lt;/replace&gt;&gt;
+                &lt;&lt;elseif $step is 6&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;
+                        Barefoot and disoriented, you stumble toward the glass balcony door. As you reach out to pull the curtain, your own pale, blurred reflection stares back at you from the darkened window pane.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;div style=&quot;text-align:center;&quot;&gt;
+                            &lt;&lt;button &quot;FOCUS ON YOUR REFLECTION...&quot;&gt;&gt;
+                                &lt;&lt;script&gt;&gt;
+                                    /* Fade out atmosphere over 2 seconds */
+                                    setup.sound.fade(&quot;static&quot;, 2000);
+                                    setup.sound.fade(&quot;siren&quot;, 2000);
+                                    
+                                    setTimeout(function() {
+                                        Engine.play(&quot;Create_Gender&quot;);
+                                    }, 2000);
+                                &lt;&lt;/script&gt;&gt;
+                            &lt;&lt;/button&gt;&gt;
+                        &lt;/div&gt;
+                    &lt;&lt;/replace&gt;&gt;
+                    /* Hide the continue prompt on step 6 */
+                    &lt;&lt;replace &quot;#vn-advance&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
+                &lt;&lt;/if&gt;&gt;
+            &lt;&lt;/link&gt;&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="62" name="SelectHobby" tags="" position="900,100" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $hp to Math.min($hp, $hp_max)&gt;&gt;
 &lt;&lt;set $stamina to Math.min($stamina, $stamina_max)&gt;&gt;
 
@@ -19986,6 +20231,32 @@ This is better than you expected.
             return obj.status !== &quot;completed&quot;;
         })&gt;&gt;
     &lt;&lt;/nobr&gt;&gt;
+&lt;&lt;/widget&gt;&gt;
+
+/* Sets up the VN layout with character image &amp; initial text */
+&lt;&lt;widget &quot;vnSetup&quot;&gt;&gt;
+  &lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-stage&quot;&gt;
+      &lt;&lt;if $args[0]&gt;&gt;
+        &lt;img src=&quot;$args[0]&quot; class=&quot;vn-character&quot; id=&quot;vn-char-img&quot;&gt;
+      &lt;&lt;/if&gt;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot;&gt;
+      &lt;div id=&quot;vn-speaker&quot; class=&quot;vn-speaker&quot;&gt;$args&lt;/div&gt;
+      &lt;div id=&quot;vn-text&quot;&gt;$args[2]&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;&lt;/widget&gt;&gt;
+
+/* Replaces the text inside the dialogue box without scrolling */
+&lt;&lt;widget &quot;say&quot;&gt;&gt;
+  &lt;&lt;replace &quot;#vn-speaker&quot;&gt;&gt;$args[0]&lt;&lt;/replace&gt;&gt;
+  &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;$args&lt;&lt;/replace&gt;&gt;
+&lt;&lt;/widget&gt;&gt;
+
+/* Option to swap character portrait image dynamically */
+&lt;&lt;widget &quot;setChar&quot;&gt;&gt;
+  &lt;&lt;replace &quot;.vn-stage&quot;&gt;&gt;&lt;img src=&quot;$args[0]&quot; class=&quot;vn-character&quot;&gt;&lt;&lt;/replace&gt;&gt;
 &lt;&lt;/widget&gt;&gt;</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */

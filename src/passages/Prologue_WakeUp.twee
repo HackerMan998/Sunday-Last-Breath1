@@ -1,66 +1,72 @@
 :: Prologue_WakeUp {"position":"500,0","size":"100,100"}
 <<set $inventory to []>>
-    <<set $gameClockActive to false>> /* Time is frozen during intro */
-    
+<<set $gameClockActive to false>> /* Time is frozen during intro */
+<<set $step to 1>>
+
 <<script>>
     /* STATIC STARTS (ID: static) */
     setup.sound.play("static", "audio/sfx/static.mp3", true, 0.4);
 <</script>>
 
-<center>
-<div class="tv-container">
-    <img src="image/static.gif">
+<div class="vn-container">
+    /* Top Stage: Fixed TV Image Overhead */
+    <div class="vn-stage">
+        <div class="tv-container" style="text-align: center;">
+            <img src="image/static.gif" alt="TV Static" class="tv-static-img">
+            <div class="glitch">SSSHHHHHKKKKK...</div>
+        </div>
+    </div>
+
+    /* Bottom Fixed Dialogue Box */
+    <div class="vn-dialogue-box">
+        <div class="vn-speaker">SYSTEM / NARRATION</div>
+
+        <div id="vn-text">
+            A harsh, jagged tearing sound shreds through the tail end of your nightmare. Not a sound from your mind—relentless, cold white noise.
+        </div>
+
+        /* Native SugarCube Click Prompt */
+        <div id="vn-advance">
+            <<link "(Click here to continue ▶)">>
+                <<set $step++>>
+                <<if $step is 2>>
+                    <<replace "#vn-text">>Your eyes snap open as you jolt upright. The living room is drowning in the cold, chaotic strobe of an untuned television set.<</replace>>
+                <<elseif $step is 3>>
+                    <<replace "#vn-text">>The main power is miraculously still running, but the modem beside the TV is flashing its status LEDs in a frantic, uncoordinated pulse—searching for a signal that isn't there.<</replace>>
+                <<elseif $step is 4>>
+                    <<script>>
+                        /* SIRENS FADE IN */
+                        setup.sound.play("siren", "audio/sfx/sirens.mp3", true, 0.3);
+                    <</script>>
+                    <<replace "#vn-text">>Then, beyond the thin glass of the balcony door, another sound bleeds through from the city below—a rising, mournful chorus of distant emergency sirens echoing across the night.<</replace>>
+                <<elseif $step is 5>>
+                    <<script>>
+                        /* SHORT SCREAM */
+                        setup.sound.play("scream", "audio/sfx/scream.mp3", false, 0.9);
+                    <</script>>
+                    <<replace "#vn-text">>And buried deep beneath the mechanical wail of the sirens... a raw, terrifying human <span style="color:#e74c3c; font-weight:bold;">scream</span> cut short in the dark.<</replace>>
+                <<elseif $step is 6>>
+                    <<replace "#vn-text">>
+                        Barefoot and disoriented, you stumble toward the glass balcony door. As you reach out to pull the curtain, your own pale, blurred reflection stares back at you from the darkened window pane.
+                        <br><br>
+                        <div style="text-align:center;">
+                            <<button "FOCUS ON YOUR REFLECTION...">>
+                                <<script>>
+                                    /* Fade out atmosphere over 2 seconds */
+                                    setup.sound.fade("static", 2000);
+                                    setup.sound.fade("siren", 2000);
+                                    
+                                    setTimeout(function() {
+                                        Engine.play("Create_Gender");
+                                    }, 2000);
+                                <</script>>
+                            <</button>>
+                        </div>
+                    <</replace>>
+                    /* Hide the continue prompt on step 6 */
+                    <<replace "#vn-advance">><</replace>>
+                <</if>>
+            <</link>>
+        </div>
+    </div>
 </div>
-<br>
-<div class="glitch" style="font-size: 2.5em;">SSSHHHHHKKKKK...</div>
-</center>
-<br><br>
-
-<<timed 1s>>
-The sound cuts through your dreams like a saw blade. White noise.
-<</timed>>
-
-<<timed 3s>>
-You jolt awake. The living room is bathed in the cold, flickering glow of the television.
-<</timed>>
-
-<<timed 6s>>
-But the power is on. The lights on the modem are blinking frantically. 
-<</timed>>
-
-<<timed 10s>>
-<<script>>
-    /* SIRENS FADE IN (ID: siren) */
-    setup.sound.play("siren", "audio/sfx/sirens.mp3", true, 0.3);
-<</script>>
-
-Outside the window, beyond the thin glass, you hear it. A distant, rising chorus of sirens. 
-<</timed>>
-
-<<timed 14s>>
-<<script>>
-    /* SHORT SCREAM (ID: scream) - Loop is FALSE */
-    setup.sound.play("scream", "audio/sfx/scream.mp3", false, 0.9);
-<</script>>
-
-And underneath that... <span style="color:red">screaming.</span>
-<</timed>>
-
-<<timed 18s>>
-You stumble to the balcony door. You catch your reflection in the darkened glass.
-<br><br>
-
-<div style="text-align:center;">
-    <<button "Focus on your reflection...">>
-        <<script>>
-            /* Fade out atmosphere over 2 seconds */
-            setup.sound.fade("static", 2000);
-            setup.sound.fade("siren", 2000);
-            
-            setTimeout(function() {
-                Engine.play("Create_Gender");
-            }, 2000);
-        <</script>>
-    <</button>>
-</div>
-<</timed>>

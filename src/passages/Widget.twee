@@ -788,3 +788,29 @@
         })>>
     <</nobr>>
 <</widget>>
+
+/* Sets up the VN layout with character image & initial text */
+<<widget "vnSetup">>
+  <div class="vn-container">
+    <div class="vn-stage">
+      <<if $args[0]>>
+        <img src="$args[0]" class="vn-character" id="vn-char-img">
+      <</if>>
+    </div>
+    <div class="vn-dialogue-box">
+      <div id="vn-speaker" class="vn-speaker">$args</div>
+      <div id="vn-text">$args[2]</div>
+    </div>
+  </div>
+<</widget>>
+
+/* Replaces the text inside the dialogue box without scrolling */
+<<widget "say">>
+  <<replace "#vn-speaker">>$args[0]<</replace>>
+  <<replace "#vn-text">>$args<</replace>>
+<</widget>>
+
+/* Option to swap character portrait image dynamically */
+<<widget "setChar">>
+  <<replace ".vn-stage">><img src="$args[0]" class="vn-character"><</replace>>
+<</widget>>

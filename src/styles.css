@@ -1003,3 +1003,237 @@ body[data-tags~="splash-screen"] #story {
     50% { opacity: 1; color: var(--accent-gold); }
     100% { opacity: 0.3; }
 }
+
+/* =================================================================
+   TRUE VISUAL NOVEL (VN) DIALOGUE BOX & CLICK-TO-ADVANCE
+================================================================= */
+
+/* Lock viewport & remove outer scrollbars */
+#story, #passages, .passage {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+  overflow: hidden !important;
+}
+
+.vn-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100vh - 55px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.vn-stage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.tv-static-img {
+  max-height: 28vh;
+  width: auto;
+  border: 2px solid #444;
+  border-radius: 4px;
+  display: block;
+  margin: 0 auto;
+}
+
+.glitch {
+  color: #e74c3c;
+  margin-top: 6px;
+  font-size: 1.8em;
+  text-align: center;
+}
+
+/* Clickable Dialogue Box */
+.vn-dialogue-box {
+  height: 36vh;
+  width: 100%;
+  background: rgba(12, 12, 18, 0.95);
+  border-top: 2px solid #e74c3c;
+  padding: 16px 24px 35px 24px;
+  box-sizing: border-box;
+  position: relative;
+  color: #e0e0e0;
+  font-size: 1.1em;
+  line-height: 1.5;
+  cursor: pointer; /* Indicates whole box is clickable */
+  user-select: none;
+}
+
+.vn-speaker {
+  font-weight: bold;
+  color: #e74c3c;
+  font-size: 0.9em;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+#vn-text {
+  max-width: 95%;
+}
+
+/* Subtle VN Prompt Indicator (Pulsing at bottom right inside box) */
+.vn-prompt-text {
+  position: absolute;
+  bottom: 12px;
+  right: 24px;
+  color: #888;
+  font-size: 0.85em;
+  font-style: italic;
+  animation: pulse-prompt 1.5s infinite;
+}
+
+@keyframes pulse-prompt {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+/* Glowing Choice Button at the End */
+.vn-choice-btn {
+  background: rgba(231, 76, 60, 0.2) !important;
+  border: 1px solid #e74c3c !important;
+  color: #ffffff !important;
+  padding: 10px 24px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  border-radius: 4px !important;
+  font-size: 0.95em !important;
+  letter-spacing: 1px !important;
+  box-shadow: 0 0 10px rgba(231, 76, 60, 0.4);
+  transition: all 0.2s ease !important;
+}
+
+.vn-choice-btn:hover {
+  background: #e74c3c !important;
+  box-shadow: 0 0 18px rgba(231, 76, 60, 0.8);
+  transform: scale(1.03);
+}
+
+/* Advance Prompt Link inside Dialogue Box */
+#vn-advance {
+  position: absolute;
+  bottom: 14px;
+  right: 24px;
+  z-index: 9999;
+}
+
+#vn-advance a {
+  color: #aaaaaa !important;
+  font-size: 0.85em;
+  font-style: italic;
+  text-decoration: none !important;
+  animation: pulse-prompt 1.5s infinite;
+  display: inline-block;
+  padding: 4px 8px;
+}
+
+#vn-advance a:hover {
+  color: #ff5252 !important;
+}
+
+@keyframes pulse-prompt {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+/* Floating Floor Items Badge (Top-Right) */
+#floor-items-toggle {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 9999;
+  background: rgba(231, 76, 60, 0.95);
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.85em;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(231, 76, 60, 0.6);
+  transition: all 0.2s ease;
+}
+
+#floor-items-toggle:hover {
+  background: #ff5252;
+  transform: scale(1.05);
+}
+
+/* Sliding Drawer Overlay (Sits ON TOP of the screen) */
+#floor-items-drawer {
+  position: fixed;
+  top: 0;
+  right: -320px; /* Off-screen when closed */
+  width: 300px;
+  height: 100vh;
+  background: rgba(12, 12, 18, 0.96);
+  border-left: 2px solid #e74c3c;
+  z-index: 10000;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.8);
+  color: #e0e0e0;
+}
+
+/* Added when opened by clicking the badge */
+#floor-items-drawer.open {
+  right: 0;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #e74c3c;
+  letter-spacing: 1px;
+}
+
+.drawer-close-btn {
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #aaa;
+}
+
+.drawer-close-btn:hover {
+  color: #fff;
+}
+
+/* Item List Card */
+.floor-item-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.floor-item-card a {
+  background: #27ae60;
+  color: #fff !important;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-decoration: none !important;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+
+.floor-item-card a:hover {
+  background: #2ecc71;
+}

@@ -3,7 +3,7 @@
 	"ifid": "7063291B-129B-4B6B-B05D-A2968060E9C0",
 	"format": "SugarCube",
 	"format-version": "2.37.3",
-	"start": "Act3_ArrivalSchool",
+	"start": "StudioSplash",
 	"tag-colors": {
 		"Initialize": "red",
 		"PassageReady": "green",
