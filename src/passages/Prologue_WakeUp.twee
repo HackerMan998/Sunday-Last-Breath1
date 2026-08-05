@@ -3,17 +3,13 @@
 <<set $gameClockActive to false>> /* Time is frozen during intro */
 <<set $step to 1>>
 
-<<script>>
-    /* STATIC STARTS (ID: static) */
-    setup.sound.play("static", "audio/sfx/static.mp3", true, 0.4);
-<</script>>
-
 <div class="vn-container">
     /* Top Stage: Fixed TV Image Overhead */
     <div class="vn-stage">
         <div class="tv-container" style="text-align: center;">
-            <img src="image/static.gif" alt="TV Static" class="tv-static-img">
-            <div class="glitch">SSSHHHHHKKKKK...</div>
+            /* TV starts dim/off to sell the peaceful Saturday night */
+            <img src="image/static.gif" alt="TV Static" class="tv-static-img" id="tv-screen" style="opacity: 0.1; transition: opacity 0.1s;">
+            <div class="glitch" id="tv-glitch" style="display:none;">SSSHHHHHKKKKK...</div>
         </div>
     </div>
 
@@ -21,33 +17,48 @@
     <div class="vn-dialogue-box">
         <div class="vn-speaker">SYSTEM / NARRATION</div>
 
-        <div id="vn-text">
-            A harsh, jagged tearing sound shreds through the tail end of your nightmare. Not a sound from your mind—relentless, cold white noise.
+        <!-- Where the typewriter text will render -->
+        <div id="vn-text"></div>
+        
+        <!-- Container for choices/buttons that appear after typing -->
+        <div id="vn-action-area"></div>
+
+        <!-- Animated Indicator (Controlled by VNEngine) -->
+        <div class="vn-prompt-text" style="display:none;">
+            CLICK TO CONTINUE <span class="vn-prompt-icon">▶</span>
         </div>
 
-        /* Native SugarCube Click Prompt */
-        <div id="vn-advance">
-            <<link "(Click here to continue ▶)">>
+        /* Hidden Native SugarCube Click Prompt */
+        <div id="vn-advance" style="display:none;">
+            <<link "Next">>
                 <<set $step++>>
                 <<if $step is 2>>
-                    <<replace "#vn-text">>Your eyes snap open as you jolt upright. The living room is drowning in the cold, chaotic strobe of an untuned television set.<</replace>>
+                    <<script>>
+                        /* JUMPSCARE: Audio and Visuals trigger together */
+                        setup.sound.play("static", "audio/sfx/static.mp3", true, 0.4);
+                        $('#tv-screen').css('opacity', '1');
+                        $('#tv-glitch').show();
+                    <</script>>
+                    <<run VNEngine.startTypewriter("Then, the broadcast dies. A harsh, jagged tearing sound shreds through the tail end of your sleep—relentless, cold white noise.", 25)>>
                 <<elseif $step is 3>>
-                    <<replace "#vn-text">>The main power is miraculously still running, but the modem beside the TV is flashing its status LEDs in a frantic, uncoordinated pulse—searching for a signal that isn't there.<</replace>>
+                    <<run VNEngine.startTypewriter("Your eyes snap open as you jolt upright. The living room is drowning in the chaotic strobe of an untuned television. Beside it, the modem flashes its LEDs in a frantic pulse, searching for a dead connection.", 25)>>
                 <<elseif $step is 4>>
                     <<script>>
                         /* SIRENS FADE IN */
                         setup.sound.play("siren", "audio/sfx/sirens.mp3", true, 0.3);
                     <</script>>
-                    <<replace "#vn-text">>Then, beyond the thin glass of the balcony door, another sound bleeds through from the city below—a rising, mournful chorus of distant emergency sirens echoing across the night.<</replace>>
+                    <<run VNEngine.startTypewriter("You hold your breath. Beyond the thin glass of the balcony door, a sound bleeds through from the city streets below—a rising, mournful chorus of distant emergency sirens echoing across the night.", 25)>>
                 <<elseif $step is 5>>
                     <<script>>
                         /* SHORT SCREAM */
                         setup.sound.play("scream", "audio/sfx/scream.mp3", false, 0.9);
                     <</script>>
-                    <<replace "#vn-text">>And buried deep beneath the mechanical wail of the sirens... a raw, terrifying human <span style="color:#e74c3c; font-weight:bold;">scream</span> cut short in the dark.<</replace>>
+                    <<run VNEngine.startTypewriter("And buried deep beneath the mechanical wail of the sirens... a raw, terrifying scream that is abruptly cut short in the dark.", 25)>>
                 <<elseif $step is 6>>
-                    <<replace "#vn-text">>
-                        Barefoot and disoriented, you stumble toward the glass balcony door. As you reach out to pull the curtain, your own pale, blurred reflection stares back at you from the darkened window pane.
+                    <<run VNEngine.startTypewriter("Barefoot and disoriented, you stumble toward the glass balcony door. As you reach out to pull the curtain, your own pale, blurred reflection stares back at you from the darkened window pane.", 25)>>
+                    
+                    /* Reveal the character creation button in the action area */
+                    <<replace "#vn-action-area">>
                         <br><br>
                         <div style="text-align:center;">
                             <<button "FOCUS ON YOUR REFLECTION...">>
@@ -63,10 +74,17 @@
                             <</button>>
                         </div>
                     <</replace>>
-                    /* Hide the continue prompt on step 6 */
+                    
+                    /* Remove the advance link and blinking cursor so the player must click the button */
                     <<replace "#vn-advance">><</replace>>
+                    <<run $('.vn-prompt-text').remove()>>
                 <</if>>
             <</link>>
         </div>
     </div>
 </div>
+
+/* Kick off the first line of text once the passage is fully rendered to the screen */
+<<done>>
+    <<run VNEngine.startTypewriter("It was supposed to be a quiet Saturday night. You remember the warmth of the couch, the hum of the heater, and drifting off to the dull murmur of a late-night talk show.", 25)>>
+<</done>>

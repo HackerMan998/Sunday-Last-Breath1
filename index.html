@@ -104,7 +104,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<!-- UUID://7063291B-129B-4B6B-B05D-A2968060E9C0// --><tw-storydata name="Sunday&#39;s Last Breath" startnode="71" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="7063291B-129B-4B6B-B05D-A2968060E9C0" zoom="0.3" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/***********************************************************************
+	<!-- UUID://7063291B-129B-4B6B-B05D-A2968060E9C0// --><tw-storydata name="Sunday&#39;s Last Breath" startnode="72" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="7063291B-129B-4B6B-B05D-A2968060E9C0" zoom="0.3" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/***********************************************************************
  * TWINE SURVIVAL UI - MASTER STYLESHEET
  ***********************************************************************/
 
@@ -303,7 +303,8 @@ a:hover { color: #000; background-color: var(--accent-blue); border-bottom: 1px 
     position: sticky !important; top: 0 !important; z-index: 1000 !important;
     background-color: rgba(5, 4, 4, 0.95); backdrop-filter: blur(5px);
     display: flex; justify-content: space-between; align-items: center;
-    padding: 20px 2px 15px 2px !important; margin-bottom: 20px;
+    padding: 20px 30px 15px 30px !important; /* FIXED: 30px padding on the sides */
+    margin-bottom: 20px;
     border-bottom: 1px solid #333; box-shadow: 0 15px 20px -5px var(--bg-color); 
     box-sizing: border-box; width: 100%;
 }
@@ -1114,142 +1115,148 @@ body[data-tags~="splash-screen"] #story {
    TRUE VISUAL NOVEL (VN) DIALOGUE BOX & CLICK-TO-ADVANCE
 ================================================================= */
 
-/* Lock viewport & remove outer scrollbars */
-#story, #passages, .passage {
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  box-sizing: border-box;
-  overflow: hidden !important;
+/* --- VIEWPORT & SUGARCUBE OVERRIDES --- */
+html, body {
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background-color: #050404;
 }
 
+#story {
+    margin: 0 !important; /* Kills the default Twine sidebar spacing */
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+}
+
+#passages {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.passage {
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex !important;
+    flex-direction: column !important; /* Turns the passage into a flex container */
+}
+
+/* --- MAIN VN CONTAINER --- */
 .vn-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: calc(100vh - 55px);
-  box-sizing: border-box;
-  overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex: 1; /* Automatically shrinks/grows to perfectly fill remaining space! */
+    min-height: 0; /* Critical: prevents the box from overflowing the screen */
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
+/* --- STAGE AREA (TV / CHARACTER ART) --- */
 .vn-stage {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 10px 0;
+    flex: 1 1 auto; /* Allows stage to grow and shrink gracefully */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 0; 
+    padding: 15px;
+    box-sizing: border-box;
+    width: 100%; 
+}
+
+.tv-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 100%;
 }
 
 .tv-static-img {
-  max-height: 28vh;
-  width: auto;
-  border: 2px solid #444;
-  border-radius: 4px;
-  display: block;
-  margin: 0 auto;
+    max-height: 40vh !important; /* Let image scale without crushing text */
+    max-width: 100%;
+    object-fit: contain;
+    border: 2px solid #333;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
-.glitch {
-  color: #e74c3c;
-  margin-top: 6px;
-  font-size: 1.8em;
-  text-align: center;
-}
-
-/* Clickable Dialogue Box */
+/* --- DYNAMIC DIALOGUE BOX --- */
 .vn-dialogue-box {
-  height: 36vh;
-  width: 100%;
-  background: rgba(12, 12, 18, 0.95);
-  border-top: 2px solid #e74c3c;
-  padding: 16px 24px 35px 24px;
-  box-sizing: border-box;
-  position: relative;
-  color: #e0e0e0;
-  font-size: 1.1em;
-  line-height: 1.5;
-  cursor: pointer; /* Indicates whole box is clickable */
-  user-select: none;
+    flex: 0 1 auto; /* Takes only the space it needs */
+    height: auto; /* Allows box to expand for choices/buttons */
+    min-height: 25vh;
+    max-height: 45vh; /* Prevents it from eating the whole screen */
+    overflow-y: auto; /* Adds a scrollbar ONLY if text is massive */
+    width: 100%;
+    background: rgba(8, 8, 12, 0.96);
+    border-top: 2px solid #e74c3c;
+    padding: 20px 30px 50px 30px; /* Extra bottom padding for the prompt */
+    box-sizing: border-box;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
 }
 
+/* Custom Scrollbar for Dialogue Box */
+.vn-dialogue-box::-webkit-scrollbar { width: 8px; }
+.vn-dialogue-box::-webkit-scrollbar-thumb { background: #e74c3c; border-radius: 4px; }
+
+/* Speaker Badge Styling */
 .vn-speaker {
-  font-weight: bold;
-  color: #e74c3c;
-  font-size: 0.9em;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+    color: #e74c3c;
+    font-size: 0.85em;
+    letter-spacing: 2px;
+    background: rgba(231, 76, 60, 0.12);
+    padding: 3px 10px;
+    border-left: 3px solid #e74c3c;
+    margin-bottom: 12px;
+    text-transform: uppercase;
 }
 
+/* Dialogue Text */
 #vn-text {
-  max-width: 95%;
+    font-family: 'Courier Prime', monospace;
+    color: #e0e0e0;
+    font-size: 1.15em;
+    line-height: 1.6;
+    max-width: 96%;
+    text-align: justify;
 }
 
-/* Subtle VN Prompt Indicator (Pulsing at bottom right inside box) */
+#vn-action-area {
+    margin-top: 15px; /* Adds breathing room above buttons */
+}
+
+/* Animated Click-to-Continue Prompt */
 .vn-prompt-text {
-  position: absolute;
-  bottom: 12px;
-  right: 24px;
-  color: #888;
-  font-size: 0.85em;
-  font-style: italic;
-  animation: pulse-prompt 1.5s infinite;
+    position: relative;
+    bottom: 14px;
+    right: 30px;
+    color: #e74c3c;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9em;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
 }
 
-@keyframes pulse-prompt {
-  0% { opacity: 0.4; }
-  50% { opacity: 1; }
-  100% { opacity: 0.4; }
+.vn-prompt-icon {
+    display: inline-block;
+    animation: bounce-right 0.8s infinite alternate ease-in-out;
 }
 
-/* Glowing Choice Button at the End */
-.vn-choice-btn {
-  background: rgba(231, 76, 60, 0.2) !important;
-  border: 1px solid #e74c3c !important;
-  color: #ffffff !important;
-  padding: 10px 24px !important;
-  font-weight: bold !important;
-  cursor: pointer !important;
-  border-radius: 4px !important;
-  font-size: 0.95em !important;
-  letter-spacing: 1px !important;
-  box-shadow: 0 0 10px rgba(231, 76, 60, 0.4);
-  transition: all 0.2s ease !important;
-}
-
-.vn-choice-btn:hover {
-  background: #e74c3c !important;
-  box-shadow: 0 0 18px rgba(231, 76, 60, 0.8);
-  transform: scale(1.03);
-}
-
-/* Advance Prompt Link inside Dialogue Box */
-#vn-advance {
-  position: absolute;
-  bottom: 14px;
-  right: 24px;
-  z-index: 9999;
-}
-
-#vn-advance a {
-  color: #aaaaaa !important;
-  font-size: 0.85em;
-  font-style: italic;
-  text-decoration: none !important;
-  animation: pulse-prompt 1.5s infinite;
-  display: inline-block;
-  padding: 4px 8px;
-}
-
-#vn-advance a:hover {
-  color: #ff5252 !important;
-}
-
-@keyframes pulse-prompt {
-  0% { opacity: 0.4; }
-  50% { opacity: 1; }
-  100% { opacity: 0.4; }
+@keyframes bounce-right {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(5px); }
 }
 
 /* Floating Floor Items Badge (Top-Right) */
@@ -3909,6 +3916,80 @@ if (typeof Macro !== 'undefined') {
         return objs.some(function(o) { return o.id === id && o.status === 'active'; });
     };
 }
+
+// Routes clicks from the main VN box to the actual advance link
+$(document).on('click', '.vn-dialogue-box', function() {
+    $('#vn-advance a').trigger('click');
+});
+
+/* =================================================================
+   VISUAL NOVEL TYPEWRITER & INPUT ENGINE
+================================================================= */
+window.VNEngine = {
+    typing: false,
+    fullText: "",
+    targetEl: null,
+    timer: null,
+
+    // Initialize typewriter effect
+    startTypewriter: function(text, speed = 25) {
+        const self = this;
+        self.fullText = text;
+        self.targetEl = $('#vn-text');
+        self.typing = true;
+        
+        if (self.timer) clearInterval(self.timer);
+        
+        self.targetEl.html('');
+        $('.vn-prompt-text').hide(); // Hide 'Next' prompt while typing
+        
+        let index = 0;
+        self.timer = setInterval(function() {
+            if (index < text.length) {
+                self.targetEl.append(text.charAt(index));
+                index++;
+            } else {
+                self.complete();
+            }
+        }, speed);
+    },
+
+    // Instantly reveal all text
+    complete: function() {
+        if (this.timer) clearInterval(this.timer);
+        if (this.targetEl) this.targetEl.html(this.fullText);
+        this.typing = false;
+        $('.vn-prompt-text').fadeIn(200); // Show blinking prompt
+    },
+
+    // Handle clicks: Skip typing IF typing, else Advance passage
+    handleInteraction: function() {
+        if (this.typing) {
+            this.complete();
+        } else {
+            const $link = $('#vn-advance a, .vn-advance-link');
+            if ($link.length) {
+                $link.first().trigger('click');
+            }
+        }
+    }
+};
+
+// Global click handler for dialogue box
+$(document).off('click', '.vn-dialogue-box').on('click', '.vn-dialogue-box', function(e) {
+    // 1. Prevent infinite click loops caused by event bubbling
+    if (e.isTrigger) {
+        return;
+    }
+    
+    // 2. Ignore clicks if player clicked directly on choices, buttons, or links
+    if ($(e.target).closest('button, input, a').length) {
+        return;
+    }
+    
+    // 3. Process the click
+    window.VNEngine.handleInteraction();
+});
 /* twine-user-script #2: "pda.js" */
 // Function to trigger the PDA Dialog box
 window.openPDA = function() {
@@ -15207,15 +15288,14 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
 &lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="57" name="Prologue" tags="" position="200,300" size="100,100">&lt;&lt;set $inCharCreation to false&gt;&gt;
 &lt;&lt;set $stamina to $stamina_max&gt;&gt;
 &lt;&lt;set $hp to $hp_max&gt;&gt;
+&lt;&lt;set $hubStep to 1&gt;&gt;
 
 &lt;!-- ======================================================= --&gt;
 &lt;!-- 1. JAVASCRIPT SETUP &amp; AUDIO INITIALIZATION              --&gt;
 &lt;!-- ======================================================= --&gt;
 &lt;&lt;script&gt;&gt;
-    /* 1. SETUP GAME STATE */
     State.variables.gameClockActive = true;
     
-    /* 2. AUDIO: Switch to eerie silence/low drone */
     if(State.variables.creation_music) {
         setup.sound.fade(&quot;creation_theme&quot;, 2000);
         setTimeout(function() {
@@ -15223,191 +15303,121 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
             setup.sound.play(&quot;atmosphere&quot;, &quot;audio/bgm/atmosphere.mp3&quot;, true, 0.6);
         }, 2000);
         State.variables.creation_music = false;
+        
+        [&#39;clock&#39;, &#39;static&#39;, &#39;siren&#39;, &#39;scream&#39;].forEach(function(id) {
+            if (setup.sound.tracks[id]) setup.sound.stop(id);
+        });
     }
-    
-    [&#39;clock&#39;, &#39;static&#39;, &#39;siren&#39;, &#39;scream&#39;, &#39;creation_theme&#39;].forEach(function(id) {
-        if (setup.sound.tracks[id]) {
-            window.AudioDebugger.log(&#39;Stopping: &#39; + id, &#39;stop&#39;);
-            setup.sound.stop(id);
-        }
-    });
-    
-    window.AudioDebugger.log(&#39;Starting atmosphere track&#39;, &#39;play&#39;);
 
-    /* 3. STASH LOGIC */
     if (!State.variables.hasPacked &amp;&amp; State.variables.inventory &amp;&amp; State.variables.inventory.length &gt; 0) {
         State.variables.tableStash = clone(State.variables.inventory);
-        State.variables.inventory =[];
+        State.variables.inventory = [];
     }
 &lt;&lt;/script&gt;&gt;
 
-
 &lt;!-- ======================================================= --&gt;
-&lt;!-- 2. NARRATIVE INTRO &amp; EMERGENCY BROADCAST                --&gt;
+&lt;!-- 2. VN LAYOUT WRAPPER                                    --&gt;
 &lt;!-- ======================================================= --&gt;
-&lt;center&gt;
-    &lt;h1&gt;DAY 0: SUNDAY&lt;/h1&gt;
-&lt;/center&gt;
-
-The silence breaks. Not with a scream, but with a tone. 
-
-&lt;div style=&quot;border: 2px solid red; background: rgba(50, 0, 0, 0.3); padding: 15px; margin: 20px 0; box-shadow: 0 0 15px red;&quot;&gt;
-    &lt;div class=&quot;glitch&quot; style=&quot;font-size: 1.5em; color: red; font-weight: bold; width: 100%; text-align: center;&quot;&gt;
-        EMERGENCY ALERT SYSTEM
-    &lt;/div&gt;
-    &lt;div style=&quot;text-align: center; color: white; letter-spacing: 2px; border-top: 1px solid red; margin-top: 10px; padding-top: 5px;&quot;&gt;
-        CIVIL DANGER WARNING
-    &lt;/div&gt;
-    &lt;p style=&quot;text-align: center; color: #ffcccc; font-family: &#39;Courier Prime&#39;; font-size: 0.9em; margin-top: 10px;&quot;&gt;
-        &quot;...remain indoors. Do not approach individuals exhibiting violent behavior. This is not a drill...&quot;
-    &lt;/p&gt;
-&lt;/div&gt;
-
-The robotic voice cuts out. Static returns to the TV. 
-
-&lt;br&gt;
-&lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;&#39;Violent behavior...&#39; They don&#39;t lock down the whole city for a standard riot. Something is very wrong.&quot;&gt;&gt;
-&lt;br&gt;
-
-
-&lt;!-- ======================================================= --&gt;
-&lt;!-- 3. PLAYER STATE &amp; INVENTORY VISUALIZATION               --&gt;
-&lt;!-- ======================================================= --&gt;
-&lt;&lt;if $hasPacked&gt;&gt;
-    &lt;!-- STATE: PACKED AND READY --&gt;
-    &lt;p&gt;The weight of the bag feels reassuring on your back. You found a &lt;b style=&quot;color:white&quot;&gt;Kitchen Knife&lt;/b&gt; and some &lt;b style=&quot;color:brown&quot;&gt;Stale Coffee&lt;/b&gt; on the counter.&lt;/p&gt; 
-    &lt;p&gt;The apartment feels foreign now. Dangerous. You need to move.&lt;/p&gt;
-
-&lt;&lt;else&gt;&gt;
-    &lt;!-- STATE: VULNERABLE --&gt;
-    &lt;p&gt;You are standing in the middle of your living room in your pajamas. You feel naked. Vulnerable.&lt;/p&gt;
-    &lt;p&gt;Your &lt;b&gt;Starter Gear&lt;/b&gt; is scattered across the dining table.&lt;/p&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
     
-    &lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Focus. Get dressed. Grab the gear. Don&#39;t panic.&quot;&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    
-    &lt;!-- VISUALIZES THE STASH ON TABLE --&gt;
-    &lt;div style=&quot;background:rgba(255,255,255,0.05); padding:20px; border:2px dashed #444; margin-bottom: 20px; max-width: 700px; margin-left: auto; margin-right: auto;&quot;&gt;
-        &lt;&lt;if $tableStash &amp;&amp; $tableStash.length &gt; 0&gt;&gt;
-            &lt;div style=&quot;display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 35px;&quot;&gt;
-                &lt;&lt;for _i range $tableStash&gt;&gt;
-                    &lt;div style=&quot;text-align:center;&quot;&gt;
-                        &lt;&lt;print setup.items[_i.id].icon&gt;&gt;&lt;br&gt;
-                        &lt;span style=&quot;font-size:0.7em; color:#aaa; display: block; margin-top: 5px;&quot;&gt;_i.id&lt;/span&gt;
+    &lt;div class=&quot;vn-stage&quot;&gt;
+        &lt;img src=&quot;image/living_room_red.gif&quot; class=&quot;tv-static-img&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;vn-dialogue-box&quot;&gt;
+        
+        &lt;div id=&quot;vn-text&quot;&gt;
+            &lt;!-- PAGE 1: FIRST VISIT ONLY --&gt;
+            &lt;&lt;if not $prologue_intro_seen&gt;&gt;
+                You turn away from the glass. The silence in your apartment breaks—not with a scream, but with a tone.
+                &lt;div style=&quot;border: 2px solid #8a1c1c; background: rgba(50, 0, 0, 0.3); padding: 10px 15px; margin: 10px 0 15px 0; box-shadow: 0 0 15px #8a1c1c;&quot;&gt;
+                    &lt;div class=&quot;glitch&quot; style=&quot;font-size: 1.2em; color: #e74c3c; font-weight: bold; width: 100%; text-align: center; letter-spacing: 2px; margin-top: 0;&quot;&gt;
+                        EMERGENCY ALERT SYSTEM
                     &lt;/div&gt;
-                &lt;&lt;/for&gt;&gt;
-            &lt;/div&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;span style=&quot;color:#666;&quot;&gt;(Empty)&lt;/span&gt;
-        &lt;&lt;/if&gt;&gt;
-    &lt;/div&gt;
-&lt;&lt;/if&gt;&gt;
-
-&lt;hr style=&quot;border-color: #333; margin: 20px 0;&quot;&gt;
-
-
-&lt;!-- ======================================================= --&gt;
-&lt;!-- 4. CINEMATIC CHOICE MENU                                --&gt;
-&lt;!-- ======================================================= --&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-
-    &lt;!-- ACTION: GATHER GEAR &amp; LOOT ROOM --&gt;
-    &lt;&lt;if !$hasPacked&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;GATHER GEAR &amp; SEARCH ROOM&quot;&gt;&gt;
-                &lt;&lt;addTime 4&gt;&gt;
-                &lt;&lt;completeObjective &quot;pack_gear&quot;&gt;&gt;
-     			&lt;&lt;activateObjective &quot;leave_apt&quot;&gt;&gt;
+                    &lt;div style=&quot;text-align: center; color: white; letter-spacing: 4px; border-top: 1px solid #8a1c1c; margin-top: 5px; padding-top: 5px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+                        CIVIL DANGER WARNING
+                    &lt;/div&gt;
+                    &lt;p style=&quot;color: #ffcccc; font-family: &#39;Courier Prime&#39;, monospace; font-size: 0.9em; margin-top: 10px; margin-bottom: 0;&quot;&gt;
+                        &quot;The following message is transmitted at the request of the King County Sheriff&#39;s Office. This is not a test.&lt;br&gt;&lt;br&gt;
+                        A Civil Danger Warning is in effect for the Seattle metropolitan area. At 21:46, authorities reported a rapidly spreading biological hazard. Affected individuals exhibit extreme, unprovoked violence. The pathogen is highly contagious through fluid contact.&lt;br&gt;&lt;br&gt;
+                        Shelter in place immediately. Major interstates are closed. Lock all doors, turn off lights, and remain completely silent. Do not approach infected individuals.&lt;br&gt;&lt;br&gt;
+                        The National Guard has been deployed. Lethal force is authorized.&quot;
+                    &lt;/p&gt;
+                &lt;/div&gt;
                 &lt;&lt;script&gt;&gt;
-                    State.variables.inventory = clone(State.variables.tableStash);
-                    State.variables.tableStash =[];
-                    State.variables.hasPacked = true;
-                    
-                    /* SPAWN HOUSE LOOT FOR FOOTER SYSTEM */
-                    if (!State.variables.houseLootSpawned) {
-                        State.variables.floorItems[&quot;Prologue&quot;] =[
-                            { id: &quot;Stale Coffee&quot;, qty: 1 },
-                            { id: &quot;Kitchen Knife&quot;, qty: 1 },
-                            { id: &quot;T-Shirt&quot;, qty: 1 }
-                        ];
-                        State.variables.houseLootSpawned = true;
-                    }
-                    Engine.play(passage());
+                    /* PLAY TTS EMERGENCY BROADCAST HERE (Set to loop until cut off) */
+                    setup.sound.play(&quot;ebs_warning&quot;, &quot;audio/sfx/ebs_warning.mp3&quot;, true, 0.8);
                 &lt;&lt;/script&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;5 Minutes | Grab your starter items and look for supplies.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
-
-    &lt;!-- ACTION: INTEL - PHONE (Hides after visiting) --&gt;
-    &lt;&lt;if not visited(&quot;Prologue_Phone&quot;)&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;CHECK NEWS FEED&quot;&gt;&gt;
-                &lt;&lt;goto &quot;Prologue_Phone&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;1 Minute | See what the internet knows.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
-
-    &lt;!-- ACTION: INTEL - POLICE RADIO (Hides after visiting) --&gt;
-    &lt;&lt;if not visited(&quot;Prologue_Radio&quot;)&gt;&gt;
-        &lt;&lt;if $job == &quot;Police Officer&quot;&gt;&gt;
-            &lt;button&gt;
-                &lt;&lt;link &quot;LISTEN TO EMERGENCY BAND [POLICE]&quot;&gt;&gt;
-                    &lt;&lt;addTime 3&gt;&gt;
-                    &lt;&lt;goto &quot;Prologue_Radio&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[JOB: POLICE]&lt;/b&gt; 4 Minutes | Monitor encrypted dispatch channels.&lt;/span&gt;
-            &lt;/button&gt;
-        &lt;&lt;elseif $skills.tech &gt;= 1 and $int &gt;= 4&gt;&gt;
-            &lt;button&gt;
-                &lt;&lt;link &quot;HACK LOCAL POLICE CHATTER[TECH 1]&quot;&gt;&gt;
-                    &lt;&lt;addTime 5&gt;&gt;
-                    &lt;&lt;goto &quot;Prologue_Radio&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TECH 1 / INT 4]&lt;/b&gt; 6 Minutes | You find the local dispatch frequency and bypass their basic scrambling.&lt;/span&gt;
-            &lt;/button&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;button disabled style=&quot;opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
-                &lt;span style=&quot;text-decoration: line-through;&quot;&gt;ACCESS EMERGENCY BAND&lt;/span&gt;&lt;br&gt;
-                &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES POLICE OFFICER OR TECH 1 &amp; INT 4] You lack the hardware or the hacking skills to splice into local police frequencies.&lt;/span&gt;
-            &lt;/button&gt;
+            &lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
+        
+        &lt;div id=&quot;vn-action-area&quot;&gt;
+            &lt;!-- RETURNING PLAYERS SEE MENU INSTANTLY --&gt;
+            &lt;&lt;if $prologue_intro_seen&gt;&gt;
+                &lt;&lt;include &quot;Prologue_Menu&quot;&gt;&gt;
+            &lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
+        
+        &lt;&lt;if not $prologue_intro_seen&gt;&gt;
+            &lt;div class=&quot;vn-prompt-text&quot;&gt;
+                CLICK TO CONTINUE &lt;span class=&quot;vn-prompt-icon&quot;&gt;▶&lt;/span&gt;
+            &lt;/div&gt;
         &lt;&lt;/if&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
 
-&lt;!-- ACTION: INTEL - GOV FIREWALL (Hides after visiting) --&gt;
-    &lt;&lt;if not visited(&quot;Prologue_Hacking&quot;)&gt;&gt;
-        &lt;&lt;if $skills.tech &gt;= 3 and $int &gt;= 6&gt;&gt;
-            &lt;button&gt;
-                &lt;&lt;link &quot;BYPASS GOV FIREWALL [TECH 3]&quot;&gt;&gt;
-                    &lt;&lt;addTime 8&gt;&gt;
-                    &lt;&lt;goto &quot;Prologue_Hacking&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TECH 3 / INT 6]&lt;/b&gt; 9 Minutes | Breach military-grade encryption to find the truth.&lt;/span&gt;
-            &lt;/button&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;button disabled style=&quot;opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
-                &lt;span style=&quot;text-decoration: line-through;&quot;&gt;BYPASS GOV FIREWALL&lt;/span&gt;&lt;br&gt;
-                &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES TECH 3 &amp; INT 6] You lack the high-level expertise to breach military encryption.&lt;/span&gt;
-            &lt;/button&gt;
-        &lt;&lt;/if&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-
-    &lt;!-- ACTION: EXIT (Only appears once gear is packed) --&gt;
-    &lt;&lt;if $hasPacked&gt;&gt;
-        &lt;button style=&quot;border-left-color: var(--accent-red) !important; margin-top: 15px;&quot;&gt;
-          &lt;&lt;link &quot;LEAVE APARTMENT&quot;&gt;&gt;
-               &lt;&lt;run setup.sound.stop(&#39;atmosphere&#39;)&gt;&gt;
-               &lt;&lt;run setup.sound.fade(&#39;atmosphere&#39;, 1000)&gt;&gt;
-               &lt;&lt;completeObjective &quot;leave_apt&quot;&gt;&gt;
-               &lt;&lt;addObjective &quot;escape_building&quot; &quot;Find a way down to the ground floor&quot;&gt;&gt;
-               &lt;&lt;goto &quot;Hallway&quot;&gt;&gt;
-           &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot; style=&quot;color: #ff9999;&quot;&gt;Exit to the 4th Floor Hallway. No turning back.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
-
+        &lt;div id=&quot;vn-advance&quot; style=&quot;display:none;&quot;&gt;
+            &lt;&lt;link &quot;Next&quot;&gt;&gt;
+                &lt;&lt;set $hubStep++&gt;&gt;
+                
+                &lt;!-- PAGE 2: THE REACTION --&gt;
+                &lt;&lt;if $hubStep is 2&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;
+                        &lt;&lt;script&gt;&gt;
+                            /* KILLS THE ROBOTIC VOICE AND RESTARTS THE CREEPY STATIC */
+                            setup.sound.stop(&quot;ebs_warning&quot;);
+                            setup.sound.play(&quot;static&quot;, &quot;audio/sfx/static.mp3&quot;, true, 0.3);
+                        &lt;&lt;/script&gt;&gt;
+                        The robotic voice cuts out. Static returns to the TV. 
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;&#39;Lethal force authorized...&#39; They don&#39;t lock down the whole city for a standard riot. Something is very wrong.&quot;&gt;&gt;
+                    &lt;&lt;/replace&gt;&gt;
+                    
+                &lt;!-- PAGE 3: THE GEAR --&gt;
+                &lt;&lt;elseif $hubStep is 3&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;
+                        &lt;div class=&quot;vn-speaker&quot;&gt;LIVING ROOM&lt;/div&gt;&lt;br&gt;
+                        You are standing in the middle of your living room in your pajamas. You feel naked. Vulnerable. 
+                        &lt;br&gt;&lt;br&gt;
+                        Your &lt;b&gt;Starter Gear&lt;/b&gt; is scattered across your cramped desk, illuminated by the red glow of the TV.
+                        &lt;br&gt;&lt;br&gt;
+                        
+                        &lt;div style=&quot;background:rgba(255,255,255,0.05); padding:10px; border:1px dashed #444; margin: 5px auto; max-width: 600px; border-radius: 4px;&quot;&gt;
+                            &lt;&lt;if $tableStash &amp;&amp; $tableStash.length &gt; 0&gt;&gt;
+                                &lt;div style=&quot;display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 15px;&quot;&gt;
+                                    &lt;&lt;for _i range $tableStash&gt;&gt;
+                                        &lt;div style=&quot;text-align:center;&quot;&gt;
+                                            &lt;&lt;print setup.items[_i.id].icon&gt;&gt;&lt;br&gt;
+                                            &lt;span style=&quot;font-size:0.7em; color:#aaa; display: block; margin-top: 5px;&quot;&gt;_i.id&lt;/span&gt;
+                                        &lt;/div&gt;
+                                    &lt;&lt;/for&gt;&gt;
+                                &lt;/div&gt;
+                            &lt;&lt;else&gt;&gt;
+                                &lt;div style=&quot;text-align:center; color:#666; font-style:italic;&quot;&gt;(Table is empty)&lt;/div&gt;
+                            &lt;&lt;/if&gt;&gt;
+                        &lt;/div&gt;
+                    &lt;&lt;/replace&gt;&gt;
+                    
+                &lt;!-- PAGE 4: THE MENU --&gt;
+                &lt;&lt;elseif $hubStep is 4&gt;&gt;
+                    &lt;&lt;set $prologue_intro_seen to true&gt;&gt;
+                    &lt;&lt;run $(&#39;.vn-prompt-text&#39;).remove()&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-action-area&quot;&gt;&gt;
+                        &lt;&lt;include &quot;Prologue_Menu&quot;&gt;&gt;
+                    &lt;&lt;/replace&gt;&gt;
+                &lt;&lt;/if&gt;&gt;
+            &lt;&lt;/link&gt;&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="58" name="Prologue_Hacking" tags="" position="300,400" size="100,100">&lt;!-- ======================================================= --&gt;
 &lt;!-- 1. PASSAGE HEADER                                       --&gt;
 &lt;!-- ======================================================= --&gt;
@@ -15491,7 +15501,94 @@ The robotic voice cuts out. Static returns to the TV.
     /* --- C. SET STORY VARIABLES --- */
     /* Set the flag so the player can use the 8821 code later in the game */
     State.variables.secretLoreFound = true;
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="59" name="Prologue_Phone" tags="" position="100,400" size="100,100">&lt;!-- ========================================== --&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="59" name="Prologue_Menu" tags="" position="500,100" size="100,100">&lt;hr style=&quot;border-color: #333; margin: 0 0 15px 0;&quot;&gt;
+&lt;div class=&quot;choice-menu&quot;&gt;
+    &lt;&lt;if !$hasPacked&gt;&gt;
+        &lt;button&gt;
+            &lt;&lt;link &quot;GATHER GEAR &amp; SEARCH ROOM&quot;&gt;&gt;
+                &lt;&lt;addTime 4&gt;&gt;
+                &lt;&lt;completeObjective &quot;pack_gear&quot;&gt;&gt;
+                &lt;&lt;activateObjective &quot;leave_apt&quot;&gt;&gt;
+                &lt;&lt;script&gt;&gt;
+                    State.variables.inventory = clone(State.variables.tableStash);
+                    State.variables.tableStash = [];
+                    State.variables.hasPacked = true;
+                    if (!State.variables.houseLootSpawned) {
+                        State.variables.floorItems[&quot;Prologue&quot;] = [
+                            { id: &quot;Stale Coffee&quot;, qty: 1 },
+                            { id: &quot;Kitchen Knife&quot;, qty: 1 },
+                            { id: &quot;T-Shirt&quot;, qty: 1 }
+                        ];
+                        State.variables.houseLootSpawned = true;
+                    }
+                    Engine.play(&quot;Prologue&quot;);
+                &lt;&lt;/script&gt;&gt;
+            &lt;&lt;/link&gt;&gt;
+            &lt;span class=&quot;btn-sub&quot;&gt;5 Minutes | Grab your starter items and look for supplies.&lt;/span&gt;
+        &lt;/button&gt;
+    &lt;&lt;/if&gt;&gt;
+
+    &lt;&lt;if not visited(&quot;Prologue_Phone&quot;)&gt;&gt;
+        &lt;button&gt;
+            &lt;&lt;link &quot;CHECK NEWS FEED&quot;&gt;&gt;
+                &lt;&lt;goto &quot;Prologue_Phone&quot;&gt;&gt;
+            &lt;&lt;/link&gt;&gt;
+            &lt;span class=&quot;btn-sub&quot;&gt;1 Minute | See what the internet knows.&lt;/span&gt;
+        &lt;/button&gt;
+    &lt;&lt;/if&gt;&gt;
+
+    &lt;&lt;if not visited(&quot;Prologue_Radio&quot;)&gt;&gt;
+        &lt;&lt;if $job == &quot;Police Officer&quot;&gt;&gt;
+            &lt;button&gt;
+                &lt;&lt;link &quot;LISTEN TO EMERGENCY BAND [POLICE]&quot;&gt;&gt;
+                    &lt;&lt;addTime 3&gt;&gt;&lt;&lt;goto &quot;Prologue_Radio&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[JOB: POLICE]&lt;/b&gt; 4 Minutes | Monitor encrypted dispatch channels.&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;&lt;elseif $skills.tech &gt;= 1 and $int &gt;= 4&gt;&gt;
+            &lt;button&gt;
+                &lt;&lt;link &quot;HACK LOCAL POLICE CHATTER [TECH 1]&quot;&gt;&gt;
+                    &lt;&lt;addTime 5&gt;&gt;&lt;&lt;goto &quot;Prologue_Radio&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TECH 1 / INT 4]&lt;/b&gt; 6 Minutes | Find the dispatch frequency and bypass their scrambling.&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;&lt;else&gt;&gt;
+            &lt;button disabled style=&quot;opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
+                &lt;span style=&quot;text-decoration: line-through;&quot;&gt;ACCESS EMERGENCY BAND&lt;/span&gt;&lt;br&gt;
+                &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES POLICE OFFICER OR TECH 1 &amp; INT 4] You lack the hardware or skills.&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;&lt;/if&gt;&gt;
+    &lt;&lt;/if&gt;&gt;
+
+    &lt;&lt;if not visited(&quot;Prologue_Hacking&quot;)&gt;&gt;
+        &lt;&lt;if $skills.tech &gt;= 3 and $int &gt;= 6&gt;&gt;
+            &lt;button&gt;
+                &lt;&lt;link &quot;BYPASS GOV FIREWALL [TECH 3]&quot;&gt;&gt;
+                    &lt;&lt;addTime 8&gt;&gt;&lt;&lt;goto &quot;Prologue_Hacking&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TECH 3 / INT 6]&lt;/b&gt; 9 Minutes | Breach military-grade encryption.&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;&lt;else&gt;&gt;
+            &lt;button disabled style=&quot;opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
+                &lt;span style=&quot;text-decoration: line-through;&quot;&gt;BYPASS GOV FIREWALL&lt;/span&gt;&lt;br&gt;
+                &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES TECH 3 &amp; INT 6] You lack the high-level expertise to breach military encryption.&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;&lt;/if&gt;&gt;
+    &lt;&lt;/if&gt;&gt;
+
+    &lt;&lt;if $hasPacked&gt;&gt;
+        &lt;button style=&quot;border-left-color: var(--accent-red) !important; margin-top: 15px;&quot;&gt;
+            &lt;&lt;link &quot;LEAVE APARTMENT&quot;&gt;&gt;
+                &lt;&lt;run setup.sound.stop(&#39;atmosphere&#39;)&gt;&gt;
+                &lt;&lt;run setup.sound.fade(&#39;atmosphere&#39;, 1000)&gt;&gt;
+                &lt;&lt;completeObjective &quot;leave_apt&quot;&gt;&gt;
+                &lt;&lt;addObjective &quot;escape_building&quot; &quot;Find a way down to the ground floor&quot;&gt;&gt;
+                &lt;&lt;goto &quot;Hallway&quot;&gt;&gt;
+            &lt;&lt;/link&gt;&gt;
+            &lt;span class=&quot;btn-sub&quot; style=&quot;color: #ff9999;&quot;&gt;Exit to the 4th Floor Hallway. No turning back.&lt;/span&gt;
+        &lt;/button&gt;
+    &lt;&lt;/if&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="60" name="Prologue_Phone" tags="" position="100,400" size="100,100">&lt;!-- ========================================== --&gt;
 &lt;!-- 1. PASSAGE HEADER                          --&gt;
 &lt;!-- ========================================== --&gt;
 &lt;center&gt;
@@ -15540,7 +15637,7 @@ The comments are a storm of denial, prayers, and instructions to &quot;aim for t
 		
         &lt;&lt;goto &quot;Prologue&quot;&gt;&gt;
 	&lt;&lt;/button&gt;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="60" name="Prologue_Radio" tags="" position="200,400" size="100,100">&lt;!-- ========================================== --&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="61" name="Prologue_Radio" tags="" position="200,400" size="100,100">&lt;!-- ========================================== --&gt;
 &lt;!-- HEADER                                     --&gt;
 &lt;!-- ========================================== --&gt;
 &lt;center&gt;
@@ -15589,21 +15686,17 @@ It seems the &quot;Second Life&quot; didn&#39;t care about the soldier&#39;s min
         &lt;&lt;goto &quot;Prologue&quot;&gt;&gt;
         
     &lt;&lt;/button&gt;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="61" name="Prologue_WakeUp" tags="" position="500,0" size="100,100">&lt;&lt;set $inventory to []&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="62" name="Prologue_WakeUp" tags="" position="500,0" size="100,100">&lt;&lt;set $inventory to []&gt;&gt;
 &lt;&lt;set $gameClockActive to false&gt;&gt; /* Time is frozen during intro */
 &lt;&lt;set $step to 1&gt;&gt;
-
-&lt;&lt;script&gt;&gt;
-    /* STATIC STARTS (ID: static) */
-    setup.sound.play(&quot;static&quot;, &quot;audio/sfx/static.mp3&quot;, true, 0.4);
-&lt;&lt;/script&gt;&gt;
 
 &lt;div class=&quot;vn-container&quot;&gt;
     /* Top Stage: Fixed TV Image Overhead */
     &lt;div class=&quot;vn-stage&quot;&gt;
         &lt;div class=&quot;tv-container&quot; style=&quot;text-align: center;&quot;&gt;
-            &lt;img src=&quot;image/static.gif&quot; alt=&quot;TV Static&quot; class=&quot;tv-static-img&quot;&gt;
-            &lt;div class=&quot;glitch&quot;&gt;SSSHHHHHKKKKK...&lt;/div&gt;
+            /* TV starts dim/off to sell the peaceful Saturday night */
+            &lt;img src=&quot;image/static.gif&quot; alt=&quot;TV Static&quot; class=&quot;tv-static-img&quot; id=&quot;tv-screen&quot; style=&quot;opacity: 0.1; transition: opacity 0.1s;&quot;&gt;
+            &lt;div class=&quot;glitch&quot; id=&quot;tv-glitch&quot; style=&quot;display:none;&quot;&gt;SSSHHHHHKKKKK...&lt;/div&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 
@@ -15611,33 +15704,48 @@ It seems the &quot;Second Life&quot; didn&#39;t care about the soldier&#39;s min
     &lt;div class=&quot;vn-dialogue-box&quot;&gt;
         &lt;div class=&quot;vn-speaker&quot;&gt;SYSTEM / NARRATION&lt;/div&gt;
 
-        &lt;div id=&quot;vn-text&quot;&gt;
-            A harsh, jagged tearing sound shreds through the tail end of your nightmare. Not a sound from your mind—relentless, cold white noise.
+        &lt;!-- Where the typewriter text will render --&gt;
+        &lt;div id=&quot;vn-text&quot;&gt;&lt;/div&gt;
+        
+        &lt;!-- Container for choices/buttons that appear after typing --&gt;
+        &lt;div id=&quot;vn-action-area&quot;&gt;&lt;/div&gt;
+
+        &lt;!-- Animated Indicator (Controlled by VNEngine) --&gt;
+        &lt;div class=&quot;vn-prompt-text&quot; style=&quot;display:none;&quot;&gt;
+            CLICK TO CONTINUE &lt;span class=&quot;vn-prompt-icon&quot;&gt;▶&lt;/span&gt;
         &lt;/div&gt;
 
-        /* Native SugarCube Click Prompt */
-        &lt;div id=&quot;vn-advance&quot;&gt;
-            &lt;&lt;link &quot;(Click here to continue ▶)&quot;&gt;&gt;
+        /* Hidden Native SugarCube Click Prompt */
+        &lt;div id=&quot;vn-advance&quot; style=&quot;display:none;&quot;&gt;
+            &lt;&lt;link &quot;Next&quot;&gt;&gt;
                 &lt;&lt;set $step++&gt;&gt;
                 &lt;&lt;if $step is 2&gt;&gt;
-                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;Your eyes snap open as you jolt upright. The living room is drowning in the cold, chaotic strobe of an untuned television set.&lt;&lt;/replace&gt;&gt;
+                    &lt;&lt;script&gt;&gt;
+                        /* JUMPSCARE: Audio and Visuals trigger together */
+                        setup.sound.play(&quot;static&quot;, &quot;audio/sfx/static.mp3&quot;, true, 0.4);
+                        $(&#39;#tv-screen&#39;).css(&#39;opacity&#39;, &#39;1&#39;);
+                        $(&#39;#tv-glitch&#39;).show();
+                    &lt;&lt;/script&gt;&gt;
+                    &lt;&lt;run VNEngine.startTypewriter(&quot;Then, the broadcast dies. A harsh, jagged tearing sound shreds through the tail end of your sleep—relentless, cold white noise.&quot;, 25)&gt;&gt;
                 &lt;&lt;elseif $step is 3&gt;&gt;
-                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;The main power is miraculously still running, but the modem beside the TV is flashing its status LEDs in a frantic, uncoordinated pulse—searching for a signal that isn&#39;t there.&lt;&lt;/replace&gt;&gt;
+                    &lt;&lt;run VNEngine.startTypewriter(&quot;Your eyes snap open as you jolt upright. The living room is drowning in the chaotic strobe of an untuned television. Beside it, the modem flashes its LEDs in a frantic pulse, searching for a dead connection.&quot;, 25)&gt;&gt;
                 &lt;&lt;elseif $step is 4&gt;&gt;
                     &lt;&lt;script&gt;&gt;
                         /* SIRENS FADE IN */
                         setup.sound.play(&quot;siren&quot;, &quot;audio/sfx/sirens.mp3&quot;, true, 0.3);
                     &lt;&lt;/script&gt;&gt;
-                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;Then, beyond the thin glass of the balcony door, another sound bleeds through from the city below—a rising, mournful chorus of distant emergency sirens echoing across the night.&lt;&lt;/replace&gt;&gt;
+                    &lt;&lt;run VNEngine.startTypewriter(&quot;You hold your breath. Beyond the thin glass of the balcony door, a sound bleeds through from the city streets below—a rising, mournful chorus of distant emergency sirens echoing across the night.&quot;, 25)&gt;&gt;
                 &lt;&lt;elseif $step is 5&gt;&gt;
                     &lt;&lt;script&gt;&gt;
                         /* SHORT SCREAM */
                         setup.sound.play(&quot;scream&quot;, &quot;audio/sfx/scream.mp3&quot;, false, 0.9);
                     &lt;&lt;/script&gt;&gt;
-                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;And buried deep beneath the mechanical wail of the sirens... a raw, terrifying human &lt;span style=&quot;color:#e74c3c; font-weight:bold;&quot;&gt;scream&lt;/span&gt; cut short in the dark.&lt;&lt;/replace&gt;&gt;
+                    &lt;&lt;run VNEngine.startTypewriter(&quot;And buried deep beneath the mechanical wail of the sirens... a raw, terrifying scream that is abruptly cut short in the dark.&quot;, 25)&gt;&gt;
                 &lt;&lt;elseif $step is 6&gt;&gt;
-                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;
-                        Barefoot and disoriented, you stumble toward the glass balcony door. As you reach out to pull the curtain, your own pale, blurred reflection stares back at you from the darkened window pane.
+                    &lt;&lt;run VNEngine.startTypewriter(&quot;Barefoot and disoriented, you stumble toward the glass balcony door. As you reach out to pull the curtain, your own pale, blurred reflection stares back at you from the darkened window pane.&quot;, 25)&gt;&gt;
+                    
+                    /* Reveal the character creation button in the action area */
+                    &lt;&lt;replace &quot;#vn-action-area&quot;&gt;&gt;
                         &lt;br&gt;&lt;br&gt;
                         &lt;div style=&quot;text-align:center;&quot;&gt;
                             &lt;&lt;button &quot;FOCUS ON YOUR REFLECTION...&quot;&gt;&gt;
@@ -15653,13 +15761,20 @@ It seems the &quot;Second Life&quot; didn&#39;t care about the soldier&#39;s min
                             &lt;&lt;/button&gt;&gt;
                         &lt;/div&gt;
                     &lt;&lt;/replace&gt;&gt;
-                    /* Hide the continue prompt on step 6 */
+                    
+                    /* Remove the advance link and blinking cursor so the player must click the button */
                     &lt;&lt;replace &quot;#vn-advance&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
+                    &lt;&lt;run $(&#39;.vn-prompt-text&#39;).remove()&gt;&gt;
                 &lt;&lt;/if&gt;&gt;
             &lt;&lt;/link&gt;&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="62" name="SelectHobby" tags="" position="900,100" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;
+
+/* Kick off the first line of text once the passage is fully rendered to the screen */
+&lt;&lt;done&gt;&gt;
+    &lt;&lt;run VNEngine.startTypewriter(&quot;It was supposed to be a quiet Saturday night. You remember the warmth of the couch, the hum of the heater, and drifting off to the dull murmur of a late-night talk show.&quot;, 25)&gt;&gt;
+&lt;&lt;/done&gt;&gt;</tw-passagedata><tw-passagedata pid="63" name="SelectHobby" tags="" position="900,100" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $hp to Math.min($hp, $hp_max)&gt;&gt;
 &lt;&lt;set $stamina to Math.min($stamina, $stamina_max)&gt;&gt;
 
@@ -16192,7 +16307,7 @@ It seems the &quot;Second Life&quot; didn&#39;t care about the soldier&#39;s min
 &lt;&lt;/if&gt;&gt;
 
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="63" name="Settings_Menu" tags="" position="200,200" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="64" name="Settings_Menu" tags="" position="200,200" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;div style=&quot;font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; padding: 10px;&quot;&gt;
     /* ============================================================
        SECTION 1: TEXT SIZE SETTINGS
@@ -16248,7 +16363,7 @@ It seems the &quot;Second Life&quot; didn&#39;t care about the soldier&#39;s min
 
 &lt;/div&gt;
 
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="64" name="Stairwell_Entrance" tags="" position="200,700" size="100,100">&lt;&lt;completeObjective &quot;escape_building&quot;&gt;&gt; /* Finishes old escape task */
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="65" name="Stairwell_Entrance" tags="" position="200,700" size="100,100">&lt;&lt;completeObjective &quot;escape_building&quot;&gt;&gt; /* Finishes old escape task */
 &lt;&lt;purgeCompleted&gt;&gt;
 /* =================================================================
    PASSAGE: STAIRWELL ENTRANCE
@@ -16363,7 +16478,7 @@ You need to get down to the ground floor.
         &lt;&lt;/if&gt;&gt;
 
     &lt;/div&gt; &lt;!-- End of Choice Menu --&gt;
-&lt;/div&gt; &lt;!-- End of Interaction Box --&gt;</tw-passagedata><tw-passagedata pid="65" name="Stairwell_Landing" tags="" position="200,800" size="100,100">/* =================================================================
+&lt;/div&gt; &lt;!-- End of Interaction Box --&gt;</tw-passagedata><tw-passagedata pid="66" name="Stairwell_Landing" tags="" position="200,800" size="100,100">/* =================================================================
    1. INITIALIZATION &amp; SETUP
    Swap UI map to 2nd Floor, update location pin, and check if 
    the player experienced the horrors on the 4th floor.
@@ -16500,7 +16615,7 @@ You have to open the fire door to the 2nd Floor, cross the building, and find th
         &lt;&lt;set $floorLevel to 2&gt;&gt;
         &lt;&lt;goto &quot;Floor2_Hallway&quot;&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="66" name="StoryCaption" tags="" position="100,0" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="67" name="StoryCaption" tags="" position="100,0" size="100,100">&lt;&lt;nobr&gt;&gt;
 
 /* ==========================================================
    SECTION 1: TAB NAVIGATION
@@ -16715,7 +16830,7 @@ You have to open the fire door to the 2nd Floor, cross the building, and find th
     &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="67" name="StoryInit" tags="" position="0,0" size="100,100">/*  
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="68" name="StoryInit" tags="" position="0,0" size="100,100">/*  
     =================================================================
     STORYINIT: THE CORE ENGINE DATABASE
     Sunday&#39;s Last Breath - Twine Survival Horror
@@ -17285,7 +17400,7 @@ You have to open the fire door to the 2nd Floor, cross the building, and find th
 &lt;&lt;set $objectives to [
     { id: &quot;pack_gear&quot;, desc: &quot;Gather your starter gear from the table&quot;, status: &quot;active&quot; },
     { id: &quot;leave_apt&quot;, desc: &quot;Leave your apartment and head outside&quot;, status: &quot;locked&quot; }
-]&gt;&gt;</tw-passagedata><tw-passagedata pid="68" name="Student_Exercise" tags="" position="800,100" size="100,100">&lt;&lt;nobr&gt;&gt;
+]&gt;&gt;</tw-passagedata><tw-passagedata pid="69" name="Student_Exercise" tags="" position="800,100" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* 1. DATA MAPPING: Converts short variable names to pretty labels for the UI */
 &lt;&lt;set _labelMap to {
     &quot;str&quot;: &quot;Strength&quot;,
@@ -17360,7 +17475,7 @@ You have to open the fire door to the 2nd Floor, cross the building, and find th
             ⚠️ SPEND ALL POINTS TO CONTINUE
         &lt;/span&gt;
     &lt;&lt;/if&gt;&gt;
-&lt;/center&gt;</tw-passagedata><tw-passagedata pid="69" name="Student_Major" tags="" position="800,200" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/center&gt;</tw-passagedata><tw-passagedata pid="70" name="Student_Major" tags="" position="800,200" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;center&gt;
     &lt;h1&gt;UNIVERSITY TRANSCRIPT: MAJOR&lt;/h1&gt;
     &lt;div style=&quot;color:#888; font-style:italic; margin-bottom: 20px;&quot;&gt;
@@ -17441,7 +17556,7 @@ You have to open the fire door to the 2nd Floor, cross the building, and find th
     &lt;/div&gt;
 
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="70" name="Student_Minor" tags="" position="1000,200" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="71" name="Student_Minor" tags="" position="1000,200" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;center&gt;
     &lt;h1&gt;UNIVERSITY TRANSCRIPT: MINOR&lt;/h1&gt;
     &lt;div style=&quot;color:#888; font-style:italic; margin-bottom: 20px;&quot;&gt;
@@ -17532,7 +17647,7 @@ You have to open the fire door to the 2nd Floor, cross the building, and find th
     &lt;&lt;/if&gt;&gt;
 
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="71" name="StudioSplash" tags="splash-screen" position="300,100" size="100,100">&lt;div class=&quot;studio-splash-container&quot;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="72" name="StudioSplash" tags="splash-screen" position="300,100" size="100,100">&lt;div class=&quot;studio-splash-container&quot;&gt;
     &lt;img src=&quot;image/studio_logo.gif&quot; class=&quot;splash-logo&quot;&gt;
     &lt;h3 class=&quot;splash-presents&quot;&gt;P R E S E N T S&lt;/h3&gt;
 &lt;/div&gt;
@@ -17540,7 +17655,7 @@ You have to open the fire door to the 2nd Floor, cross the building, and find th
 &lt;!-- Auto-forwards to the Disclaimer after 4 seconds --&gt;
 &lt;&lt;timed 4.2s&gt;&gt;
     &lt;&lt;goto &quot;Disclaimer&quot;&gt;&gt;
-&lt;&lt;/timed&gt;&gt;</tw-passagedata><tw-passagedata pid="72" name="System_Menu" tags="" position="100,200" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/timed&gt;&gt;</tw-passagedata><tw-passagedata pid="73" name="System_Menu" tags="" position="100,200" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;div style=&quot;font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; padding: 10px;&quot;&gt;
 
 	&lt;!-- MENU HEADER --&gt;
@@ -17594,7 +17709,7 @@ You have to open the fire door to the 2nd Floor, cross the building, and find th
 	&lt;/div&gt;
 
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="73" name="Title" tags="title-screen" position="400,0" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="74" name="Title" tags="title-screen" position="400,0" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* START MAIN MENU MUSIC */
 &lt;&lt;run window.playMenuMusic()&gt;&gt;
 
@@ -17636,7 +17751,7 @@ You have to open the fire door to the 2nd Floor, cross the building, and find th
 &lt;/div&gt;
 
 &lt;&lt;run window.animateMainMenu()&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="74" name="Unit_401" tags="" position="300,625" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="75" name="Unit_401" tags="" position="300,625" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* ================================================================= */
 /* 1. INITIALIZATION &amp; SETUP                                         */
 /* ================================================================= */
@@ -17957,7 +18072,7 @@ You&#39;re the only living thing in here. The place is yours.
 
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="75" name="Unit_402" tags="" position="200,600" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="76" name="Unit_402" tags="" position="200,600" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* ====================================================================
    INITIALIZATION &amp; STATE SETUP
    ==================================================================== */
@@ -18322,7 +18437,7 @@ There is a revolver on the floor near Mr. Anderson&#39;s foot. Small caliber. He
 
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="76" name="Unit_405" tags="" position="100,625" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="77" name="Unit_405" tags="" position="100,625" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* =================================================================
    1. INITIALIZATION &amp; SETUP
    ================================================================= */
@@ -18734,7 +18849,7 @@ You press your ear to the door. The silence on the other side isn&#39;t empty si
     &lt;/button&gt;
 
 &lt;&lt;/if&gt;&gt; &lt;!-- End of Inside Room Phase checks --&gt;
-&lt;&lt;/if&gt;&gt; &lt;!-- End of Main Location (Inside/Outside) check --&gt;</tw-passagedata><tw-passagedata pid="77" name="Unit_406" tags="" position="0,650" size="100,100">&lt;!-- ======================================================= --&gt;
+&lt;&lt;/if&gt;&gt; &lt;!-- End of Main Location (Inside/Outside) check --&gt;</tw-passagedata><tw-passagedata pid="78" name="Unit_406" tags="" position="0,650" size="100,100">&lt;!-- ======================================================= --&gt;
 &lt;!-- INITIALIZATION &amp; SETUP                                  --&gt;
 &lt;!-- ======================================================= --&gt;
 &lt;&lt;nobr&gt;&gt;
@@ -19113,7 +19228,7 @@ You press your ear to the door. The silence on the other side isn&#39;t empty si
 
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="78" name="Utility_Closet" tags="" position="400,650" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="79" name="Utility_Closet" tags="" position="400,650" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* ===================================================================== */
 /* 0. INITIALIZATION &amp; SETUP                                             */
 /* ===================================================================== */
@@ -19443,7 +19558,7 @@ This is better than you expected.
     &lt;/div&gt;
 
 &lt;/div&gt;
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="79" name="Widget" tags="widget" position="200,0" size="100,100">/* ========================================================================
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="80" name="Widget" tags="widget" position="200,0" size="100,100">/* ========================================================================
    WIDGET LIBRARY: CORE SYSTEMS
    Includes: UI, Survival Logic, Inventory, Time, Map, and Radar Systems
    ======================================================================== */

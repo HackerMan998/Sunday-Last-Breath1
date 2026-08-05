@@ -197,7 +197,8 @@ a:hover { color: #000; background-color: var(--accent-blue); border-bottom: 1px 
     position: sticky !important; top: 0 !important; z-index: 1000 !important;
     background-color: rgba(5, 4, 4, 0.95); backdrop-filter: blur(5px);
     display: flex; justify-content: space-between; align-items: center;
-    padding: 20px 2px 15px 2px !important; margin-bottom: 20px;
+    padding: 20px 30px 15px 30px !important; /* FIXED: 30px padding on the sides */
+    margin-bottom: 20px;
     border-bottom: 1px solid #333; box-shadow: 0 15px 20px -5px var(--bg-color); 
     box-sizing: border-box; width: 100%;
 }
@@ -1008,142 +1009,148 @@ body[data-tags~="splash-screen"] #story {
    TRUE VISUAL NOVEL (VN) DIALOGUE BOX & CLICK-TO-ADVANCE
 ================================================================= */
 
-/* Lock viewport & remove outer scrollbars */
-#story, #passages, .passage {
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  box-sizing: border-box;
-  overflow: hidden !important;
+/* --- VIEWPORT & SUGARCUBE OVERRIDES --- */
+html, body {
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background-color: #050404;
 }
 
+#story {
+    margin: 0 !important; /* Kills the default Twine sidebar spacing */
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+}
+
+#passages {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.passage {
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex !important;
+    flex-direction: column !important; /* Turns the passage into a flex container */
+}
+
+/* --- MAIN VN CONTAINER --- */
 .vn-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: calc(100vh - 55px);
-  box-sizing: border-box;
-  overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex: 1; /* Automatically shrinks/grows to perfectly fill remaining space! */
+    min-height: 0; /* Critical: prevents the box from overflowing the screen */
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
+/* --- STAGE AREA (TV / CHARACTER ART) --- */
 .vn-stage {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 10px 0;
+    flex: 1 1 auto; /* Allows stage to grow and shrink gracefully */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 0; 
+    padding: 15px;
+    box-sizing: border-box;
+    width: 100%; 
+}
+
+.tv-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 100%;
 }
 
 .tv-static-img {
-  max-height: 28vh;
-  width: auto;
-  border: 2px solid #444;
-  border-radius: 4px;
-  display: block;
-  margin: 0 auto;
+    max-height: 40vh !important; /* Let image scale without crushing text */
+    max-width: 100%;
+    object-fit: contain;
+    border: 2px solid #333;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
-.glitch {
-  color: #e74c3c;
-  margin-top: 6px;
-  font-size: 1.8em;
-  text-align: center;
-}
-
-/* Clickable Dialogue Box */
+/* --- DYNAMIC DIALOGUE BOX --- */
 .vn-dialogue-box {
-  height: 36vh;
-  width: 100%;
-  background: rgba(12, 12, 18, 0.95);
-  border-top: 2px solid #e74c3c;
-  padding: 16px 24px 35px 24px;
-  box-sizing: border-box;
-  position: relative;
-  color: #e0e0e0;
-  font-size: 1.1em;
-  line-height: 1.5;
-  cursor: pointer; /* Indicates whole box is clickable */
-  user-select: none;
+    flex: 0 1 auto; /* Takes only the space it needs */
+    height: auto; /* Allows box to expand for choices/buttons */
+    min-height: 25vh;
+    max-height: 45vh; /* Prevents it from eating the whole screen */
+    overflow-y: auto; /* Adds a scrollbar ONLY if text is massive */
+    width: 100%;
+    background: rgba(8, 8, 12, 0.96);
+    border-top: 2px solid #e74c3c;
+    padding: 20px 30px 50px 30px; /* Extra bottom padding for the prompt */
+    box-sizing: border-box;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
 }
 
+/* Custom Scrollbar for Dialogue Box */
+.vn-dialogue-box::-webkit-scrollbar { width: 8px; }
+.vn-dialogue-box::-webkit-scrollbar-thumb { background: #e74c3c; border-radius: 4px; }
+
+/* Speaker Badge Styling */
 .vn-speaker {
-  font-weight: bold;
-  color: #e74c3c;
-  font-size: 0.9em;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+    color: #e74c3c;
+    font-size: 0.85em;
+    letter-spacing: 2px;
+    background: rgba(231, 76, 60, 0.12);
+    padding: 3px 10px;
+    border-left: 3px solid #e74c3c;
+    margin-bottom: 12px;
+    text-transform: uppercase;
 }
 
+/* Dialogue Text */
 #vn-text {
-  max-width: 95%;
+    font-family: 'Courier Prime', monospace;
+    color: #e0e0e0;
+    font-size: 1.15em;
+    line-height: 1.6;
+    max-width: 96%;
+    text-align: justify;
 }
 
-/* Subtle VN Prompt Indicator (Pulsing at bottom right inside box) */
+#vn-action-area {
+    margin-top: 15px; /* Adds breathing room above buttons */
+}
+
+/* Animated Click-to-Continue Prompt */
 .vn-prompt-text {
-  position: absolute;
-  bottom: 12px;
-  right: 24px;
-  color: #888;
-  font-size: 0.85em;
-  font-style: italic;
-  animation: pulse-prompt 1.5s infinite;
+    position: relative;
+    bottom: 14px;
+    right: 30px;
+    color: #e74c3c;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9em;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
 }
 
-@keyframes pulse-prompt {
-  0% { opacity: 0.4; }
-  50% { opacity: 1; }
-  100% { opacity: 0.4; }
+.vn-prompt-icon {
+    display: inline-block;
+    animation: bounce-right 0.8s infinite alternate ease-in-out;
 }
 
-/* Glowing Choice Button at the End */
-.vn-choice-btn {
-  background: rgba(231, 76, 60, 0.2) !important;
-  border: 1px solid #e74c3c !important;
-  color: #ffffff !important;
-  padding: 10px 24px !important;
-  font-weight: bold !important;
-  cursor: pointer !important;
-  border-radius: 4px !important;
-  font-size: 0.95em !important;
-  letter-spacing: 1px !important;
-  box-shadow: 0 0 10px rgba(231, 76, 60, 0.4);
-  transition: all 0.2s ease !important;
-}
-
-.vn-choice-btn:hover {
-  background: #e74c3c !important;
-  box-shadow: 0 0 18px rgba(231, 76, 60, 0.8);
-  transform: scale(1.03);
-}
-
-/* Advance Prompt Link inside Dialogue Box */
-#vn-advance {
-  position: absolute;
-  bottom: 14px;
-  right: 24px;
-  z-index: 9999;
-}
-
-#vn-advance a {
-  color: #aaaaaa !important;
-  font-size: 0.85em;
-  font-style: italic;
-  text-decoration: none !important;
-  animation: pulse-prompt 1.5s infinite;
-  display: inline-block;
-  padding: 4px 8px;
-}
-
-#vn-advance a:hover {
-  color: #ff5252 !important;
-}
-
-@keyframes pulse-prompt {
-  0% { opacity: 0.4; }
-  50% { opacity: 1; }
-  100% { opacity: 0.4; }
+@keyframes bounce-right {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(5px); }
 }
 
 /* Floating Floor Items Badge (Top-Right) */

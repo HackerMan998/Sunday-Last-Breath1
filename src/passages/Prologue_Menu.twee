@@ -1,0 +1,89 @@
+:: Prologue_Menu {"position":"500,100"}
+<hr style="border-color: #333; margin: 0 0 15px 0;">
+<div class="choice-menu">
+    <<if !$hasPacked>>
+        <button>
+            <<link "GATHER GEAR & SEARCH ROOM">>
+                <<addTime 4>>
+                <<completeObjective "pack_gear">>
+                <<activateObjective "leave_apt">>
+                <<script>>
+                    State.variables.inventory = clone(State.variables.tableStash);
+                    State.variables.tableStash = [];
+                    State.variables.hasPacked = true;
+                    if (!State.variables.houseLootSpawned) {
+                        State.variables.floorItems["Prologue"] = [
+                            { id: "Stale Coffee", qty: 1 },
+                            { id: "Kitchen Knife", qty: 1 },
+                            { id: "T-Shirt", qty: 1 }
+                        ];
+                        State.variables.houseLootSpawned = true;
+                    }
+                    Engine.play("Prologue");
+                <</script>>
+            <</link>>
+            <span class="btn-sub">5 Minutes | Grab your starter items and look for supplies.</span>
+        </button>
+    <</if>>
+
+    <<if not visited("Prologue_Phone")>>
+        <button>
+            <<link "CHECK NEWS FEED">>
+                <<goto "Prologue_Phone">>
+            <</link>>
+            <span class="btn-sub">1 Minute | See what the internet knows.</span>
+        </button>
+    <</if>>
+
+    <<if not visited("Prologue_Radio")>>
+        <<if $job == "Police Officer">>
+            <button>
+                <<link "LISTEN TO EMERGENCY BAND [POLICE]">>
+                    <<addTime 3>><<goto "Prologue_Radio">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[JOB: POLICE]</b> 4 Minutes | Monitor encrypted dispatch channels.</span>
+            </button>
+        <<elseif $skills.tech >= 1 and $int >= 4>>
+            <button>
+                <<link "HACK LOCAL POLICE CHATTER [TECH 1]">>
+                    <<addTime 5>><<goto "Prologue_Radio">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[TECH 1 / INT 4]</b> 6 Minutes | Find the dispatch frequency and bypass their scrambling.</span>
+            </button>
+        <<else>>
+            <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">ACCESS EMERGENCY BAND</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES POLICE OFFICER OR TECH 1 & INT 4] You lack the hardware or skills.</span>
+            </button>
+        <</if>>
+    <</if>>
+
+    <<if not visited("Prologue_Hacking")>>
+        <<if $skills.tech >= 3 and $int >= 6>>
+            <button>
+                <<link "BYPASS GOV FIREWALL [TECH 3]">>
+                    <<addTime 8>><<goto "Prologue_Hacking">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[TECH 3 / INT 6]</b> 9 Minutes | Breach military-grade encryption.</span>
+            </button>
+        <<else>>
+            <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">BYPASS GOV FIREWALL</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES TECH 3 & INT 6] You lack the high-level expertise to breach military encryption.</span>
+            </button>
+        <</if>>
+    <</if>>
+
+    <<if $hasPacked>>
+        <button style="border-left-color: var(--accent-red) !important; margin-top: 15px;">
+            <<link "LEAVE APARTMENT">>
+                <<run setup.sound.stop('atmosphere')>>
+                <<run setup.sound.fade('atmosphere', 1000)>>
+                <<completeObjective "leave_apt">>
+                <<addObjective "escape_building" "Find a way down to the ground floor">>
+                <<goto "Hallway">>
+            <</link>>
+            <span class="btn-sub" style="color: #ff9999;">Exit to the 4th Floor Hallway. No turning back.</span>
+        </button>
+    <</if>>
+</div>

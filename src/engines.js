@@ -2564,3 +2564,77 @@ if (typeof Macro !== 'undefined') {
         return objs.some(function(o) { return o.id === id && o.status === 'active'; });
     };
 }
+
+// Routes clicks from the main VN box to the actual advance link
+$(document).on('click', '.vn-dialogue-box', function() {
+    $('#vn-advance a').trigger('click');
+});
+
+/* =================================================================
+   VISUAL NOVEL TYPEWRITER & INPUT ENGINE
+================================================================= */
+window.VNEngine = {
+    typing: false,
+    fullText: "",
+    targetEl: null,
+    timer: null,
+
+    // Initialize typewriter effect
+    startTypewriter: function(text, speed = 25) {
+        const self = this;
+        self.fullText = text;
+        self.targetEl = $('#vn-text');
+        self.typing = true;
+        
+        if (self.timer) clearInterval(self.timer);
+        
+        self.targetEl.html('');
+        $('.vn-prompt-text').hide(); // Hide 'Next' prompt while typing
+        
+        let index = 0;
+        self.timer = setInterval(function() {
+            if (index < text.length) {
+                self.targetEl.append(text.charAt(index));
+                index++;
+            } else {
+                self.complete();
+            }
+        }, speed);
+    },
+
+    // Instantly reveal all text
+    complete: function() {
+        if (this.timer) clearInterval(this.timer);
+        if (this.targetEl) this.targetEl.html(this.fullText);
+        this.typing = false;
+        $('.vn-prompt-text').fadeIn(200); // Show blinking prompt
+    },
+
+    // Handle clicks: Skip typing IF typing, else Advance passage
+    handleInteraction: function() {
+        if (this.typing) {
+            this.complete();
+        } else {
+            const $link = $('#vn-advance a, .vn-advance-link');
+            if ($link.length) {
+                $link.first().trigger('click');
+            }
+        }
+    }
+};
+
+// Global click handler for dialogue box
+$(document).off('click', '.vn-dialogue-box').on('click', '.vn-dialogue-box', function(e) {
+    // 1. Prevent infinite click loops caused by event bubbling
+    if (e.isTrigger) {
+        return;
+    }
+    
+    // 2. Ignore clicks if player clicked directly on choices, buttons, or links
+    if ($(e.target).closest('button, input, a').length) {
+        return;
+    }
+    
+    // 3. Process the click
+    window.VNEngine.handleInteraction();
+});
