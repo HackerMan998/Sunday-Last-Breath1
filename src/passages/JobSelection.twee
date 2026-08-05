@@ -1,0 +1,166 @@
+:: JobSelection {"position":"900,0","size":"100,100"}
+<<nobr>>
+<center>
+    <h1>SURVIVOR IDENTITY</h1>
+    <div style="color:#888; font-style:italic; margin-bottom: 20px;">
+        "What was your life before the screaming started?"
+    </div>
+</center>
+
+<div class="job-grid">
+
+    <!-- 1. POLICE OFFICER -->
+    <div class="job-dossier-card" style="border-top: 3px solid var(--accent-blue);">
+        <img class="job-bg" src="image/job_police.gif">
+        <div class="job-content">
+            <div class="job-title" style="color:var(--accent-blue)">POLICE OFFICER</div>
+            <div class="job-desc">
+                You served on the force. Trained to handle firearms under extreme stress. <br>
+                <i style="color:#888;">"Protect and Serve" is just a memory. Now, it's "Aim and Fire."</i>
+            </div>
+            <div class="job-stats" style="border-left: 2px solid var(--accent-blue);">
+                <span style="color:#fff">PERKS:</span> Steady Hands & Authority<br>
+                <span style="color:#fff">START:</span> Glock 19, Ammo x24
+            </div>
+            <<button "SELECT POLICE OFFICER">>
+                <<set $job to "Police Officer">>
+                <<set $str to 5>><<set $int to 4>><<set $agi to 6>><<set $cha to 3>><<set $per to 7>>
+                <<set $skills.shooting to 3>><<set $skills.melee to 2>>
+                <<run window.setPerk("STEADY HANDS", "image/perks/steady_hands.png", "+15 Accuracy bonus.")>>
+                <<run window.setPerk("AUTHORITY", "image/perks/authority.png", "Command NPCs in crisis.")>>
+                <<run setup.addItem("Glock 19", 1)>><<run setup.addItem("9mm Ammo", 24)>>
+                <<goto "SelectHobby">>
+            <</button>>
+        </div>
+    </div>
+
+    <!-- 2. CONSTRUCTION WORKER -->
+    <div class="job-dossier-card" style="border-top: 3px solid var(--accent-red);">
+        <img class="job-bg" src="image/job_worker.gif">
+        <div class="job-content">
+            <div class="job-title" style="color:var(--accent-red)">CONSTRUCTION</div>
+            <div class="job-desc">
+                You built this city, and you know how to break it. You are physically powerful. <br>
+                <i style="color:#888;">Subtlety is not your strong suit. Force is.</i>
+            </div>
+            <div class="job-stats" style="border-left: 2px solid var(--accent-red);">
+                <span style="color:#fff">PERKS:</span> Breacher & Iron Grip<br>
+                <span style="color:#fff">START:</span> Sledgehammer, Duct Tape
+            </div>
+            <<button "SELECT WORKER">>
+                <<set $job to "Construction Worker">>
+                <<set $str to 8>><<set $int to 3>><<set $agi to 4>><<set $cha to 4>><<set $per to 3>>
+                <<set $hp_max to 140>><<set $hp to 140>>
+                <<set $skills.melee to 3>><<set $skills.tech to 2>>
+                <<run window.setPerk("BREACHER", "image/perks/breacher.png", "Smash locked doors with force.")>>
+                <<run window.setPerk("IRON GRIP", "image/perks/iron_grip.png", "Knockback enemies on miss.")>>
+                <<run setup.addItem("Sledgehammer", 1)>><<run setup.addItem("Duct Tape", 2)>>
+                <<goto "SelectHobby">>
+            <</button>>
+        </div>
+    </div>
+
+    <!-- 3. BURGLAR -->
+    <div class="job-dossier-card" style="border-top: 3px solid #2ecc71;">
+        <img class="job-bg" src="image/job_thief.gif">
+        <div class="job-content">
+            <div class="job-title" style="color:#2ecc71">BURGLAR</div>
+            <div class="job-desc">
+                You move silently and leave before anyone knows you were there. <br>
+                <i style="color:#888;">Why fight when you can just take what you want?</i>
+            </div>
+            <div class="job-stats" style="border-left: 2px solid #2ecc71;">
+                <span style="color:#fff">PERKS:</span> Locksmith & Ghost<br>
+                <span style="color:#fff">START:</span> Lockpicks, Knife, Light
+            </div>
+            <<button "SELECT BURGLAR">>
+                <<set $job to "Burglar">>
+                <<set $str to 3>><<set $int to 5>><<set $agi to 8>><<set $cha to 2>><<set $per to 6>>
+                <<set $stamina_max to 140>><<set $stamina to 140>>
+                <<set $skills.stealth to 3>><<set $skills.scavenging to 2>>
+                <<run window.setPerk("LOCKSMITH", "image/perks/locksmith.png", "Open locks silently.")>>
+                <<run window.setPerk("GHOST", "image/perks/ghost.png", "Harder for enemies to hit you.")>>
+                <<run setup.addItem("Combat Knife", 1)>><<run setup.addItem("Lockpicks", 1)>><<run setup.addItem("Flashlight", 1)>>
+                <<goto "SelectHobby">>
+            <</button>>
+        </div>
+    </div>
+
+    <!-- 4. DOCTOR -->
+    <div class="job-dossier-card" style="border-top: 3px solid #3498db;">
+        <img class="job-bg" src="image/job_doctor.gif">
+        <div class="job-content">
+            <div class="job-title" style="color:#3498db">DOCTOR</div>
+            <div class="job-desc">
+                You know exactly how the human body works—and how to take it apart. <br>
+                <i style="color:#888;">Knowledge is the only resource that doesn't run out.</i>
+            </div>
+            <div class="job-stats" style="border-left: 2px solid #3498db;">
+                <span style="color:#fff">PERKS:</span> Field Medic & Anatomist<br>
+                <span style="color:#fff">START:</span> Medkit, Antibiotics
+            </div>
+            <<button "SELECT DOCTOR">>
+                <<set $job to "Doctor">>
+                <<set $str to 2>><<set $int to 8>><<set $agi to 4>><<set $cha to 5>><<set $per to 5>>
+                <<set $hum to 70>>
+                <<set $skills.medicine to 3>><<set $skills.tech to 2>>
+                <<run window.setPerk("FIELD MEDIC", "image/perks/field_medic.png", "Healing items restore 2x HP.")>>
+                <<run window.setPerk("ANATOMIST", "image/perks/anatomist.png", "High critical hit chance.")>>
+                <<run setup.addItem("Scalpel", 1)>><<run setup.addItem("First Aid Kit", 1)>><<run setup.addItem("Antibiotics", 1)>>
+                <<goto "SelectHobby">>
+            <</button>>
+        </div>
+    </div>
+
+    <!-- 5. MANAGER -->
+    <div class="job-dossier-card" style="border-top: 3px solid #9b59b6;">
+        <img class="job-bg" src="image/job_sales.gif">
+        <div class="job-content">
+            <div class="job-title" style="color:#9b59b6">MANAGER</div>
+            <div class="job-desc">
+                A natural leader. You can talk your way out of a gunfight and barter for life. <br>
+                <i style="color:#888;">Humans are the real threat. You know how to handle them.</i>
+            </div>
+            <div class="job-stats" style="border-left: 2px solid #9b59b6;">
+                <span style="color:#fff">PERKS:</span> Silver Tongue & Inspiration<br>
+                <span style="color:#fff">START:</span> Luxury Watch, Golf Club
+            </div>
+            <<button "SELECT MANAGER">>
+                <<set $job to "Manager">>
+                <<set $str to 3>><<set $int to 5>><<set $agi to 3>><<set $cha to 9>><<set $per to 4>>
+                <<set $hum to 80>>
+                <<set $skills.scavenging to 2>><<set $skills.medicine to 1>>
+                <<run window.setPerk("SILVER TONGUE", "image/perks/silver_tongue.png", "Better trade prices with NPCs.")>>
+                <<run window.setPerk("INSPIRATION", "image/perks/inspiration.png", "Companions gain +10 Accuracy.")>>
+                <<run setup.addItem("Golf Club", 1)>><<run setup.addItem("Luxury Watch", 1)>>
+                <<goto "SelectHobby">>
+            <</button>>
+        </div>
+    </div>
+
+    <!-- 6. STUDENT -->
+    <div class="job-dossier-card" style="border-top: 3px solid #fff;">
+        <img class="job-bg" src="image/job_student.gif">
+        <div class="job-content">
+            <div class="job-title" style="color:#fff">STUDENT</div>
+            <div class="job-desc">
+                A blank slate with infinite potential. You adapt faster than anyone else. <br>
+                <i style="color:#888;">You define your own survival.</i>
+            </div>
+            <div class="job-stats" style="border-left: 2px solid #fff;">
+                <span style="color:#fff">PERKS:</span> Fast Learner & Adrenaline<br>
+                <span style="color:#fff">START:</span> Baseball Bat, Textbook
+            </div>
+            <<button "SELECT STUDENT">>
+                <<set $job to "Student">>
+                <<set $str to 2>><<set $int to 2>><<set $agi to 2>><<set $cha to 2>><<set $per to 2>>
+                <<run window.setPerk("FAST LEARNER", "image/perks/fast_learner.png", "Gain XP 2x faster.")>>
+                <<run window.setPerk("ADRENALINE", "image/perks/adrenaline.png", "Stats boost when HP below 30%.")>>
+                <<run setup.addItem("Baseball Bat", 1)>><<run setup.addItem("Textbook", 1)>>
+                <<goto "Student_Exercise">>
+            <</button>>
+        </div>
+    </div>
+
+</div> <!-- END job-grid -->
+<</nobr>>

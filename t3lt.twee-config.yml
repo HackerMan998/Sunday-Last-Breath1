@@ -1,0 +1,36 @@
+sugarcube-2:
+  macros:
+    chat:
+      name: chat
+    addTime:
+      name: addTime
+    exert:
+      name: exert
+    statbar:
+      name: statbar
+    traitDisplay:
+      name: traitDisplay
+    objectiveLog:
+      name: objectiveLog
+    completeObjective:
+      name: completeObjective
+    activateObjective:
+      name: activateObjective
+    addObjective:
+      name: addObjective
+    purgeCompleted:
+      name: purgeCompleted
+    mapDisplay:
+      name: mapDisplay
+    clockDisplay:
+      name: clockDisplay
+    equipDisplay:
+      name: equipDisplay
+    invDisplay:
+      name: invDisplay
+    attributeRadar:
+      name: attributeRadar
+    skillRadar:
+      name: skillRadar
+    gainTrust:
+      name: gainTrust

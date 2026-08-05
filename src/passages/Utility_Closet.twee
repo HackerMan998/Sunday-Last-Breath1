@@ -1,0 +1,332 @@
+:: Utility_Closet {"position":"400,650","size":"100,100"}
+<<nobr>>
+/* ===================================================================== */
+/* 0. INITIALIZATION & SETUP                                             */
+/* ===================================================================== */
+<<set $currentLocation to "Utility">>
+
+/* --- Set Base and Halved Stamina Costs --- */
+<<set _baseCost to 10>>
+<<set _halfCost to Math.round(_baseCost / 2)>>
+
+/* --- Initialize Room Variables --- */
+<<if not $utility_opened>><<set $utility_opened to false>><</if>>
+<<if not $looted_utility_flashlight>><<set $looted_utility_flashlight to false>><</if>>
+<<if not $looted_utility_bleach>><<set $looted_utility_bleach to false>><</if>>
+<<if not $looted_utility_gloves>><<set $looted_utility_gloves to false>><</if>>
+<<if not $looted_utility_tape>><<set $looted_utility_tape to false>><</if>>
+<<if not $looted_utility_rope>><<set $looted_utility_rope to false>><</if>>
+<<if not $looted_utility_batteries>><<set $looted_utility_batteries to false>><</if>>
+<<if not $read_utility_log>><<set $read_utility_log to false>><</if>>
+<</nobr>>
+
+
+<<if not $utility_opened>>
+/* ===================================================================== */
+/* PHASE 1: THE JAMMED HANDLE (LOCKED STATE)                             */
+/* ===================================================================== */
+<h2>UTILITY CLOSET — THE JAMMED HANDLE</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+    <img src="image/hallway/utility_door_locked.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+</div>
+
+The door at the end of the hall is unmarked except for a faded hazard stripe along its base and a small metal plate: *MAINTENANCE — AUTHORIZED ACCESS ONLY*. Someone has scratched out *AUTHORIZED ACCESS* with a key.
+
+The handle doesn't turn. Not locked — you can tell by the feel of the mechanism, the way it moves but catches — just jammed. Rusted through, or something shifted in the door frame.
+
+You press your ear to the door. Inside, something rattles. Light and metallic. The building settling, or loose gear shifting on a shelf every time the walls vibrate.
+
+<div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-gold);">
+    <b style="color:var(--accent-gold);">🔧 THE HANDLE IS STUCK. HOW DO YOU OPEN IT?</b><br><br>
+
+    <!-- FAILED BRUTE FORCE WARNING MESSAGE -->
+    <<if $utility_bruteforce_fail>>
+        <div style="padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin-bottom:15px; text-align:center;">
+            ❌ <b>BRUTE FORCE FAILED.</b> You kick the door with everything you have, but it only rattles loudly in the frame. Your leg throbs. The handle is still stuck.
+        </div>
+        <<unset $utility_bruteforce_fail>>
+    <</if>>
+
+    <!-- ========================================== -->
+    <!-- BYPASS METHODS GRID (6 OPTIONS)            -->
+    <!-- ========================================== -->
+    <div class="choice-menu" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+
+        <!-- 1. JOB CHECK -->
+        <<if $job == "Mechanic" or $job == "Carpenter">>
+            <button style="height: 100%;">
+                <<link "Disassemble the casing[JOB]">>
+                    <<addTime 3>>
+                    <<exert _halfCost>>
+                    <<run setup.sound.play("tool_use", "audio/sfx/metal_tinkering.mp3", false, 0.8)>>
+                    <<set $utility_opened to true>>
+                    <<goto "Utility_Closet">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[MECHANIC / CARPENTER]</b> Cost: <<print _halfCost>> STAMINA (Halved). You understand commercial hardware. You pop the pins and remove the handle safely.</span>
+            </button>
+        <<else>>
+            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">Disassemble the casing</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES MECHANIC OR CARPENTER] You lack the occupational knowledge to safely strip the hardware without breaking it.</span>
+            </button>
+        <</if>>
+
+        <!-- 2. TRAIT CHECK -->
+        <<if hasTrait("LOCKSMITH") or hasTrait("GHOST")>>
+            <button style="height: 100%;">
+                <<link "🤫 Work it open without force [TRAIT]">>
+                    <<addTime 1>>
+                    <<exert _halfCost>>
+                    <<run setup.sound.play("lockpick", "audio/sfx/lockpick_click.mp3", false, 0.8)>>
+                    <<set $utility_opened to true>>
+                    <<goto "Utility_Closet">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[LOCKSMITH / GHOST]</b> Cost: <<print _halfCost>> STAMINA (Halved). Not locked — just stuck. A little finesse in the right spot and it releases smoothly.</span>
+            </button>
+        <<else>>
+            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">🤫 Work it open without force</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES LOCKSMITH OR GHOST] You lack the specialized touch to finesse the jammed spindle without breaking it.</span>
+            </button>
+        <</if>>
+
+        <!-- 3. SKILL CHECK -->
+        <<if $skills.tech >= 1>>
+            <button style="height: 100%;">
+                <<link "🔌 Release it manually [TECH 1]">>
+                    <<addTime 3>>
+                    <<exert _halfCost>>
+                    <<set $utility_opened to true>>
+                    <<goto "Utility_Closet">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[TECH 1]</b> Cost: <<print _halfCost>> STAMINA (Halved). You examine the handle, find where the spindle has seized against its housing, and work it free. Clean.</span>
+            </button>
+        <<else>>
+            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">🔌 Release it manually</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES TECH 1] You don't have the mechanical knowledge to figure out exactly where the internal spindle has seized.</span>
+            </button>
+        <</if>>
+
+        <!-- 4. ATTRIBUTE CHECK (FIXED FROM 40 TO 4) -->
+        <<if $str >= 4>>
+            <button style="height: 100%;">
+                <<link "💪 Muscle it open [STR 4]">>
+                    <<addTime 1>>
+                    <<exert _halfCost>>
+                    <<run setup.sound.play("smash", "audio/sfx/metal_smash.mp3", false, 0.9)>>
+                    <<set $utility_opened to true>>
+                    <<goto "Utility_Closet">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 4]</b> Cost: <<print _halfCost>> STAMINA (Halved). You grab it two-handed, put your shoulder into it, and wrench. Something cracks inside the mechanism. The door opens.</span>
+            </button>
+        <<else>>
+            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">💪 Muscle it open</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES STR 4] You aren't strong enough to force the rusted mechanism to turn.</span>
+            </button>
+        <</if>>
+
+        <!-- 5. ITEM CHECK -->
+        <<if $equip.weapon == "Crowbar" or $equip.weapon == "Tire Iron">>
+            <button style="height: 100%;">
+                <<link "🔧 Pry it open with <<print $equip.weapon>>">>
+                    <<addTime 2>>
+                    <<exert _halfCost>>
+                    <<run setup.sound.play("pry_metal", "audio/sfx/metal_groan.mp3", false, 0.9)>>
+                    <<set $utility_opened to true>>
+                    <<goto "Utility_Closet">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[PHYSICS]</b> Cost: <<print _halfCost>> STAMINA (Halved). You slot the bar between the door and frame near the latch and lever down. It pops with a deep thud.</span>
+            </button>
+        <<else>>
+            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">🔧 Pry the handle assembly off</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES STURDY TOOL] You could pop the mechanism housing if you had a crowbar or heavy lever equipped.</span>
+            </button>
+        <</if>>
+
+        <!-- 6. LAST RESORT (70% RNG CHANCE) -->
+        <button style="grid-column: span 2; border-left-color: var(--accent-red) !important;">
+            <<link "🦵 Kick it open — full force [BRUTE FORCE]">>
+                <<addTime 2>>
+                <<exert _baseCost>>
+                <<run setup.sound.play("heavy_kick", "audio/sfx/heavy_kick.mp3", false, 1.0)>>
+                /* 70/30 RNG SPLIT */
+                <<if random(1, 100) <= 70>>
+                    <<run window.shakeScreen(10)>>
+                    <<set $utility_opened to true>>
+                <<else>>
+                    <<run window.shakeScreen(20)>>
+                    <<set $utility_bruteforce_fail to true>>
+                <</if>>
+                <<goto "Utility_Closet">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-red);">[LAST RESORT: 70% SUCCESS CHANCE]</b> Cost: <<print _baseCost>> STAMINA. The door bangs hard against the wall inside. It might work. It might not. <br><i style="color:#ff9999;">(If you lack the Stamina, this will drain your HP).</i></span>
+        </button>
+
+    </div> 
+    <!-- End of Bypass Methods Grid -->
+
+    <!-- ========================================== -->
+    <!-- LEAVE OPTION                               -->
+    <!-- ========================================== -->
+    <div style="margin-top: 15px;">
+        <button>
+            <<link "🚪 Leave it — return to the hallway">>
+                <<unset $utility_bruteforce_fail>> /* Cleanup flag if they leave */
+                <<set $hallwaySection to 4>>
+                <<goto "Hallway">>
+            <</link>>
+            <span class="btn-sub">Back to the corridor. Section 4.</span>
+        </button>
+    </div>
+
+</div>
+
+
+<<else>>
+/* ===================================================================== */
+/* PHASE 2: INSIDE THE CLOSET (OPENED/LOOTING STATE)                     */
+/* ===================================================================== */
+<h2>UTILITY CLOSET — MAINTENANCE SUPPLIES</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+    <img src="image/hallway/utility_door_opened.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+</div>
+
+The door swings inward.
+
+Industrial chemicals hit you immediately — bleach, ammonia, floor cleaner. The sharp, synthetic smell of someone doing their job, right up until they weren't.
+
+The rattling was a mop bucket, rocking slightly on its wheels every time the building shifts. In the quiet of the hallway, the sound carried further than it had any right to.
+
+Shelves line both walls, organized by someone methodical and probably bored — cleaning supplies on the left, tools and hardware on the right. At the back, hanging from a dedicated hook: a heavy-duty industrial flashlight beside a coiled nylon rope and a mounted spare battery pack.
+
+This is better than you expected.
+
+<div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-blue);">
+    <b style="color:var(--accent-blue);">🔦 WHAT DO YOU TAKE?</b><br><br>
+
+    <!-- ========================================== -->
+    <!-- LOOTING GRID                               -->
+    <!-- ========================================== -->
+    <div class="choice-menu" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+
+        <<if not $looted_utility_flashlight>>
+            <button style="height: 100%;">
+                <<link "🔦 Take the flashlight">>
+                    <<addTime 1>> /* Added Time Cost */
+                    <<set $looted_utility_flashlight to true>>
+                    <<run setup.addItem("Flashlight", 1)>>
+                    <<goto "Utility_Closet">>
+                <</link>>
+                <span class="btn-sub">Heavy-duty. Battery is full.</span>
+            </button>
+        <</if>>
+
+        <<if not $looted_utility_batteries>>
+            <button style="height: 100%;">
+                <<link "🔋 Take the battery pack">>
+                    <<addTime 1>> /* Added Time Cost */
+                    <<set $looted_utility_batteries to true>>
+                    <<run setup.addItem("Batteries", 4)>>
+                    <<goto "Utility_Closet">>
+                <</link>>
+                <span class="btn-sub">Four AAs, still sealed in packaging.</span>
+            </button>
+        <</if>>
+
+        <<if not $looted_utility_rope>>
+            <button style="height: 100%;">
+                <<link "🪢 Take the nylon rope">>
+                    <<addTime 1>> /* Added Time Cost */
+                    <<set $looted_utility_rope to true>>
+                    <<run setup.addItem("Rope", 1)>>
+                    <<goto "Utility_Closet">>
+                <</link>>
+                <span class="btn-sub">Twelve meters, coiled and clipped.</span>
+            </button>
+        <</if>>
+
+        <<if not $looted_utility_tape>>
+            <button style="height: 100%;">
+                <<link "🖤 Take the duct tape">>
+                    <<addTime 1>> /* Added Time Cost */
+                    <<set $looted_utility_tape to true>>
+                    <<run setup.addItem("Duct Tape", 1)>>
+                    <<goto "Utility_Closet">>
+                <</link>>
+                <span class="btn-sub">A full roll. Fixes everything temporarily.</span>
+            </button>
+        <</if>>
+
+        <<if not $looted_utility_bleach>>
+            <button style="height: 100%;">
+                <<link "🧴 Take the bleach">>
+                    <<addTime 1>> /* Added Time Cost */
+                    <<set $looted_utility_bleach to true>>
+                    <<run setup.addItem("Bleach", 1)>>
+                    <<goto "Utility_Closet">>
+                <</link>>
+                <span class="btn-sub">Good for sanitizing wounds or an improvised chemical deterrent.</span>
+            </button>
+        <</if>>
+
+        <<if not $looted_utility_gloves>>
+            <button style="height: 100%;">
+                <<link "🧤 Take the work gloves">>
+                    <<addTime 1>> /* Added Time Cost */
+                    <<set $looted_utility_gloves to true>>
+                    <<run setup.addItem("Work Gloves", 1)>>
+                    <<goto "Utility_Closet">>
+                <</link>>
+                <span class="btn-sub">Heavy rubber. Protects your hands.</span>
+            </button>
+        <</if>>
+
+        <<if not $read_utility_log>>
+            <button style="grid-column: span 2;">
+                <<link "📋 Read the maintenance log (2 mins)">>
+                    <<set $read_utility_log to true>>
+                    <<addTime 2>> /* Fixed from 1 to 2 to match narrative text */
+                    /* ADD TO LORE DATABASE */
+                    <<run window.addLore("Ascott Maintenance Log", "Saturday, 11:15 PM. Noise complaint on the 2nd floor. Found some guy in a suit standing in the mid-hallway, just smashing his head against the wall. Blood everywhere. Tried to ask if he needed help, but he just made this awful, wet rattling noise.")>>
+                    <<goto "Utility_Closet">>
+                <</link>>
+                <span class="btn-sub">Last entry: <i>"Saturday, 11:15 PM. Noise complaint on the 2nd floor..."</i></span>
+            </button>
+        <<else>>
+            <div style="grid-column: span 2; padding:8px; background:rgba(0,0,0,0.2); border:1px solid #333; font-style:italic; color:#666; margin-bottom:8px;">
+                You've read the log. Whatever is down on the 2nd floor has been there since last night. And it's not human anymore.
+            </div>
+        <</if>>
+
+    </div> 
+    <!-- End of Looting Grid -->
+
+    <!-- ========================================== -->
+    <!-- CLEARED ROOM MESSAGE                       -->
+    <!-- ========================================== -->
+    <<if $looted_utility_flashlight and $looted_utility_batteries and $looted_utility_rope and $looted_utility_tape and $looted_utility_bleach and $looted_utility_gloves>>
+        <div style="padding:10px; background:rgba(0,100,0,0.2); border:1px solid var(--accent-green); font-style:italic; color:#99cc99;">
+            You've stripped the shelves of everything useful. The mop bucket rattles softly in the dark behind you as you go.
+        </div>
+    <</if>>
+
+    <!-- ========================================== -->
+    <!-- LEAVE OPTION                               -->
+    <!-- ========================================== -->
+    <div style="margin-top: 15px;">
+        <button>
+            <<link "🚪 Leave and return to the hallway">>
+                <<set $hallwaySection to 4>>
+                <<goto "Hallway">>
+            <</link>>
+            <span class="btn-sub">Back to the corridor. Section 4.</span>
+        </button>
+    </div>
+
+</div>
+<</if>>

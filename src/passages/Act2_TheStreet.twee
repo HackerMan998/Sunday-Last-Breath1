@@ -1,0 +1,354 @@
+:: Act2_TheStreet {"position":"500,800","size":"100,100"}
+/* =======================================================================
+   SYSTEM INITIALIZATION
+======================================================================= */
+/* Clear the map when leaving the building */
+<<set $activeMap to undefined>>
+
+<<nobr>>
+<<script>>
+    /* 1. CLEAR PREVIOUS AUDIO & START THE RIOT */
+    /* Stop the lobby drone/ambience to ensure a clean slate */
+    setup.sound.stopAll(); 
+    
+    /* Play the heavy city riot track immediately on load */
+    setup.sound.play("city_riot", "audio/bgm/city_riot_heavy.mp3", true, 0.8);
+<</script>>
+
+<div id="dynamic-story">
+
+    /* ===================================================================
+       SCENE 1: THE STREETS
+    =================================================================== */
+    <h2>THE STREETS</h2>
+    
+    The cold air hits you the moment you push through the lobby doors, but it offers no relief. The street is a warzone.
+    <br><br>
+    
+    A tide of human panic surges down the avenue. You don't even get a chance to pick a direction before the crowd hits you. It is a wave of pure, blind terror—elbows, shoulders, the overwhelming stench of sweat, exhaust, and blood. You are shoved violently, your boots sliding on asphalt slick with things you don't want to look at.
+    
+    <!-- IMAGE 1: THE MOB -->
+    <div style="margin-bottom: 15px; text-align: center;">
+        <img src="image/Act2Street/themob.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+    </div>
+    
+    <<run window.shakeScreen(20)>>
+    
+    /* --- COMPANION CHECK: VANE --- */
+    <<if $vane_status == "joined">>
+        <span style="color:var(--accent-blue);">Vane</span> grabs the strap of your bag, pulling hard. He drags you out of the crush and you both tumble into a narrow, shadowed alleyway, slamming against a brick wall. 
+        <br><br>
+        
+        He bends over, hands on his knees, panting hard. He's bleeding from a scrape on his cheek, but his dark eyes are wide and sharply focused. He gasps, looking back at the stampede.
+        <br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "This whole city is a death trap. We can't stay here. We have to get out. Anywhere but here.">>
+    
+    <<else>>
+        You fight against the current, throwing your weight sideways until you tear yourself out of the crush, stumbling into a narrow, shadowed alleyway. You lean against a brick wall, your lungs burning.
+        <br><br>
+        The apartment building was a tomb, but the city is a slaughterhouse. You need to leave. Tonight.
+    <</if>>
+    
+    <br><br>
+    
+    /* ===================================================================
+       SCENE 2: THE ALLEYWAY (TRANSITION)
+    =================================================================== */
+    <div class="choice-menu" id="street-choices">
+        <<button "Catch your breath">>
+                <<completeObjective "survive_streets">>
+    <<addObjective "explore_alley" "Find a way out of the alleyway">>
+            /* --- AUDIO TRANSITION --- */
+            /* Crossfade from the open street to the muffled alleyway */
+            <<run setup.sound.crossfade("city_riot", "alley_riot", "audio/bgm/alley_muffled_riot.mp3", 2000, 0.6)>>
+            
+            /* --- PLAY THE JUMPSCARE SOUNDS --- */
+            <<run setup.sound.play("screech", "audio/sfx/falling_screech_doppler.mp3", false, 0.8)>>
+            <<run setTimeout(function() { 
+                setup.sound.play("crunch", "audio/sfx/meat_asphalt_crunch.mp3", false, 1.0); 
+                setup.sound.play("tearing", "audio/sfx/frenzied_tearing.mp3", true, 0.7); 
+            }, 800)>>
+
+            /* --- REVEAL ALLEYWAY CONTENT --- */
+            <<replace "#dynamic-story">>
+                
+                <!-- WE WRAP THE ALLEYWAY IN A DIV SO WE CAN HIDE IT LATER -->
+                <div id="alley-content">
+                    <h2>THE ALLEYWAY</h2>
+                    
+                    You take one deep breath. You don't get a second.
+                    <br><br>
+                    
+                    A screech echoes from above. Before you can even look up, a heavy mass plummets from a fire escape three stories overhead. 
+                    
+                    <!-- IMAGE 2: THE JUMPSCARE -->
+                    <div style="margin-bottom: 15px; text-align: center;">
+                        <img src="image/Act2Street/alley_jumpscare.gif" style="max-width: 100%; border: 1px solid var(--accent-red); box-shadow: 0 0 15px rgba(138,28,28,0.4);">
+                    </div>
+                    
+                    <<run window.shakeScreen(30)>>
+                    
+                    It hits the pavement with a wet, sickening <i>CRUNCH</i> of asphalt and bone, completely flattening a civilian who had been running blindly down the alley. 
+                    <br><br>
+                    
+                    The thing that fell doesn't stay down. Its legs are shattered, bent at impossible angles, but it drags itself up by its arms with terrifying speed and immediately sinks its jagged teeth into the screaming civilian's neck. Blood sprays across the brick wall.
+                    <br><br>
+                </div>
+                
+                /* =======================================================
+                   SCENE 3: ALLEYWAY RESOLUTION (KILL OR FLEE)
+                ======================================================= */
+                
+                <!-- This empty div holds the result of the kill/run choice -->
+                <div id="alley-resolution"></div>
+                
+                <div class="choice-menu" id="alley-choices">
+                
+                    /* ---------------------------------------------------
+                       OPTION A: KILL IT
+                    --------------------------------------------------- */
+                    <<button "Kill it! [COMBAT]">>
+                        <<run $("#alley-content").hide()>> <!-- HIDES THE ALLEYWAY STORY/IMAGE -->
+                        <<run $("#alley-choices").hide()>>  <!-- HIDES THE BUTTONS -->
+                        
+                        /* STOP THE TEARING AND PLAY CRUSH SOUND */
+                        <<run setup.sound.stop("tearing")>>
+                        <<run setup.sound.play("crush", "audio/sfx/skull_crush_heavy.mp3", false, 1.0)>>
+                        
+                        <<replace "#alley-resolution">>
+                            You don't hesitate. Your weapon comes down hard, crushing the infected's skull before it can fully tear the man's throat out. It goes limp. The civilian underneath is gurgling, eyes rolling back. He is already gone.
+                            <br><br>
+                            You step over them and push deeper into the alley, emerging out the other side.
+                            <br><br>
+                            
+                            <!-- NEW INTERMEDIATE BUTTON FOR PACING -->
+                            <div class="choice-menu">
+                                <<button "Step out into the parking lot">>
+                                    <<run $("#alley-resolution").hide()>>
+                                        <<completeObjective "explore_alley">>
+    <<addObjective "getaway_vehicle" "Find a way to start the blue sedan">>
+    <<purgeCompleted>>
+                                    /* FADE OUT AUDIO & BRING IN PARKING LOT AMBIENCE */
+                                    <<run setup.sound.fade("alley_riot", 2000)>>
+                                    <<run setup.sound.play("parking_ambience", "audio/bgm/parking_lot_wind.mp3", true, 0.5)>>
+                                    
+                                    <<run $("#parking-lot-sequence").fadeIn()>>
+                                <</button>>
+                            </div>
+                        <</replace>>
+                    <</button>>
+                    
+                    /* ---------------------------------------------------
+                       OPTION B: FLEE
+                    --------------------------------------------------- */
+                    <<button "Run the other way[FLEE]">>
+                        <<run $("#alley-content").hide()>> <!-- HIDES THE ALLEYWAY STORY/IMAGE -->
+                        <<run $("#alley-choices").hide()>>  <!-- HIDES THE BUTTONS -->
+                            <<completeObjective "explore_alley">>
+    <<addObjective "getaway_vehicle" "Find a way to start the blue sedan">>
+    <<purgeCompleted>>
+                        /* STOP THE TEARING AND PLAY FENCE SOUND */
+                        <<run setup.sound.stop("tearing")>>
+                        <<run setup.sound.play("chainlink", "audio/sfx/chainlink_crash.mp3", false, 0.9)>>
+                        
+                        <<replace "#alley-resolution">>
+                            You stumble backward in horror. You turn and sprint in the opposite direction, cutting through a narrow chain-link gate to put a barrier between you and the feeding frenzy.
+                            <br><br>
+                            You burst through the gate, chest heaving, and find yourself in a wide, open space.
+                            <br><br>
+                            <<set $hum -= 5>> <!-- Humanity penalty for running -->
+                            
+                            <!-- NEW INTERMEDIATE BUTTON FOR PACING -->
+                            <div class="choice-menu">
+                                <<button "Catch your breath and look around">>
+                                    <<run $("#alley-resolution").hide()>>
+                                    
+                                    /* FADE OUT AUDIO & BRING IN PARKING LOT AMBIENCE */
+                                    <<run setup.sound.fade("alley_riot", 2000)>>
+                                    <<run setup.sound.play("parking_ambience", "audio/bgm/parking_lot_wind.mp3", true, 0.5)>>
+                                    
+                                    <<run $("#parking-lot-sequence").fadeIn()>>
+                                <</button>>
+                            </div>
+                        <</replace>>
+                    <</button>>
+                    
+                </div>
+                
+                /* =======================================================
+                   SCENE 4: THE PARKING LOT (CAR ESCAPE)
+                ======================================================= */
+                
+                <!-- HIDDEN PARKING LOT SEQUENCE -->
+                <div id="parking-lot-sequence" style="display:none;">
+                    <hr class="solid">
+                    <h2>THE PARKING LOT</h2>
+                    
+                    <!-- IMAGE 3: THE GETAWAY CAR -->
+                    <div style="margin-bottom: 15px; text-align: center;">
+                        <img src="image/Act2Street/blue_sedan.gif" style="max-width: 100%; border: 1px solid var(--accent-blue); box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+                    </div>
+                    
+                    You are standing in a gated parking lot behind a mid-rise office building. It's mostly empty, but parked near the exit ramp is a blue four-door sedan. The windows are intact. The tires are fully inflated. 
+                    <br><br>
+                    It is your ticket out of this hellhole. You just need to get it running.
+                    <br><br>
+
+                    <div class="choice-menu">
+                    
+                        /* ---------------------------------------------------
+                           CHECK 1: DID THEY LOOT THE KEYS IN ROOM 401? 
+                        --------------------------------------------------- */
+                        <<if $inventory.find(i => i.id === "Car Keys")>>
+                            <<button "Use the Car Keys you found">>
+
+                                /* PLAY CHIRP AND UNLOCK */
+                                <<run setup.sound.play("chirp", "audio/sfx/keyfob_chirp.mp3", false, 0.8)>>
+                                <<run setTimeout(function(){ setup.sound.play("unlock", "audio/sfx/heavy_door_clack.mp3", false, 1.0); }, 600)>>
+                                
+                                <<replace "#parking-lot-sequence">>
+                                    <h2>IGNITION</h2>
+                                    You reach into your pocket and pull out the keys you pried from the dead man's fingers in Unit 401. 
+                                    <br><br>
+                                    
+                                    You hit the unlock button. The sedan chirps happily, its headlights flashing brightly in the dark. The doors unlock with a heavy *clack*. In the middle of the apocalypse, it feels like absolute magic.
+                                    
+                                    <<if $vane_status == "joined">>
+                                        <br><br>
+                                        Vane stares at you, a slow, impressed smile spreading across his face.
+                                        <br>
+                                        <<chat "Vane" "image/avatars/vane.gif" "right" "Okay. Remind me never to underestimate you.">>
+                                    <</if>>
+                                    
+                                    <br><br>
+                                    
+                                    <div class="choice-menu">
+                                        <<button "Get in and Drive">>
+                                            <<completeObjective "getaway_vehicle">>
+    <<addObjective "escape_city" "Escape the city southbound on Interstate 5">>
+    <<purgeCompleted>>
+                                            <<run setup.sound.fade("parking_ambience", 1500)>>
+                                            <<goto "Act2_TheRoad">>
+                                        <</button>>
+                                    </div>
+                                <</replace>>
+                            <</button>>
+
+                        /* ---------------------------------------------------
+                           CHECK 2: DO THEY HAVE VANE? 
+                        --------------------------------------------------- */
+                        <<elseif $vane_status == "joined">>
+                            <<button "Ask Vane if he knows how to start it">>
+
+                                /* PLAY SMASH AND ENGINE START */
+                                <<run setup.sound.play("smash", "audio/sfx/elbow_smash_glass.mp3", false, 0.9)>>
+                                <<run setTimeout(function(){ setup.sound.play("engine", "audio/sfx/engine_sputter_roar.mp3", false, 0.8); }, 1500)>>
+
+                                <<replace "#parking-lot-sequence">>
+                                    <h2>IGNITION</h2>
+                                    You look at the steering column, then look at Vane.
+                                    <br><br>
+                                    
+                                    Vane smirks, a sudden, sharp flash of confidence cutting through his terror, and slides into the driver's seat. 
+                                    <br>
+                                    <<chat "Vane" "image/avatars/vane.gif" "right" "Move over.">>
+                                    <br>
+                                    
+                                    He pulls a multi-tool from his pocket, wedges it under the steering column, and pops the plastic casing with practiced ease. "Misspent youth," he mutters, pulling out a cluster of wires. He strips two, twists them together, and the engine roars to life. 
+                                    <br><br>
+                                    
+                                    He looks up at you through the open door, grinning.
+                                    <br>
+                                    <<chat "Vane" "image/avatars/vane.gif" "right" "Get in.">>
+                                    <br><br>
+                                    
+                                    <div class="choice-menu">
+                                        <<button "Get in and Drive">>
+                                            <<completeObjective "getaway_vehicle">>
+    <<addObjective "escape_city" "Escape the city southbound on Interstate 5">>
+    <<purgeCompleted>>
+                                            <<run setup.sound.fade("parking_ambience", 1500)>>
+                                            <<goto "Act2_TheRoad">>
+                                        <</button>>
+                                    </div>
+                                <</replace>>
+                            <</button>>
+
+                        /* ---------------------------------------------------
+                           CHECK 3: CAN THE PLAYER HOTWIRE IT THEMSELVES? 
+                        --------------------------------------------------- */
+                        <<elseif hasTrait("HOTWIRE") or $skills.tech >= 2>>
+                            <<button "Hotwire the sedan [TECH]">>
+
+                                /* PLAY SMASH AND ENGINE START */
+                                <<run setup.sound.play("smash", "audio/sfx/elbow_smash_glass.mp3", false, 0.9)>>
+                                <<run setTimeout(function(){ setup.sound.play("engine", "audio/sfx/engine_sputter_roar.mp3", false, 0.8); }, 1500)>>
+
+                                <<replace "#parking-lot-sequence">>
+                                    <h2>IGNITION</h2>
+                                    You smash the driver's side window with your elbow, clear the glass, and unlock the door. 
+                                    <br><br>
+                                    
+                                    Diving under the steering column, you rip away the plastic paneling. You strip the ignition wires and strike them together. A spark flashes in the dark, and the engine roars to life on the second try. 
+                                    <br><br>
+                                    
+                                    <div class="choice-menu">
+                                        <<button "Put it in gear and Drive">>
+                                            <<completeObjective "getaway_vehicle">>
+    <<addObjective "escape_city" "Escape the city southbound on Interstate 5">>
+    <<purgeCompleted>>
+                                            <<run setup.sound.fade("parking_ambience", 1500)>>
+                                            <<goto "Act2_TheRoad">>
+                                        <</button>>
+                                    </div>
+                                <</replace>>
+                            <</button>>
+
+                        /* ---------------------------------------------------
+                           CHECK 4: BRUTE FORCE (NO KEYS, NO VANE, NO TECH) 
+                        --------------------------------------------------- */
+                        <<else>>
+                            <<button "Smash the window and search for keys">>
+
+                                /* PLAY SMASH AND LOUD CAR ALARM */
+                                <<run setup.sound.play("smash", "audio/sfx/elbow_smash_glass.mp3", false, 0.9)>>
+                                <<run setTimeout(function(){ setup.sound.play("alarm", "audio/sfx/car_alarm_wail.mp3", true, 0.9); }, 500)>>
+
+                                <<replace "#parking-lot-sequence">>
+                                    <h2>IGNITION</h2>
+                                    You have no idea how to hotwire a car, and you don't have the keys. You wrap your jacket around your fist and smash the driver's side window. 
+                                    <br><br>
+                                    
+                                    <i>BEEP! BEEP! BEEP!</i>
+                                    <br><br>
+                                    
+                                    The car alarm immediately triggers, a deafening wail echoing off the concrete buildings. You frantically tear through the glovebox and center console—nothing. 
+                                    <br><br>
+                                    <<run window.shakeScreen(15)>>
+                                    
+                                    /* STOP PARKING LOT AMBIENCE BECAUSE THE ALARM IS TOO LOUD */
+                                    <<run setup.sound.stop("parking_ambience")>>
+                                    
+                                    From the shadows of the parking lot, three infected step into the amber glow of the streetlights, drawn by the noise. You're going to have to fight for this car.
+                                    <br><br>
+                                    
+                                    <span class="btn-sub" style="color:var(--accent-red);">[CAR ALARM TRIGGERED - PREPARE FOR COMBAT]</span>
+                                    <br><br>
+                                    
+                                    <div class="choice-menu">
+                                        <<button "Draw your weapon">>
+                                            <<goto "Act2_ParkingLot_Combat">>
+                                        <</button>>
+                                    </div>
+                                <</replace>>
+                            <</button>>
+                        <</if>>
+                        
+                    </div>
+                </div>
+                
+            <</replace>>
+        <</button>>
+    </div>
+</div>
+<</nobr>>

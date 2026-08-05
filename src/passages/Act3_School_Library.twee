@@ -1,0 +1,47 @@
+:: Act3_School_Library {"position":"900,1900","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "library">>
+<<set $activeMap to "Highschool 1st Floor">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
+<</nobr>>
+
+<h2>1ST FLOOR — SCHOOL LIBRARY</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+<<if _arrivedLate>>
+    <img src="image/Act3_Timberline/library_morning.gif" style="max-width: 100%; border: 1px solid #333;">
+<<else>>
+    <img src="image/Act3_Timberline/library_night.gif" style="max-width: 100%; border: 1px solid #333;">
+<</if>>
+</div>
+
+Towering bookshelves cast long shadows.
+
+<<if not $looted_library>>
+    Several reference manuals on mechanics and first aid sit on the central study tables.
+    <br><br>
+    <div class="choice-menu">
+        <button>
+            <<link "Search the library reference manuals">>
+                <<addTime 10>>
+                <<set $looted_library to true>>
+                <<run setup.addItem("Manual: Mechanics", 1)>>
+                <<run setup.addItem("Textbook", 1)>>
+                <<goto "Act3_School_Library">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOOT]</b> Found Manual: Mechanics (+1 Tech) and Textbook (+50 XP).</span>
+        </button>
+    </div>
+<<else>>
+    You have already searched the library reference section.
+<</if>>
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "🚪 Exit Library to Hallway [WEST]">>
+            <<set $currentLocation to "hall_1_east_2">>
+            <<goto "Act3_School1Floor">>
+        <</link>>
+    </button>
+</div>

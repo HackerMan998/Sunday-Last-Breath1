@@ -1,0 +1,37 @@
+:: Act3_School_Pantry {"position":"600,1800","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "pantry">>
+<<set $activeMap to "Highschool Ground">>
+<</nobr>>
+
+<h2>GROUND FLOOR — FOOD PANTRY</h2>
+
+Industrial metal shelves stand behind the canteen kitchen.
+
+<<if not $looted_pantry>>
+    You spot unopened crates of bottled water and canned goods tucked behind flour sacks.
+    <br><br>
+    <div class="choice-menu">
+        <button>
+            <<link "Search the Pantry shelves">>
+                <<addTime 5>>
+                <<set $looted_pantry to true>>
+                <<run setup.addItem("Bottled Water", 2)>>
+                <<run setup.addItem("Canned Food", 1)>>
+                <<goto "Act3_School_Pantry">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOOT]</b> Found 2x Bottled Water, 1x Canned Food.</span>
+        </button>
+    </div>
+<<else>>
+    The shelves have been cleared of useful emergency rations.
+<</if>>
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "🚪 Exit Pantry to Canteen [NORTH]">>
+            <<goto "Act3_School_Canteen">>
+        <</link>>
+    </button>
+</div>

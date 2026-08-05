@@ -1,0 +1,47 @@
+:: Act3_School_LockerRoom {"position":"800,1800","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "locker_room">>
+<<set $activeMap to "Highschool Ground">>
+<</nobr>>
+
+<h2>GROUND FLOOR — ATHLETIC LOCKER ROOM</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+    <img src="image/Act3_Timberline/locker.gif" style="max-width: 100%; border: 1px solid #333;">
+</div>
+
+Benches and metal lockers line the walls.
+
+<<if not $looted_locker>>
+    Several athletic lockers are unlocked. You see discarded duffel bags.
+    <br><br>
+    <div class="choice-menu">
+        <button>
+            <<link "Search the athletic lockers">>
+                <<addTime 5>>
+                <<set $looted_locker to true>>
+                <<run setup.addItem("Work Gloves", 1)>>
+                <<run setup.addItem("Running Shoes", 1)>>
+                <<goto "Act3_School_LockerRoom">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOOT]</b> Found Work Gloves and Running Shoes.</span>
+        </button>
+    </div>
+<<else>>
+    The lockers have been picked through.
+<</if>>
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "⬆️ Enter MEP Mechanical Space [NORTH]">>
+            <<goto "Act3_School_MEP">>
+        <</link>>
+    </button>
+    <button>
+        <<link "🚪 Exit Locker Room to Hallway [SOUTH]">>
+            <<set $currentLocation to "hall_g_east_1">>
+            <<goto "Act3_SchoolGFloor">>
+        <</link>>
+    </button>
+</div>

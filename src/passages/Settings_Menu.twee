@@ -1,0 +1,58 @@
+:: Settings_Menu {"position":"200,200","size":"100,100"}
+<<nobr>>
+<div style="font-family: 'Courier Prime', monospace; color: #ccc; padding: 10px;">
+    /* ============================================================
+       SECTION 1: TEXT SIZE SETTINGS
+       Manipulates the body CSS using jQuery
+       ============================================================ */
+    <div style="text-align: center; margin-bottom: 25px;">
+        <b style="color:var(--accent-gold);">TEXT SIZE</b>
+        <hr style="border-color:#333; margin: 5px 0 10px 0;">
+        
+        <div style="display:flex; justify-content:space-between; gap: 5px;">
+            /* --- Mobile/Small Display --- */
+            <<button "SMALL">>
+                <<run $('body').css('font-size', '14px')>>
+            <</button>>
+            
+            /* --- Default Desktop --- */
+            <<button "DEFAULT">>
+                <<run $('body').css('font-size', '16px')>>
+            <</button>>
+            
+            /* --- Large/High Res --- */
+            <<button "LARGE">>
+                <<run $('body').css('font-size', '18px')>>
+            <</button>>
+        </div>
+    </div>
+
+    /* ============================================================
+       SECTION 2: INTERFACE FONT (THEME)
+       Changes the font-family and forces priority (!important)
+       ============================================================ */
+    <div style="text-align: center;">
+        <b style="color:var(--accent-green);">INTERFACE FONT</b>
+        <hr style="border-color:#333; margin: 5px 0 10px 0;">
+        
+        <div style="display:flex; justify-content:space-between; gap: 5px;">
+            /* --- Mono/Retro Terminal Style --- */
+            <<button "TERMINAL">>
+                <<run $('body')[0].style.setProperty('font-family', "'Courier Prime', monospace", 'important')>>
+            <</button>>
+            
+            /* --- Standard Sans-Serif --- */
+            <<button "CLEAN">>
+                <<run $('body')[0].style.setProperty('font-family', "Arial, Helvetica, sans-serif", 'important')>>
+            <</button>>
+            
+            /* --- Traditional Serif --- */
+            <<button "CLASSIC">>
+                <<run $('body')[0].style.setProperty('font-family', "Georgia, serif", 'important')>>
+            <</button>>
+        </div>
+    </div>
+
+</div>
+
+<</nobr>>

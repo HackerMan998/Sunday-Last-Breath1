@@ -1,0 +1,1365 @@
+:: Debug_Panel {"position":"875,425","size":"100,100"}
+<<nobr>>
+    <<set $returnPassage to previous()>>
+<</nobr>>
+
+<style>
+    #dbg { 
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; 
+        color: #e0e0e0; 
+        width: 100%;
+        max-width: 900px; 
+        margin: 0 auto; 
+        background: #0b0b0b; 
+        border: 1px solid #282828;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+        display: flex;
+        flex-direction: column;
+        height: 82vh;
+        max-height: 780px;
+        min-height: 520px;
+        overflow: hidden;
+        position: relative;
+        isolation: isolate; 
+        box-sizing: border-box !important;
+    }
+    
+    #dbg, #dbg * { 
+        text-decoration: none !important; 
+        text-shadow: none !important; 
+        box-sizing: border-box !important;
+    }
+
+    #dbg button {
+        width: auto !important;
+        margin-bottom: 0 !important;
+        position: relative !important;
+        overflow: visible !important;
+        box-sizing: border-box !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        float: none !important;
+    }
+    #dbg button::after {
+        display: none !important;
+    }
+
+    /* TOP TOOLBAR */
+    .dbg-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #141414;
+        border-bottom: 1px solid #2a2a2a;
+        padding: 8px 12px;
+        gap: 10px;
+        flex-shrink: 0;
+        z-index: 10;
+        width: 100%;
+    }
+
+    .dbg-toolbar-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .dbg-toggle-btn {
+        background: #1e1e1e;
+        border: 1px solid #3a3a3a;
+        color: #aaa;
+        border-radius: 4px;
+        padding: 5px 9px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.76rem;
+        font-family: inherit;
+        transition: all 0.15s ease;
+        width: auto !important;
+        margin-bottom: 0 !important;
+        flex-shrink: 0;
+    }
+    .dbg-toggle-btn:hover {
+        background: #282828;
+        color: #ff6b35;
+        border-color: #ff6b35;
+    }
+
+    .dbg-title {
+        font-weight: 700;
+        font-size: 0.88rem;
+        letter-spacing: 0.05em;
+        color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .dbg-badge {
+        background: rgba(255, 107, 53, 0.15);
+        border: 1px solid rgba(255, 107, 53, 0.4);
+        color: #ff6b35;
+        font-size: 0.68em;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .dbg-toolbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .dbg-toolbar-actions .db {
+        width: auto !important;
+        margin-bottom: 0 !important;
+        flex-shrink: 0;
+    }
+
+    /* SPLIT VIEW CONTAINER */
+    .dbg-split-container {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+    }
+
+    /* SIDEBAR PANE */
+    
+    
+    .dbg-sidebar {
+        width: 200px;
+        min-width: 130px;
+        max-width: 280px;
+        background: #101010;
+        border-right: 1px solid #222;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        transition: margin-left 0.2s ease;
+        overflow-y: auto;
+    }
+
+    .dbg-sidebar.collapsed {
+        margin-left: -200px;
+    }
+
+    .dbg-sidebar-header {
+        font-size: 0.65em;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #666;
+        padding: 12px 14px 6px;
+        font-weight: bold;
+    }
+
+    .dbg-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        padding: 0 8px 12px;
+    }
+
+    .dbg-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 9px;
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        color: #aaa;
+        font-size: 0.78rem;
+        font-family: inherit;
+        cursor: pointer;
+        text-align: left;
+        transition: all 0.12s ease;
+        width: 100% !important;
+        margin-bottom: 0 !important;
+    }
+
+    .dbg-nav-item:hover {
+        background: #1a1a1a;
+        color: #fff;
+    }
+
+    .dbg-nav-item.active {
+        background: #24140a;
+        color: #ff6b35;
+        border-color: rgba(255, 107, 53, 0.4);
+        font-weight: 600;
+    }
+
+    .dbg-nav-icon {
+        font-size: 1.1em;
+        width: 20px;
+        text-align: center;
+    }
+
+    /* SPLITTER DIVIDER */
+    .dbg-divider {
+        width: 6px;
+        background: #161616;
+        cursor: col-resize;
+        position: relative;
+        flex-shrink: 0;
+        transition: background 0.15s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-left: 1px solid #222;
+        border-right: 1px solid #222;
+        z-index: 5;
+    }
+
+    .dbg-divider:hover, .dbg-divider.dragging {
+        background: #ff6b35;
+    }
+
+    .dbg-divider-handle {
+        width: 2px;
+        height: 24px;
+        background: #444;
+        border-radius: 1px;
+    }
+
+    /* CONTENT PANE */
+    .dbg-content {
+        flex: 1;
+        min-width: 0;
+        background: #080808;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 14px 16px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dbg-section {
+        display: none;
+        width: 100%;
+    }
+
+    .dbg-section.active {
+        display: block;
+        animation: dbgFadeIn 0.15s ease-out;
+    }
+
+    @keyframes dbgFadeIn {
+        from { opacity: 0; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dbg-section-header {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #ff6b35;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #242424;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    /* CONTROL ELEMENTS STYLING */
+    .dr { 
+        display: flex; 
+        align-items: center; 
+        gap: 8px; 
+        margin-bottom: 8px; 
+        background: #121212;
+        padding: 5px 8px;
+        border-radius: 5px;
+        border: 1px solid #1e1e1e;
+        width: 100%;
+        min-width: 0;
+    }
+    
+    .dl { 
+        width: 105px; 
+        font-size: .76em; 
+        color: #aaa; 
+        flex-shrink: 0; 
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .ds { 
+        flex: 1; 
+        min-width: 0;
+        width: 100%;
+        accent-color: #ff6b35; 
+        cursor: pointer; 
+        height: 14px;
+        margin: 0;
+    }
+    
+    .dv { 
+        width: 36px; 
+        flex-shrink: 0;
+        text-align: center; 
+        color: #ff6b35; 
+        font-weight: bold; 
+        font-size: .82em; 
+        background: #1c0f08;
+        padding: 2px 4px;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 107, 53, 0.3);
+    }
+    
+    #dbg .dbr { 
+        display: flex !important; 
+        flex-wrap: wrap !important; 
+        gap: 6px !important; 
+        margin-bottom: 12px !important; 
+        width: 100% !important;
+        align-items: center !important;
+    }
+    
+    .dgrid { 
+        display: grid; 
+        grid-template-columns: repeat(2, minmax(0, 1fr)); 
+        gap: 8px 12px; 
+        width: 100%;
+    }
+    
+    .dsep { 
+        border: none; 
+        border-top: 1px solid #222; 
+        margin: 14px 0; 
+    }
+    
+    #dbg .db, #dbg .dbr button, #dbg button.db { 
+        background: #141414 !important; 
+        border: 1px solid #333 !important; 
+        color: #ccc !important; 
+        padding: 5px 10px !important; 
+        font-size: .76em !important; 
+        font-family: inherit !important; 
+        cursor: pointer !important; 
+        border-radius: 4px !important;
+        transition: all 0.12s ease !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 4px !important;
+        min-height: 28px !important;
+        line-height: 1.3 !important;
+        width: auto !important;
+        flex: 0 0 auto !important;
+        margin-bottom: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .db:hover { 
+        border-color: #ff6b35; 
+        color: #ff6b35; 
+        background: #1a0f08;
+    }
+    
+    .db.on { 
+        border-color: #ff6b35; 
+        background: #281206; 
+        color: #ff6b35; 
+        font-weight: bold;
+        box-shadow: 0 0 8px rgba(255, 107, 53, 0.2);
+    }
+    
+    .db.neg { 
+        border-color: #444; 
+        color: #888; 
+    }
+    
+    .db.neg:hover { 
+        border-color: #c0392b; 
+        color: #c0392b; 
+    }
+    
+    .db.neg.on { 
+        border-color: #c0392b; 
+        background: #220000; 
+        color: #e74c3c; 
+    }
+    
+    .db.go { 
+        border-color: #27ae60; 
+        color: #27ae60; 
+    }
+    
+    .db.go:hover { background: #04200d; }
+    
+    .db.bad { 
+        border-color: #c0392b; 
+        color: #c0392b; 
+    }
+    
+    .db.bad:hover { background: #220000; }
+    
+    .dsel, .dinput { 
+        background: #141414; 
+        border: 1px solid #333; 
+        color: #ddd; 
+        padding: 5px 8px; 
+        font-family: inherit; 
+        font-size: .78em; 
+        border-radius: 4px;
+        min-width: 0;
+    }
+    
+    .item-row { 
+        display: flex; 
+        align-items: center; 
+        gap: 8px; 
+        margin-bottom: 8px; 
+        width: 100%;
+    }
+    
+    .item-row select { 
+        flex: 1; 
+        min-width: 0;
+    }
+    
+    .item-row input[type=number] { 
+        width: 60px; 
+        flex-shrink: 0;
+    }
+    
+    .dnotice { 
+        background: #1a0e00; 
+        border-left: 3px solid #ff6b35; 
+        padding: 8px 12px; 
+        font-size: .78em; 
+        color: #aaa; 
+        margin-bottom: 12px; 
+        border-radius: 0 4px 4px 0;
+    }
+    
+    .dskv { 
+        min-width: 26px; 
+        text-align: center; 
+        color: #ff6b35; 
+        font-weight: bold; 
+        font-size: .85em; 
+        background: #1c0f08;
+        padding: 2px 4px;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 107, 53, 0.3);
+    }
+    
+    .dlabel { 
+        font-size: .72em; 
+        color: #ff6b35; 
+        text-transform: uppercase; 
+        letter-spacing: 0.08em; 
+        margin: 10px 0 5px; 
+        font-weight: bold;
+    }
+
+    @media (max-width: 680px) {
+        #dbg { height: 90vh; max-height: none; border-radius: 0; }
+        .dgrid { grid-template-columns: minmax(0, 1fr); }
+        .dbg-sidebar { width: 140px; }
+        .dbg-sidebar.collapsed { margin-left: -140px; }
+        .dl { width: 95px; }
+    }
+
+    .dbg-sidebar {
+        resize: horizontal; overflow-x: hidden;
+    }
+    
+    
+    .dbg-list-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+    .dbg-list-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.05);
+        padding: 10px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        text-align: left;
+        width: 100%;
+        color: #ccc;
+        transition: all 0.15s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .dbg-list-btn:hover {
+        background: rgba(255,255,255,0.05);
+        border-color: rgba(255,255,255,0.1);
+    }
+    .dbg-list-btn.on {
+        background: rgba(255, 107, 53, 0.1);
+        border: 1px solid rgba(255, 107, 53, 0.4);
+    }
+    .dbg-list-btn.on .list-title {
+        color: #ff6b35;
+    }
+    .dbg-list-btn.neg.on {
+        background: rgba(231, 76, 60, 0.1);
+        border: 1px solid rgba(231, 76, 60, 0.4);
+    }
+    .dbg-list-btn.neg.on .list-title {
+        color: #e74c3c;
+    }
+    
+    .list-icon {
+        font-size: 1.2em;
+        width: 24px;
+        text-align: center;
+        opacity: 0.8;
+    }
+    
+    .list-content {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        flex: 1;
+    }
+    .list-title {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #ddd;
+        letter-spacing: 0.02em;
+    }
+    .list-sub {
+        font-size: 0.65rem;
+        color: #888;
+        line-height: 1.2;
+    }
+    .list-sub strong {
+        color: #aaa;
+    }
+
+
+</style>
+
+<div id="dbg">
+    <!-- TOOLBAR HEADER -->
+    <div class="dbg-toolbar">
+        <div class="dbg-toolbar-left">
+            <button class="dbg-toggle-btn" id="dbg-toggle-sidebar" title="Collapse / Expand Navigation Pane">
+                <span>☰</span>
+                <span style="font-size: 0.85em;">Sidebar</span>
+            </button>
+            <div class="dbg-title">
+                <span>🛠️ DEBUG PANEL</span>
+                <span class="dbg-badge">STATE EDITOR</span>
+            </div>
+        </div>
+        <div class="dbg-toolbar-actions">
+            <button class="db go" onclick="document.getElementById('p-max').click()">MAX ALL</button>
+            <button class="db bad" onclick="document.getElementById('p-min').click()">MIN ALL</button>
+            <button class="db go" onclick="document.getElementById('nav-return').click()">↩ Game</button>
+        </div>
+    </div>
+
+    <!-- MAIN SPLIT VIEW -->
+    <div class="dbg-split-container">
+        <!-- SIDEBAR -->
+        <div class="dbg-sidebar" id="dbg-sidebar">
+            <div class="dbg-sidebar-header">NAV PANES</div>
+            <nav class="dbg-nav">
+                <button class="dbg-nav-item active" data-target="sec-presets">
+                    <span class="dbg-nav-icon">⚡</span>
+                    <span class="dbg-nav-label">Presets</span>
+                </button>
+                <button class="dbg-nav-item" data-target="sec-vitals">
+                    <span class="dbg-nav-icon">📊</span>
+                    <span class="dbg-nav-label">Vitals &amp; Stats</span>
+                </button>
+                <button class="dbg-nav-item" data-target="sec-loadout">
+                    <span class="dbg-nav-icon">🎒</span>
+                    <span class="dbg-nav-label">Loadout &amp; Items</span>
+                </button>
+                <button class="dbg-nav-item" data-target="sec-companions">
+                    <span class="dbg-nav-icon">👥</span>
+                    <span class="dbg-nav-label">Companions</span>
+                </button>
+                <button class="dbg-nav-item" data-target="sec-flags">
+                    <span class="dbg-nav-icon">🚩</span>
+                    <span class="dbg-nav-label">Quest &amp; Story</span>
+                </button>
+                <button class="dbg-nav-item" data-target="sec-fasttravel">
+                    <span class="dbg-nav-icon">🚀</span>
+                    <span class="dbg-nav-label">Fast-Travel</span>
+                </button>
+                <button class="dbg-nav-item" data-target="sec-all">
+                    <span class="dbg-nav-icon">📄</span>
+                    <span class="dbg-nav-label">Show All</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- DRAGGABLE DIVIDER -->
+        <div class="dbg-divider" id="dbg-divider" title="Drag divider to resize sidebar">
+            <div class="dbg-divider-handle"></div>
+        </div>
+
+        <!-- CONTENT AREA -->
+        <div class="dbg-content" id="dbg-content">
+
+            <!-- 1. PRESETS -->
+            <div class="dbg-section active" id="sec-presets">
+                <div class="dbg-section-header">
+                    <span>⚡ Quick Character Presets</span>
+                </div>
+                <div class="dnotice">Select an archetype preset to immediately configure stats, skills, and gear.</div>
+                <div class="dbr">
+                    <button class="db go" id="p-max">MAX ALL STATS</button>
+                    <button class="db" id="p-combat">Combat Build</button>
+                    <button class="db" id="p-talker">Diplomat Build</button>
+                    <button class="db" id="p-agility">Agility Build</button>
+                    <button class="db" id="p-cop">Police Officer</button>
+                    <button class="db" id="p-doc">Doctor</button>
+                    <button class="db bad" id="p-min">MIN ALL STATS</button>
+                </div>
+            </div>
+
+                        <!-- 2. VITALS & STATS -->
+            <div class="dbg-section" id="sec-vitals">
+                <div class="dbg-section-header">
+                    <span>📊 Core Vitals, Attributes &amp; Skills</span>
+                </div>
+                <div class="dgrid">
+                    <div>
+                        <div class="dr">
+                            <span class="dl">HP Health</span> 
+                            <input type="range" class="ds" id="sl-hp" min="1" max="100">
+                            <span class="dv" id="vl-hp">?</span>
+                        </div>
+                        <div class="dr">
+                            <span class="dl">STR Strength</span> 
+                            <input type="range" class="ds" id="sl-str" min="1" max="10">
+                            <span class="dv" id="vl-str">?</span>
+                        </div>
+                        <div class="dr">
+                            <span class="dl">AGI Agility</span> 
+                            <input type="range" class="ds" id="sl-agi" min="1" max="10">
+                            <span class="dv" id="vl-agi">?</span>
+                        </div>
+                        <div class="dr">
+                            <span class="dl">END Endurance</span> 
+                            <input type="range" class="ds" id="sl-end" min="1" max="10">
+                            <span class="dv" id="vl-end">?</span>
+                        </div>
+                        <div class="dr">
+                            <span class="dl">PER Perception</span> 
+                            <input type="range" class="ds" id="sl-per" min="1" max="10">
+                            <span class="dv" id="vl-per">?</span>
+                        </div>
+                        <div class="dr">
+                            <span class="dl">Hunger</span> 
+                            <input type="range" class="ds" id="sl-hunger" min="0" max="100">
+                            <span class="dv" id="vl-hunger">?</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="dr">
+                            <span class="dl">CHA Charisma</span> 
+                            <input type="range" class="ds" id="sl-cha" min="1" max="10">
+                            <span class="dv" id="vl-cha">?</span>
+                        </div>
+                        <div class="dr">
+                            <span class="dl">INT Intelligence</span>
+                            <input type="range" class="ds" id="sl-int" min="1" max="10">
+                            <span class="dv" id="vl-int">?</span>
+                        </div>
+                        <div class="dr">
+                            <span class="dl">HUM Humanity</span> 
+                            <input type="range" class="ds" id="sl-hum" min="0" max="100">
+                            <span class="dv" id="vl-hum">?</span>
+                        </div>
+                        <div class="dr">
+                            <span class="dl">Stamina</span> 
+                            <input type="range" class="ds" id="sl-stamina" min="0" max="200">
+                            <span class="dv" id="vl-stamina">?</span>
+                        </div>
+                        <div class="dr">
+                            <span class="dl">Thirst</span> 
+                            <input type="range" class="ds" id="sl-thirst" min="0" max="100">
+                            <span class="dv" id="vl-thirst">?</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dlabel" style="margin-top: 20px;">Core Skills (0 - 5 Scale)</div>
+                <div class="dgrid">
+                    <div>
+                        <div class="dr">
+                            <span class="dl">Shooting</span> 
+                            <button class="db" id="sk-sh-d">-</button>
+                            <span class="dskv" id="sk-sh-v">0</span>
+                            <button class="db" id="sk-sh-u">+</button>
+                        </div>
+                        <div class="dr">
+                            <span class="dl">Melee</span> 
+                            <button class="db" id="sk-me-d">-</button>
+                            <span class="dskv" id="sk-me-v">0</span>
+                            <button class="db" id="sk-me-u">+</button>
+                        </div>
+                        <div class="dr">
+                            <span class="dl">Medicine</span> 
+                            <button class="db" id="sk-md-d">-</button>
+                            <span class="dskv" id="sk-md-v">0</span>
+                            <button class="db" id="sk-md-u">+</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="dr">
+                            <span class="dl">Stealth</span> 
+                            <button class="db" id="sk-st-d">-</button>
+                            <span class="dskv" id="sk-st-v">0</span>
+                            <button class="db" id="sk-st-u">+</button>
+                        </div>
+                        <div class="dr">
+                            <span class="dl">Scavenge</span> 
+                            <button class="db" id="sk-sc-d">-</button>
+                            <span class="dskv" id="sk-sc-v">0</span>
+                            <button class="db" id="sk-sc-u">+</button>
+                        </div>
+                        <div class="dr">
+                            <span class="dl">Tech</span> 
+                            <button class="db" id="sk-tc-d">-</button>
+                            <span class="dskv" id="sk-tc-v">0</span>
+                            <button class="db" id="sk-tc-u">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dlabel" style="margin-top: 20px;">Survivor Identity (Roles)</div>
+                <div class="dbg-list-grid">
+                    <button class="dbg-list-btn job-btn" data-trait1="STEADY HANDS" data-trait2="AUTHORITY">
+    <div class="list-icon">👮</div>
+    <div class="list-content">
+        <div class="list-title">POLICE OFFICER</div>
+        <div class="list-sub"><strong>PERKS:</strong> STEADY HANDS &amp; AUTHORITY</div>
+    </div>
+</button>
+<button class="dbg-list-btn job-btn" data-trait1="BREACHER" data-trait2="IRON GRIP">
+    <div class="list-icon">👷</div>
+    <div class="list-content">
+        <div class="list-title">CONSTRUCTION</div>
+        <div class="list-sub"><strong>PERKS:</strong> BREACHER &amp; IRON GRIP</div>
+    </div>
+</button>
+<button class="dbg-list-btn job-btn" data-trait1="LOCKSMITH" data-trait2="GHOST">
+    <div class="list-icon">🥷</div>
+    <div class="list-content">
+        <div class="list-title">BURGLAR</div>
+        <div class="list-sub"><strong>PERKS:</strong> LOCKSMITH &amp; GHOST</div>
+    </div>
+</button>
+<button class="dbg-list-btn job-btn" data-trait1="FIELD MEDIC" data-trait2="ANATOMIST">
+    <div class="list-icon">👨‍⚕️</div>
+    <div class="list-content">
+        <div class="list-title">DOCTOR</div>
+        <div class="list-sub"><strong>PERKS:</strong> FIELD MEDIC &amp; ANATOMIST</div>
+    </div>
+</button>
+<button class="dbg-list-btn job-btn" data-trait1="SILVER TONGUE" data-trait2="INSPIRATION">
+    <div class="list-icon">👔</div>
+    <div class="list-content">
+        <div class="list-title">MANAGER</div>
+        <div class="list-sub"><strong>PERKS:</strong> SILVER TONGUE &amp; INSPIRATION</div>
+    </div>
+</button>
+<button class="dbg-list-btn job-btn" data-trait1="FAST LEARNER" data-trait2="ADRENALINE">
+    <div class="list-icon">🎒</div>
+    <div class="list-content">
+        <div class="list-title">STUDENT</div>
+        <div class="list-sub"><strong>PERKS:</strong> FAST LEARNER &amp; ADRENALINE</div>
+    </div>
+</button>
+
+                </div>
+                <div class="dlabel" style="margin-top: 20px;">Positive Hobbies</div>
+                <div class="dbg-list-grid">
+                    <button class="dbg-list-btn" data-trait="RUNNER">
+    <div class="list-icon">👟</div>
+    <div class="list-content">
+        <div class="list-title">RUNNER</div>
+        <div class="list-sub">Can Flee twice.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="MECHANIC">
+    <div class="list-icon">🔧</div>
+    <div class="list-content">
+        <div class="list-title">MECHANIC</div>
+        <div class="list-sub">Start cars without keys.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="HUNTER">
+    <div class="list-icon">🏹</div>
+    <div class="list-content">
+        <div class="list-title">HUNTER</div>
+        <div class="list-sub">Spot ambushes early.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="BOXER">
+    <div class="list-icon">🥊</div>
+    <div class="list-content">
+        <div class="list-title">BOXER</div>
+        <div class="list-sub">Unarmed attacks deal heavy damage.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="GAMER">
+    <div class="list-icon">🎮</div>
+    <div class="list-content">
+        <div class="list-title">GAMER</div>
+        <div class="list-sub">See % Chance of success.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="HIKER">
+    <div class="list-icon">🎒</div>
+    <div class="list-content">
+        <div class="list-title">HIKER</div>
+        <div class="list-sub">+2 Inventory Slots.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="ARCHER">
+    <div class="list-icon">🎯</div>
+    <div class="list-content">
+        <div class="list-title">ARCHER</div>
+        <div class="list-sub">Retrieve arrows after kill.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="GARDENER">
+    <div class="list-icon">🌿</div>
+    <div class="list-content">
+        <div class="list-title">GARDENER</div>
+        <div class="list-sub">Water/Food heal extra.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="BASEBALL">
+    <div class="list-icon">⚾</div>
+    <div class="list-content">
+        <div class="list-title">BASEBALL</div>
+        <div class="list-sub">100% Knockdown on Crit.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="BOOKWORM">
+    <div class="list-icon">📚</div>
+    <div class="list-content">
+        <div class="list-title">BOOKWORM</div>
+        <div class="list-sub">Can attempt untrained Skill Checks.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="WATCHMAN">
+    <div class="list-icon">🦉</div>
+    <div class="list-content">
+        <div class="list-title">WATCHMAN</div>
+        <div class="list-sub">No accuracy penalty at night.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="DEBATER">
+    <div class="list-icon">⚖️</div>
+    <div class="list-content">
+        <div class="list-title">DEBATER</div>
+        <div class="list-sub">Detect deceit.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="CHEF">
+    <div class="list-icon">🍳</div>
+    <div class="list-content">
+        <div class="list-title">CHEF</div>
+        <div class="list-sub">Create meals from raw items.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="PARKOUR">
+    <div class="list-icon">🧗</div>
+    <div class="list-content">
+        <div class="list-title">PARKOUR</div>
+        <div class="list-sub">Access vertical paths.</div>
+    </div>
+</button>
+<button class="dbg-list-btn" data-trait="VOLUNTEER">
+    <div class="list-icon">🤝</div>
+    <div class="list-content">
+        <div class="list-title">VOLUNTEER</div>
+        <div class="list-sub">Heal morale faster.</div>
+    </div>
+</button>
+
+                </div>
+                <div class="dlabel" style="margin-top: 20px; color:var(--accent-red);">Survivor Weaknesses</div>
+                <div class="dbg-list-grid">
+                    <button class="dbg-list-btn neg" data-trait="SMOKER">
+    <div class="list-icon">🚬</div>
+    <div class="list-content">
+        <div class="list-title">SMOKER</div>
+        <div class="list-sub">-20 Stamina. Needs Nicotine.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="ALCOHOLIC">
+    <div class="list-icon">🥃</div>
+    <div class="list-content">
+        <div class="list-title">ALCOHOLIC</div>
+        <div class="list-sub">+20 HP. -1 Int. Reduced Pain.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="ASTHMATIC">
+    <div class="list-icon">🫁</div>
+    <div class="list-content">
+        <div class="list-title">ASTHMATIC</div>
+        <div class="list-sub">Cannot run without Inhaler.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="BLIND">
+    <div class="list-icon">👓</div>
+    <div class="list-content">
+        <div class="list-title">BLIND</div>
+        <div class="list-sub">Needs glasses to shoot.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="BAD KNEE">
+    <div class="list-icon">🦵</div>
+    <div class="list-content">
+        <div class="list-title">BAD KNEE</div>
+        <div class="list-sub">Cannot Flee.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="GLUTTON">
+    <div class="list-icon">🍔</div>
+    <div class="list-content">
+        <div class="list-title">GLUTTON</div>
+        <div class="list-sub">Must eat 2x Food.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="FRAGILE">
+    <div class="list-icon">🩸</div>
+    <div class="list-content">
+        <div class="list-title">FRAGILE</div>
+        <div class="list-sub">Bleeding deals double damage.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="PARANOID">
+    <div class="list-icon">👁️</div>
+    <div class="list-content">
+        <div class="list-title">PARANOID</div>
+        <div class="list-sub">Cannot sleep near NPCs.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="INSOMNIAC">
+    <div class="list-icon">🌙</div>
+    <div class="list-content">
+        <div class="list-title">INSOMNIAC</div>
+        <div class="list-sub">-10 HP. Night Vision.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="CLEAN">
+    <div class="list-icon">🧼</div>
+    <div class="list-content">
+        <div class="list-title">CLEAN</div>
+        <div class="list-sub">Healing items give +20 HP.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="COWARD">
+    <div class="list-icon">🏃</div>
+    <div class="list-content">
+        <div class="list-title">COWARD</div>
+        <div class="list-sub">-Damage. High escape chance.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="PYRO">
+    <div class="list-icon">🔥</div>
+    <div class="list-content">
+        <div class="list-title">PYRO</div>
+        <div class="list-sub">Fire weapons deal +50% DMG.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="LONE WOLF">
+    <div class="list-icon">🐺</div>
+    <div class="list-content">
+        <div class="list-title">LONE WOLF</div>
+        <div class="list-sub">+10% Stats when alone.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="LUDDITE">
+    <div class="list-icon">📟</div>
+    <div class="list-content">
+        <div class="list-title">LUDDITE</div>
+        <div class="list-sub">Cannot use electronics.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="PACIFIST">
+    <div class="list-icon">🕊️</div>
+    <div class="list-content">
+        <div class="list-title">PACIFIST</div>
+        <div class="list-sub">Unique peaceful choices.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="CLUMSY">
+    <div class="list-icon">💥</div>
+    <div class="list-content">
+        <div class="list-title">CLUMSY</div>
+        <div class="list-sub">Start encounters at high alert.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="GAMBLER">
+    <div class="list-icon">🎲</div>
+    <div class="list-content">
+        <div class="list-title">GAMBLER</div>
+        <div class="list-sub">10% Auto-Hit or Auto-Miss.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="SHELTERED">
+    <div class="list-icon">🧸</div>
+    <div class="list-content">
+        <div class="list-title">SHELTERED</div>
+        <div class="list-sub">Starts with +20 Humanity.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="SHOPPER">
+    <div class="list-icon">🛍️</div>
+    <div class="list-content">
+        <div class="list-title">SHOPPER</div>
+        <div class="list-sub">Sell luxury items for 200%.</div>
+    </div>
+</button>
+<button class="dbg-list-btn neg" data-trait="ARROGANT">
+    <div class="list-icon">😤</div>
+    <div class="list-content">
+        <div class="list-title">ARROGANT</div>
+        <div class="list-sub">Companions dislike you.</div>
+    </div>
+</button>
+
+                </div>
+                <div style="margin-top: 15px; margin-bottom: 20px;">
+                    <button class="db bad" id="trait-clear-all" style="width:100%; max-width:300px;">Clear All Traits</button>
+                </div>
+
+                <div class="dr" style="margin-top: 6px;">
+                    <span class="dl" style="color:var(--accent-gold); font-weight:bold;">Safehouse Trust</span>
+                    <input type="range" class="ds" id="sl-trust" min="0" max="100">
+                    <span class="dv" id="vl-trust">?</span>
+                </div>
+                
+                <div class="dr" style="margin-top: 6px;">
+                    <span class="dl">Set Clock</span>
+                    <input type="number" id="time-hour" class="dinput" style="width: 50px; text-align: center; padding: 4px; flex-shrink: 0;" min="0" max="23" placeholder="HH">
+                    <span style="color: #666; font-weight: bold;">:</span>
+                    <input type="number" id="time-minute" class="dinput" style="width: 50px; text-align: center; padding: 4px; flex-shrink: 0;" min="0" max="59" placeholder="MM">
+                    <button class="db go" id="time-set" style="width: auto !important; padding: 4px 10px; margin-left: 6px; margin-bottom: 0 !important; flex-shrink: 0;">SET</button>
+                </div>
+            </div>
+            <!-- 4. LOADOUT & ITEMS -->
+            <div class="dbg-section" id="sec-loadout">
+                <div class="dbg-section-header">
+                    <span>🎒 Job, Loadout &amp; Backpack Items</span>
+                </div>
+
+                <div class="dlabel">Job Role &amp; Equipped Slots</div>
+                <div class="dr">
+                    <span class="dl">Job Role</span>
+                    <select class="dsel" id="sel-job">
+                        <option value="???">??? (Unset)</option>
+                        <option value="Police Officer">Police Officer</option>
+                        <option value="Construction Worker">Construction Worker</option>
+                        <option value="Burglar">Burglar</option>
+                        <option value="Doctor">Doctor</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Student">Student</option>
+                    </select>
+                </div>
+                <div class="dr">
+                    <span class="dl">Weapon</span>
+                    <select class="dsel" id="sel-weapon">
+                        <option value="none">none (Unarmed)</option>
+                        <optgroup label="Pistols">
+                            <option value="Glock 19">Glock 19</option>
+                            <option value="Makarov">Makarov</option>
+                            <option value="Taurus">Taurus</option>
+                            <option value="Revolver .38">Revolver .38</option>
+                            <option value="FN Five-Seven">FN Five-Seven</option>
+                            <option value="Magnum">Magnum</option>
+                        </optgroup>
+                        <optgroup label="Long Guns">
+                            <option value="MP5">MP5</option>
+                            <option value="M4A1">M4A1</option>
+                            <option value="Barret M82">Barret M82</option>
+                            <option value="Spas-12">Spas-12</option>
+                            <option value="Remington 870">Remington 870</option>
+                            <option value="Compound Bow">Compound Bow</option>
+                        </optgroup>
+                        <optgroup label="Melee Weapons">
+                            <option value="Crowbar">Crowbar</option>
+                            <option value="Combat Knife">Combat Knife</option>
+                            <option value="Hunting Knife">Hunting Knife</option>
+                            <option value="Kitchen Knife">Kitchen Knife</option>
+                            <option value="Scalpel">Scalpel</option>
+                            <option value="Baseball Bat">Baseball Bat</option>
+                            <option value="Golf Club">Golf Club</option>
+                            <option value="Sledgehammer">Sledgehammer</option>
+                            <option value="Tire Iron">Tire Iron</option>
+                            <option value="Cane">Cane</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="dr">
+                    <span class="dl">Head Slot</span>
+                    <select class="dsel" id="sel-head">
+                        <option value="none">none</option>
+                        <option value="Hard Hat">Hard Hat</option>
+                        <option value="Tinfoil Hat">Tinfoil Hat</option>
+                        <option value="Glasses">Glasses</option>
+                    </select>
+                </div>
+                <div class="dr">
+                    <span class="dl">Body Slot</span>
+                    <select class="dsel" id="sel-body">
+                        <option value="none">none</option>
+                        <option value="Leather Jacket">Leather Jacket</option>
+                        <option value="Tactical Vest">Tactical Vest</option>
+                        <option value="T-Shirt">T-Shirt</option>
+                    </select>
+                </div>
+                <div class="dr">
+                    <span class="dl">Pants Slot</span>
+                    <select class="dsel" id="sel-pants">
+                        <option value="none">none</option>
+                        <option value="Jeans">Jeans</option>
+                    </select>
+                </div>
+                <div class="dr">
+                    <span class="dl">Boots Slot</span>
+                    <select class="dsel" id="sel-boots">
+                        <option value="none">none</option>
+                        <option value="Hiking Boots">Hiking Boots</option>
+                        <option value="Running Shoes">Running Shoes</option>
+                        <option value="Sneakers">Sneakers</option>
+                    </select>
+                </div>
+
+                <div class="dsep"></div>
+
+                <div class="dlabel">Add Items to Backpack</div>
+                <div class="item-row">
+                    <select id="item-select">
+                        <optgroup label="Firearms &amp; Ranged">
+                            <option value="Glock 19">Glock 19</option>
+                            <option value="Makarov">Makarov</option>
+                            <option value="Taurus">Taurus</option>
+                            <option value="Revolver .38">Revolver .38</option>
+                            <option value="FN Five-Seven">FN Five-Seven</option>
+                            <option value="Magnum">Magnum</option>
+                            <option value="MP5">MP5</option>
+                            <option value="M4A1">M4A1</option>
+                            <option value="Barret M82">Barret M82</option>
+                            <option value="Spas-12">Spas-12</option>
+                            <option value="Remington 870">Remington 870</option>
+                            <option value="Compound Bow">Compound Bow</option>
+                        </optgroup>
+                        <optgroup label="Melee Weapons">
+                            <option value="Crowbar">Crowbar</option>
+                            <option value="Combat Knife">Combat Knife</option>
+                            <option value="Hunting Knife">Hunting Knife</option>
+                            <option value="Kitchen Knife">Kitchen Knife</option>
+                            <option value="Sledgehammer">Sledgehammer</option>
+                            <option value="Scalpel">Scalpel</option>
+                            <option value="Golf Club">Golf Club</option>
+                            <option value="Baseball Bat">Baseball Bat</option>
+                            <option value="Cane">Cane</option>
+                            <option value="Tire Iron">Tire Iron</option>
+                        </optgroup>
+                        <optgroup label="Ammunition">
+                            <option value="9mm Ammo">9mm Ammo</option>
+                            <option value="5.56mm Ammo">5.56mm Ammo</option>
+                            <option value="5.7x28mm Ammo">5.7x28mm Ammo</option>
+                            <option value=".38 Ammo">.38 Ammo</option>
+                            <option value=".500 Magnum">.500 Magnum</option>
+                            <option value=".50 Cal">.50 Cal</option>
+                            <option value="Shotgun Shells">Shotgun Shells</option>
+                            <option value="Arrows">Arrows</option>
+                        </optgroup>
+                        <optgroup label="Wearables &amp; Apparel">
+                            <option value="Leather Jacket">Leather Jacket</option>
+                            <option value="Tactical Vest">Tactical Vest</option>
+                            <option value="T-Shirt">T-Shirt</option>
+                            <option value="Jeans">Jeans</option>
+                            <option value="Hiking Boots">Hiking Boots</option>
+                            <option value="Running Shoes">Running Shoes</option>
+                            <option value="Sneakers">Sneakers</option>
+                            <option value="Hard Hat">Hard Hat</option>
+                            <option value="Tinfoil Hat">Tinfoil Hat</option>
+                            <option value="Glasses">Glasses</option>
+                        </optgroup>
+                        <optgroup label="Medical Supplies">
+                            <option value="First Aid Kit">First Aid Kit</option>
+                            <option value="Bandage">Bandage</option>
+                            <option value="Antibiotics">Antibiotics</option>
+                            <option value="Painkillers">Painkillers</option>
+                            <option value="Inhaler">Inhaler</option>
+                            <option value="Sleeping Pills">Sleeping Pills</option>
+                        </optgroup>
+                        <optgroup label="Food &amp; Nourishment">
+                            <option value="Bottled Water">Bottled Water</option>
+                            <option value="Canned Food">Canned Food</option>
+                            <option value="Beef Jerky">Beef Jerky</option>
+                            <option value="Stale Coffee">Stale Coffee</option>
+                            <option value="Energy Bar">Energy Bar</option>
+                            <option value="Bag of Chips">Bag of Chips</option>
+                            <option value="Whiskey">Whiskey</option>
+                            <option value="Bottle of Vodka">Bottle of Vodka</option>
+                        </optgroup>
+                        <optgroup label="Tools &amp; Hardware">
+                            <option value="Flashlight">Flashlight</option>
+                            <option value="Fuse">Fuse</option>
+                            <option value="Batteries">Batteries</option>
+                            <option value="Multi-Tool">Multi-Tool</option>
+                            <option value="Lockpicks">Lockpicks</option>
+                            <option value="Duct Tape">Duct Tape</option>
+                            <option value="Lighter">Lighter</option>
+                            <option value="Rope">Rope</option>
+                            <option value="Jerry Can">Jerry Can</option>
+                            <option value="Car Keys">Car Keys</option>
+                            <option value="Police Radio">Police Radio</option>
+                            <option value="Work Gloves">Work Gloves</option>
+                            <option value="Bleach">Bleach</option>
+                        </optgroup>
+                        <optgroup label="Trade Goods &amp; Manuals">
+                            <option value="Luxury Watch">Luxury Watch</option>
+                            <option value="Gold Ring">Gold Ring</option>
+                            <option value="Family Photo">Family Photo</option>
+                            <option value="Manual: Mechanics">Manual: Mechanics</option>
+                            <option value="Manual: Anatomy">Manual: Anatomy</option>
+                            <option value="Textbook">Textbook</option>
+                            <option value="Encyclopedia">Encyclopedia</option>
+                        </optgroup>
+                    </select>
+                    <input type="number" id="item-qty" value="1" min="1" max="99">
+                    <button class="db go" id="item-add">Add</button>
+                </div>
+                
+                <div style="font-size: .8em; color: #888; margin-bottom: 6px;">
+                    Backpack Contents: <span id="bag-preview" style="color: #ff6b35;">(empty)</span>
+                </div>
+                <div class="dbr">
+                    <button class="db bad" id="item-clear-bag">Clear Entire Bag</button>
+                </div>
+            </div>
+
+            <!-- 5. COMPANIONS -->
+            <div class="dbg-section" id="sec-companions">
+                <div class="dbg-section-header">
+                    <span>👥 Caravan Companions</span>
+                </div>
+                <div class="dbr">
+                    <button class="db go" id="c-add-vane">+ Vane</button>
+                    <button class="db bad" id="c-rem-vane">- Vane</button>
+                    <button class="db go" id="c-add-maya">+ Maya &amp; Lily</button>
+                    <button class="db bad" id="c-rem-maya">- Maya &amp; Lily</button>
+                    <button class="db go" id="c-add-diane">+ Diane &amp; Boys</button>
+                    <button class="db bad" id="c-rem-diane">- Diane &amp; Boys</button>
+                    <button class="db go" id="c-add-reyes">+ Reyes</button>
+                    <button class="db bad" id="c-rem-reyes">- Reyes</button>
+                    <button class="db bad" id="c-clear">Clear All</button>
+                </div>
+                <div style="font-size: .8em; color: #888; margin-top: 6px;">
+                    Active Companions: <span id="c-list" style="color: #ff6b35; font-weight: bold;">(none)</span>
+                </div>
+            </div>
+
+            <!-- 6. QUEST & STORY FLAGS -->
+            <div class="dbg-section" id="sec-flags">
+                <div class="dbg-section-header">
+                    <span>🚩 Quest &amp; Story Flags</span>
+                </div>
+
+                <div class="dlabel">Prologue &amp; Act 1</div>
+                <div class="dbr">
+                    <button class="db" data-flag="hasPacked">EAS: Bag Packed</button>
+                    <button class="db" data-flag="houseLootSpawned">EAS: Home Loot Spawned</button>
+                    <button class="db" data-flag="secretLoreFound">Firewall Bypassed</button>
+                    <button class="db go" data-group="room406">⚡ Unit 406 Cleared</button>
+                    <button class="db go" data-group="utility">⚡ Utility Closet Cleared</button>
+                    <button class="db go" data-group="marcus">⚡ Unit 405 (Marcus) Cleared</button>
+                </div>
+
+                <div class="dlabel">Act 2 &amp; Act 2.5</div>
+                <div class="dbr">
+                    <button class="db" data-flag="read_405_journal">Read Marcus's Map</button>
+                    <button class="db" data-flag="visit_marcus_cabin">Visited Marcus's Cabin</button>
+                    <button class="db" data-flag="diane_trust">Diane Trust Earned</button>
+                    <button class="db" data-flag="loud_pump_auth">Gas Station Alarm Triggered</button>
+                </div>
+
+                <div class="dlabel">Act 3 Safehouse Quests</div>
+                <div class="dbr">
+                    <button class="db" data-flag="act3_observed">Observed Outskirts First</button>
+                    <button class="db" data-flag="companion_reyes">Deputy Reyes Escort Active</button>
+                    <button class="db" data-flag="weapons_confiscated">Weapons Confiscated at Gate</button>
+                    <button class="db" data-flag="helped_sadie">Act 3: Helped Sadie (Canteen)</button>
+                    <button class="db" data-flag="sadie_quest_active">Act 3: Sadie Quest Active</button>
+                    <button class="db" data-flag="helped_thorne">Act 3: Helped Dr. Thorne (Infirmary)</button>
+                    <button class="db" data-flag="thorne_quest_active">Act 3: Thorne Quest Active</button>
+                    <button class="db" data-flag="helped_chloe">Act 3: Helped Chloe (Comms)</button>
+                    <button class="db" data-flag="chloe_quest_active">Act 3: Chloe Quest Active</button>
+                </div>
+            </div>
+
+            <!-- 7. FAST-TRAVEL TELEPORTER -->
+            <div class="dbg-section" id="sec-fasttravel">
+                <div class="dbg-section-header">
+                    <span>🚀 Fast-Travel Teleporter</span>
+                </div>
+
+                <div class="dbr" style="align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <input type="text" class="dinput" id="nav-input" placeholder="Type passage name..." style="flex: 1;">
+                    <button class="db go" id="nav-go">Teleport</button>
+                </div>
+                
+                <div class="dlabel">Act 2 Scenes</div>
+                <div class="dbr">
+                    <button class="db go" id="nav-act2-street">The Street Escape</button>
+                    <button class="db go" id="nav-act2-road">The Road (Anchor)</button>
+                    <button class="db go" id="nav-act2-gas">Route 9 Gas Station</button>
+                    <button class="db go" id="nav-act2-highway">I-5 Highway Gridlock</button>
+                    <button class="db go" id="nav-act2-cabin">Act 2.5: Marcus's Cabin</button>
+                    <button class="db go" id="nav-act2-crash">Act 2.5: Maya's Crash</button>
+                </div>
+
+                <div class="dlabel">Act 3 Scenes &amp; Safehouse</div>
+                <div class="dbr">
+                    <button class="db go" id="nav-act3-arrival">Act 3: Outskirts Arrival</button>
+                    <button class="db go" id="nav-act3-sheriff">Substation 4</button>
+                    <button class="db go" id="nav-act3-home">Suburban Home</button>
+                    <button class="db go" id="nav-act3-safe">High School Gates</button>
+                    <button class="db go" id="nav-act3-hub" style="border-color:var(--accent-gold); color:var(--accent-gold);">Act 3: Ground Floor Hub</button>
+                </div>
+
+                <div class="dsep"></div>
+
+                <div class="dbr">
+                    <button class="db go" id="nav-lobby">Reset &amp; Warp to Lobby Entrance</button>
+                    <button class="db go" id="nav-return" title="Return to current passage">Return to Game</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<<run setTimeout(function() { 
+    if (typeof window.initDebugPanel === 'function') {
+        window.initDebugPanel(); 
+    }
+}, 50)>>

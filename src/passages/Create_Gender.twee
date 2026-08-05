@@ -1,0 +1,42 @@
+:: Create_Gender {"position":"600,0","size":"100,100"}
+<<script>>
+    setup.sound.stop("static");
+    setup.sound.stop("siren");
+
+    if (!State.variables.creation_music) {
+        /* PLAY MUSIC */
+        setup.sound.play("creation_theme", "audio/bgm/creation_theme.mp3", true, 0.5);
+        
+        /* PLAY CLOCK SFX */
+        setup.sound.play("clock", "audio/sfx/tick.mp3", true, 0.2);
+        
+        State.variables.creation_music = true;
+    }
+<</script>>
+
+<center>
+<h1>IDENTITY: GENDER</h1>
+<div style="color:#888; font-style:italic; margin-bottom: 20px;">
+"The face staring back at you in the darkened glass..."
+</div>
+
+<div class="job-container">
+    <<button "MALE">> <<set $gender to "Male">> <<goto "Create_FirstName">> <</button>>
+    <<button "FEMALE">> <<set $gender to "Female">> <<goto "Create_FirstName">> <</button>>
+    <<button "NON-BINARY">> <<set $gender to "Non-Binary">> <<goto "Create_FirstName">> <</button>>
+</div>
+
+<hr>
+<div style="margin-top: 20px; color:#aaa;">
+    Or define your own:
+    <br>
+    <<textbox "$gender" "" autofocus>>
+    <br><br>
+    <<button "Confirm Identity">> 
+        <<if $gender is "" or $gender is " ">>
+            <<set $gender to "Survivor">>
+        <</if>>
+        <<goto "Create_FirstName">> 
+    <</button>>
+</div>
+</center>

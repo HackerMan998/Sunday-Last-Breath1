@@ -1,0 +1,73 @@
+:: Act3_School_RadioRoom {"position":"800,1900","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "radio_room">>
+<<set $activeMap to "Highschool 1st Floor">>
+<</nobr>>
+
+<h2>1ST FLOOR — SECURITY COMMS & RADIO ROOM</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+    <img src="image/Act3_Timberline/radio.gif" style="max-width: 100%; border: 1px solid #333;">
+</div>
+
+<<chat "Chloe" "image/avatars/radio_chloe.gif" "right" "All military frequencies in King County went static twenty minutes ago...">>
+<br><br>
+
+<<if $helped_chloe>>
+    <span style="color:var(--accent-green);">The radio relay is humming steadily thanks to your repairs.</span>
+    <br><br>
+    <<if not $has_radio_lore>>
+        <div class="choice-menu">
+            <button>
+                <<link "Listen to Chloe's radio intel">>
+                    <<addTime 10>>
+                    <<set $has_radio_lore to true>>
+                    <<run window.addLore("Radio Intel: The Fall of Highway 99", "Chloe's fixed relay captured military transmissions confirming that I-5 and Highway 99 barricades have been totally overrun.")>>
+                    <<goto "Act3_School_RadioRoom">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[LORE UNLOCKED]</b> Listen to regional feeds.</span>
+            </button>
+        </div>
+    <<else>>
+        <span style="color:var(--accent-gold);">You have recorded Chloe's regional radio chatter log.</span>
+    <</if>>
+<<else>>
+    <div class="choice-menu">
+        <<if $inventory.find(i => i.id === "Fuse" || i.id === "Batteries" || i.id === "Multi-Tool")>>
+            <button>
+                <<link "Fix Chloe's radio relay with your electrical parts [INVENTORY]">>
+                    <<addTime 15>>
+                    <<set $helped_chloe to true>>
+                    <<completeObjective "fetch_parts_chloe">>
+                    <<purgeCompleted>>
+                    <<run window.gainXP(35)>>
+                    <<run window.gainTrust(20)>>
+                    <<if $inventory.find(i => i.id === "Fuse")>><<run setup.removeItem("Fuse", 1)>><<elseif $inventory.find(i => i.id === "Batteries")>><<run setup.removeItem("Batteries", 1)>><</if>>
+                    <<goto "Act3_School_RadioRoom">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-green);">[+20 TRUST] [+35 XP]</b> Repair the radio transformer.</span>
+            </button>
+        <</if>>
+        <<if not $chloe_quest_active>>
+            <button>
+                <<link "Ask Chloe how to help fix the radio">>
+                    <<addTime 5>>
+                    <<set $chloe_quest_active to true>>
+                    <<addObjective "fetch_parts_chloe" "Find a Fuse, Batteries, or Multi-Tool for Chloe">>
+                    <<goto "Act3_School_RadioRoom">>
+                <</link>>
+                <span class="btn-sub">Accept radio repair quest.</span>
+            </button>
+        <</if>>
+    </div>
+<</if>>
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "🚪 Exit Radio Room to Hallway [EAST]">>
+            <<set $currentLocation to "hall_1_west_1">>
+            <<goto "Act3_School1Floor">>
+        <</link>>
+    </button>
+</div>

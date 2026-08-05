@@ -1,0 +1,324 @@
+:: Act2_Highway {"position":"500,1100","size":"100,100"}
+<<nobr>>
+/* =======================================================================
+   INITIALIZATION & VARIABLES
+   Runs only on the first visit to set up the scene.
+   ======================================================================= */
+<<if ndef $highway_phase>>
+	<<set $highway_phase to 1>>
+    
+    /* ADD 1 HOUR OF DRIVING TIME TO THE GAME CLOCK */
+    <<addTime 59>>
+    
+    /* AUDIO: Initial Highway Ambience (Heavy Rain & Wind) EXACTLY ONCE */
+    <<run setup.sound.play("highway_ambience", "audio/bgm/heavy_rain_wind.mp3", true, 0.5)>>
+<</if>>
+
+/* WEAPON TYPE DETECTION (For the UI) */
+<<set _isGun     to (def setup.ammoMap[$equip.weapon])>>
+<<set _isBlade   to ["Combat Knife", "Hunting Knife", "Kitchen Knife", "Scalpel"].includes($equip.weapon)>>
+<<set _isBlunt   to["Baseball Bat", "Golf Club", "Sledgehammer", "Cane", "Tire Iron", "Crowbar"].includes($equip.weapon)>>
+<<set _isUnarmed to ($equip.weapon == "none")>>
+<</nobr>>
+
+
+/* =======================================================================
+   PHASE 1 — ARRIVAL (THE GRIDLOCK)
+   ======================================================================= */
+<<if $highway_phase == 1>>
+	<h2>INTERSTATE 5 — SOUTHBOUND</h2>
+
+    <!-- VISUAL: Gridlock Image -->
+    <div style="margin-bottom: 15px; text-align: center;">
+        <img src="image/Act2Road/highway_gridlock.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+    </div>
+
+    <!-- NARRATIVE TEXT -->
+    You've been driving for an hour. The adrenaline has faded into a dull, throbbing exhaustion. The highway was supposed to be the main artery out of the county. 
+    <br><br>
+    Instead, it's a parking lot.
+    <br><br>
+    A sea of red taillights stretches for miles into the dense, fog-choked night. Nobody is moving. Engines are idling, pumping gray exhaust into the cold air. You brake to a halt at the very back of the gridlock.
+    <br><br>
+
+    <!-- DYNAMIC DIALOGUE: Vane Present vs. Solo -->
+    <<if $vane_status == "joined">>
+        Vane leans forward, peering through the windshield. 
+        <br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Dammit. Dead stop. We aren't going anywhere fast.">>
+        <br>
+        You put the car in park and rub your eyes. The silence in the cabin is heavy. 
+        <br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "So... before today. Before the world ended. What did you actually do?">>
+        <br>
+        <<chat "You" "image/avatars/player.gif" "left" "I was a <<print $job>>. You?">>
+        <br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Software sales. Honestly? I hated it. Funny how none of that matters now.">>
+    <<else>>
+        You put the car in park and rub your eyes. The silence in the cabin is oppressive. It leaves too much room for your thoughts to wander back to the blood in the Ascott Residency.
+    <</if>>
+	<br><br>
+    
+    <!-- PLAYER CHOICE -->
+	<div class="choice-menu">
+		<button>
+            <<link "Turn on the radio">>
+                <<set $highway_phase to 2>>
+                <<goto "Act2_Highway">>
+            <</link>>
+            <span class="btn-sub">See if there's any news on the traffic.</span>
+		</button>
+	</div>
+
+
+/* =======================================================================
+   PHASE 2 — THE RADIO BROADCAST
+   ======================================================================= */
+<<elseif $highway_phase == 2>>
+	<h2>INTERSTATE 5 — SOUTHBOUND</h2>
+
+    <!-- VISUAL: Gridlock Image -->
+    <div style="margin-bottom: 15px; text-align: center;">
+        <img src="image/Act2Road/highway_gridlock.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+    </div>
+
+    <!-- AUDIO TRIGGER -->
+    <<run setup.sound.play("radio", "audio/sfx/radio_static_ebs.mp3", false, 0.7)>>
+
+    <!-- NARRATIVE TEXT -->
+    <<if $vane_status == "joined">>
+        He reaches out and twists the radio dial, looking for a distraction. 
+    <<else>>
+        You reach out and twist the radio dial. You just want music. Anything to drown out the quiet. 
+    <</if>>
+    <br><br>
+    Static hisses through the speakers, sharp and loud. You cycle through dead stations until a voice breaks through the noise. It isn't a DJ.
+    
+    <!-- UI ELEMENT: Emergency Broadcast Box -->
+    <div style="margin-top:20px; padding:15px; background:#0a0a0a; border-left:3px solid var(--accent-blue); font-family:'Courier Prime', monospace; color:#ccc;">
+        <span class="glitch" style="color:var(--accent-red); font-weight:bold;">[EMERGENCY BROADCAST SYSTEM]</span><br><br>
+        <i>"...repeat, all military checkpoints on I-5 and Highway 99 have been overrun. Do not proceed to the quarantine zones. I repeat, the quarantine zones have fallen."</i><br><br>
+        <i>"The pathogen is highly virulent. Infection is transmitted via saliva and blood transfer. Reanimation occurs within three to five minutes of death. They are not human anymore. Aim for the brain stem. May God have mercy on..."</i>
+    </div>
+    <br>
+    
+    <!-- POST-BROADCAST NARRATIVE -->
+    The signal cuts out, replaced by a whining dial tone. 
+    <br><br>
+    <<if $vane_status == "joined">>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Overrun? But... the army was out there. How could they fall?">>
+    <<else>>
+        You stare at the radio. The military is gone. There is no rescue coming.
+    <</if>>
+    <br>
+    You unbuckle your seatbelt. "Stay here," you mutter, popping the door. "I'm going to see what's holding up the line."
+    <br><br>
+
+    <!-- PLAYER CHOICE -->
+	<div class="choice-menu">
+		<button>
+            <<link "Step out onto the highway">>
+                <<completeObjective "escape_city">>
+    <<addObjective "check_traffic" "Check the road ahead for a way through">>
+                <<set $highway_phase to 3>>
+                <<goto "Act2_Highway">>
+            <</link>>
+            <span class="btn-sub">Check the road ahead.</span>
+		</button>
+	</div>
+
+
+/* =======================================================================
+   PHASE 3 — THE EXPLOSION & CHAOS
+   ======================================================================= */
+<<elseif $highway_phase == 3>>
+	<h2>INTERSTATE 5 — SOUTHBOUND</h2>
+
+    <!-- VISUAL: Explosion Image -->
+    <div style="margin-bottom: 15px; text-align: center;">
+        <img src="image/Act2Road/highway_explosion.gif" style="max-width: 100%; border: 1px solid var(--accent-red); box-shadow: 0 4px 15px rgba(138,28,28,0.5);">
+    </div>
+
+    <!-- AUDIO & EFFECTS -->
+    <<run setup.sound.play("explosion", "audio/sfx/distant_explosion.mp3", false, 1.0)>>
+    <<run setup.sound.play("panic", "audio/bgm/highway_panic_wave.mp3", true, 0.6)>>
+    <<run window.shakeScreen(15)>>
+
+    <!-- NARRATIVE TEXT -->
+    You step out onto the asphalt. The air is freezing. You walk past the first few cars ahead of you. Families. Solo drivers. Some are sleeping, some are crying. Nobody knows what's happening.
+    <br><br>
+    You look about a quarter-mile down the highway. 
+    <br><br>
+    <b style="color:var(--accent-red); font-size:1.5em;">BOOM.</b>
+    <br><br>
+    A brilliant flash of orange fire erupts near the front of the gridlock. A car just exploded. 
+    <br><br>
+    Then, the screaming starts. 
+    <br><br>
+    It's a wave. You watch in horror as the brake lights of the cars ahead of you violently shift. Drivers are panicking, slamming their cars into the vehicles next to them, trying to escape the road. Through the fog, you see shapes sprinting between the cars. They are dragging people through shattered windows. The infection didn't start at the front of the line—<i style="color:var(--accent-red);">someone in the traffic jam was bitten.</i>
+    <br><br>
+    The wave of panic and blood is moving backward. Straight toward you.
+    <br><br>
+    
+    <!-- UI ELEMENT: Warning Block -->
+    <div style="padding:10px; background:rgba(138,28,28,0.2); border-left:3px solid var(--accent-red); font-style:italic; color:#ff9999;">
+        You turn and sprint back to your sedan. You have to U-turn and get off this highway right now.
+    </div>
+    <br>
+
+    <!-- DYNAMIC ESCAPE NARRATIVE -->
+    <<if $vane_status == "joined">>
+        /* AUDIO: Vane driving */
+        <<run setup.sound.play("car_rev", "audio/sfx/car_rev.mp3", false, 0.8)>>
+
+        As you run back, you hear the engine rev. Vane has slid into the driver's seat! He slams the car into reverse, tires squealing, perfectly angling the sedan to hop the median and face the opposite direction.
+        <br><br>
+        He kicks the passenger door open for you. 
+        <br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "GET IN!">>
+        <br>
+        You lunge for the door, but two figures vault over the hood of the car parked next to yours. Their clothes are torn, their mouths dripping with fresh gore. They cut you off from the passenger door.
+        <br><br>
+        Vane can't drive away without leaving you behind. You have to kill them.
+    <<else>>
+        You reach the door handle of your sedan, fumbling for your keys. You need to get in, throw it in reverse, and jump the median. 
+        <br><br>
+        But before you can pull the door open, glass shatters from the car parked directly adjacent to yours. Two figures crawl out of the broken window, thrashing wildly. Their skin is pale, their mouths dripping with fresh gore. They lock their milky eyes on you.
+        <br><br>
+        They are blocking your door. You can't turn the car around until they're dead.
+    <</if>>
+    <br><br>
+    <<completeObjective "check_traffic">>
+    <<addObjective "defend_sedan" "Defend your car from the oncoming infected">>
+    <<purgeCompleted>>
+    <!-- SYSTEM: Initialize Enemy Horde -->
+    <<set $horde to[
+        {name: "Infected Motorist", hp: 30, acc: 35, ev: 5, img: "image/Act2Road/zombie_motorist.png"},
+        {name: "Frenzied Passenger", hp: 25, acc: 40, ev: 10, img: "image/Act2Road/zombie_passenger.png"}
+    ]>>
+
+    <!-- PLAYER CHOICE -->
+	<div class="choice-menu">
+		<button>
+            <<link "DRAW WEAPON [COMBAT]">>
+                <<set $highway_phase to 4>>
+                /* Fade out environment before jumping to combat */
+                <<run setup.sound.fade("highway_ambience", 1000)>>
+                <<run setup.sound.fade("panic", 1000)>>
+                <<goto "Act2_Highway">>
+            <</link>>
+            <span class="btn-sub">Engage the infected.</span>
+		</button>
+	</div>
+
+
+/* =======================================================================
+   PHASE 4 — COMBAT LOOP & RESOLUTION
+   ======================================================================= */
+<<elseif $highway_phase == 4>>
+	<h2>INTERSTATE 5 — COMBAT</h2>
+
+    <!-- STATE A: ENEMIES ARE ALIVE (SHOW COMBAT UI) -->
+	<<if $horde.length > 0>>
+		<div style="text-align:center; margin-bottom: 20px; background: rgba(80,0,0,0.2); border: 1px solid #8a1c1c; padding: 15px;">
+            
+            <!-- ENEMY SPRITE DISPLAY -->
+			<div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;">
+                <img @src="$horde[0].img" style="max-width: 100%; border: 1px solid #8a1c1c; box-shadow: 0 4px 8px rgba(138,28,28,0.3); filter: grayscale(20%) contrast(1.2);">
+			</div>
+            
+			<h3 style="color:var(--accent-red); margin-top:0;">ENEMIES REMAINING: <<print $horde.length>></h3>
+			
+            <!-- ENEMY ROSTER LIST -->
+			<div style="border:1px solid #333; background:#000; padding:10px; max-width:300px; margin:0 auto; text-align:left;">
+				<<for _i, _z range $horde>>
+					<div style="border-bottom:1px dashed #333; padding:5px; font-family: monospace;">
+						TARGET: <span style="color:#aaa">_z.name</span> (Evasion: _z.ev%)
+					</div>
+				<</for>>
+			</div>
+		</div>
+
+        <!-- PLAYER HUD & ATTACK BUTTON -->
+		<div style="text-align:center; padding: 15px; border: 1px solid #444; background-color: #050404;">
+			<b>EQUIPPED:</b> 
+			<<if $equip.weapon is "none">>
+				<span style="color:var(--accent-red)">UNARMED (Fists)</span>
+			<<else>>
+				<span style="color:var(--accent-blue)">$equip.weapon</span>
+			<</if>>
+			<br><br>
+
+			<div class="choice-menu">
+				<button>
+                    <<link "ATTACK TARGET">>
+                        <<run window.combatTurn(0)>>
+                    <</link>>
+				</button>
+			</div>
+		</div>
+
+
+    <!-- STATE B: HORDE IS DEAD (SHOW POST-COMBAT CINEMATIC) -->
+    <<else>>
+
+        /* AUDIO: Post-Combat Body Drop */
+        <<if not $highway_cleared>>
+            <<run setup.sound.play("body_drop", "audio/sfx/body_fall_wet.mp3", false, 0.9)>>
+            <<set $highway_cleared to true>>
+        <</if>>
+        
+        <!-- VICTORY HEADER -->
+		<div style="text-align:center; margin-bottom: 20px;">
+			<div style="font-size:3em;">💀</div>
+			<h2 style="color:var(--accent-green)">TARGETS ELIMINATED</h2>
+            <br>
+            <span style="color:var(--accent-gold); font-size: 1.2em; font-weight: bold;">[+50 XP]</span>
+            <<if not $highway_combat_xp>>
+                <<run window.gainXP(50)>>
+                <<set $highway_combat_xp to true>>
+            <</if>>
+		</div>
+		
+        <!-- NARRATIVE TEXT -->
+		The final infected collapses against the side of the car, smearing thick, dark blood down the glass before slumping to the wet asphalt. You are panting hard. Your hands are slick with rain and gore.
+        <br><br>
+        
+        <!-- DYNAMIC DEPARTURE -->
+        <<if $vane_status == "joined">>
+            Vane leans over and pushes the passenger door open for you. He looks pale, staring wide-eyed at the bodies on the ground. 
+            <br>
+            <<chat "Vane" "image/avatars/vane.gif" "right" "Get in. Get in right now.">>
+            <br>
+            You don't need to be told twice. You shove the bodies away with your boot, slide into the driver's seat, and slam the door shut. 
+            <br><br>
+            <<run setup.sound.play("uturn", "audio/sfx/uturn.mp3", false, 0.8)>>
+            Vane takes his foot off the brake. The sedan surges backward, spinning 180 degrees over the muddy median, before you throw it into Drive and punch the gas.
+        <<else>>
+            You shove the bodies away with your boot, yank the door open, and slide into the driver's seat. You slam the door shut and lock it just as another infected throws its hands against the rear window.
+            <br><br>
+            <<run setup.sound.play("uturn", "audio/sfx/uturn.mp3", false, 0.8)>>
+            You throw the car into reverse, spinning 180 degrees over the muddy median, ripping up grass and mud. You shift into Drive and punch the gas, leaving the horde to swarm the empty gridlock behind you.
+        <</if>>
+        <br><br>
+
+        The highway is a graveyard. You need a new route. And you are going to need fuel.
+		<br><br>
+
+        <!-- FINAL PLAYER CHOICE -->
+		<div class="choice-menu">
+			<button>
+                <<link "DRIVE TO THE GAS STATION">>
+                    <<completeObjective "defend_sedan">>
+    <<purgeCompleted>>
+                    <<addTime 4>>
+                    /* Clean up phase variables before advancing to the next Act */
+                    <<unset $highway_phase>>
+                    <<goto "Act2_GasStation">> 
+                <</link>>
+                <span class="btn-sub">Get off the interstate.</span>
+			</button>
+		</div>
+
+	<</if>>
+<</if>>

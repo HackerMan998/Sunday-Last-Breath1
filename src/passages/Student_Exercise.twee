@@ -1,0 +1,77 @@
+:: Student_Exercise {"position":"800,100","size":"100,100"}
+<<nobr>>
+/* 1. DATA MAPPING: Converts short variable names to pretty labels for the UI */
+<<set _labelMap to {
+    "str": "Strength",
+    "int": "Intelligence",
+    "agi": "Agility",
+    "cha": "Charisma",
+    "per": "Perception"
+}>>
+<</nobr>>
+
+<center>
+    <!-- HEADER SECTION -->
+    <h1>PRE-APOCALYPSE TRAINING</h1>
+    <i>"While others worked, you were preparing. How did you spend your free time?"</i>
+    
+    <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
+
+    <!-- POINT DISPLAY SECTION -->
+    <div style="font-size:2em; font-weight:bold; color:var(--accent-gold)">
+        POINTS REMAINING: <span id="points">$studentPoints</span>
+    </div>
+    <p style="margin-top: 5px;">
+        <small style="color: #888;">(Click [+] to train an attribute by 1 point)</small>
+    </p>
+</center>
+
+<br>
+
+<!-- ATTRIBUTE SELECTION BOX -->
+<div style="max-width:500px; margin:0 auto; background:rgba(20,20,20,0.8); padding:20px; border:1px solid #444; box-shadow: 0 0 10px rgba(0,0,0,0.5);">
+
+    <<for _s range ["str","int","agi","cha","per"]>>
+        <div style="display:flex; justify-content:space-between; align-items: center; margin-bottom:12px; padding-bottom: 8px; border-bottom: 1px solid #222;">
+            
+            /* Display the Pretty Name and current value (e.g., STRENGTH: 3) */
+            <span style="text-transform:uppercase; letter-spacing: 1px; font-family: 'Oswald', sans-serif;">
+                <b style="color:var(--accent-blue);">_labelMap[_s]</b>: <<print State.variables[_s]>>
+            </span>
+
+            <span>
+                <<capture _s>>
+                    /* New 10-point scale logic: Add 1, check limit of 10 */
+                    <<button "+1">>
+                        <<if $studentPoints >= 1 && State.variables[_s] < 10>>
+                            <<set State.variables[_s] += 1>>
+                            <<set $studentPoints -= 1>>
+                            
+                            /* Refresh the page to show new totals and chart */
+                            <<goto "Student_Exercise">>
+                        <</if>>
+                    <</button>>
+                <</capture>>
+            </span>
+        </div>
+    <</for>>
+
+</div>
+
+<br>
+
+<!-- NAVIGATION SECTION -->
+<center>
+    <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0; max-width: 600px;">
+    
+    <<if $studentPoints == 0>>
+        <div style="color: var(--accent-green); margin-bottom: 10px;">✓ All training points allocated.</div>
+        <<button "CONTINUE TO UNIVERSITY MAJOR">> 
+            <<goto "Student_Major">> 
+        <</button>>
+    <<else>>
+        <span style="color:var(--accent-red); font-weight: bold; letter-spacing: 1px;">
+            ⚠️ SPEND ALL POINTS TO CONTINUE
+        </span>
+    <</if>>
+</center>

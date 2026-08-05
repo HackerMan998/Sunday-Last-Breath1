@@ -1,0 +1,58 @@
+:: PassageFooter {"position":"0,100","size":"100,100"}
+<<nobr>>
+/* =================================================================
+   DYNAMIC FLOOR LOOT UI
+   This block renders a visual interface for items currently on the 
+   ground in the player's current location.
+================================================================= */
+
+/* 1. SETUP: Identify current location */
+<<set _currentRoom to passage()>>
+
+/* 2. VALIDATION: Check if the floor array exists and has items */
+<<if def $floorItems[_currentRoom] and $floorItems[_currentRoom].length > 0>>
+    
+    <br><br>
+    
+    /* --- Main Container --- */
+    <div class="loot-container">
+        
+        /* Section Header */
+        <div class="loot-header">⚠️ ITEMS ON GROUND</div>
+        
+        /* 3. GENERATION: Loop through every item in the room's array */
+        <<for _i, _item range $floorItems[_currentRoom]>>
+            
+            /* Pull master data (icons, etc.) from setup.items database */
+            <<set _db to setup.items[_item.id]>>
+            
+            /* --- Item Card --- */
+            <div class="loot-item">
+                
+                /* Visual: Item Icon */
+                <div class="loot-icon">
+                    <<print _db.icon>>
+                </div>
+                
+                /* Text: Item Name and Quantity */
+                <div class="loot-name">
+                    <<print _item.id>><br>
+                    (x<<print _item.qty>>)
+                </div>
+                
+                /* 4. ACTION: Grab Button */
+                /* Capture the current index (_i) so the button knows which item to pick up */
+                <<capture _i>>
+                    <button class="loot-btn" @onclick="'window.pickupItem(' + _i + ')'">
+                        GRAB
+                    </button>
+                <</capture>>
+                
+            </div> /* End loot-item */
+            
+        <</for>>
+        
+    </div> /* End loot-container */
+
+<</if>>
+<</nobr>>

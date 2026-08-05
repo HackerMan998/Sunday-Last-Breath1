@@ -1,0 +1,535 @@
+:: SelectHobby {"position":"900,100","size":"100,100"}
+<<nobr>>
+<<set $hp to Math.min($hp, $hp_max)>>
+<<set $stamina to Math.min($stamina, $stamina_max)>>
+
+<center>
+    <h1>
+        <<if $hobbyStep == 1>>
+            PRIMARY HOBBY <span style="font-size:0.6em; color:#aaa;">(+1-2 Stats / Items)</span>
+        <<elseif $hobbyStep == 2>>
+            SECONDARY HOBBY <span style="font-size:0.6em; color:#aaa;">(+1 Stat / Items)</span>
+        <<else>>
+            SURVIVOR WEAKNESS <span style="font-size:0.6em; color:var(--accent-red);">(Drawbacks)</span>
+        <</if>>
+    </h1>
+</center>
+
+<div class="trait-grid">
+
+/* =================================================================
+   POSITIVE HOBBIES (Steps 1 & 2)
+   ================================================================= */
+<<if $hobbyStep < 3>>
+
+    <<if !$pickedHobbies.includes("runner")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_runner.png">
+        <div class="trait-content">
+            <div class="trait-title">RUNNER</div>
+            <div class="trait-desc">You run marathons. Outlast any chase.</div>
+            <div class="trait-stats">+STAMINA / +AGI</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("runner")>>
+                <<if $hobbyStep == 1>><<set $stamina_max += 20>><<set $base_stamina_max += 20>><<set $agi += 1>><<else>><<set $stamina_max += 10>><<set $base_stamina_max += 10>><</if>>
+                <<run window.setPerk("RUNNER", "image/perks/sprinter.png", "Can Flee twice.")>>
+                <<run setup.addItem("Energy Bar", 2)>><<run setup.addItem("Running Shoes", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <<if !$pickedHobbies.includes("mechanic")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_mechanic.png">
+        <div class="trait-content">
+            <div class="trait-title">MECHANIC</div>
+            <div class="trait-desc">Fixing cars and tech comes naturally.</div>
+            <div class="trait-stats">+TECH / +STR</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("mechanic")>>
+                <<if $hobbyStep == 1>><<set $str += 1>><<set $int += 1>><<set $skills.tech += 1>><<else>><<set $int += 1>><</if>>
+                <<run window.setPerk("MECHANIC", "image/perks/hotwire.png", "Start cars without keys.")>><<run setup.addItem("Multi-Tool", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <<if !$pickedHobbies.includes("hunter")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_hunter.png">
+        <div class="trait-content">
+            <div class="trait-title">HUNTER</div>
+            <div class="trait-desc">Track game in the wild. Spot danger first.</div>
+            <div class="trait-stats">+PERC / +SHOOT</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("hunter")>>
+                <<if $hobbyStep == 1>><<set $per += 2>><<set $skills.shooting += 1>><<else>><<set $per += 1>><</if>>
+                <<run window.setPerk("HUNTER", "image/perks/tracker.png", "Spot ambushes early.")>><<run setup.addItem("Binoculars", 1)>><<run setup.addItem("Combat Knife", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <<if !$pickedHobbies.includes("boxer")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_boxer.png">
+        <div class="trait-content">
+            <div class="trait-title">BOXER</div>
+            <div class="trait-desc">Know how to take a hit and throw a punch.</div>
+            <div class="trait-stats">+STR / +HP</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("boxer")>>
+                <<if $hobbyStep == 1>><<set $str += 2>><<set $hp_max += 10>><<set $skills.melee += 1>><<else>><<set $str += 1>><</if>>
+                <<run window.setPerk("BOXER", "image/perks/knockout.png", "Unarmed attacks deal heavy damage.")>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <<if !$pickedHobbies.includes("gamer")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_gamer.png">
+        <div class="trait-content">
+            <div class="trait-title">GAMER</div>
+            <div class="trait-desc">Simulations taught strategy and mental acuity.</div>
+            <div class="trait-stats">+INT / +TECH</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("gamer")>>
+                <<if $hobbyStep == 1>><<set $int += 2>><<set $skills.tech += 1>><<else>><<set $int += 1>><</if>>
+                <<run window.setPerk("GAMER", "image/perks/strategist.png", "See % Chance of success.")>><<run setup.addItem("Fuse", 2)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <<if !$pickedHobbies.includes("hiker")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_hiker.png">
+        <div class="trait-content">
+            <div class="trait-title">HIKER</div>
+            <div class="trait-desc">Travel long distances carrying heavy loads.</div>
+            <div class="trait-stats">+BAG SPACE</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("hiker")>>
+                <<if $hobbyStep == 1>><<set $stamina_max += 10>><<set $base_stamina_max += 10>><<set $str += 1>><<set $skills.scavenging += 1>><<else>><<set $stamina_max += 10>><<set $base_stamina_max += 10>><</if>>
+                <<run window.setPerk("HIKER", "image/perks/pack_mule.png", "+2 Inventory Slots.")>><<set $bag_limit += 2>><<run setup.addItem("Hiking Boots", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <<if !$pickedHobbies.includes("archer")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_archer.png">
+        <div class="trait-content">
+            <div class="trait-title">ARCHER</div>
+            <div class="trait-desc">Silent hunter. Retrieve ammo after a kill.</div>
+            <div class="trait-stats">+PERC / +BOW</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("archer")>>
+                <<if $hobbyStep == 1>><<set $str += 1>><<set $per += 1>><<set $skills.shooting += 1>><<else>><<set $per += 1>><</if>>
+                <<run window.setPerk("ARCHER", "image/perks/silent_hunter.png", "Retrieve arrows after kill.")>><<run setup.addItem("Compound Bow", 1)>><<run setup.addItem("Arrows", 5)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <<if !$pickedHobbies.includes("gardener")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_gardener.png">
+        <div class="trait-content">
+            <div class="trait-title">GARDENER</div>
+            <div class="trait-desc">You know plants and natural remedies.</div>
+            <div class="trait-stats">+INT / +HEAL</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("gardener")>>
+                <<if $hobbyStep == 1>><<set $int += 1>><<set $per += 1>><<set $hp_max += 5>><<else>><<set $int += 1>><</if>>
+                <<run window.setPerk("GARDENER", "image/perks/herbalist.png", "Water/Food heal extra.")>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <<if !$pickedHobbies.includes("baseball")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_baseball.png">
+        <div class="trait-content">
+            <div class="trait-title">BASEBALL</div>
+            <div class="trait-desc">Swing for the fences. High hand-eye coordination.</div>
+            <div class="trait-stats">+STR / +MELEE</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("baseball")>>
+                <<if $hobbyStep == 1>><<set $str += 2>><<set $skills.melee += 1>><<else>><<set $str += 1>><</if>>
+                <<run window.setPerk("BASEBALL", "image/perks/home_run.png", "100% Knockdown on Crit.")>><<run setup.addItem("Baseball Bat", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <<if !$pickedHobbies.includes("bookworm")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_bookworm.png">
+        <div class="trait-content">
+            <div class="trait-title">BOOKWORM</div>
+            <div class="trait-desc">Read about everything. Understand theory.</div>
+            <div class="trait-stats">+INT / -STAMINA</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("bookworm")>>
+                <<if $hobbyStep == 1>><<set $int += 2>><<set $stamina_max -= 5>><<set $base_stamina_max -= 5>><<else>><<set $int += 1>><</if>>
+                <<run window.setPerk("BOOKWORM", "image/perks/theory.png", "Can attempt untrained Skill Checks.")>><<run setup.addItem("Encyclopedia", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <<if !$pickedHobbies.includes("watchman")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_watchman.png">
+        <div class="trait-content">
+            <div class="trait-title">WATCHMAN</div>
+            <div class="trait-desc">Used to night shifts. See clearly in the dark.</div>
+            <div class="trait-stats">+PERC / +STEALTH</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("watchman")>>
+                <<if $hobbyStep == 1>><<set $per += 2>><<set $skills.stealth += 1>><<else>><<set $per += 1>><</if>>
+                <<run window.setPerk("WATCHMAN", "image/perks/night_owl.png", "No accuracy penalty at night.")>><<run setup.addItem("Flashlight", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <<if !$pickedHobbies.includes("debater")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_debater.png">
+        <div class="trait-content">
+            <div class="trait-title">DEBATER</div>
+            <div class="trait-desc">Able to argue your way out of anything.</div>
+            <div class="trait-stats">+CHA / +SPEECH</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("debater")>>
+                <<if $hobbyStep == 1>><<set $cha += 2>><<else>><<set $cha += 1>><</if>>
+                <<run window.setPerk("DEBATER", "image/perks/lie_detector.png", "Detect deceit.")>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+    
+    <<if !$pickedHobbies.includes("chef")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_chef.png">
+        <div class="trait-content">
+            <div class="trait-title">CHEF</div>
+            <div class="trait-desc">Make the most of incredibly scarce food.</div>
+            <div class="trait-stats">+SCAVENGE</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("chef")>>
+                <<if $hobbyStep == 1>><<set $per += 1>><<set $skills.scavenging += 1>><<else>><<set $per += 1>><</if>>
+                <<run window.setPerk("CHEF", "image/perks/cook.png", "Create meals from raw items.")>><<run setup.addItem("Combat Knife", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+    
+    <<if !$pickedHobbies.includes("parkour")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_parkour.png">
+        <div class="trait-content">
+            <div class="trait-title">PARKOUR</div>
+            <div class="trait-desc">Urban exploration. Climb vertical obstacles.</div>
+            <div class="trait-stats">+AGI / +STEALTH</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("parkour")>>
+                <<if $hobbyStep == 1>><<set $agi += 2>><<set $skills.stealth += 1>><<else>><<set $agi += 1>><</if>>
+                <<run window.setPerk("PARKOUR", "image/perks/climber.png", "Access vertical paths.")>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <<if !$pickedHobbies.includes("volunteer")>>
+    <div class="trait-card">
+        <img src="image/trait/trait_volunteer.png">
+        <div class="trait-content">
+            <div class="trait-title">VOLUNTEER</div>
+            <div class="trait-desc">You help others. Extremely high humanity.</div>
+            <div class="trait-stats">+HUMANITY / +MEDIC</div>
+            <<button "SELECT">>
+                <<set $pickedHobbies.push("volunteer")>>
+                <<if $hobbyStep == 1>><<set $skills.medicine += 1>><<set $hum += 10>><<else>><<set $hum += 5>><</if>>
+                <<run window.setPerk("VOLUNTEER", "image/perks/compassion.png", "Heal morale faster.")>><<run setup.addItem("First Aid Kit", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+
+/* =================================================================
+   DESTRUCTIVE WEAKNESSES (Step 3)
+   ================================================================= */
+<<else>>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_smoker.png">
+        <div class="trait-content">
+            <div class="trait-title">SMOKER</div>
+            <div class="trait-desc">Lungs of tar. Severe addiction penalty.</div>
+            <div class="trait-stats">-STAMINA / +PERC</div>
+            <<button "SELECT">>
+                <<set $stamina_max -= 20>><<set $base_stamina_max -= 20>><<set $per += 1>>
+                <<run window.setPerk("SMOKER", "image/perks/addict.png", "-20 Stamina. Needs Nicotine.")>><<run setup.addItem("Cigarettes", 1)>><<run setup.addItem("Lighter", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_alcoholic.png">
+        <div class="trait-content">
+            <div class="trait-title">ALCOHOLIC</div>
+            <div class="trait-desc">Numb to pain, but shakes without a drink.</div>
+            <div class="trait-stats">-INT / +HP</div>
+            <<button "SELECT">>
+                <<set $int -= 1>><<set $hp_max += 20>><<set $hp += 20>>
+                <<run window.setPerk("ALCOHOLIC", "image/perks/liquid_courage.png", "+20 HP. -1 Int. Reduced Pain.")>><<run setup.addItem("Whiskey", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_asthmatic.png">
+        <div class="trait-content">
+            <div class="trait-title">ASTHMATIC</div>
+            <div class="trait-desc">Running is difficult. Rely on an inhaler.</div>
+            <div class="trait-stats">-STAMINA / +INT</div>
+            <<button "SELECT">>
+                <<set $stamina_max -= 30>><<set $base_stamina_max -= 30>><<set $int += 1>>
+                <<run window.setPerk("ASTHMATIC", "image/perks/wheezy.png", "Cannot run without Inhaler.")>><<run setup.addItem("Inhaler", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_blind.png">
+        <div class="trait-content">
+            <div class="trait-title">BLIND</div>
+            <div class="trait-desc">Terrible vision. Good with close details.</div>
+            <div class="trait-stats">-PERC / +TECH</div>
+            <<button "SELECT">>
+                <<set $per -= 2>><<set $skills.tech += 1>>
+                <<run window.setPerk("BLIND", "image/trait/trait_blind.png", "Needs glasses to shoot.")>><<run setup.addItem("Glasses", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_badknee.png">
+        <div class="trait-content">
+            <div class="trait-title">BAD KNEE</div>
+            <div class="trait-desc">Old injury prevents fleeing. Stand your ground.</div>
+            <div class="trait-stats">-AGI / +STR</div>
+            <<button "SELECT">>
+                <<set $agi -= 2>><<set $str += 1>>
+                <<run window.setPerk("BAD KNEE", "image/perks/hobble.png", "Cannot Flee.")>><<run setup.addItem("Cane", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_glutton.png">
+        <div class="trait-content">
+            <div class="trait-title">GLUTTON</div>
+            <div class="trait-desc">Hard to kill, but consumes extra food.</div>
+            <div class="trait-stats">-AGI / +HP</div>
+            <<button "SELECT">>
+                <<set $agi -= 1>><<set $hp_max += 20>><<set $hp += 20>>
+                <<run window.setPerk("GLUTTON", "image/perks/hungry.png", "Must eat 2x Food.")>><<run setup.addItem("Bag of Chips", 2)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+    
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_fragile.png">
+        <div class="trait-content">
+            <div class="trait-title">FRAGILE</div>
+            <div class="trait-desc">Bruise easily. Learned medicine to survive.</div>
+            <div class="trait-stats">-HP / +MEDIC</div>
+            <<button "SELECT">>
+                <<set $hp_max -= 20>><<set $skills.medicine += 1>>
+                <<run window.setPerk("FRAGILE", "image/perks/bleeder.png", "Bleeding deals double damage.")>><<run setup.addItem("Bandage", 3)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_paranoid.png">
+        <div class="trait-content">
+            <div class="trait-title">PARANOID</div>
+            <div class="trait-desc">Trust no one. You repel potential allies.</div>
+            <div class="trait-stats">-CHA / +SCAVENGE</div>
+            <<button "SELECT">>
+                <<set $cha -= 2>><<set $skills.scavenging += 1>>
+                <<run window.setPerk("PARANOID", "image/perks/trust_no_one.png", "Cannot sleep near NPCs.")>><<run setup.addItem("Tinfoil Hat", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_insomniac.png">
+        <div class="trait-content">
+            <div class="trait-title">INSOMNIAC</div>
+            <div class="trait-desc">You never sleep well. Used to the dark.</div>
+            <div class="trait-stats">-HP / +STEALTH</div>
+            <<button "SELECT">>
+                <<set $hp_max -= 10>><<set $skills.stealth += 1>>
+                <<run window.setPerk("INSOMNIAC", "image/perks/nocturnal.png", "-10 HP. Night Vision.")>><<run setup.addItem("Sleeping Pills", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_germophobe.png">
+        <div class="trait-content">
+            <div class="trait-title">CLEAN</div>
+            <div class="trait-desc">Obsessed with hygiene. Blood causes stress.</div>
+            <div class="trait-stats">-HUMANITY / +HEAL</div>
+            <<button "SELECT">>
+                <<set $hum -= 20>><<set $skills.medicine += 1>>
+                <<run window.setPerk("CLEAN", "image/perks/sterile.png", "Healing items give +20 HP.")>><<run setup.addItem("Hand Sanitizer", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_coward.png">
+        <div class="trait-content">
+            <div class="trait-title">COWARD</div>
+            <div class="trait-desc">Freeze in combat, but run fast.</div>
+            <div class="trait-stats">-STR / +ESCAPE</div>
+            <<button "SELECT">>
+                <<set $str -= 2>><<set $agi += 2>>
+                <<run window.setPerk("COWARD", "image/perks/flight.png", "-Damage. High escape chance.")>><<run setup.addItem("Pepper Spray", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_pyro.png">
+        <div class="trait-content">
+            <div class="trait-title">PYRO</div>
+            <div class="trait-desc">Obsessed with fire. Zero empathy.</div>
+            <div class="trait-stats">-HUMANITY / +TECH</div>
+            <<button "SELECT">>
+                <<set $hum -= 15>><<set $skills.tech += 1>>
+                <<run window.setPerk("PYRO", "image/perks/burn.png", "Fire weapons deal +50% DMG.")>><<run setup.addItem("Lighter", 1)>><<run setup.addItem("Jerry Can", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_lonewolf.png">
+        <div class="trait-content">
+            <div class="trait-title">LONE WOLF</div>
+            <div class="trait-desc">Rude and abrasive. Stronger when alone.</div>
+            <div class="trait-stats">-CHA / +STEALTH</div>
+            <<button "SELECT">>
+                <<set $cha -= 2>><<set $skills.stealth += 1>>
+                <<run window.setPerk("LONE WOLF", "image/perks/soloist.png", "+10% Stats when alone.")>><<run setup.addItem("Combat Knife", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_luddite.png">
+        <div class="trait-content">
+            <div class="trait-title">LUDDITE</div>
+            <div class="trait-desc">Hate technology. Excellent with nature.</div>
+            <div class="trait-stats">-TECH / +SCAVENGE</div>
+            <<button "SELECT">>
+                <<set $skills.tech = 0>><<set $skills.scavenging += 1>>
+                <<run window.setPerk("LUDDITE", "image/perks/analog.png", "Cannot use electronics.")>><<run setup.addItem("Old Map", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_pacifist.png">
+        <div class="trait-content">
+            <div class="trait-title">PACIFIST</div>
+            <div class="trait-desc">Refuse to kill humans. Negotiator.</div>
+            <div class="trait-stats">-COMBAT / +HUM</div>
+            <<button "SELECT">>
+                <<set $skills.shooting = 0>><<set $skills.melee = 0>><<set $cha += 1>><<set $hum += 20>>
+                <<run window.setPerk("PACIFIST", "image/perks/diplomat.png", "Unique peaceful choices.")>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_clumsy.png">
+        <div class="trait-content">
+            <div class="trait-title">CLUMSY</div>
+            <div class="trait-desc">Loud and accident-prone. Tough.</div>
+            <div class="trait-stats">-STEALTH / +STR</div>
+            <<button "SELECT">>
+                <<set $skills.stealth = 0>><<set $str += 1>>
+                <<run window.setPerk("CLUMSY", "image/perks/noisy.png", "Start encounters at high alert.")>><<run setup.addItem("Hard Hat", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_gambler.png">
+        <div class="trait-content">
+            <div class="trait-title">GAMBLER</div>
+            <div class="trait-desc">Took risks with money. Relies on luck.</div>
+            <div class="trait-stats">-INT / +LUCK</div>
+            <<button "SELECT">>
+                <<set $int -= 1>>
+                <<run window.setPerk("GAMBLER", "image/perks/high_roller.png", "10% Auto-Hit or Auto-Miss.")>><<run setup.addItem("Deck of Cards", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_sheltered.png">
+        <div class="trait-content">
+            <div class="trait-title">SHELTERED</div>
+            <div class="trait-desc">Naive about the world. Optimistic.</div>
+            <div class="trait-stats">-SCAVENGE / +HUMANITY</div>
+            <<button "SELECT">>
+                <<set $skills.scavenging = 0>><<set $hum += 20>>
+                <<run window.setPerk("SHELTERED", "image/perks/optimist.png", "Starts with +20 Humanity.")>><<run setup.addItem("Luxury Watch", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_shopaholic.png">
+        <div class="trait-content">
+            <div class="trait-title">SHOPPER</div>
+            <div class="trait-desc">Carries useless things. Good at bartering.</div>
+            <div class="trait-stats">-BAG SLOTS / +CHA</div>
+            <<button "SELECT">>
+                <<set $bag_limit -= 2>><<set $cha += 1>>
+                <<run window.setPerk("SHOPPER", "image/perks/barterer.png", "Sell luxury items for 200%.")>><<run setup.addItem("Designer Bag", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+    <div class="trait-card destructive">
+        <img src="image/trait/trait_arrogant.png">
+        <div class="trait-content">
+            <div class="trait-title">ARROGANT</div>
+            <div class="trait-desc">You correct everyone. Unlikable.</div>
+            <div class="trait-stats">-CHA / +INT</div>
+            <<button "SELECT">>
+                <<set $cha -= 2>><<set $int += 1>>
+                <<run window.setPerk("ARROGANT", "image/perks/know_it_all.png", "Companions dislike you.")>><<run setup.addItem("Encyclopedia", 1)>><<goto "NextHobbyStep">>
+            <</button>>
+        </div>
+    </div>
+
+<</if>>
+
+</div>
+<</nobr>>

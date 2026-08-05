@@ -1,0 +1,51 @@
+:: Prologue_Radio {"position":"200,400","size":"100,100"}
+<!-- ========================================== -->
+<!-- HEADER                                     -->
+<!-- ========================================== -->
+<center>
+    <h1>📻 RADIO: DISPATCH BAND</h1>
+</center>
+<br>
+
+<!-- ========================================== -->
+<!-- RADIO BROADCAST DIALOGUE                   -->
+<!-- ========================================== -->
+The radio crackles with static, then a voice cuts through—sharp, professional, but bordering on a scream.
+
+<i>"Dispatch, this is Unit 4-Charlie! We are at the precinct! They aren't staying down! I repeat, standard center-mass shots are INEFFECTIVE! Requesting Permission for 'Code Black' engagement!"</i>
+
+<br><br>
+
+A calm, female voice responds: 
+<br>
+<i>"4-Charlie, Permission for Code Black is GRANTED. All units, be advised: Target neutralization requires complete destruction of the cerebral cortex. Use extreme caution. Do not allow skin contact."</i>
+
+<!-- ========================================== -->
+<!-- VISUAL SEPARATOR                           -->
+<!-- ========================================== -->
+<hr style="border-color: #333; margin: 20px 0;">
+
+<!-- ========================================== -->
+<!-- LORE REVEAL & PLAYER THOUGHTS              -->
+<!-- ========================================== -->
+You hear a code word you remember from training: <b style="color:var(--accent-red)">'PROJECT ODIN'</b>. It was a rumor about a drug intended to bring fatally wounded soldiers back to the fight—a "second life" for the frontline. 
+
+<br><br>
+
+It seems the "Second Life" didn't care about the soldier's mind. Only their hunger.
+
+<br><br>
+
+<!-- ========================================== -->
+<!-- ACTION BUTTONS                             -->
+<!-- ========================================== -->
+<div style="text-align:center;">
+    <<button "Back to Room">>
+    
+        /* Save the radio transcript to the player's Lore Database */
+        <<run window.addLore("Police Dispatch Transcript", "Permission for 'Code Black' GRANTED. All units, be advised: Target neutralization requires complete destruction of the cerebral cortex. Use extreme caution. Do not allow skin contact.")>>
+        
+        <<goto "Prologue">>
+        
+    <</button>>
+</div>

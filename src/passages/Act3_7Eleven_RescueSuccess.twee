@@ -1,0 +1,44 @@
+:: Act3_7Eleven_RescueSuccess {"position":"750,2150","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "headmaster_office">>
+<<set $inSafehouse to true>>
+<<set $activeMap to "Highschool 1st Floor">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
+<</nobr>>
+
+<h2>1ST FLOOR — COMMAND OFFICE VICTORIOUS RETURN</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+    <img src="image/Act3_Timberline/headmaster.gif" style="max-width: 100%; border: 1px solid #333;">
+</div>
+
+You, Reyes, and Commander Miller enter the 1st Floor Command Office.
+<br><br>
+Matriarch Evelyn gasps in relief, rushing around the mahogany desk to check Miller's bandaged shoulder.
+<br><br>
+<<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "Thank God you made it back! We brought the fuel truck into the courtyard locker room.">>
+
+<br><br>
+<<chat "Commander Miller" "image/avatars/quartermaster_sgtvance.gif" "right" "It's all thanks to this one right here. Stood shoulder to shoulder with Reyes and pulled us out of a death trap.">>
+
+<br><br>
+Miller turns to you, placing a heavy hand on your shoulder.
+<br><br>
+<<chat "Commander Miller" "image/avatars/quartermaster_sgtvance.gif" "right" "You're no longer just a refugee in Timberline High. As of today, you are a full member of our Senior Defense Council. Full clearance across all wings of the sanctuary.">>
+
+<br><br>
+<div style="padding:15px; background:rgba(0,100,0,0.25); border:1px solid var(--accent-green); text-align:center;">
+    <b style="color:var(--accent-green); font-size:1.3em;">🏆 SENIOR COUNCIL CLEARANCE UNLOCKED</b>
+    <br>
+    <span style="color:#aaa;">You now have full access to all military reserves, radio feeds, and perimeter defenses in Timberline.</span>
+</div>
+
+<br><br>
+<div class="choice-menu">
+    <button style="border-left-color: var(--accent-blue) !important;">
+        <<link "🏫 Return to the Safehouse Corridor" "Act3_SchoolGFloor">>
+            <<set $currentLocation to "hall_g_center">>
+        <</link>>
+        <span class="btn-sub">Explore the fully unlocked Timberline Sanctuary.</span>
+    </button>
+</div>

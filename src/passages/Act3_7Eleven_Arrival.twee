@@ -1,0 +1,59 @@
+:: Act3_7Eleven_Arrival {"position":"750,1850","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "seven_eleven">>
+<<set $inSafehouse to false>>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
+<</nobr>>
+
+<h2>ROUTE 9 — 7-ELEVEN COMMERCIAL STRIP</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+    <img src="image/Act3_Timberline/screening.gif" style="max-width: 100%; border: 1px solid #333; filter: hue-rotate(330deg) contrast(1.2);">
+</div>
+
+The tires of Reyes' pickup screech to a halt behind a rusted delivery van across from the 7-Eleven gas station.
+<br><br>
+Shattered glass glints in the flickering fluorescent canopy lights. Black smoke billows from an overturned sedan near the gas pumps.
+<br><br>
+Inside the convenience store, rapid gunshot flashes illuminate the shattered windows. You can hear the guttural shrieks of infected mixed with angry shouting from armed scavengers!
+
+<br><br>
+<<chat "Reyes" "image/avatars/reyes.gif" "right" "There's Miller's armored pickup truck smashed straight through the front entrance glass! Scavengers have them pinned against the beverage cooler at the back!">>
+
+<br><br>
+<<if _arrivedLate>>
+    <span style="color:var(--accent-gold);">[DAYLIGHT ASSAULT]</span>
+    Bright morning daylight illuminates the chaos, but infected are spilling out from the alleyways behind the strip mall!
+<<else>>
+    <span style="color:var(--accent-blue);">[PRE-DAWN ASSAULT]</span>
+    Heavy mist and rain swirl under the flickering neon "7-ELEVEN" sign, casting eerie shadows across the parking lot.
+<</if>>
+
+<br><br>
+<<chat "Reyes" "image/avatars/reyes.gif" "right" "We need to breach the store and relieve Miller's team before they get overwhelmed! How do you want to play this?">>
+
+<br><br>
+<div class="choice-menu">
+    <button style="border-left-color: var(--accent-red) !important;">
+        <<link "💥 Breach through the main shattered double doors [FRONT ASSAULT]" "Act3_7Eleven_Combat">>
+            <<set $seven_eleven_approach to "front">>
+            <<addTime 2>>
+        <</link>>
+        <span class="btn-sub"><b style="color:var(--accent-red);">[COMBAT ASSAULT]</b> Charge straight through the front entrance with Reyes, weapons hot.</span>
+    </button>
+
+    <<if $skills.stealth >= 2 or hasTrait("STEALTH") or hasTrait("SCAVENGER")>>
+        <button style="border-left-color: var(--accent-gold) !important;">
+            <<link "🥷 Flank around the rear dumpster to the storage room door [STEALTH]" "Act3_7Eleven_Flank">>
+                <<set $seven_eleven_approach to "stealth">>
+                <<addTime 3>>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-gold);">[STEALTH / TRAIT CHECK]</b> Sneak around the back alley to catch the scavengers from behind.</span>
+        </button>
+    <<else>>
+        <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+            <span style="text-decoration: line-through;">🥷 Flank around the rear dumpster [REQUIRES STEALTH 2]</span><br>
+            <span class="btn-sub" style="color: #666;">You need higher stealth to maneuver around the alley silently.</span>
+        </button>
+    <</if>>
+</div>

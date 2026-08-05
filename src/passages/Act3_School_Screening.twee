@@ -1,0 +1,32 @@
+:: Act3_School_Screening {"position":"700,1800","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "screening">>
+<<set $activeMap to "Highschool Ground">>
+<</nobr>>
+
+<h2>GROUND FLOOR — SCREENING ROOM</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+    <img src="image/Act3_Timberline/screening.gif" style="max-width: 100%; border: 1px solid #333;">
+</div>
+
+<<chat "Sgt. Vance" "image/avatars/quartermaster_sgtvance.gif" "right" "Keep your hands visible while you're in the foyer. All heavy weapons stay tagged in the locker.">>
+<br><br>
+
+Sgt. Vance inspects incoming gear and logs refugee contraband.
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "🚪 Exit Screening to Foyer [WEST]">>
+            <<set $currentLocation to "security_foyer">>
+            <<goto "Act3_SchoolGFloor">>
+        <</link>>
+    </button>
+    <button>
+        <<link "⬆️ Exit Screening to East Hallway [NORTH]">>
+            <<set $currentLocation to "hall_g_east_1">>
+            <<goto "Act3_SchoolGFloor">>
+        <</link>>
+    </button>
+</div>

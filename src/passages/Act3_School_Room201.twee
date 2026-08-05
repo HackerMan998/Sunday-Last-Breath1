@@ -1,0 +1,19 @@
+:: Act3_School_Room201 {"position":"1200,1900","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "room_201">>
+<<set $activeMap to "Highschool 1st Floor">>
+<</nobr>>
+
+<h2>1ST FLOOR — ROOM 201</h2>
+
+Classroom converted to ammunition and equipment storage.
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "🚪 Exit Room 201 to Hallway [EAST]">>
+            <<set $currentLocation to "hall_1_west_2">>
+            <<goto "Act3_School1Floor">>
+        <</link>>
+    </button>
+</div>

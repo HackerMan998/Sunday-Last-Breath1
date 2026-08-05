@@ -1,0 +1,63 @@
+:: Act3_School_Headmaster {"position":"600,1900","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "headmaster_office">>
+<<set $activeMap to "Highschool 1st Floor">>
+
+<<set _leaderName to "Matriarch Evelyn">>
+<<if def $anchor_name and $anchor_name != "myself" and $anchor_name != "my folks">>
+    <<set _leaderName to $anchor_name>>
+<<elseif $anchor == "parents">>
+    <<set _leaderName to "Matriarch Evelyn & Dad">>
+<</if>>
+<</nobr>>
+
+<h2>1ST FLOOR — COMMAND & HEADMASTER'S OFFICE</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+    <img src="image/Act3_Timberline/headmaster.gif" style="max-width: 100%; border: 1px solid #333;">
+</div>
+
+<<if def $anchor_name and $anchor_name != "myself" and $anchor_name != "my folks">>
+    <<chat _leaderName "image/avatars/matriarch_evelyn.gif" "right" "You made it! I knew you'd find a way out of the city. We're holding the school perimeter, but we need every capable hand to keep the sanctuary running.">>
+    <br><br>
+    <<print _leaderName>> stands at the headmaster's mahogany desk, coordinating logistics across the high school compound with radios and topographic maps.
+<<elseif $anchor == "parents">>
+    <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "Thank God you're safe! Your father and I mobilized the local block watch as soon as the emergency broadcasts went dark.">>
+    <br><br>
+    Your mother sits behind the desk surrounded by supply manifests, while your dad monitors the radio relay.
+<<else>>
+    <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "If you're staying under our roof, you contribute to the perimeter defense. We don't take free-loaders.">>
+    <br><br>
+    Evelyn sits behind a mahogany desk covered in topographic maps and supply registers.
+<</if>>
+
+<br><br>
+<div class="choice-menu">
+    <<if not isObjectiveCompleted("rescue_leader_711")>>
+        <button style="border-left-color:var(--accent-gold) !important; background: rgba(80, 60, 0, 0.25);">
+            <<link "📋 Report to Command with Officer Reyes [STORY EVENT]" "Act3_Meeting_Evelyn">>
+                <<set $act3_reyes_triggered to true>>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-gold);">[MAIN QUEST]</b> Debrief with Reyes and meet Sanctuary Command.</span>
+        </button>
+    <</if>>
+
+    <<if not $met_evelyn>>
+        <button>
+            <<link "Offer your help to sanctuary command">>
+                <<addTime 10>>
+                <<set $met_evelyn to true>>
+                <<run window.gainTrust(10)>>
+                <<goto "Act3_School_Headmaster">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-green);">[+10 TRUST]</b> Offer your services to keep Timberline Sanctuary running.</span>
+        </button>
+    <</if>>
+
+    <button>
+        <<link "🚪 Exit Headmaster's Office to Hallway [NORTH]">>
+            <<set $currentLocation to "hall_1_center">>
+            <<goto "Act3_School1Floor">>
+        <</link>>
+    </button>
+</div>

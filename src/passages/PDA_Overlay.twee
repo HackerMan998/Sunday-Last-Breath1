@@ -1,0 +1,89 @@
+:: PDA_Overlay {"position":"700,425"}
+<<nobr>>
+
+<!-- WRAP THE TABS IN A STICKY CONTAINER -->
+<div class="sticky-pda-tabs">
+    <div class="sidebar-tabs-row1">
+        <button id="btn-main" class="sidebar-tab-btn active" onclick="switchSidebarTab('main')">STATUS</button>
+        <button id="btn-bag" class="sidebar-tab-btn" onclick="switchSidebarTab('bag')">GEAR</button>
+        <button id="btn-skills" class="sidebar-tab-btn" onclick="switchSidebarTab('skills')">SKILLS</button>
+        <button id="btn-traits" class="sidebar-tab-btn" onclick="switchSidebarTab('traits')">TRAITS</button>
+    </div>
+    <div class="sidebar-tabs-row2" style="display: flex; gap: 2px;">
+        <button id="btn-map" class="sidebar-tab-btn" onclick="switchSidebarTab('map')">MAP</button>
+        <button id="btn-lore" class="sidebar-tab-btn" onclick="window.openLore()">LORE</button>
+    </div>
+</div>
+
+<!-- TAB 1: STATUS -->
+<div id="tab-main" class="tab-content">
+    <div class="char-header">
+        <div class="char-name">$firstName $lastName</div>
+        <div class="char-sub">$gender | $job</div>
+    </div>
+    
+    <<objectiveLog>>
+
+    <div class="level-display">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="color: var(--accent-gold); font-size: 1.2em; font-weight: bold;">LVL $level</span>
+            <span style="color: #666; font-size: 0.8em;">$xp/$xp_req XP</span>
+        </div>
+        <div class="bar-container" style="height: 8px;">
+            <div class="bar-fill xp" @style="'width:' + ($xp / $xp_req * 100) + '%'"></div>
+        </div>
+    </div>
+    
+    <div class="vital-bar-wrapper">
+        <div class="bar-container vital">
+            <div class="bar-fill humanity" @style="'width:' + ($hum / 100 * 100) + '%'"></div>
+            <div class="bar-text"><span class="bar-label">HUMANITY</span><span class="bar-value">$hum/100</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- TAB 2: GEAR / INVENTORY (Fixed grid alignment!) -->
+<div id="tab-bag" class="tab-content" style="display: none;">
+    <<equipDisplay>>
+    <<invDisplay>>
+</div>
+
+<!-- TAB 3: SKILLS -->
+<div id="tab-skills" class="tab-content" style="display: none;">
+    <<attributeRadar>>
+    <<skillRadar>>
+</div>
+
+<!-- TAB 4: TRAITS -->
+<div id="tab-traits" class="tab-content" style="display: none;">
+    <div class="tactical-header">TRAITS & PERKS</div>
+    <<customTraitDisplay>>
+</div>
+
+<!-- TAB 5: MAP -->
+<div id="tab-map" class="tab-content" style="display: none;">
+    <div class="tactical-header">LOCATION MAP</div>
+    
+    /* DYNAMIC MAP TOGGLE: Checks if we are in the main hallways */
+    <<if passage() == "Act3_SchoolGFloor" or passage() == "Act3_School1Floor">>
+        <div style="padding: 40px 20px; text-align: center; color: var(--accent-blue); font-style: italic; font-size: 0.9em; background: rgba(0,0,0,0.5);">
+            [ MAP FEED ROUTED TO MAIN HUD ]
+        </div>
+    <<else>>
+        /* Renders the map in the PDA for every other room/Act in the game */
+        <<mapDisplay>>
+    <</if>>
+</div>
+
+<!-- BOTTOM SYSTEM FOOTER -->
+<div class="sidebar-footer">
+    <div class="volume-panel">
+        <span class="volume-label">VOL</span>
+        <input type="range" class="volume-slider" min="0" max="100" @value="$volMaster ?? 100">
+    </div>
+    <button style="border-left-color: var(--accent-blue) !important;" onclick="(SugarCube.Dialog.create || SugarCube.Dialog.setup)('SYSTEM MENU'); SugarCube.Dialog.wiki(SugarCube.Story.get('System_Menu').text); SugarCube.Dialog.open();">
+        SAVE / LOAD / SETTINGS
+    </button>
+</div>
+
+<</nobr>>

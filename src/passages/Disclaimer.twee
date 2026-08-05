@@ -1,0 +1,28 @@
+:: Disclaimer [splash-screen]
+
+<div class="disclaimer-container" id="disclaimer-click-zone">
+    
+    <div class="disclaimer-header">CONTENT WARNING</div>
+    
+    <div class="disclaimer-text">
+        This story contains graphic violence, blood and gore, death, strong language, and psychological horror.<br><br>
+        This is <span style="color: var(--accent-red); font-weight: bold;">PART I : DAY ZERO</span> of an episodic survival series.<br>
+        The choices you make, the people you save, and the humanity you lose will carry over into future installments.<br><br>
+        Names, characters, businesses, and incidents are either the products of the author’s imagination or used in a fictitious manner. Any resemblance to actual events or locales is entirely coincidental.
+    </div>
+
+    <!-- The Audio Unlocker Prompt! -->
+    <div class="click-to-start">
+        [ CLICK ANYWHERE TO CONTINUE ]
+    </div>
+
+</div>
+
+<!-- Jumps to the Title Screen (and unlocks audio!) when they click -->
+<<script>>
+    setTimeout(function() {
+        $('#disclaimer-click-zone').one('click', function() {
+            Engine.play("Title"); 
+        });
+    }, 500); 
+<</script>>

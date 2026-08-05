@@ -1,0 +1,303 @@
+:: Debug_Room {"position":"1300,0","size":"100,100"}
+DEBUG / CHEAT ROOM - WITH PERK SWAPPER
+   ================================================================= */
+
+/* 1. FORCE GAME STATE VARIABLES */
+<<set $charCreationMode to false>> 
+<<set $gameClockActive to false>>
+
+<center>
+<h1>🛠️ DEBUG / CHEAT ROOM</h1>
+<i>"Simulation Mode Active. State: LIVE."</i>
+<br>
+<span style="color:red">Warning: Adding too many items will fill your bag. Use "CLEAR BAG" first.</span>
+</center>
+<br>
+
+<div style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center;">
+
+    /* ===== PANEL 1: CHARACTER BUILD ===== */
+    <div style="border:1px solid #444; padding:10px; width:200px;">
+        <h3 style="color:var(--accent-blue)">1. SET JOB</h3>
+        <<button "POLICE (Shooter)">>
+            <<set $job to "Police Officer">>
+            <<set $str to 50>><<set $agi to 70>><<set $per to 80>>
+            <<set $skills.shooting to 5>>
+            <<run window.setPerk("STEADY HANDS", "👮")>>
+            <<run UI.alert("Roleplay: Police Officer\n✅ STEADY HANDS perk added")>>
+            <<run Engine.play(passage())>>
+        <</button>>
+
+        <<button "WORKER (Tank)">>
+            <<set $job to "Construction Worker">>
+            <<set $str to 90>><<set $hp_max to 140>><<set $hp to 140>>
+            <<set $skills.melee to 5>>
+            <<run window.setPerk("BREACHER", "💥")>>
+            <<run UI.alert("Roleplay: Worker\n✅ BREACHER perk added")>>
+            <<run Engine.play(passage())>>
+        <</button>>
+        
+        <<button "STUDENT (Learner)">>
+            <<set $job to "Student">>
+            <<set $level to 1>><<set $xp to 0>>
+            <<run window.setPerk("FAST LEARNER", "📚")>>
+            <<run UI.alert("Roleplay: Student\n✅ FAST LEARNER perk added")>>
+            <<run Engine.play(passage())>>
+        <</button>>
+
+        <<button "BASEBALL (Home Run)">>
+            <<set $job to "Baseball Player">>
+            <<set $str to 60>><<set $agi to 80>>
+            <<set $skills.melee to 5>>
+            <<run window.setPerk("BASEBALL", "⚾")>>
+            <<run UI.alert("Roleplay: Baseball Player\n✅ BASEBALL perk added")>>
+            <<run Engine.play(passage())>>
+        <</button>>
+    </div>
+
+    /* ===== PANEL 1B: QUICK PERK SWAPPER ===== */
+    <div style="border:2px solid #f1c40f; padding:10px; width:400px; background-color:#222;">
+        <h3 style="color:#f1c40f">🧪 PERK SWAPPER (Quick Test)</h3>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:5px; margin-bottom:10px;">
+            <<button "👮 STEADY HANDS">>
+                <<run window.setPerk("STEADY HANDS", "👮")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+            
+            <<button "🏥 FIELD MEDIC">>
+                <<run window.setPerk("FIELD MEDIC", "🏥")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+            
+            <<button "👊 BOXER">>
+                <<run window.setPerk("BOXER", "👊")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+
+            <<button "🎮 GAMER">>
+                <<run window.setPerk("GAMER", "🎮")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+
+            <<button "🌙 WATCHMAN">>
+                <<run window.setPerk("WATCHMAN", "🌙")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+
+            <<button "⚡ ADRENALINE">>
+                <<run window.setPerk("ADRENALINE", "⚡")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+
+            <<button "🌿 GARDENER">>
+                <<run window.setPerk("GARDENER", "🌿")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+
+            <<button "⚾ BASEBALL">>
+                <<run window.setPerk("BASEBALL", "⚾")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+
+            <<button "🐾 HUNTER">>
+                <<run window.setPerk("HUNTER", "🐾")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+
+            <<button "💥 BREACHER">>
+                <<run window.setPerk("BREACHER", "💥")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+
+            <<button "🔧 MECHANIC">>
+                <<run window.setPerk("MECHANIC", "🔧")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+
+            <<button "🧗 PARKOUR">>
+                <<run window.setPerk("PARKOUR", "🧗")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+
+            <<button "📚 FAST LEARNER">>
+                <<run window.setPerk("FAST LEARNER", "📚")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+
+            <<button "🎒 HIKER">>
+                <<run window.setPerk("HIKER", "🎒")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+
+            <<button "🎲 GAMBLER">>
+                <<run window.setPerk("GAMBLER", "🎲")>>
+                <<run Engine.play(passage())>>
+            <</button>>
+        </div>
+
+        <span style="color:#aaa; font-size:0.9em;">Current Perk: <<print $traits[0] ? $traits[0].desc : "NONE">></span>
+        <br>
+        <<button "🗑️ Clear Perk">>
+            <<run window.clearPerks()>>
+            <<run Engine.play(passage())>>
+        <</button>>
+    </div>
+
+    /* ===== PANEL 2: WEAPONS ===== */
+    <div style="border:1px solid #c0392b; padding:10px; width:200px;">
+        <h3 style="color:#c0392b">2. WEAPONS</h3>
+        <<button "ALL PISTOLS">>
+            <<run setup.addItem("Glock 19")>>
+            <<run setup.addItem("Revolver .38")>>
+            <<run setup.addItem("Magnum")>>
+            <<run setup.addItem("Five-Seven")>>
+            <<run Engine.play(passage())>>
+        <</button>>
+
+        <<button "ALL LONG GUNS">>
+            <<run setup.addItem("Remington 870")>>
+            <<run setup.addItem("Spas-12")>>
+            <<run setup.addItem("M4A1")>>
+            <<run setup.addItem("Barret M82")>>
+            <<run setup.addItem("Compound Bow")>>
+            <<run Engine.play(passage())>>
+        <</button>>
+
+        <<button "ALL MELEE">>
+            <<run setup.addItem("Crowbar")>>
+            <<run setup.addItem("Combat Knife")>>
+            <<run setup.addItem("Sledgehammer")>>
+            <<run setup.addItem("Baseball Bat")>>
+            <<run setup.addItem("Kitchen Knife")>>
+            <<run Engine.play(passage())>>
+        <</button>>
+    </div>
+
+    /* ===== PANEL 3: GEAR & AMMO ===== */
+    <div style="border:1px solid #f39c12; padding:10px; width:200px;">
+        <h3 style="color:#f39c12">3. GEAR / AMMO</h3>
+        <<button "FULL AMMO BOX">>
+            <<run setup.addItem("9mm Ammo", 50)>>
+            <<run setup.addItem("Shotgun Shells", 20)>>
+            <<run setup.addItem("5.56mm Ammo", 60)>>
+            <<run setup.addItem(".38 Ammo", 20)>>
+            <<run setup.addItem("Arrows", 10)>>
+            <<run Engine.play(passage())>>
+        <</button>>
+
+        <<button "FULL ARMOR SET">>
+            <<run setup.addItem("Tactical Vest")>>
+            <<run setup.addItem("Hard Hat")>>
+            <<run setup.addItem("Hiking Boots")>>
+            <<run setup.addItem("Jeans")>>
+            <<run Engine.play(passage())>>
+        <</button>>
+    </div>
+
+    /* ===== PANEL 4: CONSUMABLES (USE TEST) ===== */
+    <div style="border:1px solid #2ecc71; padding:10px; width:200px;">
+        <h3 style="color:#2ecc71">4. TEST 'USE'</h3>
+        
+        <<button "SKILL BOOKS (XP)">>
+            <<run setup.addItem("Manual: Mechanics")>>
+            <<run setup.addItem("Manual: Anatomy")>>
+            <<run setup.addItem("Textbook")>>
+            <<run Engine.play(passage())>>
+        <</button>>
+
+        <<button "MEDICAL SUPPLIES">>
+            <<set $hp to 10>> 
+            <<run setup.addItem("First Aid Kit")>>
+            <<run setup.addItem("Antibiotics")>>
+            <<run setup.addItem("Painkillers")>>
+            <<run Engine.play(passage())>>
+        <</button>>
+
+        <<button "FOOD & VICES">>
+            <<set $stamina to 10>> 
+            <<run setup.addItem("Energy Bar")>>
+            <<run setup.addItem("Whiskey")>>
+            <<run setup.addItem("Cigarettes")>>
+            <<run setup.addItem("Stale Coffee")>>
+            <<run Engine.play(passage())>>
+        <</button>>
+    </div>
+
+    /* ===== PANEL 5: TOOLS & JUNK ===== */
+    <div style="border:1px solid #9b59b6; padding:10px; width:200px;">
+        <h3 style="color:#9b59b6">5. UTILITY</h3>
+        <<button "SURVIVAL KIT">>
+            <<run setup.addItem("Flashlight")>>
+            <<run setup.addItem("Fuse", 5)>>
+            <<run setup.addItem("Duct Tape")>>
+            <<run setup.addItem("Multi-Tool")>>
+            <<run Engine.play(passage())>>
+        <</button>>
+
+        <<button "TRADE GOODS">>
+            <<run setup.addItem("Luxury Watch")>>
+            <<run setup.addItem("Gold Ring")>>
+            <<run setup.addItem("Encyclopedia")>>
+            <<run Engine.play(passage())>>
+        <</button>>
+    </div>
+
+    /* ===== PANEL 6: CONTROLS ===== */
+    <div style="border:1px solid #fff; padding:10px; width:200px;">
+        <h3 style="color:#fff">6. CONTROLS</h3>
+        
+        <<button "🗑️ CLEAR BAG">>
+            <<set $inventory to []>>
+            <<set $equip.weapon to "none">>
+            <<set $equip.head to "none">>
+            <<set $equip.body to "none">>
+            <<set $equip.pants to "none">>
+            <<set $equip.boots to "none">>
+            <<run Engine.play(passage())>>
+        <</button>>
+
+        <<button "🎁 SPAWN FLOOR LOOT">>
+            <<set $floorItems["Debug_Room"] to [
+                {id: "Kitchen Knife", qty: 1},
+                {id: "Stale Coffee", qty: 1},
+                {id: "T-Shirt", qty: 1}
+            ]>>
+            <<run Engine.play(passage())>>
+        <</button>>
+
+        <<button "🧟 START COMBAT">>
+            <<set $horde to [{ name: "Test Zombie", ev: 5 }]>>
+            <<goto "Debug_Combat">>
+        <</button>>
+    </div>
+
+</div>
+
+<br><hr>
+
+<h3>📖 TESTING GUIDE:</h3>
+
+<p><strong>AUTOMATIC TRAITS (Test Immediately):</strong></p>
+<ul>
+    <li><strong>STEADY HANDS:</strong> Pick a gun. Note hit % WITHOUT perk. Swap to STEADY HANDS. Hit % should be +15. ✅</li>
+    <li><strong>FIELD MEDIC:</strong> Get low HP. Use First Aid Kit WITHOUT perk (heals 15). Clear perk. Use FIELD MEDIC perk (heals 30). ✅</li>
+    <li><strong>GARDENER:</strong> Use Energy Bar WITHOUT perk (50 stamina). Use with GARDENER perk (75 stamina). ✅</li>
+    <li><strong>BASEBALL:</strong> Start combat. Without perk, crits ~15%. With BASEBALL, crits ~30%. ✅</li>
+    <li><strong>BOXER:</strong> Start combat unarmed. Without perk: "👊 You shoved/stomped..." With perk: "👊💥 BRUTAL!" ✅</li>
+    <li><strong>WATCHMAN:</strong> Time doesn't pass in debug, but logic checks for night (7 PM - 6 AM). ✅</li>
+    <li><strong>ADRENALINE:</strong> Get HP below 50%. Start combat. Skill bonus should be +10. ✅</li>
+    <li><strong>GAMER:</strong> Look at sidebar - should show "📊 Hit Chance: XX%" when GAMER is active. ✅</li>
+    <li><strong>GAMBLER:</strong> Combat - 10% crit, 10% auto-miss for chaotic moments. ✅</li>
+</ul>
+
+<p><strong>STORY-GATING TRAITS:</strong></p>
+<ul>
+    <li>Create passages with locked doors, vehicles, etc.</li>
+    <li>Use the copy-paste patterns from STORY_GATING_QUICK_REFERENCE.txt</li>
+    <li>Test with and without perks to confirm gating works</li>
+</ul>
+
+<center>
+    <span style="color:#f1c40f; font-size:0.8em;">⬇ CHECK FLOOR ITEMS BELOW ⬇</span>
+</center>

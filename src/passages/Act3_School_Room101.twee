@@ -1,0 +1,19 @@
+:: Act3_School_Room101 {"position":"900,1800","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "room_101">>
+<<set $activeMap to "Highschool Ground">>
+<</nobr>>
+
+<h2>GROUND FLOOR — CLASSROOM 101</h2>
+
+Desks have been pushed aside to make room for sleeping bags. Refugees rest quietly in the dark.
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "🚪 Exit Classroom 101 to Hallway [EAST]">>
+            <<set $currentLocation to "hall_g_west_2">>
+            <<goto "Act3_SchoolGFloor">>
+        <</link>>
+    </button>
+</div>

@@ -1,0 +1,323 @@
+:: Unit_401 {"position":"300,625","size":"100,100"}
+<<nobr>>
+/* ================================================================= */
+/* 1. INITIALIZATION & SETUP                                         */
+/* ================================================================= */
+<<set $currentLocation to "401">>
+
+/* AUDIO: Muffled Pop Music Loop */
+<<if not $turned_off_music>>
+    <<run setup.sound.play("party_music", "audio/sfx/bestsongeversample.mp3", true, 0.6)>>
+<</if>>
+
+/* Default Room Variables (if not already set) */
+<<if not $shelf_lifted>><<set $shelf_lifted to false>><</if>>
+<<if not $looted_401_alcohol>><<set $looted_401_alcohol to false>><</if>>
+<<if not $turned_off_music>><<set $turned_off_music to false>><</if>>
+<<if not $looted_401_kitchen>><<set $looted_401_kitchen to false>><</if>>
+<<if not $looted_401_pockets>><<set $looted_401_pockets to false>><</if>>
+<<if not $looted_401_bathroom>><<set $looted_401_bathroom to false>><</if>>
+
+/* Setup Physical Bypass Costs */
+<<set _baseCost to 20>>
+<<set _halfCost to Math.round(_baseCost / 2)>>
+<</nobr>>
+
+<<if not $shelf_lifted>>
+/* ================================================================= */
+/* PHASE 1: THE FALLEN SHELF (KEYS TRAPPED)                          */
+/* ================================================================= */
+<h2>UNIT 401 — THE PARTY THAT ENDED</h2>
+
+The music hits you before the smell does. <i>"...and we danced all night to the best song ever..."</i>
+<br><br>
+Red solo cups are everywhere — crushed on the floor, stacked on the kitchen counter, floating in a punch bowl filled with something pink and congealed. The air is dense with stale beer, cheap cologne, and something underneath both that you decide not to identify.
+<br><br>
+You follow the hallway to the living room. That's where you find him.
+<br><br>
+A massive oak entertainment center has toppled forward, catching a young man across the chest and pinning him flat to the floor. Twenty-something. Blond hair gone dark at the temples with sweat. His chest is not moving.
+<br><br>
+His right arm is outstretched. His fingers — already beginning to stiffen — are still loosely curled around a set of car keys.
+<br><br>
+The entertainment center is solid oak. At least three hundred pounds. The fall must have been instant. He never had time to drop them.
+<br><br>
+Behind the wreckage, the speakers keep going. <i>"...danced all night to the best song ever..."</i>
+
+<div style="margin-top:20px; padding:15px; background:rgba(80,0,0,0.2); border-left:3px solid var(--accent-gold);">
+    <b style="color:var(--accent-gold);">🪑 THE SHELF IS CRUSHING HIM. YOU NEED TO MOVE IT TO REACH THE KEYS.</b><br><br>
+
+    <!-- PHYSICAL BYPASS GRID (2 COLUMNS) -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;" class="choice-menu">
+
+        <!-- --------------------------------------------------- -->
+        <!-- 1. PLAYER JOB (CONSTRUCTION)                        -->
+        <!-- --------------------------------------------------- -->
+        <<if $job == "Construction Worker">>
+            <button style="height: 100%;">
+                <<link "Leverage weak points [CONSTRUCTION]">>
+                    <<addTime 1>>
+                    <<exert _halfCost>>
+                    <<set $shelf_lifted to true>>
+                    <<run setup.addItem("Car Keys", 1)>>
+                    <<goto "Unit_401">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[JOB]</b> Cost: <<print _halfCost>> STAMINA (Halved). You know exactly where the center of mass is. You tilt it easily.</span>
+            </button>
+        <<else>>
+            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">Leverage weak points</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES CONSTRUCTION WORKER] You lack the occupational knowledge to find the pivot point.</span>
+            </button>
+        <</if>>
+
+        <!-- --------------------------------------------------- -->
+        <!-- 2. PLAYER TRAIT (BREACHER / IRON GRIP)              -->
+        <!-- --------------------------------------------------- -->
+        <<if hasTrait("BREACHER") or hasTrait("IRON GRIP")>>
+            <button style="height: 100%;">
+                <<link "Lift it clean [BREACHER / IRON GRIP]">>
+                    <<addTime 1>>
+                    <<exert _halfCost>>
+                    <<set $shelf_lifted to true>>
+                    <<run setup.addItem("Car Keys", 1)>>
+                    <<goto "Unit_401">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[TRAIT]</b> Cost: <<print _halfCost>> STAMINA (Halved). You've moved heavier on a job site. You lift it like it's furniture.</span>
+            </button>
+        <<else>>
+            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">Lift it clean</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES BREACHER OR IRON GRIP] You don't have the specialized physical training to lift this without straining.</span>
+            </button>
+        <</if>>
+
+        <!-- --------------------------------------------------- -->
+        <!-- 3. PLAYER SKILL (TECH)                              -->
+        <!-- --------------------------------------------------- -->
+        <<if $skills.tech >= 2>>
+            <button style="height: 100%;">
+                <<link "Dismantle the joints[TECH 2]">>
+                    <<addTime 4>>
+                    <<exert _halfCost>>
+                    <<set $shelf_lifted to true>>
+                    <<run setup.addItem("Car Keys", 1)>>
+                    <<goto "Unit_401">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[SKILL]</b> Cost: <<print _halfCost>> STAMINA (Halved). You pop the hinges and break the shelf apart in pieces. Takes longer, but saves energy.</span>
+            </button>
+        <<else>>
+            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">Dismantle the joints</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES TECH 2] You don't know how to break down this furniture without tools.</span>
+            </button>
+        <</if>>
+
+        <!-- --------------------------------------------------- -->
+        <!-- 4. PLAYER ITEM (CROWBAR / TIRE IRON)                -->
+        <!-- --------------------------------------------------- -->
+        <<if $equip.weapon == "Crowbar" or $equip.weapon == "Tire Iron">>
+            <button style="height: 100%;">
+                <<link "Pry it up with <<print $equip.weapon>>">>
+                    <<addTime 2>>
+                    <<exert _halfCost>>
+                    <<set $shelf_lifted to true>>
+                    <<run setup.addItem("Car Keys", 1)>>
+                    <<goto "Unit_401">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[ITEM]</b> Cost: <<print _halfCost>> STAMINA (Halved). You wedge the steel under the frame and use the doorway as a fulcrum. Slow, but smart.</span>
+            </button>
+        <<else>>
+            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">Pry it up with a tool</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES PRYING TOOL] You don't have a crowbar or tire iron equipped to create leverage.</span>
+            </button>
+        <</if>>
+
+<!-- --------------------------------------------------- -->
+        <!-- 5. PLAYER ATTRIBUTE (STR)                           -->
+        <!-- --------------------------------------------------- -->
+        <<if $str >= 6>>
+            <button style="height: 100%;">
+                <<link "Deadlift with raw strength [STR 6]">>
+                    <<addTime 1>>
+                    <<exert _halfCost>>
+                    <<set $shelf_lifted to true>>
+                    <<run setup.addItem("Car Keys", 1)>>
+                    <<goto "Unit_401">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[ATTRIBUTE]</b> Cost: <<print _halfCost>> STAMINA (Halved). You plant your feet and muscle it upward. You are strong enough to do this efficiently.</span>
+            </button>
+        <<else>>
+            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">Deadlift with raw strength</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES STR 6] You lack the physical musculature to lift 300 pounds cleanly.</span>
+            </button>
+        <</if>>
+
+        <!-- --------------------------------------------------- -->
+        <!-- 6. LAST RESORT (BRUTE FORCE)                        -->
+        <!-- --------------------------------------------------- -->
+        <button style="grid-column: span 2; border-left-color: var(--accent-red) !important;">
+            <<link "Throw your entire body weight into it [BRUTE FORCE]">>
+                <<addTime 3>>
+                <<exert _baseCost>>
+                <<set $shelf_lifted to true>>
+                <<run setup.addItem("Car Keys", 1)>>
+                <<goto "Unit_401">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: INJURY]</b> Cost: <<print _baseCost>> STAMINA. You have no leverage, no tools, and no specialized knowledge. You will have to tear your own muscles to move this. <br><i style="color:#ff9999;">(If you lack the Stamina, this will severely drain your HP).</i></span>
+        </button>
+
+    </div>
+
+    <!-- --------------------------------------------------- -->
+    <!-- LEAVE BUTTON (Outside the grid)                     -->
+    <!-- --------------------------------------------------- -->
+    <div class="choice-menu" style="margin-top:20px;">
+        <button>
+        <<link "🚪 Leave — the keys aren't worth the injury">>
+            <<run setup.sound.stop("party_music")>>
+            <<set $hallwaySection to 4>>
+            <<goto "Hallway">>
+        <</link>>
+        <span class="btn-sub">Return to the hallway. Section 4.</span>
+        </button>
+    </div>
+
+</div>
+
+<<else>>
+/* ================================================================= */
+/* PHASE 2: INSIDE THE APARTMENT (LOOTING)                           */
+/* ================================================================= */
+<h2>UNIT 401 — THE PARTY THAT ENDED</h2>
+
+The shelf is off him.
+<br><br>
+You straighten up slowly, hands shaking, lower back screaming from the effort. The car keys are in your palm. You don't remember picking them up. Your hands just did it.
+<br><br>
+You look at his face once. Then you look away.
+<br><br>
+
+<!-- PLAYER INTERNAL MONOLOGUE CHAT BUBBLE -->
+<<chat "You" "image/avatars/player.gif" "left" "'He's somebody's kid. You didn't know him. You're not going to start now.'">>
+<br>
+
+The music keeps playing. 
+<br><br>
+<i>"...danced all night to the best song ever..."</i>
+<br><br>
+The same three seconds. Over and over. The apartment smells like beer and grief and the particular staleness of a party that ended too fast.
+<br><br>
+You're the only living thing in here. The place is yours.
+
+<div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-blue);">
+    <b style="color:var(--accent-blue);">🎵 THE APARTMENT IS YOURS. WHAT DO YOU DO?</b><br><br>
+
+    <div class="choice-menu">
+
+        <!-- --------------------------------------------------- -->
+        <!-- LOOT: KITCHEN                                       -->
+        <!-- --------------------------------------------------- -->
+        <<if not $looted_401_kitchen>>
+            <button>
+                <<link "🍕 Raid the kitchen (2 minutes)">>
+                    <<set $looted_401_kitchen to true>>
+                    <<addTime 1>>
+                    <<run setup.addItem("Energy Bar", 2)>>
+                    <<run setup.addItem("Bottled Water", 1)>>
+                    <<goto "Unit_401">>
+                <</link>>
+                <span class="btn-sub">Two energy bars and a sealed water bottle shoved to the back of a cabinet. Party food. Not much — but unopened.</span>
+            </button>
+        <</if>>
+
+        <!-- --------------------------------------------------- -->
+        <!-- LOOT: BATHROOM                                      -->
+        <!-- --------------------------------------------------- -->
+        <<if not $looted_401_bathroom>>
+            <button>
+                <<link "🪥 Check the bathroom medicine cabinet (2 minutes)">>
+                    <<set $looted_401_bathroom to true>>
+                    <<addTime 1>>
+                    <<run setup.addItem("Painkillers", 2)>>
+                    <<run setup.addItem("Bandage", 1)>>
+                    <<goto "Unit_401">>
+                <</link>>
+                <span class="btn-sub">Painkillers and a bandage roll. Someone came to this party already hurting. Now you're taking their meds.</span>
+            </button>
+        <</if>>
+
+        <!-- --------------------------------------------------- -->
+        <!-- LOOT: ALCOHOL                                       -->
+        <!-- --------------------------------------------------- -->
+        <<if not $looted_401_alcohol>>
+            <button>
+                <<link "🍺 Take the alcohol from the counter (2 minutes)">>
+                    <<set $looted_401_alcohol to true>>
+                    <<addTime 1>>
+                    <<run setup.addItem("Bottle of Vodka", 1)>>
+                    <<run setup.addItem("Whiskey", 1)>>
+                    <<goto "Unit_401">>
+                <</link>>
+                <span class="btn-sub">Full bottles. Vodka for wounds, whiskey for everything else. Both make decent Molotov material.</span>
+            </button>
+        <</if>>
+
+        <!-- --------------------------------------------------- -->
+        <!-- LOOT: POCKETS                                       -->
+        <!-- --------------------------------------------------- -->
+        <<if not $looted_401_pockets>>
+            <button>
+                <<link "🔍 Go through his jacket pockets (1 minute)">>
+                    <<set $looted_401_pockets to true>>
+                    <<run setup.addItem("Lighter", 1)>>
+                    <<goto "Unit_401">>
+                <</link>>
+                <span class="btn-sub">A crumpled bill and a lighter. You leave the cash — money means nothing anymore. You take the lighter.</span>
+            </button>
+        <</if>>
+
+        <!-- --------------------------------------------------- -->
+        <!-- ACTION: TURN OFF MUSIC                              -->
+        <!-- --------------------------------------------------- -->
+        <<if not $turned_off_music>>
+            <button>
+                <<link "🔇 Turn off the music (1 minute)">>
+                    <<run setup.sound.fade("party_music", 1000)>>
+                    <<set $turned_off_music to true>>
+                    <<goto "Unit_401">>
+                <</link>>
+                <span class="btn-sub">Stealth bonus — reduces noise on this floor. The silence that replaces it is heavier than the music was.</span>
+            </button>
+        <<else>>
+            <div style="padding:8px; background:rgba(0,0,0,0.2); border:1px solid #333; font-style:italic; color:#666; margin-bottom:8px;">
+                The music is off. The silence in here is complete. It's worse.
+            </div>
+        <</if>>
+
+        <!-- --------------------------------------------------- -->
+        <!-- EMPTY ROOM STATE (All actions complete)             -->
+        <!-- --------------------------------------------------- -->
+        <<if $looted_401_kitchen and $looted_401_bathroom and $looted_401_alcohol and $looted_401_pockets and $turned_off_music>>
+            <br>
+            <div style="padding:10px; background:rgba(0,100,0,0.2); border:1px solid var(--accent-green); font-style:italic; color:#99cc99;">
+                There's nothing left here. Just the body, the dark, and the silence where the music used to be.
+            </div>
+        <</if>>
+
+        <!-- --------------------------------------------------- -->
+        <!-- LEAVE APARTMENT                                     -->
+        <!-- --------------------------------------------------- -->
+        <button>
+            <<link "🚪 Leave and return to the hallway">>
+                <<run setup.sound.stop("party_music")>>
+                <<set $hallwaySection to 4>>
+                <<goto "Hallway">>
+            <</link>>
+            <span class="btn-sub">Back to the corridor. Section 4.</span>
+        </button>
+
+    </div>
+</div>
+<</if>>

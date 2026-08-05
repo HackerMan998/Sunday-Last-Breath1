@@ -1,0 +1,93 @@
+:: Act3_7Eleven_Combat {"position":"750,1950","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "seven_eleven_interior">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
+
+/* Initialize combat enemies */
+<<if ndef $s711_enemies>>
+    <<set $s711_enemies to [
+        { name: "Scavenger Enforcer", hp: 35, maxHp: 35, dmg: 12, ev: 10 },
+        { name: "Frenzied Runner", hp: 25, maxHp: 25, dmg: 10, ev: 20 },
+        { name: "Scavenger Shooter", hp: 30, maxHp: 30, dmg: 15, ev: 15 }
+    ]>>
+<</if>>
+<</nobr>>
+
+<h2>7-ELEVEN — MAIN CONVENIENCE STORE FLOOR</h2>
+
+<<if $s711_enemies.length > 0>>
+    You and Reyes kick through the shattered double glass doors, firing into the smoke!
+    <br><br>
+    Toppled snack shelves, spilled soda cans, and bloodstained linoleum fill the store. Two armed scavengers and a snarling infected turn toward you with raised weapons!
+    <br><br>
+    Behind the thick glass of the walk-in beverage cooler at the back, Commander Miller and his surviving guard bleed on the floor, holding the steel door shut!
+    <br><br>
+    <<chat "Commander Miller (Cooler)" "image/avatars/quartermaster_sgtvance.gif" "right" "Reyes! Flank the shooters! Don't let them hit the fuel canisters!">>
+
+    <br><br>
+    <div style="background: rgba(80,0,0,0.2); border: 1px solid #8a1c1c; padding: 15px; text-align:center;">
+        <h3 style="color:var(--accent-red); margin-top:0;">HOSTILES REMAINING: <<print $s711_enemies.length>></h3>
+        <div style="border:1px solid #333; background:#000; padding:10px; max-width:320px; margin:0 auto; text-align:left;">
+            <<for _i, _e range $s711_enemies>>
+                <div style="border-bottom:1px dashed #333; padding:5px; font-family: monospace;">
+                    TARGET: <span style="color:var(--accent-red)">_e.name</span> (HP: _e.hp/_e.maxHp)
+                </div>
+            <</for>>
+        </div>
+    </div>
+
+    <br><br>
+    <div class="choice-menu">
+        <button style="border-left-color: var(--accent-red) !important;">
+            <<link "💥 Open Fire on the Scavengers">>
+                <<addTime 1>>
+                /* Deal damage to first enemy */
+                <<set $s711_enemies[0].hp -= 20>>
+                <<if $s711_enemies[0].hp <= 0>>
+                    <<run $s711_enemies.shift()>>
+                <</if>>
+                <<goto "Act3_7Eleven_Combat">>
+            <</link>>
+            <span class="btn-sub">Engage the hostiles pinning down Commander Miller.</span>
+        </button>
+    </div>
+
+<<else>>
+    <div style="text-align:center; margin-bottom: 20px;">
+        <div style="font-size:3em;">💀</div>
+        <h2 style="color:var(--accent-green)">ALL HOSTILES ELIMINATED</h2>
+        <br>
+        <span style="color:var(--accent-gold); font-size: 1.2em; font-weight: bold;">[+50 XP] [+25 TRUST]</span>
+        <<run window.gainXP(50)>>
+        <<run window.gainTrust(25)>>
+    </div>
+
+    The gunshots die down, replaced by the hiss of leaking refrigerator freon and dying groans.
+    <br><br>
+    The heavy steel walk-in cooler door creaks open. Commander Miller steps out, a bloodied bandage wrapped tight around his shoulder, holding a shotgun in one hand and a heavy jerrycan of diesel fuel in the other.
+
+    <br><br>
+    <<chat "Commander Miller" "image/avatars/quartermaster_sgtvance.gif" "right" "Good shooting, kid. If you and Reyes hadn't breached when you did, we'd be dog meat in that cooler.">>
+
+    <br><br>
+    <<if _arrivedLate>>
+        <<chat "Commander Miller" "image/avatars/quartermaster_sgtvance.gif" "right" "I heard you got into Timberline late after sunrise. You've already proven your worth twice over.">>
+    <<else>>
+        <<chat "Commander Miller" "image/avatars/quartermaster_sgtvance.gif" "right" "I heard you arrived early before the rain started. Fast on your feet and steady under fire. Exactly what Timberline needs.">>
+    <</if>>
+
+    <br><br>
+    /* COMPLETE RESCUE OBJECTIVE */
+    <<completeObjective "rescue_leader_711">>
+    <<purgeCompleted>>
+
+    <br><br>
+    <div class="choice-menu">
+        <button style="border-left-color: var(--accent-green) !important;">
+            <<link "🚗 Escort Commander Miller back to Timberline Sanctuary" "Act3_7Eleven_RescueSuccess">>
+                <<addTime 15>>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-green);">[MISSION COMPLETE]</b> Return triumphantly to the high school sanctuary.</span>
+        </button>
+    </div>
+<</if>>

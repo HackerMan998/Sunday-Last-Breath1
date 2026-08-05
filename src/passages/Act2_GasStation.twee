@@ -1,0 +1,487 @@
+:: Act2_GasStation {"position":"500,1200","size":"100,100"}
+<<addObjective "secure_fuel" "Secure fuel at the Route 9 gas station">>
+<<nobr>>
+/* ====================================================================
+   INITIALIZATION & STATE SETUP
+   Runs once when the passage is first loaded.
+   ==================================================================== */
+<<if ndef $gas_phase>>
+	<<set $gas_phase to 1>>
+    
+    /* AUDIO: Heavy rain, wind blowing through pine trees, a squeaking metal sign */
+    <<run setup.sound.play("gas_ambience", "audio/bgm/gas_station_rain.mp3", true, 0.4)>>
+<</if>>
+<</nobr>>
+
+
+/* ════════════════════════════════════════════════════════════════════
+   PHASE 1 — ARRIVAL (THE PUMPS)
+   ════════════════════════════════════════════════════════════════════ */
+<<if $gas_phase == 1>>
+	<h2>ROUTE 9 — TIMBERLINE PIT STOP</h2>
+
+    /* --- 1. VISUALS & AUDIO --- */
+    <div style="margin-bottom: 15px; text-align: center;">
+        <img src="image/Act2GasStation/GasStation.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+    </div>
+
+    /* --- 2. NARRATIVE --- */
+    You pull off the highway, putting miles between you and the gridlock. The road narrows, winding into the dense, towering pine forests of the Pacific Northwest. 
+    <br><br>
+    The fuel gauge is brushing the red line. 
+    <br><br>
+    A pair of flickering halogen lights cut through the fog ahead. A lonely, isolated gas station. It looks abandoned. The power is surging, casting long, erratic shadows across the wet pavement. You pull up to the pump.
+    <br><br>
+
+    /* --- 3. DYNAMIC COMPANION REACTION --- */
+    <<if $vane_status == "joined">>
+        <<run setup.sound.play("car_door", "audio/sfx/car_door_open.mp3", false, 0.8)>>
+
+        Vane steps out into the rain, pulling his jacket tight against the cold. He looks around at the pitch-black tree line, visibly on edge.
+        <br><br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "I'll handle the pump. You go inside and authorize it. Just... be fast, okay? It's too quiet out here.">>
+        <br>
+        You nod, stepping out of the car. Vane grabs the fuel nozzle. He's exposed out here, but you need gas.
+
+    <<else>>
+        <<run setup.sound.play("car_door", "audio/sfx/car_door_open.mp3", false, 0.8)>>
+
+        You step out into the freezing rain. The silence of the woods is vast and oppressive. You grab the fuel nozzle and shove it into the car, but the pump screen reads: <b style="color:red;">PLEASE SEE CASHIER</b>.
+        <br><br>
+        You wedge your wallet into the handle to lock the trigger open. You have to go inside and authorize the console. 
+    <</if>>
+
+    /* --- 4. PLAYER CHOICES --- */
+	<br>
+	<div class="choice-menu">
+		<button>
+            <<link "Enter the Convenience Store">>
+                <<addTime 1>>
+                <<set $gas_phase to 2>>
+                <<goto "Act2_GasStation">>
+            <</link>>
+            <span class="btn-sub">It's dark inside.</span>
+		</button>
+	</div>
+
+
+/* ════════════════════════════════════════════════════════════════════
+   PHASE 2 — THE STORE & THE TERMINAL
+   ════════════════════════════════════════════════════════════════════ */
+<<elseif $gas_phase == 2>>
+	<h2>TIMBERLINE PIT STOP — INTERIOR</h2>
+
+    /* --- 1. VISUALS & AUDIO --- */
+    <div style="margin-bottom: 15px; text-align: center;">
+        <img src="image/Act2GasStation/InteriorGasStation.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+    </div>
+
+    <<if not $store_entered>>
+        <<run setup.sound.play("neon_buzz", "audio/sfx/neon_flicker_buzz.mp3", true, 0.3)>>
+        <<set $store_entered to true>>
+    <</if>>
+
+    /* --- 2. NARRATIVE --- */
+    The glass doors slide open on a broken track. The smell is a mix of stale coffee, damp cardboard, and spilled antifreeze. The aisles have been hastily looted—shelves knocked over, chip bags trampled into the linoleum. The back of the store fades into pitch-black shadow.
+    <br><br>
+    You make your way behind the counter. The manager's terminal is blinking in the dark, casting a sickly green light across the desk. It is asking for a four-digit PIN. 
+    <br><br>
+
+    /* --- DYNAMIC EXPLORATION TEXT --- */
+    <<if $store_searched>>
+        <span style="color:var(--accent-green);">You spent five tense minutes picking through the wreckage of the aisles. Every wrapper that crunched under your boot sounded like a gunshot. You managed to salvage an intact Energy Bar. Near the back hallway, you also spotted a torn blue employee vest discarded on the floor. In the pocket was a crumpled receipt with <b>'PUMP AUTH: 6821'</b> scrawled in pen.</span>
+        <br><br>
+    <</if>>
+
+    /* --- 3. PRE-CHOICE VARIABLE SETUP --- */
+    <<set _hasFlashlight to $inventory.find(i => i.id === "Flashlight")>>
+    <<set _hasLighter to $inventory.find(i => i.id === "Lighter")>>
+
+    /* --- 4. PLAYER CHOICES (EXPLORE OR BYPASS) --- */
+    <div class="choice-menu">
+        
+        <!-- OPTIONAL EXPLORATION -->
+        <<if not $store_searched>>
+            <b style="color:#aaa; margin-bottom: 5px; display:block;">🔦 LOOK AROUND</b>
+            <button>
+                <<link "Search the dark aisles first (5 Minutes)">>
+                    <<addTime 4>>
+                    <<set $store_searched to true>>
+                    <<run setup.addItem("Energy Bar", 1)>>
+                    <<goto "Act2_GasStation">>
+                <</link>>
+                <span class="btn-sub">Dig through the trampled shelves. You might find supplies or a clue to the PIN.</span>
+            </button>
+            <br>
+        <</if>>
+
+        <!-- TERMINAL INTERACTION -->
+        <div style="padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-blue);">
+            <b style="color:var(--accent-blue);">⚙️ AUTHORIZE THE PUMP</b>
+            <hr style="border-color:#333; margin: 10px 0;">
+            
+            <!-- PIN FOUND DURING SEARCH -->
+            <<if $store_searched>>
+                <button>
+                    <<link "Enter the PIN from the receipt [6821]">>
+                        <<run setup.sound.play("terminal_beep", "audio/sfx/terminal_beep.mp3", false, 0.8)>>
+                        <<set $gas_phase to 3>>
+                        <<completeObjective "secure_fuel">>
+                        <<addObjective "escape_gas_station" "Escape the gas station as the horde closes in">>
+                        <<purgeCompleted>>
+                        <<goto "Act2_GasStation">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-gold);">[KNOWLEDGE]</b> You punch in the code. The system accepts it immediately.</span>
+                </button>
+            <</if>>
+
+            <!-- TECH BYPASS -->
+            <<if $skills.tech >= 1>>
+                <button>
+                    <<link "Override the terminal [TECH 1]">>
+                        <<set $gas_phase to 3>>
+                        <<completeObjective "secure_fuel">>
+                        <<addObjective "escape_gas_station" "Escape the gas station as the horde closes in">>
+                        <<purgeCompleted>>
+                        <<goto "Act2_GasStation">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-gold);">[TECH 1]</b> You pop the housing and bridge the auth wire directly. Fast and clean.</span>
+                </button>
+            <<else>>
+                <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                    <span style="text-decoration: line-through;">Override the terminal</span><br>
+                    <span class="btn-sub" style="color: #666;">[REQUIRES TECH 1] You don't know the password and can't hack the system.</span>
+                </button>
+            <</if>>
+
+            <!-- PERCEPTION & LIGHT SOURCE BYPASS -->
+            <<if _hasFlashlight>>
+                <button>
+                    <<link "Search the counter with your Flashlight">>
+                        <<run setup.sound.play("flashlight", "audio/sfx/flashlight_click.mp3", false, 0.8)>>
+                        <<set $gas_phase to 3>>
+                        <<completeObjective "secure_fuel">>
+                        <<addObjective "escape_gas_station" "Escape the gas station as the horde closes in">>
+                        <<purgeCompleted>>
+                        <<goto "Act2_GasStation">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-gold);">[FLASHLIGHT]</b> The beam illuminates a sticky note taped under the register: '6821'.</span>
+                </button>
+
+            <<elseif _hasLighter>>
+                <<if $per >= 4>>
+                    <button>
+                        <<link "Search the counter with your Lighter [PER 4]">>
+                            <<run setup.sound.play("lighter", "audio/sfx/lighter_flick.mp3", false, 0.8)>>
+                            <<addTime 1>>
+                            <<set $gas_phase to 3>>
+                            <<completeObjective "secure_fuel">>
+                            <<addObjective "escape_gas_station" "Escape the gas station as the horde closes in">>
+                            <<purgeCompleted>>
+                            <<goto "Act2_GasStation">>
+                        <</link>>
+                        <span class="btn-sub"><b style="color:var(--accent-gold);">[LIGHTER + PER 4]</b> In the dim, flickering light, you spot a sticky note under the register.</span>
+                    </button>
+                <<else>>
+                    <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                        <span style="text-decoration: line-through;">Search the counter with your Lighter</span><br>
+                        <span class="btn-sub" style="color: #666;">[REQUIRES PER 4] The flame is too dim. You can't spot anything useful in the mess.</span>
+                    </button>
+                <</if>>
+
+            <<elseif $per >= 6>>
+                <button>
+                    <<link "Search in the dark [PER 6]">>
+                        <<addTime 2>>
+                        <<set $gas_phase to 3>>
+                        <<completeObjective "secure_fuel">>
+                        <<addObjective "escape_gas_station" "Escape the gas station as the horde closes in">>
+                        <<purgeCompleted>>
+                        <<goto "Act2_GasStation">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-gold);">[PER 6]</b> Your eyes adjust. You find a sticky note with a PIN under the keyboard by pure tactile search.</span>
+                </button>
+
+            <<else>>
+                <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                    <span style="text-decoration: line-through;">Search the counter</span><br>
+                    <span class="btn-sub" style="color: #666;">[REQUIRES LIGHT SOURCE OR PER 6] It's pitch black back here. You can't see anything.</span>
+                </button>
+            <</if>>
+
+            <!-- BRUTE FORCE FALLBACK -->
+            <button>
+                <<link "Smash the manual override box">>
+                    <<addTime 2>>
+                    <<exert 5>>
+                    <<set $loud_pump_auth to true>>
+                    <<set $gas_phase to 3>>
+                    <<completeObjective "secure_fuel">>
+                    <<addObjective "escape_gas_station" "Escape the gas station as the horde closes in">>
+                    <<purgeCompleted>>
+                    <<goto "Act2_GasStation">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: NOISE]</b> Costs 5 STAMINA. Break the glass manager's box on the wall to pull the lever.</span>
+            </button>
+        </div>
+    </div>
+
+
+/* ════════════════════════════════════════════════════════════════════
+   PHASE 3 — THE REVELATION & THE CAT-AND-MOUSE
+   ════════════════════════════════════════════════════════════════════ */
+<<elseif $gas_phase == 3>>
+	<h2>TIMBERLINE PIT STOP — INTERIOR</h2>
+
+    /* --- 1. VISUALS & AUDIO (MAP FOUND) --- */
+    <div style="margin-bottom: 15px; text-align: center;">
+        <img src="image/Act2GasStation/mapoutsidethecity.png" style="max-width: 100%; border: 1px solid var(--accent-gold); box-shadow: 0 4px 15px rgba(211,84,0,0.3);">
+    </div>
+
+    <<if not $pump_started>>
+        <<run setup.sound.play("beep", "audio/sfx/terminal_beep.mp3", false, 0.8)>>
+        <<run setTimeout(function(){ setup.sound.play("pump_ding", "audio/sfx/fuel_pump_ding.mp3", true, 0.5); }, 1000)>>
+        <<set $pump_started to true>>
+    <</if>>
+
+    /* --- 2. NARRATIVE (THE MAP LORE) --- */
+    <<if $loud_pump_auth>>
+        <span style="color:var(--accent-red); font-style:italic;">The shattering of the glass override box echoed violently through the empty store. You don't have time to enjoy the silence.</span>
+        <br><br>
+    <</if>>
+
+    The terminal beeps in authorization. Outside, the pump whirs to life, a rhythmic, mechanical *ding... ding... ding...* cutting through the rain. 
+    <br><br>
+    As you turn to leave the counter, you notice a display rack of local transit maps. You grab one and unroll it across the glass counter.
+    <br><br>
+    The main highways—I-5, 99, the major bridges—they are all death traps now. Choked with abandoned cars and the infected.
+    <br><br>
+
+    <<if $read_405_journal>>
+        <span style="color:var(--accent-gold);">[LORE: MARCUS'S JOURNAL]</span><br>
+        You stare at the topography lines. You remember the dead hunter's words in Unit 405: <i>"The military will lock down the interstates. Take the old logging road up the northern ridge."</i>
+        <br><br>
+        You trace your finger along the dark green sections of the map. There it is. A thin, winding dirt service road cutting straight through the mountains, bypassing the military blockades completely. You have a route.
+    <<else>>
+        You stare at the topography lines. The main roads are out. If you're going to survive, you have to go off-grid. You trace your finger along a thin, winding dirt service road cutting straight through the mountains. It's a risk, but it's your only option.
+    <</if>>
+    <br><br>
+    
+    /* --- 3. THE CRASH EVENT --- */
+    <hr style="border-color:#333; margin: 20px 0;">
+
+    <<if not $crash_played>>
+        <<run setup.sound.play("shelf_crash", "audio/sfx/metal_shelf_crash.mp3", false, 1.0)>>
+        <<run window.shakeScreen(5)>>
+        <<set $crash_played to true>>
+    <</if>>
+
+    <b style="color:var(--accent-red); font-size:1.2em;">CRASH.</b>
+    <br><br>
+    
+    <<if $loud_pump_auth>>
+        You freeze. The noise you made drew it out. A metal shelf collapses in the back storage room.
+    <<else>>
+        You freeze. The sound came from the back storage room. A metal shelf collapsing.
+    <</if>>
+    <br><br>
+
+    A low, wet snarl echoes down the dark aisle. Something is in here with you. It's between you and the front doors. Outside, the fuel pump keeps dinging. 
+    
+    <<if $vane_status == "joined">>
+        <br><br>
+        Vane is outside. If that thing gets out the front door before you do, he won't see it coming.
+    <</if>>
+    <br><br>
+
+    /* --- 4. PRE-CHOICE VARIABLE SETUP --- */
+    <<set _isGun to (def setup.ammoMap[$equip.weapon])>>
+    <<set _isUnarmed to ($equip.weapon == "none")>>
+
+    /* --- 5. PLAYER CHOICES (COMBAT/FLEE) --- */
+    <div class="choice-menu">
+        
+        <!-- FIREARM ADVANTAGE -->
+        <<if _isGun>>
+            <button>
+                <<link "Draw your weapon and advance">>
+                    <<set $escapeMethod to "gun">>
+                    <<set $gas_phase to 4>>
+                    <<goto "Act2_GasStation">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[EQUIPPED FIREARM]</b> You have a gun. You aren't sneaking. Put it down.</span>
+            </button>
+        <</if>>
+
+        <!-- AGILITY BYPASS -->
+        <<if $agi >= 6>>
+            <button>
+                <<link "Vault the counter [AGI 6]">>
+                    <<set $escapeMethod to "vault">>
+                    <<set $gas_phase to 4>>
+                    <<goto "Act2_GasStation">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[AGI 6]</b> Bypass the aisles entirely. Vault over the glass case directly to the exit.</span>
+            </button>
+        <<else>>
+            <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">Vault the counter</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES AGI 6] You aren't fast or agile enough to clear the high counter without making a massive racket.</span>
+            </button>
+        <</if>>
+
+        <!-- STEALTH BYPASS -->
+        <<if $skills.stealth >= 2 or hasTrait("GHOST")>>
+            <button>
+                <<link "Slip through the dark aisles [STEALTH 2]">>
+                    <<addTime 1>>
+                    <<set $escapeMethod to "stealth">>
+                    <<set $gas_phase to 4>>
+                    <<goto "Act2_GasStation">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[STEALTH 2]</b> Use the shadows. Creep past it completely unnoticed.</span>
+            </button>
+        <<else>>
+            <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">Slip through the dark aisles</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES STEALTH 2] You aren't quiet enough to sneak past it in these tight aisles.</span>
+            </button>
+        <</if>>
+        
+        <!-- MELEE COMBAT FALLBACK -->
+        <<if not _isGun and not _isUnarmed>>
+            <button>
+                <<link "Ambush it with your melee weapon">>
+                    <<addTime 1>>
+                    <<exert 10>>
+                    <<set $escapeMethod to "melee">>
+                    <<set $gas_phase to 4>>
+                    <<goto "Act2_GasStation">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-red);">[MELEE COMBAT]</b> Costs 10 STAMINA. Hit it hard and fast with your <<print $equip.weapon>> before it sees you.</span>
+            </button>
+        <</if>>
+
+        <!-- ABSOLUTE DESPERATION (TAKE DAMAGE) -->
+        <button>
+            <<link "Sprint for the glass doors!">>
+                <<set $hp -= 10>>
+                <<run window.shakeScreen(20)>>
+                <<set $escapeMethod to "sprint">>
+                <<set $gas_phase to 4>>
+                <<goto "Act2_GasStation">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: INJURY]</b> Make a break for it. It will clip you on the way out. Take -10 HP.</span>
+        </button>
+    </div>
+
+
+/* ════════════════════════════════════════════════════════════════════
+   PHASE 4 — DEPARTURE (THE LOGGING ROAD)
+   ════════════════════════════════════════════════════════════════════ */
+<<elseif $gas_phase == 4>>
+	<h2>ROUTE 9 — TIMBERLINE PIT STOP</h2>
+
+    /* --- 1. AUDIO FADEOUT --- */
+    /* THE FIX: Consolidated all audio fades safely behind a flag */
+    <<if not $gas_audio_faded>>
+        <<run setup.sound.fade("neon_buzz", 1000)>>
+        <<run setup.sound.fade("pump_ding", 1000)>>
+        <<run setup.sound.fade("gas_ambience", 2000)>>
+        <<set $gas_audio_faded to true>>
+    <</if>>
+
+    /* --- 2. DYNAMIC NARRATIVE RESOLUTION --- */
+    <<switch $escapeMethod>>
+    
+        /* COMBAT SUCCESS - NOISE CONSEQUENCES */
+        <<case "gun" "melee">>
+            You step forward, meeting the infected head-on. Your weapon connects brutally in the dark aisle. The creature collapses to the linoleum, twitching once before going perfectly still. You stand over it, chest heaving.
+            <br><br>
+            <span style="color:var(--accent-gold); font-size: 1.2em; font-weight: bold;">[+25 XP]</span>
+            
+            /* THE FIX: Stop Infinite XP Farming */
+            <<if not $gas_combat_xp>>
+                <<run window.gainXP(25)>>
+                <<set $gas_combat_xp to true>>
+            <</if>>
+            
+            <br><br>
+            Then, another sound. A high, gurgling screech answers from the back storage room. Then another. Then a third. It wasn't just one infected hiding back there. It was a pack. And the noise you just made woke them all up. 
+            <br><br>
+            You hear the frantic scrambling of bodies hitting the aisles behind you. At that exact moment, the fuel pump outside chimes with a loud, mechanical <i>*DING*</i>. It's full. 
+            <br><br>
+            You sprint for the glass doors, bursting out into the freezing rain just as the pack rounds the corner behind you.
+
+        /* STEALTH/AGILITY SUCCESS - TIMING CONSEQUENCES */
+        <<case "vault" "stealth">>
+            You move like a ghost, skirting the edges of the aisles or vaulting cleanly over the debris. The infected snarls in the darkness behind you, completely unaware that you are slipping out the front doors. 
+            <br><br>
+            You hit the wet pavement outside, the cold air burning your lungs. But the fuel pump isn't done. You stand there for five agonizing seconds in the freezing rain, watching the digital numbers slowly tick up while the shadow paces inside the store.
+            <br><br>
+            <i>*DING.*</i>
+            <br><br>
+            The mechanical chime of the pump finishing is deafening. Inside, the infected's head snaps toward the window, spotting you instantly. It lets out a terrifying shriek and charges the glass doors.
+
+        /* DESPERATION - CHAOS CONSEQUENCES */
+        <<case "sprint">>
+            You don't think. You just run. Pure, blind panic. You slip on a puddle of spilled soda, crashing hard into a wire rack. You feel its jagged teeth scrape against your shoulder, tearing your jacket, but you kick it off wildly and scramble to your feet.
+            <br><br>
+            You slam your full body weight into the glass double doors, bursting out into the freezing rain. The creature is literally inches behind you, its jaws snapping at the back of your neck.
+
+    <</switch>>
+
+    <br><br>
+
+    /* --- 3. GETTING IN THE CAR --- */
+    <<if $vane_status == "joined">>
+        Vane jumps, seeing the creature lunging for the door. He drops the fuel nozzle, spilling gasoline across the pavement. 
+        <br><br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Get in! Let's go!">>
+        <br>
+        You both throw yourselves into the car, slamming the doors shut just as a pale, blood-soaked hand violently slaps the convenience store window.
+    <<else>>
+        You yank the fuel nozzle out, tossing it to the ground, and throw yourself into the driver's seat. You slam the door and hit the locks just as a pale, blood-soaked hand violently slaps the convenience store window, right where your head is resting against the glass.
+    <</if>>
+
+    <!-- Zombie appearing image -->
+    <div style="margin-bottom: 15px; text-align: center;">
+        <img src="image/Act2GasStation/zombiegasstation.gif" style="max-width: 100%; border: 1px solid var(--accent-red); box-shadow: 0 4px 15px rgba(138,28,28,0.5);">
+    </div>
+    
+    <br><br>
+    You shove the car into gear. The tires spin in the wet mud before finding traction, and the sedan rockets away from the flickering lights of the gas station.
+    <br><br>
+
+    /* --- 4. ACT 2.5 BRANCHING LOGIC --- */
+    <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #333;">
+        <<if $read_405_journal>>
+            You have a full tank of gas. You have a map. You follow the hand-drawn lines from Marcus's hunting journal, pulling off the main roads and navigating toward a winding dirt trail that heads up the northern ridge. To his cabin.
+            <br><br>
+            <div class="choice-menu">
+                <button>
+                    <<link "Continue up the Northern Ridge">>
+                        <<completeObjective "escape_gas_station">>
+                        <<addObjective "reach_cabin" "Navigate up the northern ridge to Marcus's cabin">>
+                        <<purgeCompleted>>
+                        <<goto "Act2_5_MarcusCabin">>
+                    <</link>>
+                </button>
+            </div>
+        <<else>>
+            You have a full tank of gas, but no destination. Just "away." You take the first rural off-ramp you see, navigating by the dashboard compass to avoid the major highways. The road is pitch black, winding deep into the woods.
+            <br><br>
+            <div class="choice-menu">
+                <button>
+                    <<link "Drive into the dark">>
+                        <<completeObjective "escape_gas_station">>
+                        <<addObjective "survive_dark" "Drive blind into the dark forest roads">>
+                        <<purgeCompleted>>
+                        <<goto "Act2_5_MayaCrash">>
+                    <</link>>
+                </button>
+            </div>
+        <</if>>
+    </div>
+
+<</if>>

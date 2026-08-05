@@ -1,0 +1,28 @@
+:: Act3_School_DeptOffices {"position":"700,1900","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "dept_offices">>
+<<set $activeMap to "Highschool 1st Floor">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
+<</nobr>>
+
+<h2>1ST FLOOR — DEPARTMENT OFFICES</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+<<if _arrivedLate>>
+    <img src="image/Act3_Timberline/faculty_morning.gif" style="max-width: 100%; border: 1px solid #333;">
+<<else>>
+    <img src="image/Act3_Timberline/faculty_night.gif" style="max-width: 100%; border: 1px solid #333;">
+<</if>>
+</div>
+
+Faculty desks and filing cabinets. Armed guards rest between patrol watches.
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "🚪 Exit Department Offices to Hallway [NORTH]">>
+            <<set $currentLocation to "hall_1_east_1">>
+            <<goto "Act3_School1Floor">>
+        <</link>>
+    </button>
+</div>

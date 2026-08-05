@@ -1,0 +1,296 @@
+:: Act3_Arrival {"position":"450,1400","size":"100,100"}
+<<nobr>>
+/* =====================================================================
+     ACT 3: ARRIVAL — INITIALIZATION & STATE CHECK
+     =====================================================================
+*/
+<<set $currentLocation to "Town_Outskirts">>
+<<set $gameClockActive to true>>
+
+<<completeObjective "reach_timberline">>
+<<addObjective "find_intel" "Search the outskirts for intel on the sanctuary">>
+<<purgeCompleted>>
+
+/* Act 3 one-time state init — same pattern as $sheriff_phase */
+<<if ndef $made_noise>>      <<set $made_noise to false>><</if>>
+<<if ndef $stranger_trust>>  <<set $stranger_trust to "none">><</if>>
+<<if ndef $companion_reyes>> <<set $companion_reyes to false>><</if>>
+<<if ndef $act3_observed>>   <<set $act3_observed to false>><</if>>
+
+/* 1. AUDIO TRANSITION */
+<<run setup.sound.stopAll()>>
+<<run setup.sound.play("outskirts_wind", "audio/bgm/outskirts_wind.mp3", true, 0.3)>>
+
+/* 2. ARRIVAL TIME LOGIC */
+<<if visited("Act2_5_MarcusCabin")>>
+    <<set _arrivedLate to true>>
+    <<set $gameDate.hour to 8>>
+    <<set $gameDate.minute to 15>>
+<<else>>
+    <<set _arrivedLate to false>>
+    <<set $gameDate.hour to 4>>
+    <<set $gameDate.minute to 30>>
+<</if>>
+
+/* 3. MODULAR DIALOGUE PRE-PROCESSING */
+<<set _hasVane to ($vane_status == "joined")>>
+<<set _hasMaya to ($maya_status == "joined" or (def $companions and $companions.includes("Maya")))>>
+<<set _hasDiane to (def $companions and $companions.includes("Diane"))>>
+<</nobr>>
+
+<h2>ACT 3: ARRIVAL</h2>
+
+/* --- VISUALS --- */
+<div style="margin-bottom: 15px; text-align: center;">
+<<if _arrivedLate>>
+    <img src="image/Act3/outskirts_morning.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+<<else>>
+    <img src="image/Act3/outskirts_night.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+<</if>>
+</div>
+
+/* --- 1. ATMOSPHERIC ARRIVAL TEXT --- */
+<<if _arrivedLate>>
+The sedan's engine idles in a low, sputtering rattle as you coast down the hill.
+A pale, freezing mist rises off the wet asphalt, lit by a weak gray morning sun
+struggling to pierce the thick canopy of pines. You slept a few hours at the
+cabin, but the exhaustion still sits heavy in your joints. The air out here
+carries the smell of pine resin and dead leaves. Clean, compared to the
+smoke-choked city. But it is too quiet. The kind of quiet that means all the
+birds left.
+<<else>>
+You have been driving on fumes for hours—steering through freezing rain until it
+died into a thick, suffocating fog. The road is pitch black, headlights cutting
+weak cones through mist that swallows landmarks whole. The dead of night, the
+cold, hollow hours before dawn when even your own breathing feels like a
+violation of the silence. Your eyes burn. The fuel gauge needle is buried past
+the red line, kissing empty.
+<</if>>
+
+<br><br>
+You bring the car to a crawl at a skewed intersection. A rusted metal signpost
+hangs from a bent post overhead, bullet-pocked and tilted from what might have
+been a vehicle impact days ago:
+
+<div style="margin: 15px 0; padding: 10px 15px; border-left: 3px solid #555; background: rgba(0,0,0,0.4); font-family: 'Courier Prime', monospace; font-size: 0.9em; color: #aaa; letter-spacing: 1px;">
+    <i>WELCOME TO TIMBERLINE — POP. 4,200</i>
+</div>
+
+The outskirts. Less dense than the concrete maze you fled, but the virus doesn't
+care about zip codes. The ditches are littered with abandoned cars, doors left
+wide open to the cold as if their owners simply stepped out and never came back.
+
+/* --- 2. COMPANION DIALOGUE BRANCHES --- */
+<<nobr>>
+<<if _hasVane and _hasMaya>>
+    /* -----------------------------------------------------------------
+       THREE-WAY DIALOGUE: MC + VANE + MAYA
+       ----------------------------------------------------------------- */
+    <br><br>
+    Vane leans against the passenger window, face pale under the dashboard glow,
+    cradling Marcus's old journal in both hands. In the backseat, Maya holds Lily 
+    close, her eyes scanning the fogged glass with protective alertness.
+    <br><br>
+    <<chat "Vane" "image/avatars/vane.gif" "right" "We've got maybe half a kilometer before the engine quits. Whatever we pick here, we're committing to it on foot if we're wrong.">>
+    <br>
+    <<chat "Maya" "image/avatars/maya.gif" "right" "And doing this on foot with Lily... it isn't an option. We need to be smart about our first step.">>
+    <br>
+    <<chat "You" "image/avatars/player.gif" "left" "Then we look before we commit. Vane, track our coordinates with the journal's map. Maya, what's your read on the intersection?">>
+    <br>
+    <<chat "Maya" "image/avatars/maya.gif" "right" "The house to the right. Someone took their time covering that window. But the concrete building? That's where people run when they panic. Panic makes a mess.">>
+
+<<elseif _hasVane and _hasDiane>>
+    /* -----------------------------------------------------------------
+       THREE-WAY DIALOGUE: MC + VANE + DIANE
+       ----------------------------------------------------------------- */
+    <br><br>
+    Vane sits slightly forward, knuckles white on Marcus's journal. Beside him, 
+    Diane stares blankly at the signpost, her sons huddled under a heavy survival 
+    blanket in the back. The silence in the car carries the heavy, raw sting of 
+    the cabin.
+    <br><br>
+    <<chat "Vane" "image/avatars/vane.gif" "right" "We're running on nothing but vapors. If we don't find fuel or a place to hole up soon, we're going to be pushing this car.">>
+    <br>
+    <<chat "Diane" "image/avatars/diane.gif" "right" "Marcus used to say you could read a town like a face. You look at the doors. Right now, both of those doors look like warnings.">>
+    <br>
+    <<chat "You" "image/avatars/player.gif" "left" "He was right. We don't commit until we've read the layout. Diane, what else did Marcus say about this ridge?">>
+    <br>
+    <<chat "Diane" "image/avatars/diane.gif" "right" "He said the substation was secure, but the residential areas are where people would panic first. I need you to be right about this one. I can't lose them too.">>
+
+<<elseif _hasVane>>
+    /* -----------------------------------------------------------------
+       TWO-WAY DIALOGUE: MC + VANE ONLY
+       ----------------------------------------------------------------- */
+    <br><br>
+    Vane leans against the passenger window, face pale under the dashboard glow,
+    cradling Marcus's old journal in both hands. He's been staring at the cover
+    for the last twenty miles without opening it.
+    <br><br>
+    <<chat "Vane" "image/avatars/vane.gif" "right" "We've got maybe half a kilometer before the engine quits. Whatever we pick here, we're committing to it on foot if we're wrong.">>
+    <br>
+    <<chat "You" "image/avatars/player.gif" "left" "Then we look before we commit. Tell me what you see.">>
+    <br>
+    Vane presses his face to the glass and squints into the fog.
+
+<<elseif _hasMaya>>
+    /* -----------------------------------------------------------------
+       TWO-WAY DIALOGUE: MC + MAYA ONLY
+       ----------------------------------------------------------------- */
+    <br><br>
+    In the backseat, Lily is curled tightly into her mother's side, finally asleep
+    after hours of silent weeping. Maya watches you in the rearview mirror.
+    Her jaw is set, but her eyes are exhausted in a way that has nothing to do
+    with sleep deprivation.
+    <br><br>
+    <<chat "Maya" "image/avatars/maya.gif" "right" "I don't know this town. Tell me what you need and tell me what you want me to do if you don't come back.">>
+    <br>
+    <<chat "You" "image/avatars/player.gif" "left" "I need intel on the local sanctuary. Every town this size had an emergency protocol. If anyone organized a response, there'll be evidence of it—signs, barricades, or a marked building. Give me five minutes to read the intersection.">>
+
+<<elseif _hasDiane>>
+    /* -----------------------------------------------------------------
+       TWO-WAY DIALOGUE: MC + DIANE ONLY
+       ----------------------------------------------------------------- */
+    <br><br>
+    Diane sits in the passenger seat, staring at the signpost. Her sons are asleep
+    in the back under a coarse blanket, their breathing shallow and slow. She
+    hasn't spoken since the cabin. The weight between you is the specific,
+    unbearable weight of a death that didn't need to happen, and that both of you
+    know it.
+    <br><br>
+    After a long silence, she speaks. Quietly. Not looking at you.
+    <br><br>
+    <<chat "Diane" "image/avatars/diane.gif" "right" "Marcus used to say you could read a town like a face. That you could tell within five minutes of arriving whether people there were going to help you or take from you. He said you just had to look at the doors.">>
+    <br>
+    She turns her head and looks at the two structures ahead. Her voice doesn't
+    waver.
+    <br><br>
+    <<chat "Diane" "image/avatars/diane.gif" "right" "I need you to be right about this one. I can't—I can't lose them too.">>
+    <br>
+    <<chat "You" "image/avatars/player.gif" "left" "I'm going to be right about this one. I promise you.">>
+    <br>
+    <i style="color:#666; font-size:0.85em;">You aren't sure you believe it. But you say it the way you mean it, which is the only way a promise like that works.</i>
+
+<<else>>
+    /* -----------------------------------------------------------------
+       ALONE: MC INTERNAL MONOLOGUE
+       ----------------------------------------------------------------- */
+    <br><br>
+    The silence inside the cabin is a living thing—heavy, suffocating, pressing
+    in from every dark corner. You killed the radio hours ago when the stations
+    stopped being stations and became something else. You rub your eyes with the
+    heel of your hand and try to remember the last time you heard another human
+    voice that wasn't screaming.
+    <br><br>
+    <<chat "You" "image/avatars/player.gif" "left" "Okay. Think. Timberline. Population forty-two hundred. Emergency broadcast. Someone would have organized. A school, a church, a civic building—somewhere with walls and a roof. Find the staging point, find the people.">>
+    <br>
+    Your voice sounds strange. Too flat. Too rehearsed. Like you're reading from
+    a manual that someone else wrote for a situation you were never supposed to
+    be in.
+<</if>>
+<</nobr>>
+
+/* --- 3. THE CROSSROADS --- */
+<br><br>
+Through the fogged windshield, two structures emerge from the mist at the fork
+in the road. You cut the headlights.
+
+<br><br>
+To the <b>left</b>: a squat, reinforced concrete block of a building behind a
+chain-link fence. Barred windows. A heavy steel door. A rusted blue star emblem
+on the facade, too dirty to read from here. No lights visible. The front
+approach is partially blocked by what looks like a vehicle—possibly a crash,
+possibly a barricade. Something dark is piled against the main entrance.
+
+<br><br>
+To the <b>right</b>: an overgrown cul-de-sac winds into a dark suburban
+development. Prominent at the corner, a large two-story colonial home with its
+windows intact—every single one. In the mist, you can see one of the ground-
+floor windows has been covered from the inside with what appears to be a dark
+curtain or blanket. The front door is closed. The porch light is dead.
+
+<br><br>
+Two options. Very different silences. You need to decide.
+
+/* --- 4. PER / JOB OBSERVATION TIER --- */
+<<nobr>>
+<<if $per >= 6 or hasTrait("NIGHT OWL") or hasTrait("TRACKER")>>
+    <br><br>
+    <div style="padding: 12px 15px; background: rgba(0, 40, 60, 0.3); border-left: 3px solid var(--accent-blue); margin: 10px 0;">
+        <span style="color: var(--accent-blue); font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px;">[ PER 6 / TRACKER ]</span><br><br>
+        Your eyes are better than most in this dark. You study both structures
+        carefully before making a call.
+        <br><br>
+        The concrete building: the dark shapes piled against the front entrance
+        aren't debris. They're bodies. At least a dozen. And the chain-link
+        fence on the east side has been cut—then crudely rewired shut from the
+        outside. Someone left through that fence in a hurry and didn't want
+        anything following them.
+        <br><br>
+        The colonial home: one set of tire tracks in the mud leading up to the
+        driveway. Recent—within the last day or two based on the edge definition.
+        Whoever arrived, they came alone, from the south. And the blanket over
+        the window isn't thick enough. There's a faint, dying light source
+        behind it. A candle or a low-battery torch. Someone is still inside.
+    </div>
+<<elseif $job == "Police Officer">>
+    <br><br>
+    <div style="padding: 12px 15px; background: rgba(0, 40, 60, 0.3); border-left: 3px solid var(--accent-blue); margin: 10px 0;">
+        <span style="color: var(--accent-blue); font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px;">[ POLICE OFFICER ]</span><br><br>
+        Old instincts. You read the left-side building in two seconds.
+        <br><br>
+        It's a substation. King County, if the building layout matches the
+        standard municipal template. Brick-over-block construction, barred
+        windows, digital entry locks on the secondary doors. The dark shapes
+        blocking the main entrance are bodies—multiple subjects, uniform
+        fragments visible. Deputies and civilians, mixed. Whatever happened at
+        that front door was fast and overwhelming.
+        <br><br>
+        You know the layout from training. Booking desk up front, evidence locker
+        center, secure armory in the rear. If the armory safe wasn't opened
+        during the breach—and the front-door massacre suggests it wasn't—there
+        are weapons inside that no infected thing has touched.
+    </div>
+<</if>>
+<</nobr>>
+
+/* --- 5. CHOICE MENU --- */
+<div class="choice-menu" style="margin-top:25px;">
+
+    /* Option A: Sheriff Substation */
+    <button>
+        <<link "Investigate the concrete building to the left">>
+            <<addTime 15>>
+            <<set $act3_location to "sheriff">>
+            <<goto "Act3_Sheriff">>
+        <</link>>
+        <span class="btn-sub">The reinforced structure behind the fence. It looks like it was built to last.</span>
+    </button>
+
+    /* Option B: Suburban Home */
+    <button>
+        <<link "Search the two-story home to the right">>
+            <<addTime 15>>
+            <<set $act3_location to "suburban_home">>
+            <<goto "Act3_Home">>
+        <</link>>
+        <span class="btn-sub">The colonial house with the intact windows. Someone covered the ground floor from the inside.</span>
+    </button>
+
+    /* Option C: Observe First (NEW) */
+    <<if $per >= 5 or hasTrait("NIGHT OWL") or hasTrait("TRACKER") or $skills.stealth >= 2>>
+        <button>
+            <<link "Kill the engine and observe both locations first">>
+                <<addTime 10>>
+                <<set $act3_observed to true>>
+                <<goto "Act3_Arrival_Observe">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-gold);">[PER 5 / STEALTH 2 / TRACKER]</b> 10 Minutes. Kill the ignition and spend time reading both structures from a distance before committing.</span>
+        </button>
+    <<else>>
+        <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+            <span style="text-decoration: line-through;">Observe from a distance first</span><br>
+            <span class="btn-sub" style="color: #666;">[REQUIRES PER 5 / STEALTH 2 / TRACKER] You lack the trained eye to read the environment before moving.</span>
+        </button>
+    <</if>>
+
+</div>

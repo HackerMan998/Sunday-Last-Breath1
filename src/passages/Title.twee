@@ -1,0 +1,44 @@
+:: Title [title-screen] {"position":"400,0","size":"100,100"}
+<<nobr>>
+/* START MAIN MENU MUSIC */
+<<run window.playMenuMusic()>>
+
+<div class="top-version-info">
+    EARLY ACCESS v1.0.0 | BUILD 2026 <br>
+    COPYRIGHT © 2026 NEALVERSE STUDIO
+</div>
+
+<div class="main-menu-container">
+    <div class="main-menu-content">
+        
+        <!-- LOGO & SUBTITLE -->
+        <img src="image/title_logo.gif" class="main-title-logo">
+        <div class="main-subtitle">
+            <span style="color: var(--accent-gold); font-weight: bold;">PART I : DAY ZERO</span> <br>
+        "The world ends today. Survival starts tomorrow."
+        </div>
+        
+        <!-- MENU BUTTONS -->
+        <div class="main-menu-options">
+            
+            /* Stop music and jump to game! */
+            <<button "NEW GAME">>
+                <<run window.stopMenuMusic()>>
+                <<goto "Prologue_WakeUp">>
+            <</button>>
+
+            <<button "LOAD GAME">><<run SugarCube.UI.saves()>><</button>>
+
+            <<button "SETTINGS">>
+                <<run (Dialog.create || Dialog.setup)("SYSTEM SETTINGS")>>
+                <<run Dialog.wiki(Story.get("System_Menu").text)>>
+                <<run Dialog.open()>>
+            <</button>>
+
+        </div>
+
+    </div>
+</div>
+
+<<run window.animateMainMenu()>>
+<</nobr>>

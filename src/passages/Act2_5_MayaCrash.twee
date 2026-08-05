@@ -1,0 +1,303 @@
+:: Act2_5_MayaCrash {"position":"550,1300","size":"100,100"}
+<<nobr>>
+/* ====================================================================
+   INITIALIZATION & STATE SETUP
+   ==================================================================== */
+<<if ndef $crash_phase>>
+	<<set $crash_phase to 1>>
+    
+    /* AUDIO: Heavy rain, engine driving, fading into a blaring car horn */
+    <<run setup.sound.play("inside_car", "audio/bgm/inside_car.mp3", true, 0.5)>>
+    <<run setup.sound.play("car_horn", "audio/sfx/car_horn_blaring.mp3", true, 0.4)>>
+<</if>>
+<</nobr>>
+
+/* ════════════════════════════════════════════════════════════════════
+   PHASE 1 — THE DISCOVERY
+   ════════════════════════════════════════════════════════════════════ */
+<<if $crash_phase == 1>>
+	<h2>RURAL ROUTE 11 — THE CRASH</h2>
+
+    /* --- 1. VISUALS --- */
+    <div style="margin-bottom: 15px; text-align: center;">
+        <img src="image/Act2_5/Police_Crash.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+    </div>
+
+    /* --- 2. NARRATIVE --- */
+    You have no destination. Just "away." You took the first rural off-ramp you saw, navigating by the dashboard compass to avoid the major highways. The road is pitch black, winding deep into the dense pine forests. 
+    <br><br>
+    Then your headlights sweep across shattered glass. 
+    <br><br>
+    Deep tire trenches carve through the mud on the shoulder. An official police cruiser is wrapped violently around a massive pine tree. The front end is crumpled like a tin can. The horn is blaring in a continuous, deafening wail.
+    <br><br>
+    You put the car in park and step out into the freezing rain, drawing your weapon.
+
+    <<if $vane_status == "joined">>
+        <br><br>
+        Vane steps out with you, squinting through the downpour. He raises a hand to block the glaring headlights of the cruiser. <span style="color:var(--accent-blue);">"Is anyone alive?"</span> he yells over the blaring horn.
+    <</if>>
+
+    <br><br>
+    You approach the driver's side. The airbag is deployed, deflated and stained dark. The officer inside—the younger, terrified cop from the Ascott barricade—is violently thrashing against his seatbelt. He is snarling, his jaw snapping wildly at the steel mesh partition separating the front from the back. He's fully turned.
+    <br><br>
+    From the back seat, you hear terrified, frantic screaming. 
+    <br><br>
+    It's Maya and Lily. The irony is brutal. The cop tried to do a good deed by escorting them out, but he was already bitten. Now they are trapped in the back of a police cruiser with a monster in the front seat.
+
+    <br><br>
+    /* --- 3. DYNAMIC HUMANITY MONOLOGUE --- */
+    <<if $hum >= 70>>
+        <i>Maya. Lily. The faces from the lobby flash in your mind. You don't hesitate. You can't leave a child to die in the dark.</i><br>
+        <<chat "You" "image/avatars/player.gif" "left" "Maya! Hang on, I'm getting you out of there!">>
+    <<elseif $hum >= 31>>
+        <i>You remember them from the barricade. It's a bad situation. The horn is going to draw everything in the woods right to you, but you can't just leave them.</i><br>
+        <<chat "You" "image/avatars/player.gif" "left" "Hey! Cover your faces, I'm going to break the glass!">>
+    <<else>>
+        <i>You warned her. She trusted the badge, and the badge drove them into a tree and tried to eat her. You have leverage now.</i><br>
+        <<chat "You" "image/avatars/player.gif" "left" "Should've come with me, Maya! How's that police protection working out?!">>
+    <</if>>
+    <br>
+
+    /* --- 4. PLAYER CHOICES (THE RESCUE) --- */
+    <div class="choice-menu">
+        
+        <!-- OPTION 1: HEROIC RESCUE -->
+        <button>
+            <<link "Pry the doors open and rescue them">>
+                <<set $hum = Math.min(100, $hum + 10)>>
+                <<set $maya_state to "rescued">>
+                <<set $crash_phase to 2>>
+                <<goto "Act2_5_MayaCrash">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-green);">[+10 HUMANITY]</b> Engage the wreckage and get them out before the noise draws a horde.</span>
+        </button>
+
+        <!-- OPTION 2: EXTORTION -->
+        <button>
+            <<link "Demand payment for their lives">>
+                <<set $hum = Math.max(0, $hum - 25)>>
+                <<set $maya_state to "extorted">>
+                <<set $crash_phase to 2>>
+                <<goto "Act2_5_MayaCrash">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-red);">[-25 HUMANITY]</b> Tap on the glass. Tell her to pass whatever supplies she has through the crack before you lift a finger.</span>
+        </button>
+
+        <!-- OPTION 3: ABANDONMENT -->
+        <button style="border-left-color: var(--accent-red) !important;">
+            <<link "Leave them to die">>
+                <<set $hum = Math.max(0, $hum - 40)>>
+                <<set $maya_status to "abandoned">>
+                <<set $crash_phase to 4>>
+                <<goto "Act2_5_MayaCrash">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-red);">[-40 HUMANITY]</b> Get back in your car. It's too dangerous. They aren't your problem.</span>
+        </button>
+    </div>
+
+/* ════════════════════════════════════════════════════════════════════
+   PHASE 2 — THE EXTRICATION (ACTION GRID)
+   ════════════════════════════════════════════════════════════════════ */
+<<elseif $crash_phase == 2>>
+	<h2>THE CRASH — EXTRACTION</h2>
+
+    <<if $maya_state == "extorted">>
+        You tap the barrel of your weapon against the rear window. Maya looks at you, eyes wide with terror, pleading. You shake your head, pointing at her bag, making a 'hand it over' gesture.
+        <br><br>
+        Her expression shifts from terror to absolute disgust. But she is trapped. She unzips her bag, shoving a handful of supplies through the cracked rear window. 
+        <br>
+        <span style="color:var(--accent-gold);">[LOOT ACQUIRED: First Aid Kit, 2x Bottled Water]</span>
+        
+        /* THE FIX: Stop infinite extortion farming */
+        <<if not $maya_extortion_paid>>
+            <<run setup.addItem("First Aid Kit", 1)>><<run setup.addItem("Bottled Water", 2)>>
+            <<set $maya_extortion_paid to true>>
+        <</if>>
+        
+        <br><br>
+        You pocket the supplies. Now you have to get them out.
+    <<else>>
+        The blaring car horn is deafening. Every second you spend out here is a beacon to anything infected within a two-mile radius. You have to work fast.
+    <</if>>
+    <br><br>
+
+    The rear doors are crumpled and jammed shut. The infected cop is thrashing wildly in the front, his bloody hands squeezing through the steel mesh partition, inches from Maya's face. 
+
+    <div class="choice-menu" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        
+        <!-- TOOL: CROWBAR -->
+        <<if $equip.weapon == "Crowbar" or $inventory.find(i => i.id === "Crowbar")>>
+            <button style="height: 100%;">
+                <<link "Pry the door open [CROWBAR]">>
+                    <<set $crash_phase to 3>>
+                    <<goto "Act2_5_MayaCrash">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[CROWBAR]</b> You don't even bother with the cop. You jam the steel under the rear hinges and pop the door cleanly off the frame.</span>
+            </button>
+        <<else>>
+            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">Pry the door open</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES CROWBAR] The frame is bent. You don't have the leverage to force it.</span>
+            </button>
+        <</if>>
+
+        <!-- TRAIT: MECHANIC -->
+        <<if hasTrait("HOTWIRE") or $skills.tech >= 2>>
+            <button style="height: 100%;">
+                <<link "Cut the battery cables [MECHANIC]">>
+                    <<run setup.sound.stop("car_horn")>>
+                    <<set $crash_phase to 3>>
+                    <<goto "Act2_5_MayaCrash">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[MECHANIC]</b> You pop the crumpled hood and rip the battery terminal loose. The horn dies instantly. In the sudden quiet, you easily kick the back window in.</span>
+            </button>
+        <<else>>
+            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">Cut the battery cables</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES MECHANIC / TECH 2] You don't know your way around a wrecked engine block fast enough to kill the alarm.</span>
+            </button>
+        <</if>>
+
+        <!-- COMPANION: VANE -->
+        <<if $vane_status == "joined">>
+            <button style="height: 100%;">
+                <<link "Vane distracts the cop [COMPANION]">>
+                    <<set $crash_phase to 3>>
+                    <<goto "Act2_5_MayaCrash">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-blue);">[VANE]</b> Vane bangs on the driver's side window, drawing the cop's frenzy completely. You safely shatter the rear window and pull them out.</span>
+            </button>
+        <<else>>
+            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">Distract the cop</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES COMPANION] You are alone. There is no one to draw its attention while you work.</span>
+            </button>
+        <</if>>
+
+        <!-- BRUTE FORCE COMBAT -->
+        <button style="height: 100%; border-left-color: var(--accent-red) !important;">
+            <<link "Kill the cop first [COMBAT]">>
+                <<exert 10>>
+                <<set $crash_phase to 3>>
+                <<goto "Act2_5_MayaCrash">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-red);">[COMBAT]</b> Costs 10 STAMINA. Smash the driver's window and execute the officer so he stops grabbing at them, then pull them out the front.</span>
+        </button>
+    </div>
+
+/* ════════════════════════════════════════════════════════════════════
+   PHASE 3 — THE AFTERMATH & RECRUITMENT
+   ════════════════════════════════════════════════════════════════════ */
+<<elseif $crash_phase == 3>>
+	<h2>THE CRASH — AFTERMATH</h2>
+
+    /* THE FIX: Stop sound stuttering */
+    <<if not $glass_shattered>>
+        <<run setup.sound.stop("car_horn")>>
+        <<run setup.sound.play("glass_break", "audio/sfx/elbow_smash_glass.mp3", false, 0.8)>>
+        <<set $glass_shattered to true>>
+    <</if>>
+
+    Glass shatters. Metal groans. You haul Maya and Lily out of the wreckage and into the freezing rain. 
+    <br><br>
+    Maya collapses onto the wet asphalt, clutching Lily fiercely to her chest. She is hyperventilating, soaked in mud and rain, staring at the dead police cruiser. The authority figure she trusted to save her nearly became their coffin.
+    <br><br>
+    She looks up at you. 
+    <br><br>
+
+    <<if $maya_state == "extorted">>
+        Her eyes are venomous. <span style="color:var(--accent-gold);">"You got what you wanted,"</span> she spits, pulling Lily tighter. <span style="color:var(--accent-gold);">"Are you going to leave us out here now?"</span>
+        <br><br>
+        You gesture to your car. You don't apologize. She doesn't ask you to. It's a transaction now. She climbs into the backseat of your sedan, refusing to speak another word to you.
+    <<else>>
+        Her face does something complicated. The terror washes away, replaced by a profound, heavy realization. You were right. The barricades fell. The system failed. You are the only reason they are alive.
+        <br><br>
+        <span style="color:var(--accent-gold);">"I'm sorry,"</span> she whispers over the rain. <span style="color:var(--accent-gold);">"I should have gone with you."</span>
+        <br><br>
+        <<if $vane_status == "joined">>
+            Vane steps up, offering her a hand. <span style="color:var(--accent-blue);">"We're here now. Come on. Get in the car."</span> Maya takes his hand, looking at him with immense gratitude before climbing into the back seat.
+        <<else>>
+            You offer her a hand. She takes it, her grip surprisingly strong. You help her and Lily into the back seat of your car.
+        <</if>>
+    <</if>>
+
+    <br><br>
+    <div style="padding:10px; background:rgba(0,100,0,0.2); border-left:3px solid var(--accent-green); margin-bottom:15px;">
+        <b>[CARAVAN UPDATED]</b> Maya and Lily have joined your group. 
+        
+        /* THE FIX: Stop infinite party clones */
+        <<if not $maya_recruited>>
+            <<set $companions.push("Maya", "Lily")>>
+            <<set $maya_status to "joined">>
+            <<set $maya_recruited to true>>
+        <</if>>
+    </div>
+
+    Before getting back in the driver's seat, you pop the trunk of the ruined cruiser. Inside, you find a locked metal case. You crack it open.
+    <br>
+    <span style="color:var(--accent-gold);">[LOOT ACQUIRED: 10x 9mm Ammo, Police Radio]</span>
+    
+    /* THE FIX: Stop infinite XP and Trunk Loot farming */
+    <<if not $police_trunk_looted>>
+        <<run setup.addItem("9mm Ammo", 10)>><<run setup.addItem("Police Radio", 1)>>
+        <<run window.gainXP(50)>>
+        <<set $police_trunk_looted to true>>
+    <</if>>
+    
+    <br><br>
+    You get back in your car, throwing it into drive. You leave the wrecked cruiser behind in the dark.
+
+    <br><br>
+    <div class="choice-menu">
+        <button>
+            <<link "Continue into the night (Act 3)">>
+                <<completeObjective "survive_dark">>
+                <<addObjective "reach_timberline" "Find the town outskirts of Timberline">>
+                <<purgeCompleted>>
+                <<goto "Act3_Arrival">>
+            <</link>>
+        </button>
+    </div>
+
+/* ════════════════════════════════════════════════════════════════════
+   PHASE 4 — THE ABANDONMENT (DARK PATH)
+   ════════════════════════════════════════════════════════════════════ */
+<<elseif $crash_phase == 4>>
+	<h2>RURAL ROUTE 11 — DRIVING AWAY</h2>
+
+    <<if $vane_status == "joined">>
+        You shift the car back into drive. 
+        <br><br>
+        Vane's head snaps toward you. <span style="color:var(--accent-blue);">"What are you doing?"</span> he asks, his voice rising in panic. <span style="color:var(--accent-blue);">"We have to help them!"</span>
+        <br><br>
+        <<chat "You" "image/avatars/player.gif" "left" "It's too risky. The cop is infected. If we open that door, we could all die.">>
+        <br>
+        Vane stares at you, horrified. He looks at the crashed cruiser, hearing the screams, then looks back to your cold, set jaw. He realizes you aren't going to budge. The car rolls forward.
+        <br><br>
+        He shrinks back into the passenger seat, pulling his jacket tight. He looks at you like <i>you</i> are the monster. The trust between you is permanently broken. He knows now that if he becomes a liability, you will leave him too.
+        
+        /* Wrapped this logic for code safety/cleanliness */
+        <<if $vane_trust != "broken">>
+            <<set $vane_trust to "broken">>
+        <</if>>
+        
+    <<else>>
+        You shift the car back into drive. The screaming from the back of the cruiser is muffled by the heavy rain and the blaring horn. 
+        <br><br>
+        You watch in the rearview mirror as the infected cop thrashes wildly against his seatbelt. You tell yourself the glass will hold. You tell yourself someone else will come along. You drive into the dark, and you do not look back.
+    <</if>>
+
+    <br>
+    <div class="choice-menu">
+        <button>
+            <<link "Drive into the night (Act 3)">>
+                <<completeObjective "survive_dark">>
+                <<addObjective "reach_timberline" "Find the town outskirts of Timberline">>
+                <<purgeCompleted>>
+                <<run setup.sound.stop("car_horn")>>
+                <<goto "Act3_Arrival">>
+            <</link>>
+        </button>
+    </div>
+
+<</if>>

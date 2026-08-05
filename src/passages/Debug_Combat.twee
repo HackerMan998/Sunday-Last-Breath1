@@ -1,0 +1,46 @@
+:: Debug_Combat {"position":"1425,0","size":"100,100"}
+<center><h1>⚠️ COMBAT TEST ZONE</h1></center>
+
+<div style="text-align:center; margin-bottom: 20px;">
+    <<if $horde.length > 0>>
+        <div style="font-size:3em;">
+            <<for _z range $horde>>🧟<</for>>
+        </div>
+        <h2 style="color:red">ENEMIES REMAINING: <<print $horde.length>></h2>
+        
+        <div style="border:1px solid #333; background:#111; padding:10px; max-width:400px; margin:0 auto; text-align:left;">
+            <<for _i, _z range $horde>>
+                <div style="border-bottom:1px dashed #333; padding:5px;">
+                    Target #_i: <span style="color:#aaa">_z.name</span> (Evasion: _z.ev%)
+                </div>
+            <</for>>
+        </div>
+    <<else>>
+        <div style="font-size:3em;">💀</div>
+        <h2 style="color:var(--accent-green)">ALL TARGETS ELIMINATED</h2>
+    <</if>>
+</div>
+
+<div style="text-align:center; padding: 20px; border: 1px solid #444; background-color: #000;">
+
+    <b>EQUIPPED:</b> 
+    <<if $equip.weapon is "none">>
+        <span style="color:red">UNARMED (Fists)</span>
+    <<else>>
+        <span style="color:cyan">$equip.weapon</span>
+    <</if>>
+    <br><br>
+
+    <<if $horde.length > 0>>
+        <<button "ATTACK PRIMARY TARGET (Index 0)">>
+            <<run window.combatTurn(0)>>
+        <</button>>
+    <<else>>
+        <<button "RETURN TO DEBUG ROOM">>
+            <<goto "Debug_Room">>
+        <</button>>
+    <</if>>
+
+</div>
+<br>
+<center><small><i>Note: Shotguns/SMGs will automatically hit targets other than Index 0.</i></small></center>

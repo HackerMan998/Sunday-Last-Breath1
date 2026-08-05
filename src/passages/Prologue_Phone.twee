@@ -1,0 +1,51 @@
+:: Prologue_Phone {"position":"100,400","size":"100,100"}
+<!-- ========================================== -->
+<!-- 1. PASSAGE HEADER                          -->
+<!-- ========================================== -->
+<center>
+    <h1>📱 SMARTPHONE: SOCIAL FEED</h1>
+</center>
+<br>
+
+<!-- ========================================== -->
+<!-- 2. INTRODUCTORY NARRATIVE                  -->
+<!-- ========================================== -->
+The screen glows with a frantic blur of notifications. You open 'X-Feed' and the top trend is simply <span style="color:red; font-weight:bold;">#ZOMBIE</span>.
+
+<!-- ========================================== -->
+<!-- 3. SOCIAL FEED UI BOX                      -->
+<!-- ========================================== -->
+<div style="background:#050505; border:1px solid #222; padding:15px; font-family: sans-serif; font-size:0.9em;">
+    
+    <!-- Tweet 1: Civilian Report -->
+    <b style="color:var(--accent-blue)">@CityScanner:</b> Does anyone know what's happening at the 5th St Hospital? Seeing police in gas masks. Stay away!! 
+    <br><hr style="border-color:#111">
+    
+    <!-- Tweet 2: Official News -->
+    <b style="color:var(--accent-blue)">@NewsWire_Breaking:</b> EMERGENCY: CDC reporting "unprecedented neuro-aggressive outbreak." Reports of reanimation among the recently deceased are UNCONFIRMED.
+    <br><hr style="border-color:#111">
+    
+    <!-- Tweet 3: Found Footage -->
+    <b style="color:var(--accent-blue)">@User_9921:</b>[ATTACHED VIDEO: BLURRY] Look at his face! That's not rabies! He took three shots and kept coming! Oh god, he's— [VIDEO ENDS]
+    
+</div>
+<br>
+
+<!-- ========================================== -->
+<!-- 4. OUTRO NARRATIVE                         -->
+<!-- ========================================== -->
+The comments are a storm of denial, prayers, and instructions to "aim for the head." One post catches your eye: a map of local military checkpoints being set up. They are barricading the bridge already.
+<br><br>
+
+<!-- ========================================== -->
+<!-- 5. PLAYER ACTIONS & LORE UPDATE            -->
+<!-- ========================================== -->
+<div style="text-align:center;">
+	<<button "Back to Room">>
+    
+        /* Add information to the Lore Database upon leaving */
+		<<run window.addLore("X-Feed Timeline (Day 0)", "CDC reporting unprecedented neuro-aggressive outbreak. Reanimation among the recently deceased confirmed. The military is already barricading the bridges out of the city.")>>
+		
+        <<goto "Prologue">>
+	<</button>>
+</div>

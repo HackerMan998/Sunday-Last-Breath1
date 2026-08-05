@@ -1,0 +1,48 @@
+:: Act3_7Eleven_Flank {"position":"750,2050","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "seven_eleven_back">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
+<</nobr>>
+
+<h2>7-ELEVEN — BACK STORAGE ROOM FLANK</h2>
+
+You silently slide past the overflowing alley dumpster and force open the squeaking rear service door with your blade.
+<br><br>
+Inside the rear storage room, stacks of cardboard boxes provide complete cover. Two scavengers are leaning around the beverage cooler door, spraying gunfire into the front floor.
+<br><br>
+<<chat "Reyes (Whispering)" "image/avatars/reyes.gif" "right" "Perfect ambush angle. On my mark, take out the guy on the left!">>
+
+<br><br>
+With a coordinated burst of silenced fire, you drop both scavengers before they even realize you're behind them!
+<br><br>
+The heavy walk-in cooler door clicks open. Commander Miller steps out, wiping sweat from his brow, holding a jerrycan of fuel and a shotgun!
+
+<br><br>
+<<chat "Commander Miller" "image/avatars/quartermaster_sgtvance.gif" "right" "Flawless flank. You caught those bastards completely off guard!">>
+
+<br><br>
+<<if _arrivedLate>>
+    <<chat "Commander Miller" "image/avatars/quartermaster_sgtvance.gif" "right" "Evelyn told me you got to Timberline late after sunrise. You operate like a seasoned scout.">>
+<<else>>
+    <<chat "Commander Miller" "image/avatars/quartermaster_sgtvance.gif" "right" "Evelyn told me you slipped into base early before the morning storm. Tactical precision at its finest.">>
+<</if>>
+
+<br><br>
+<span style="color:var(--accent-gold); font-size: 1.2em; font-weight: bold;">[+60 XP] [+30 TRUST] [STEALTH BONUS]</span>
+<<run window.gainXP(60)>>
+<<run window.gainTrust(30)>>
+
+<br><br>
+/* COMPLETE RESCUE OBJECTIVE */
+<<completeObjective "rescue_leader_711">>
+<<purgeCompleted>>
+
+<br><br>
+<div class="choice-menu">
+    <button style="border-left-color: var(--accent-green) !important;">
+        <<link "🚗 Escort Commander Miller back to Timberline Sanctuary" "Act3_7Eleven_RescueSuccess">>
+            <<addTime 15>>
+        <</link>>
+        <span class="btn-sub"><b style="color:var(--accent-green);">[MISSION COMPLETE]</b> Return to Timberline Sanctuary with the Commander and fuel.</span>
+    </button>
+</div>

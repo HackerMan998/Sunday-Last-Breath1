@@ -1,0 +1,33 @@
+:: Create_LastName {"position":"800,0","size":"100,100"}
+<center>
+<h1>IDENTITY: LAST NAME</h1>
+<i>"A name to carry through the chaos, or to be forgotten in a shallow grave."</i>
+<br><br>
+
+<div class="job-container">
+    <<button "Smith">> <<set $lastName to "Smith">> <<set $name to $firstName + " " + $lastName>> <<goto "JobSelection">> <</button>>
+    <<button "Johnson">> <<set $lastName to "Johnson">> <<set $name to $firstName + " " + $lastName>> <<goto "JobSelection">> <</button>>
+    <<button "Williams">> <<set $lastName to "Williams">> <<set $name to $firstName + " " + $lastName>> <<goto "JobSelection">> <</button>>
+    <<button "Brown">> <<set $lastName to "Brown">> <<set $name to $firstName + " " + $lastName>> <<goto "JobSelection">> <</button>>
+    <<button "Jones">> <<set $lastName to "Jones">> <<set $name to $firstName + " " + $lastName>> <<goto "JobSelection">> <</button>>
+    
+    <!-- Easter Egg Sage -->
+    <<button "Sage">> <<set $lastName to "Sage">> <<set $name to $firstName + " " + $lastName>> <<goto "JobSelection">> <</button>>
+</div>
+
+<hr>
+<div style="margin-top: 20px;">
+    Or enter your own:
+    <br>
+    <<textbox "$lastName" "" autofocus>>
+    <br><br>
+    <<button "Confirm Full Name">> 
+        <<if $lastName is "" or $lastName is " ">>
+            <<run alert("Please enter a last name.")>>
+        <<else>>
+            <<set $name to $firstName + " " + $lastName>>
+            <<goto "JobSelection">> 
+        <</if>>
+    <</button>>
+</div>
+</center>

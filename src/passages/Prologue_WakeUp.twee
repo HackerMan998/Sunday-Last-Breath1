@@ -1,0 +1,66 @@
+:: Prologue_WakeUp {"position":"500,0","size":"100,100"}
+<<set $inventory to []>>
+    <<set $gameClockActive to false>> /* Time is frozen during intro */
+    
+<<script>>
+    /* STATIC STARTS (ID: static) */
+    setup.sound.play("static", "audio/sfx/static.mp3", true, 0.4);
+<</script>>
+
+<center>
+<div class="tv-container">
+    <img src="image/static.gif">
+</div>
+<br>
+<div class="glitch" style="font-size: 2.5em;">SSSHHHHHKKKKK...</div>
+</center>
+<br><br>
+
+<<timed 1s>>
+The sound cuts through your dreams like a saw blade. White noise.
+<</timed>>
+
+<<timed 3s>>
+You jolt awake. The living room is bathed in the cold, flickering glow of the television.
+<</timed>>
+
+<<timed 6s>>
+But the power is on. The lights on the modem are blinking frantically. 
+<</timed>>
+
+<<timed 10s>>
+<<script>>
+    /* SIRENS FADE IN (ID: siren) */
+    setup.sound.play("siren", "audio/sfx/sirens.mp3", true, 0.3);
+<</script>>
+
+Outside the window, beyond the thin glass, you hear it. A distant, rising chorus of sirens. 
+<</timed>>
+
+<<timed 14s>>
+<<script>>
+    /* SHORT SCREAM (ID: scream) - Loop is FALSE */
+    setup.sound.play("scream", "audio/sfx/scream.mp3", false, 0.9);
+<</script>>
+
+And underneath that... <span style="color:red">screaming.</span>
+<</timed>>
+
+<<timed 18s>>
+You stumble to the balcony door. You catch your reflection in the darkened glass.
+<br><br>
+
+<div style="text-align:center;">
+    <<button "Focus on your reflection...">>
+        <<script>>
+            /* Fade out atmosphere over 2 seconds */
+            setup.sound.fade("static", 2000);
+            setup.sound.fade("siren", 2000);
+            
+            setTimeout(function() {
+                Engine.play("Create_Gender");
+            }, 2000);
+        <</script>>
+    <</button>>
+</div>
+<</timed>>

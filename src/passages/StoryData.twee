@@ -1,0 +1,13 @@
+:: StoryData {"position":"0,300"}
+{
+	"ifid": "7063291B-129B-4B6B-B05D-A2968060E9C0",
+	"format": "SugarCube",
+	"format-version": "2.37.3",
+	"start": "Act3_ArrivalSchool",
+	"tag-colors": {
+		"Initialize": "red",
+		"PassageReady": "green",
+		"widget": "purple"
+	},
+	"zoom": 0.3
+}

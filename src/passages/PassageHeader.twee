@@ -1,0 +1,72 @@
+:: PassageHeader {"position":"200,100"}
+<!-- This renders automatically at the top of every passage -->
+<<if not tags().includes("title-screen") and not tags().includes("splash-screen")>>
+<div id="top-hud">
+    
+    <!-- LEFT: PDA MENU BUTTON -->
+    <button style="width: auto; margin: 0; padding: 8px 15px; font-size: 0.8em; border-left: 3px solid var(--accent-gold);" onclick="window.openPDA()">
+        [TAB] PDA MENU
+    </button>
+
+    <!-- CENTER: VITALS (Horizontal Row) -->
+<div style="display: flex; gap: 10px; flex-grow: 1; margin: 0 30px; max-width: 600px;">
+
+    <!-- HP -->
+    <div class="vital-bar-wrapper"><div class="bar-container vital" style="margin:0; height: 20px;">
+        <div class="bar-fill hp" @style="'width:' + ($hp / $hp_max * 100) + '%'"></div>
+        <div class="bar-text">
+            <span class="bar-label">
+                <!-- Change the src to your actual image file -->
+                <img src="image/ui/hp_icon.png" class="hud-icon" alt="✚">
+            </span>
+            <span class="bar-value"><<print Math.ceil($hp)>></span>
+        </div>
+    </div></div>
+
+    <!-- STAMINA -->
+    <div class="vital-bar-wrapper"><div class="bar-container vital" style="margin:0; height: 20px;">
+        <div class="bar-fill stamina" @style="'width:' + ($stamina / $stamina_max * 100) + '%'"></div>
+        <div class="bar-text">
+            <span class="bar-label">
+                <img src="image/ui/stamina_icon.png" class="hud-icon" alt="🏃">
+            </span>
+            <span class="bar-value"><<print Math.ceil($stamina)>></span>
+        </div>
+    </div></div>
+
+    <!-- HUNGER -->
+    <div class="vital-bar-wrapper"><div class="bar-container vital" style="margin:0; height: 20px;">
+        <div class="bar-fill hunger" @style="'width:' + ($hunger / 100 * 100) + '%'"></div>
+        <div class="bar-text">
+            <span class="bar-label">
+                <img src="image/ui/hunger_icon.png" class="hud-icon" alt="🍖">
+            </span>
+            <span class="bar-value"><<print Math.ceil($hunger)>></span>
+        </div>
+    </div></div>
+
+    <!-- THIRST -->
+    <div class="vital-bar-wrapper"><div class="bar-container vital" style="margin:0; height: 20px;">
+        <div class="bar-fill thirst" @style="'width:' + ($thirst / 100 * 100) + '%'"></div>
+        <div class="bar-text">
+            <span class="bar-label">
+                <img src="image/ui/thirst_icon.png" class="hud-icon" alt="💧">
+            </span>
+            <span class="bar-value"><<print Math.ceil($thirst)>></span>
+        </div>
+    </div></div>
+
+</div>
+
+    <!-- RIGHT: CLOCK -->
+    <div style="text-align: right; min-width: 100px; line-height: 1.1;">
+        <div class="clock-time" style="font-size: 1.8em; margin: 0;">
+            <<if $gameDate.hour < 10>>0<</if>>$gameDate.hour:<<if $gameDate.minute < 10>>0<</if>>$gameDate.minute
+        </div>
+        <div class="clock-date" style="border: none; font-size: 0.7em; margin: 0; color: #888;">
+            DAY $gameDate.dayCount
+        </div>
+    </div>
+
+</div>
+<</if>>

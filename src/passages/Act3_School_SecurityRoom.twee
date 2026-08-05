@@ -1,0 +1,19 @@
+:: Act3_School_SecurityRoom {"position":"1000,1800","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "security_room">>
+<<set $activeMap to "Highschool Ground">>
+<</nobr>>
+
+<h2>GROUND FLOOR — SECURITY GUARD ROOM</h2>
+
+Monitors display flickering static feeds from exterior cameras mounted along the bus perimeter.
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "🚪 Exit Security Room to Hallway [NORTH]">>
+            <<set $currentLocation to "hall_g_west_1">>
+            <<goto "Act3_SchoolGFloor">>
+        <</link>>
+    </button>
+</div>

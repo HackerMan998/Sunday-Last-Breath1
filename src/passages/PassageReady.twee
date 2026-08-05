@@ -1,0 +1,65 @@
+:: PassageReady [PassageReady] {"position":"100,100","size":"100,100"}
+<<nobr>>
+
+/* ====================================================================================
+   MODULE 1: PASSIVE SURVIVAL DECAY (The Struggle)
+   Runs every turn except during character creation.
+   ==================================================================================== */
+
+<<if not $inCharCreation>>
+	
+	/* --- 1.1: Resource Depletion --- */
+	<<set $hunger to Math.max(0, $hunger - 0.5)>>   /* Hunger drops 0.5 per action */
+	<<set $thirst to Math.max(0, $thirst - 1.0)>>   /* Thirst drops 1.0 per action (dehydrates faster) */
+	
+	/* --- 1.2: Starvation & Dehydration Damage --- */
+	/* If either meter hits 0, the player begins losing HP every turn */
+	<<if $thirst <= 0>>
+		<<set $hp to Math.max(0, $hp - 5)>>         /* Dehydration is lethal (5 DMG) */
+	<</if>>
+	
+	<<if $hunger <= 0>>
+		<<set $hp to Math.max(0, $hp - 2)>>         /* Starvation is slower (2 DMG) */
+	<</if>>
+
+<</if>>
+
+
+/* ====================================================================================
+   MODULE 2: STAT CLAMPING & CALIBRATION
+   Ensures variables never exceed maximum limits or break the UI.
+   ==================================================================================== */
+
+/* --- 2.1: Vitals (0-100 Scale) --- */
+/* <<set $stamina_max to $base_stamina_max>> */
+<<set $hp to Math.min($hp, $hp_max)>>               /* Caps HP at its max value */
+<<set $stamina to Math.min($stamina, $stamina_max)>> /* Caps Stamina */
+<<set $hunger to Math.min($hunger, 100)>>           /* Caps Hunger at 100% */
+<<set $thirst to Math.min($thirst, 100)>>           /* Caps Thirst at 100% */
+<<set $hum to Math.min($hum, 100)>>                 /* Caps Humanity at 100% */
+
+/* --- 2.2: Attributes (1-10 Scale) --- */
+/* Note: We clamp these to 10 in case of buffs/bonuses */
+<<set $str to Math.min($str, 10)>>
+<<set $int to Math.min($int, 10)>>
+<<set $agi to Math.min($agi, 10)>>
+<<set $cha to Math.min($cha, 10)>>
+<<set $per to Math.min($per, 10)>>
+
+
+/* ====================================================================================
+   MODULE 3: ENGINE LOGIC & STATE CHECKS
+   Handles critical game-ending conditions and time passage.
+   ==================================================================================== */
+
+/* --- 3.1: Death Check --- */
+<<if $hp <= 0>>
+	<<run Engine.play("GameOver")>>                 /* Immediately force game over if dead */
+<</if>>
+
+/* --- 3.2: Chronos Engine --- */
+<<if $gameClockActive is true>>
+	<<addTime 1>>                                   /* Automatically add 1 minute per passage */
+<</if>>
+
+<</nobr>>

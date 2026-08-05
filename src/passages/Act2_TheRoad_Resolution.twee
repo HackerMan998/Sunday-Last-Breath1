@@ -1,0 +1,126 @@
+:: Act2_TheRoad_Resolution {"position":"600,1000","size":"100,100"}
+<<nobr>>
+<h2>THE DESTINATION</h2>
+
+<<if $vane_status == "joined">>
+    <<chat "Vane" "image/avatars/vane.gif" "right" "So... where exactly are we going?">>
+    <br>
+    
+    <<if $anchor == "none">>
+        <<chat "You" "image/avatars/player.gif" "left" "Nowhere. I don't have anyone waiting for me. We just drive until we hit the mountains. We find somewhere defensible, and we survive. That's the plan.">>
+        <br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Right. Survive. I can do that.">>
+
+    <<elseif $anchor == "parents">>
+        <<chat "You" "image/avatars/player.gif" "left" "Out of the city. We're finding my folks.">>
+        <br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Think they're okay out there?">>
+        <br>
+        <<chat "You" "image/avatars/player.gif" "left" "If anyone is, it's them. My dad's been preparing for doomsday since the 90s, and my mom is terrifying when her routine is interrupted. I guarantee they took over the neighborhood block watch by breakfast.">>
+        <br>
+        Vane manages a faint, tired smile.
+        <br><br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Good. Let's go find them.">>
+
+    <<elseif $anchor == "partner_f">>
+        <<chat "You" "image/avatars/player.gif" "left" "Out of the city. We're finding my $anchor_rel, $anchor_name.">>
+        <br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Think she's okay out there?">>
+        <br>
+        <<chat "You" "image/avatars/player.gif" "left" "Honestly? I'm more worried about whatever gets in her way. She's a high school vice principal. You think this chaos is a crisis? Try managing five hundred teenagers during a fire drill.">>
+        <br>
+        Vane manages a faint, tired smile. 
+        <br><br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Tough lady, huh?">>
+        <br>
+        <<chat "You" "image/avatars/player.gif" "left" "Terrifying when she wants to be. Give her a megaphone and she'll have a militia organized by lunch. She's fine.">>
+
+    <<elseif $anchor == "partner_m">>
+        <<chat "You" "image/avatars/player.gif" "left" "Out of the city. We're finding my $anchor_rel, $anchor_name.">>
+        <br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Think he's okay out there?">>
+        <br>
+        <<chat "You" "image/avatars/player.gif" "left" "Honestly? I'm more worried about whatever gets in his way. He's a high school athletic director. He's used to screaming at people until they get in line and follow the play.">>
+        <br>
+        Vane manages a faint, tired smile. 
+        <br><br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Tough guy, huh?">>
+        <br>
+        <<chat "You" "image/avatars/player.gif" "left" "Too stubborn to die. Give him five minutes and he'd probably have the whole neighborhood drafted into a defensive line. He's fine.">>
+
+    <<elseif $anchor == "partner_nb">>
+        <<chat "You" "image/avatars/player.gif" "left" "Out of the city. We're finding my $anchor_rel, $anchor_name.">>
+        <br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Think they're okay out there?">>
+        <br>
+        <<chat "You" "image/avatars/player.gif" "left" "Honestly? I'm more worried about whatever gets in their way. They're a high school counselor. You think this chaos is bad? Try dealing with three hundred panicking kids. They know exactly how to make people listen.">>
+        <br>
+        Vane manages a faint, tired smile. 
+        <br><br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Tough, huh?">>
+        <br>
+        <<chat "You" "image/avatars/player.gif" "left" "Force of nature. Give them five minutes and they'll have a fortified commune up and running. They're fine.">>
+
+    <</if>>
+
+<<else>>
+    /* ALONE BRANCH (No Vane) */
+    
+    <<if $anchor == "none">>
+        You say it aloud to the empty car. "Nowhere."
+        <br><br>
+        You don't have anyone waiting for you. There is no tragic rescue mission in your future. There is only the road, the fuel in the tank, and your own heartbeat. You are going to survive because you refuse to die here. That has to be enough.
+        
+    <<elseif $anchor == "parents">>
+        You close your eyes for a brief second. You picture your folks. Safe, hopefully. Far away from the concrete and the sirens and the blood. 
+        <br><br>
+        If anyone is okay out there, it's them. Your dad's been preparing for doomsday since the 90s, and your mom is terrifying when her routine is interrupted. You guarantee they took over the neighborhood block watch by breakfast.
+        <br><br>
+        You promised you'd be there. If you die in this city, you break that promise. The thought acts like a physical brace against your spine. The shaking in your hands stops. Your grip on the wheel becomes iron.
+        
+    <<elseif $anchor == "partner_f">>
+        You close your eyes for a brief second. You picture your $anchor_rel, $anchor_name. Safe, hopefully. Far away from the concrete and the sirens and the blood. 
+        <br><br>
+        If anyone is okay out there, it's her. She's a high school vice principal. You think this chaos is a crisis? Try managing five hundred teenagers during a fire drill. Give her a megaphone and she'll have a militia organized by lunch.
+        <br><br>
+        You promised you'd be there. If you die in this city, you break that promise. The thought acts like a physical brace against your spine. The shaking in your hands stops. Your grip on the wheel becomes iron.
+        
+    <<elseif $anchor == "partner_m">>
+        You close your eyes for a brief second. You picture your $anchor_rel, $anchor_name. Safe, hopefully. Far away from the concrete and the sirens and the blood. 
+        <br><br>
+        If anyone is okay out there, it's him. He's a high school athletic director. Too stubborn to die. He's used to screaming at people until they get in line and follow the play. Give him five minutes and he'd probably have the whole neighborhood drafted into a defensive line. 
+        <br><br>
+        You promised you'd be there. If you die in this city, you break that promise. The thought acts like a physical brace against your spine. The shaking in your hands stops. Your grip on the wheel becomes iron.
+        
+    <<elseif $anchor == "partner_nb">>
+        You close your eyes for a brief second. You picture your $anchor_rel, $anchor_name. Safe, hopefully. Far away from the concrete and the sirens and the blood. 
+        <br><br>
+        If anyone is okay out there, it's them. They're a high school counselor, an absolute force of nature. You think this chaos is bad? Try dealing with three hundred panicking kids. Give them five minutes and they'll have a fortified commune up and running. 
+        <br><br>
+        You promised you'd be there. If you die in this city, you break that promise. The thought acts like a physical brace against your spine. The shaking in your hands stops. Your grip on the wheel becomes iron.
+    <</if>>
+<</if>>
+
+/* --- STAT RECOVERY & TRANSITION --- */
+<br><br>
+<span style="color:var(--accent-green); font-weight:bold;">[+10 HUMANITY][+20 STAMINA]</span>
+
+<<set $hum = Math.min(100, $hum + 10)>>
+<<set $stamina = Math.min($stamina_max, $stamina + 20)>>
+
+<<run window.animateStatBar('.bar-fill.humanity', $hum, 100)>>
+<<run window.animateStatBar('.bar-fill.stamina', $stamina, $stamina_max)>>
+
+<br><br>
+You shift the car into gear. You don't look back at the burning city. You drive into the night.
+
+/* --- Final Button to next Act --- */
+<div class="choice-menu" style="margin-top: 30px;">
+    <<button "CONTINUE TO ACT 2: EXODUS">>
+        <<if $vane_status == "joined">>
+            <<run setup.sound.fade("vane_breathing", 2000)>>
+        <</if>>
+        <<goto "Act2_Highway">>
+    <</button>>
+</div>
+<</nobr>>

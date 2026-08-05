@@ -1,0 +1,508 @@
+:: Act3_School_Infirmary {"position":"700,1700","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "infirmary">>
+<<set $activeMap to "Highschool Ground">>
+<</nobr>>
+
+<h2>GROUND FLOOR — EMERGENCY INFIRMARY</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+    <img src="image/Act3_Timberline/infirmary.gif"
+         style="max-width: 100%; border: 1px solid #333;">
+</div>
+
+<<if not $thorne_met>>
+
+    <p>
+        The smell reaches you before you fully enter the room.
+    </p>
+
+    <p>
+        Antiseptic. Sweat. Old blood.
+    </p>
+
+    <p>
+        Every desk has been pushed against the walls to make space for
+        cots. Some are occupied by survivors wrapped in mismatched
+        blankets. Others are empty, their sheets folded with an
+        uncomfortable neatness.
+    </p>
+
+    <p>
+        A portable lamp flickers above the nearest cot.
+    </p>
+
+    <p>
+        A man in a stained medical coat is bent over a wounded survivor.
+        One hand presses firmly against a blood-soaked bandage while the
+        other searches through an almost empty tray of supplies.
+    </p>
+
+    <p>
+        His fingers move from one compartment to another.
+    </p>
+
+    <p>
+        Gauze.
+        Empty.
+    </p>
+
+    <p>
+        Alcohol wipes.
+        Empty.
+    </p>
+
+    <p>
+        Antibiotics.
+        Nothing.
+    </p>
+
+    <p>
+        The wounded survivor lets out a weak cry. The man immediately
+        leans closer.
+    </p>
+
+    <<chat "Unknown Doctor" "image/avatars/drthorne.gif" "right"
+    "Stay with me. You hear me? Keep your eyes open.">>
+
+    <p>
+        You take another step into the room.
+    </p>
+
+    <p>
+        The floorboard creaks.
+    </p>
+
+    <<chat "Unknown Doctor" "image/avatars/drthorne.gif" "right"
+    "Stop there.">>
+
+    <p>
+        He does not turn around.
+    </p>
+
+    <<chat "Unknown Doctor" "image/avatars/drthorne.gif" "right"
+    "If you're injured, sit against the wall and wait. If you're armed, keep the weapon pointed at the floor. And if you're here to ask whether anyone has seen your friends, ask quietly.">>
+
+    <p>
+        The survivor on the cot suddenly convulses.
+    </p>
+
+    <p>
+        The doctor grabs the patient's shoulder and presses harder against
+        the wound. For several seconds, the only sounds are strained
+        breathing and the faint hum of the emergency lamp.
+    </p>
+
+    <p>
+        Finally, the patient settles.
+    </p>
+
+    <p>
+        The man slowly removes his blood-stained gloves and turns toward
+        you.
+    </p>
+
+    <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+    "Dr. Adrian Thorne. I used to work at St. Gabriel's Medical Center. Now I work wherever people are still breathing.">>
+
+    <<set $thorne_met to true>>
+    <<set $thorne_intro_seen to true>>
+
+    <br>
+
+    <div class="choice-menu">
+
+        <button>
+            <<link "Ask about the wounded survivor">>
+                <<addTime 3>>
+                <<set $thorne_topic_patient to true>>
+                <<goto "Act3_School_Infirmary">>
+            <</link>>
+            <span class="btn-sub">
+                Find out how serious the situation is.
+            </span>
+        </button>
+
+        <button>
+            <<link "Ask what happened to this place">>
+                <<addTime 3>>
+                <<set $thorne_topic_school to true>>
+                <<goto "Act3_School_Infirmary">>
+            <</link>>
+            <span class="btn-sub">
+                Learn how the school became an emergency shelter.
+            </span>
+        </button>
+
+        <button>
+            <<link "Ask if Thorne needs help">>
+                <<addTime 2>>
+                <<set $thorne_help_offer to true>>
+                <<goto "Act3_School_Infirmary">>
+            <</link>>
+            <span class="btn-sub">
+                Offer assistance before asking for anything.
+            </span>
+        </button>
+
+    </div>
+
+<<elseif not $helped_thorne>>
+
+    <p>
+        The infirmary is quieter than before, but not peaceful.
+    </p>
+
+    <p>
+        Someone coughs behind a curtain. A patient shifts beneath a thin
+        blanket. The portable lamp continues to flicker over the treatment
+        area.
+    </p>
+
+    <p>
+        Dr. Thorne is cleaning dried blood from a pair of forceps. He looks
+        up when you enter, then returns to his work.
+    </p>
+
+    <<if $thorne_topic_patient>>
+
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+        "The patient on that cot has a deep wound and a fever. I can keep him stable for now, but 'for now' is doing a lot of work.">>
+
+        <p>
+            He places the forceps on the tray.
+        </p>
+
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+        "People think the worst part is the wound. It usually isn't. Infection is quieter. It waits until everyone believes the danger has passed.">>
+
+    <</if>>
+
+    <<if $thorne_topic_school>>
+
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+        "The school had generators, running water, and enough classrooms to separate the sick from everyone else. That made it useful.">>
+
+        <p>
+            He glances toward the occupied cots.
+        </p>
+
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+        "Then the roads closed. Supplies stopped arriving. Useful became desperate.">>
+
+    <</if>>
+
+    <<if $thorne_help_offer>>
+
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+        "Help? Yes. I need help. But I don't need another person standing in the doorway telling me they're willing.">>
+
+        <p>
+            He opens a metal tray. Inside are a few used instruments, two
+            empty medicine packets, and a roll of tape.
+        </p>
+
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+        "I need supplies. Clean bandages. Antibiotics. Painkillers. Anything that can keep an injury from becoming a death sentence.">>
+
+        <p>
+            He studies you for a moment.
+        </p>
+
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+        "Bring me something useful, and I'll remember that you came back.">>
+
+    <</if>>
+
+    <<if $thorne_quest_active>>
+
+        <br>
+
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+        "You're still looking for supplies. Good. Don't take unnecessary risks, but don't come back empty-handed either.">>
+
+        <p>
+            He gestures toward the occupied cots.
+        </p>
+
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+        "Every hour matters to someone in this room.">>
+
+    <<elseif $thorne_help_offer>>
+
+        <br>
+
+        <div class="choice-menu">
+
+            <button>
+                <<link "Accept Thorne's medical supply mission">>
+                    <<addTime 5>>
+                    <<set $thorne_quest_active to true>>
+                    <<addObjective
+                    "fetch_meds_thorne"
+                    "Find Antibiotics, Painkillers, a First Aid Kit, or clean Bandages for Dr. Thorne">>
+                    <<goto "Act3_School_Infirmary">>
+                <</link>>
+                <span class="btn-sub">
+                    <b style="color:var(--accent-green);">[NEW OBJECTIVE]</b>
+                    Search for medical supplies.
+                </span>
+            </button>
+
+            <button>
+                <<link "Tell Thorne you need time to prepare">>
+                    <<addTime 1>>
+                    <<goto "Act3_School_Infirmary">>
+                <</link>>
+                <span class="btn-sub">
+                    Leave the mission for later.
+                </span>
+            </button>
+
+        </div>
+
+    <<else>>
+
+        <br>
+
+        <div class="choice-menu">
+
+            <button>
+                <<link "Ask if Thorne needs help">>
+                    <<addTime 2>>
+                    <<set $thorne_help_offer to true>>
+                    <<goto "Act3_School_Infirmary">>
+                <</link>>
+                <span class="btn-sub">
+                    Ask what the infirmary needs.
+                </span>
+            </button>
+
+        </div>
+
+    <</if>>
+
+    <<if $inventory.find(i =>
+        i.id === "Antibiotics" ||
+        i.id === "Painkillers" ||
+        i.id === "First Aid Kit" ||
+        i.id === "Bandage")>>
+
+        <br>
+
+        <div class="choice-menu">
+
+            <button>
+                <<link "Give medical supplies to Dr. Thorne [INVENTORY]">>
+
+                    <<addTime 10>>
+
+                    <<set $helped_thorne to true>>
+                    <<set $thorne_quest_active to false>>
+
+                    <<completeObjective "fetch_meds_thorne">>
+                    <<purgeCompleted>>
+
+                    <<set $hum to Math.min(100, $hum + 20)>>
+
+                    <<run window.gainXP(30)>>
+                    <<run window.gainTrust(20)>>
+
+                    <<if $inventory.find(i => i.id === "Antibiotics")>>
+
+                        <<run setup.removeItem("Antibiotics", 1)>>
+
+                    <<elseif $inventory.find(i => i.id === "Painkillers")>>
+
+                        <<run setup.removeItem("Painkillers", 1)>>
+
+                    <<elseif $inventory.find(i => i.id === "First Aid Kit")>>
+
+                        <<run setup.removeItem("First Aid Kit", 1)>>
+
+                    <<else>>
+
+                        <<run setup.removeItem("Bandage", 1)>>
+
+                    <</if>>
+
+                    <<goto "Act3_School_Infirmary">>
+
+                <</link>>
+
+                <span class="btn-sub">
+                    <b style="color:var(--accent-green);">
+                        [+20 HUMANITY] [+20 TRUST] [+30 XP]
+                    </b>
+                    Hand over the medical supplies.
+                </span>
+
+            </button>
+
+        </div>
+
+    <</if>>
+
+<<else>>
+
+    <p>
+        The infirmary has changed.
+    </p>
+
+    <p>
+        The smell of blood is still there, but it no longer overwhelms
+        everything else. Fresh bandages have replaced several of the
+        stained ones. The supply tray is no longer empty.
+    </p>
+
+    <p>
+        A patient near the wall is sitting upright, drinking water.
+        Another sleeps beneath a clean blanket.
+    </p>
+
+    <p>
+        Dr. Thorne stands beside the treatment table, organizing medicine
+        into small labeled containers.
+    </p>
+
+    <p>
+        When he notices you, his expression softens slightly.
+    </p>
+
+    <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+    "You came back. And you brought what we needed.">>
+
+    <p>
+        He closes one of the containers.
+    </p>
+
+    <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+    "The patient from Cot Four is stable. He may even keep the leg. That's more than I was prepared to promise earlier.">>
+
+    <p>
+        Thorne looks across the room at the survivors resting on the cots.
+    </p>
+
+    <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+    "You didn't just bring medicine. You bought these people time. Around here, time is worth more than almost anything.">>
+
+    <<if not $thorne_thanks_seen>>
+
+        <<set $thorne_thanks_seen to true>>
+
+        <p>
+            He reaches beneath the treatment table and places a compact
+            medical kit beside you.
+        </p>
+
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+        "From now on, if you're hurt, come here. I won't promise miracles. I can promise I'll try.">>
+
+    <<else>>
+
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+        "Try not to make a habit of needing me. But if you do, the infirmary is open.">>
+
+    <</if>>
+
+    <br>
+
+    <<if $hp < $hp_max>>
+
+        <div class="choice-menu">
+
+            <button>
+
+                <<link "Let Dr. Thorne treat your injuries">>
+
+                    <<addTime 15>>
+                    <<set $hp to $hp_max>>
+
+                    <<goto "Act3_School_Infirmary">>
+
+                <</link>>
+
+                <span class="btn-sub">
+
+                    <b style="color:var(--accent-green);">
+                        [MAX HP RESTORED]
+                    </b>
+
+                    Thorne cleans and dresses your wounds.
+
+                </span>
+
+            </button>
+
+        </div>
+
+    <<else>>
+
+        <p style="color:var(--accent-green);">
+
+            Your wounds are treated, and your health is fully restored.
+
+        </p>
+
+    <</if>>
+
+    <br>
+
+    <div class="choice-menu">
+
+        <button>
+
+            <<link "Ask Thorne how the patients are doing">>
+
+                <<addTime 3>>
+                <<set $thorne_followup_patients to true>>
+
+                <<goto "Act3_School_Infirmary">>
+
+            <</link>>
+
+            <span class="btn-sub">
+
+                Check on the survivors you helped.
+
+            </span>
+
+        </button>
+
+    </div>
+
+    <<if $thorne_followup_patients>>
+
+        <br>
+
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+        "Better than yesterday. Not all of them are out of danger, but they're alive. That's enough for today.">>
+
+        <p>
+            He pauses before returning to his work.
+        </p>
+
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right"
+        "The school remembers who helps. People talk. You've earned more trust here than you may realize.">>
+
+    <</if>>
+
+<</if>>
+
+<br><br>
+
+<div class="choice-menu">
+
+    <button>
+
+        <<link "🚪 Exit Infirmary to Hallway [WEST]">>
+
+            <<set $currentLocation to "hall_g_east_1">>
+
+            <<goto "Act3_SchoolGFloor">>
+
+        <</link>>
+
+    </button>
+
+</div>

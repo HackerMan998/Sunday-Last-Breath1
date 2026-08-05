@@ -1,0 +1,220 @@
+:: Act3_ArrivalSchool {"position":"500,1600","size":"100,100"}
+<<nobr>>
+/* =====================================================================
+   ACT 3: ARRIVAL — INITIALIZATION & STATE SETUP
+   ===================================================================== */
+
+/* 1. Track Player Location for the SVG Map */
+<<set $currentLocation to "security_foyer">>
+<<set $activeMap to "Highschool Ground">> /* Loads the West Wing SVG */
+
+/* 2. Setup Safehouse Variables & Testing Fallbacks */
+<<if ndef $companion_reyes>>
+    <<set $companion_reyes to true>>
+<</if>>
+<<if ndef $companions>>
+    <<set $companions to []>>
+<</if>>
+
+<<if ndef $act3_phase>>
+    <<set $act3_phase to 1>>
+    <<set $inSafehouse to true>>
+    <<set $safehouseTrust to 0>>
+    <<set $weapons_confiscated to false>>
+    <<set $smuggled_weapon to "none">>
+    
+    /* Complete arrival objective and sweep HUD */
+    <<completeObjective "reach_safehaven">>
+    <<purgeCompleted>>
+    
+    /* Create a stash to hold the player's taken gear */
+    <<set $quartermaster_stash to []>>
+    
+    /* AUDIO: Highschool Exterior Ambiance */
+    <<run setup.sound.stopAll()>>
+    <<run setup.sound.play("base_ambience", "audio/bgm/rain_and_distant_chatter.mp3", true, 0.5)>>
+<</if>>
+<</nobr>>
+
+/* ═════════════════════════════════════════════════════════════════════
+   PHASE 1 — THE BARRICADES
+   ═════════════════════════════════════════════════════════════════════ */
+<<if $act3_phase == 1>>
+    <h2>TIMBERLINE REGIONAL — THE GATES</h2>
+
+    <div style="margin-bottom: 15px; text-align: center;">
+        <<if _arrivedLate>>
+            <img src="image/Act3_Timberline/exterior_morning.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+        <<else>>
+            <img src="image/Act3_Timberline/exterior_night.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+        <</if>>
+    </div>
+
+    You bring the car to a halt in front of the fortified highschool gates. Overturned school buses form a rigid perimeter. 
+    <br><br>
+    
+    <<if _arrivedLate>>
+        In the gray morning light, the scale of the operation is clear. Heavily armed sentries patrol the rooftops.
+    <<else>>
+        Blinding halogen floodlights instantly snap onto your windshield, pinning you in the dark.
+    <</if>>
+    <br><br>
+    
+    <span style="color:var(--accent-red); font-weight:bold;">"KILL THE ENGINE! HANDS WHERE WE CAN SEE THEM!"</span> a voice bellows through a megaphone. 
+    <br><br>
+
+    <<if $companion_reyes>>
+        /* -----------------------------------------------------
+           ARRIVAL WITH REYES (Easy Entry)
+           ----------------------------------------------------- */
+        Before you can react, Reyes opens the passenger door and steps out into the light. She raises her police badge high.
+        <br><br>
+        <<chat "Reyes" "image/avatars/reyes.gif" "right" "Stand down! It's Deputy Reyes! I've got survivors with me. Open the damn gate!">>
+        <br>
+        The tension instantly evaporates. The rifles lower. A heavy chain rattles, and the massive steel gate slowly drags open.
+        <br><br>
+        <<chat "Reyes" "image/avatars/reyes.gif" "right" "Drive through. Park near the foyer. I'll handle the intake.">>
+
+        <div class="choice-menu">
+            <button>
+                <<link "Drive into the compound">>
+                    <<set $act3_phase to 2>>
+                    <<goto "Act3_ArrivalSchool">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-blue);">[REYES]</b> She vouches for you. You bypass the hostile interrogation.</span>
+            </button>
+        </div>
+
+    <<else>>
+        /* -----------------------------------------------------
+           ARRIVAL ALONE / WITH CIVILIANS (Hostile Entry)
+           ----------------------------------------------------- */
+        You put the car in park and slowly raise your hands. Three guards approach the vehicle, rifles leveled directly at your chest. 
+        <br><br>
+        They yank your door open, dragging you out onto the wet asphalt. They pat you down roughly, checking for bites.
+        <br><br>
+        <<if def $companions and $companions.length > 0>>
+            They pull your companions out of the car next, forcing you all into a tight line.
+        <</if>>
+        <br>
+        "No bites," one of the guards grunts. "They're clean. Move them inside to Screening."
+
+        <div class="choice-menu">
+            <button>
+                <<link "Comply and walk inside">>
+                    <<set $act3_phase to 2>>
+                    <<goto "Act3_ArrivalSchool">>
+                <</link>>
+                <span class="btn-sub">You don't have a choice. You are escorted into the building at gunpoint.</span>
+            </button>
+        </div>
+    <</if>>
+
+/* ═════════════════════════════════════════════════════════════════════
+   PHASE 2 — THE SCREENING ROOM (CONFISCATION)
+   ═════════════════════════════════════════════════════════════════════ */
+<<elseif $act3_phase == 2>>
+    <<set $currentLocation to "screening">>
+    <h2>TIMBERLINE REGIONAL — SCREENING ROOM</h2>
+
+    <div style="margin-bottom: 15px; text-align: center;">
+        <img src="image/Act3_Timberline/screening.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+    </div>
+
+    You are brought into what used to be a generic utility classroom. Now, it's a sterile intake zone. A grizzled, exhausted man with a military buzzcut stands behind a foldable table covered in weapons. 
+    <br><br>
+    <<chat "Sgt. Vance" "image/avatars/quartermaster_sgtvance.gif" "right" "I'm Sergeant Vance, Quartermaster. Welcome to Timberline. If you want to stay, you follow the rules. Rule number one: No civilian carries primary firearms inside the perimeter.">>
+    <br>
+    He points a thick finger at your gear. 
+    <br><br>
+    <<chat "Sgt. Vance" "image/avatars/quartermaster_sgtvance.gif" "right" "Hand over the long guns and the heavy ordinance. You'll get a receipt. You can check them out when you go on patrol. But in here, you're unarmed.">>
+    <br>
+    <<if $companion_reyes>>
+        Reyes gives you a subtle nod. She has to surrender her shotgun too.
+    <</if>>
+
+    <div class="choice-menu">
+        <!-- ALWAYS AVAILABLE: SURRENDER GEAR -->
+        <button>
+            <<link "Surrender your weapons">>
+                /* Move weapons from inventory to stash */
+                <<for _i to $inventory.length - 1; _i >= 0; _i-->>
+                    <<set _item to setup.items[$inventory[_i].id]>>
+                    <<if _item.type == "weapon">>
+                        <<run $quartermaster_stash.push($inventory[_i])>>
+                        <<run $inventory.splice(_i, 1)>>
+                    <</if>>
+                <</for>>
+                <<set $equip.weapon to "none">>
+                <<set $weapons_confiscated to true>>
+                <<set $safehouseTrust += 10>>
+                <<set $act3_phase to 3>>
+                <<goto "Act3_ArrivalSchool">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-green);">[+10 TRUST]</b> Comply with base rules. Your weapons are moved to the Locker Room.</span>
+        </button>
+
+        <!-- TRAIT CHECK: SMUGGLE A WEAPON -->
+        <<if hasTrait("LIE DETECTOR") or hasTrait("DIPLOMAT") or $skills.stealth >= 3>>
+            <<if $inventory.find(i => setup.items[i.id].type == "weapon" && setup.items[i.id].desc.includes("pistol") || setup.items[i.id].desc.includes("blade"))>>
+                <button style="border-left-color: var(--accent-gold) !important;">
+                    <<link "Hide a sidearm in your jacket">>
+                        /* Logic to keep one small weapon, stash the rest */
+                        <<set _keptWeapon to false>>
+                        <<for _i to $inventory.length - 1; _i >= 0; _i-->>
+                            <<set _item to setup.items[$inventory[_i].id]>>
+                            <<if _item.type == "weapon">>
+                                <<if not _keptWeapon and (_item.desc.includes("pistol") or _item.desc.includes("blade"))>>
+                                    <<set $smuggled_weapon to $inventory[_i].id>>
+                                    <<set _keptWeapon to true>>
+                                <<else>>
+                                    <<run $quartermaster_stash.push($inventory[_i])>>
+                                    <<run $inventory.splice(_i, 1)>>
+                                <</if>>
+                            <</if>>
+                        <</for>>
+                        <<set $equip.weapon to $smuggled_weapon>>
+                        <<set $weapons_confiscated to true>>
+                        <<set $act3_phase to 3>>
+                        <<goto "Act3_ArrivalSchool">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-gold);">[DIPLOMAT / LIE DETECTOR / STEALTH 3]</b> Distract Vance just long enough to slip a pistol or knife into your boot. He takes the heavy gear.</span>
+                </button>
+            <</if>>
+        <</if>>
+    </div>
+
+
+/* ═════════════════════════════════════════════════════════════════════
+   PHASE 3 — RELEASED INTO THE HUB
+   ═════════════════════════════════════════════════════════════════════ */
+<<elseif $act3_phase == 3>>
+    <<set $currentLocation to "security_foyer">>
+    <h2>TIMBERLINE REGIONAL — FOYER</h2>
+
+    Vance tags your gear and shoves it into a heavy canvas bag. 
+    <br><br>
+    
+    <<if $smuggled_weapon != "none">>
+        You feel the cold steel of your <<print $smuggled_weapon>> pressed against your ribs. He didn't notice a thing.
+        <br><br>
+    <</if>>
+
+    <<if $companion_reyes>>
+        <<chat "Reyes" "image/avatars/reyes.gif" "right" "I'm going upstairs to brief the Commander. Sit tight. Stay out of trouble. I'll come get you when they're ready to see you.">>
+    <<else>>
+        <<chat "Sgt. Vance" "image/avatars/quartermaster_sgtvance.gif" "right" "The Commander is dealing with a crisis on the 1st Floor right now. You wait down here. Canteen is down the hall. Infirmary is across the foyer. Don't make me hunt you down.">>
+    <</if>>
+    <br>
+    The heavy metal doors click open. You step out into the sprawling, fortified highschool. You made it. You are safe. For now.
+    <br><br>
+
+    <div class="choice-menu">
+        <button style="border-left-color: var(--accent-blue) !important;">
+            <<link "Enter the Safehouse Hub">>
+                <<goto "Act3_SchoolGFloor">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-blue);">[FREE ROAM]</b> Explore the highschool, talk to survivors, and trade supplies.</span>
+        </button>
+    </div>
+<</if>>

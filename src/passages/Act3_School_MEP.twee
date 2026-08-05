@@ -1,0 +1,39 @@
+:: Act3_School_MEP {"position":"900,1700","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "mep_space">>
+<<set $activeMap to "Highschool Ground">>
+<</nobr>>
+
+<h2>GROUND FLOOR — MEP MECHANICAL SPACE</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+    <img src="image/Act3_Timberline/mep.gif" style="max-width: 100%; border: 1px solid #333;">
+</div>
+
+Mechanical, electrical, and plumbing maintenance room. Pipes groan overhead as the generator vibrates through the concrete.
+
+<<if not $looted_mep>>
+    <div class="choice-menu">
+        <button>
+            <<link "Search the generator workbench">>
+                <<addTime 5>>
+                <<set $looted_mep to true>>
+                <<run setup.addItem("Fuse", 1)>>
+                <<run setup.addItem("Multi-Tool", 1)>>
+                <<goto "Act3_School_MEP">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOOT]</b> Found 1x Fuse, 1x Multi-Tool.</span>
+        </button>
+    </div>
+<<else>>
+    The electrical workbench is cleared.
+<</if>>
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "🚪 Exit MEP Space to Locker Room [SOUTH]">>
+            <<goto "Act3_School_LockerRoom">>
+        <</link>>
+    </button>
+</div>

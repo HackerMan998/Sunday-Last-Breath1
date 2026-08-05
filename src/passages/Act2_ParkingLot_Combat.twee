@@ -1,0 +1,165 @@
+:: Act2_ParkingLot_Combat {"position":"500,900","size":"100,100"}
+<<nobr>>
+
+/* =================================================================
+   PHASE 1: INITIALIZE COMBAT (RUNS EXACTLY ONCE)
+   Sets up the enemy horde array and opening flavor text.
+================================================================= */
+<<if ndef $parking_combat_started>>
+    <<set $parking_combat_started to true>>
+    
+    <<set $horde to[
+        {name: "Infected Commuter", hp: 40, acc: 30, ev: 5, img: "image/Act2Street/zombie_commuter.png"},
+        {name: "Infected Security Guard", hp: 50, acc: 35, ev: 5, img: "image/Act2Street/zombie_guard.png"}
+    ]>>
+    
+    <<if $vane_status == "joined">>
+        <div style="padding:10px; background:rgba(0,100,0,0.2); border-left:3px solid var(--accent-green); font-style:italic; margin-bottom:15px; color:#99cc99;">
+            "I'll get the car started!" Vane yells, dodging past you and diving into the driver's side with his multi-tool. "Just keep them off me for thirty seconds!"
+        </div>
+    <<else>>
+        <div style="padding:10px; background:rgba(138,28,28,0.2); border-left:3px solid var(--accent-red); font-style:italic; margin-bottom:15px; color:#ff9999;">
+            The car alarm wails. You spin around, weapon raised, as the shadows detach themselves from the walls.
+        </div>
+    <</if>>
+<</if>>
+
+<h2>THE PARKING LOT — COMBAT</h2>
+
+
+/* =================================================================
+   PHASE 2: THE COMBAT LOOP
+   Displays the UI, enemies, and attack button while enemies are alive.
+================================================================= */
+<<if $horde.length > 0>>
+    
+    <!-- ENEMY IMAGE DISPLAY -->
+    <div style="text-align:center; margin-bottom: 20px; background: rgba(80,0,0,0.2); border: 1px solid #8a1c1c; padding: 15px;">
+        <div style="margin-bottom: 15px; text-align: center;">
+            <img @src="$horde[0].img" style="max-width: 100%; border: 1px solid #8a1c1c; box-shadow: 0 4px 8px rgba(138,28,28,0.3); filter: grayscale(20%) contrast(1.2);">
+        </div>
+    </div>
+    
+    <!-- ENEMIES REMAINING LIST -->
+    <div style="text-align:center; margin-bottom: 20px; background: rgba(80,0,0,0.2); border: 1px solid #8a1c1c; padding: 15px;">
+        <h3 style="color:var(--accent-red); margin-top:0;">ENEMIES REMAINING: <<print $horde.length>></h3>
+        
+        <div style="border:1px solid #333; background:#000; padding:10px; max-width:300px; margin:0 auto; text-align:left;">
+            <<for _i, _z range $horde>>
+                <div style="border-bottom:1px dashed #333; padding:5px; font-family: monospace;">
+                    TARGET: <span style="color:#aaa">_z.name</span> (Evasion: _z.ev%)
+                </div>
+            <</for>>
+        </div>
+    </div>
+
+    <!-- PLAYER EQUIPMENT & ATTACK LOGIC -->
+    <div style="text-align:center; padding: 15px; border: 1px solid #444; background-color: #050404;">
+        <b>EQUIPPED:</b> 
+        <<if $equip.weapon is "none">>
+            <span style="color:var(--accent-red)">UNARMED (Fists)</span>
+        <<else>>
+            <span style="color:var(--accent-blue)">$equip.weapon</span>
+        <</if>>
+        <br><br>
+        
+        <!-- The JS engine will inject typewriter text here after an attack -->
+        <div id="combat-log" style="min-height:20px; margin-bottom:15px; color:#ccc; font-family:monospace;"></div>
+
+        <div class="choice-menu">
+            <<button "ATTACK TARGET">>
+                <<run window.combatTurn(0)>>
+            <</button>>
+        </div>
+    </div>
+
+
+/* =================================================================
+   PHASE 3: POST-COMBAT CINEMATIC
+   Triggers automatically when $horde is empty (length == 0).
+================================================================= */
+<<else>>
+    
+    <!-- VICTORY REWARD -->
+    <div style="text-align:center; margin-bottom: 20px;">
+        <h2 style="color:var(--accent-green)">TARGETS ELIMINATED</h2>
+        <br>
+        <span style="color:var(--accent-gold); font-size: 1.2em; font-weight: bold;">[+50 XP]</span>
+        <<if not $parking_lot_xp>>
+            <<run window.gainXP(50)>>
+            <<set $parking_lot_xp to true>>
+        <</if>>
+    </div>
+
+    The second infected hits the pavement and doesn't get back up. You lower your weapon, chest heaving. Your lungs burn from the adrenaline. 
+    <br><br>
+    You don't hear the third one until it's already on you.
+    <br><br>
+    
+    <!-- JUMPSCARE AMBUSH -->
+    <div style="margin-bottom: 15px; text-align: center;">
+        <img src="image/Act2Street/mechanic_ambush.gif" style="max-width: 100%; border: 1px solid var(--accent-red); box-shadow: 0 0 15px rgba(138,28,28,0.4);">
+    </div>
+    
+    It drops from the roof of an adjacent toll booth—a massive, ruined man wearing a blood-soaked mechanic's shirt. He hits you squarely in the chest, the sheer momentum knocking you flat on your back against the asphalt.
+    <br><br>
+    
+    <<run window.shakeScreen(30)>>
+    <<set $hp -= 15>>
+    <<run window.animateStatBar('.bar-fill.hp', $hp, $hp_max)>>
+    <span style="color:var(--accent-red); font-weight:bold;">-15 HP (Ambush)</span>
+    <br><br>
+    
+    You grapple his shoulders, your boots scrambling for purchase. His jaws snap wildly at your face, so close you can smell the putrid, rotting meat in his teeth. His strength is impossible. Your arms are buckling. 
+    <br><br>
+    
+    /* -------------------------------------------------------------
+       BRANCH A: VANE IS WITH THE PLAYER
+    ------------------------------------------------------------- */
+    <<if $vane_status == "joined">>
+        Suddenly, blinding halogen headlights wash over you. 
+        <br><br>
+        The roar of a revving engine drowns out the creature's gurgling snarl. 
+        <br><br>
+        
+        <div style="margin-bottom: 15px; text-align: center;">
+            <img src="image/Act2Street/vane_ram.gif" style="max-width: 100%; border: 1px solid var(--accent-blue); box-shadow: 0 4px 8px rgba(93,141,181,0.4);">
+        </div>
+        
+        The blue sedan lurches forward. Tires squeal on the pavement as Vane dumps the clutch. The car broadsides the infected mechanic at forty miles an hour. The impact sounds like a butcher dropping a slab of meat on a block. The creature is launched ten feet into the air, crumpling against a concrete pillar in a spray of dark gore.
+        <br><br>
+        
+        <<run window.shakeScreen(40)>>
+        You lie there on the asphalt, completely untouched, staring at the empty space where the monster just was. 
+        <br><br>
+        The passenger door kicks open. Vane leans over from the driver's seat, gripping the steering wheel tight. His face is pale, but he's grinning like a madman.
+        <br><br>
+        "Get in!" he yells.
+        
+    /* -------------------------------------------------------------
+       BRANCH B: PLAYER IS ALONE
+    ------------------------------------------------------------- */
+    <<else>>
+        With a primal scream, you let go of his left shoulder and drive your fist upward, slamming your weapon directly under his chin. The crack of bone is deafening. The creature goes rigid, then collapses dead-weight on top of you.
+        <br><br>
+        You shove the corpse off and drag yourself to your feet, spitting blood. You stagger toward the blue sedan and punch out the window. It takes you three tries to cross the wires, your hands shaking violently. The engine finally roars to life.
+    <</if>>
+
+
+/* =================================================================
+   PHASE 4: EXIT SCENE
+================================================================= */
+    <br><br>
+    <div class="choice-menu">
+        <<button "Get in the car">>
+            <<completeObjective "getaway_vehicle">>
+    <<addObjective "escape_city" "Escape the city southbound on Interstate 5">>
+    <<purgeCompleted>>
+            /* Clean up the variables so we don't accidentally trigger this again */
+            <<unset $parking_combat_started>>
+            <<goto "Act2_TheRoad">>
+        <</button>>
+    </div>
+
+<</if>>
+<</nobr>>

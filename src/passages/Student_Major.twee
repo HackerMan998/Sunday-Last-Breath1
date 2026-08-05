@@ -1,0 +1,83 @@
+:: Student_Major {"position":"800,200"}
+<<nobr>>
+<center>
+    <h1>UNIVERSITY TRANSCRIPT: MAJOR</h1>
+    <div style="color:#888; font-style:italic; margin-bottom: 20px;">
+        "Before the sirens, you were preparing for a career. What was your focus?"
+    </div>
+</center>
+
+<div class="academic-container">
+
+    <!-- ROTC / SHOOTING -->
+    <div class="academic-card">
+        <img src="image/hobby/shooting.gif">
+        <div class="ac-overlay"></div>
+        <div class="ac-content">
+            <div class="ac-title" style="color:var(--accent-red)">ROTC</div>
+            <div class="ac-desc">Military science. You spent weekends at the range.</div>
+            <<button "SELECT MAJOR">>
+                <<set $skills.shooting to 3>>
+                <<goto "Student_Minor">>
+            <</button>>
+        </div>
+    </div>
+
+    <!-- SPORTS / MELEE -->
+    <div class="academic-card">
+        <img src="image/hobby/melee.gif">
+        <div class="ac-overlay"></div>
+        <div class="ac-content">
+            <div class="ac-title" style="color:var(--accent-gold)">SPORTS</div>
+            <div class="ac-desc">Varsity combat sports. How to use your body as a weapon.</div>
+            <<button "SELECT MAJOR">>
+                <<set $skills.melee to 3>>
+                <<goto "Student_Minor">>
+            <</button>>
+        </div>
+    </div>
+
+    <!-- TRACK / STEALTH -->
+    <div class="academic-card">
+        <img src="image/hobby/stealth.gif">
+        <div class="ac-overlay"></div>
+        <div class="ac-content">
+            <div class="ac-title" style="color:#2ecc71">TRACK</div>
+            <div class="ac-desc">Outdoor survival. Move through terrain without being noticed.</div>
+            <<button "SELECT MAJOR">>
+                <<set $skills.stealth to 3>>
+                <<goto "Student_Minor">>
+            <</button>>
+        </div>
+    </div>
+
+    <!-- CS / TECH -->
+    <div class="academic-card">
+        <img src="image/hobby/tech.gif">
+        <div class="ac-overlay"></div>
+        <div class="ac-content">
+            <div class="ac-title" style="color:var(--accent-blue)">CS & IT</div>
+            <div class="ac-desc">Hardware engineering. Manipulate electronics and security.</div>
+            <<button "SELECT MAJOR">>
+                <<set $skills.tech to 3>>
+                <<goto "Student_Minor">>
+            <</button>>
+        </div>
+    </div>
+
+    <!-- BIO / MEDICINE -->
+    <div class="academic-card">
+        <img src="image/hobby/medicine.gif">
+        <div class="ac-overlay"></div>
+        <div class="ac-content">
+            <div class="ac-title" style="color:#3498db">BIOLOGY</div>
+            <div class="ac-desc">Pre-med sciences. You understand anatomy and how to patch wounds.</div>
+            <<button "SELECT MAJOR">>
+                <<set $skills.medicine to 3>>
+                <<goto "Student_Minor">>
+            <</button>>
+        </div>
+    </div>
+
+</div>
+<</nobr>>

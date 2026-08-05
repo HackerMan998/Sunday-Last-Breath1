@@ -1,0 +1,41 @@
+:: Act3_School_Foyer {"position":"800,1700","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "security_foyer">>
+<<set $activeMap to "Highschool Ground">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
+<</nobr>>
+
+<h2>GROUND FLOOR — SECURITY FOYER</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+<<if _arrivedLate>>
+    <img src="image/Act3_Timberline/lobby_morning.gif" style="max-width: 100%; border: 1px solid #333;">
+<<else>>
+    <img src="image/Act3_Timberline/lobby_night.gif" style="max-width: 100%; border: 1px solid #333;">
+<</if>>
+</div>
+
+The main entrance foyer. Armed sentries guard the barricaded double doors against exterior threats.
+
+<br><br>
+<div class="choice-menu">
+    <<if hasObjective("rescue_leader_711") and not isObjectiveCompleted("rescue_leader_711")>>
+        <button style="border-left-color:var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);">
+            <<link "🚗 Depart for Route 9 7-Eleven [RESCUE LEADER]" "Act3_7Eleven_Arrival">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-red);">[ACTIVE RESCUE]</b> Drive out with Reyes to rescue Commander Miller at the 7-Eleven.</span>
+        </button>
+    <</if>>
+
+    <button>
+        <<link "➡️ Enter Screening Room [EAST]">>
+            <<goto "Act3_School_Screening">>
+        <</link>>
+    </button>
+    <button>
+        <<link "⬆️ Walk North into Hallway Junction">>
+            <<set $currentLocation to "hall_g_center">>
+            <<goto "Act3_SchoolGFloor">>
+        <</link>>
+    </button>
+</div>

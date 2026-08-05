@@ -1,0 +1,239 @@
+:: Act3_School1Floor {"position":"700,1600","size":"100,100"}
+<<nobr>>
+<<set $inSafehouse to true>>
+<<set $activeMap to "Highschool 1st Floor">>
+
+/* --- NODE MAPPER & NORMALIZER --- */
+<<if ndef $currentLocation>>
+    <<set $currentLocation to "hall_1_center">>
+<<elseif $currentLocation == "headmaster">>
+    <<set $currentLocation to "hall_1_center">>
+<<elseif $currentLocation == "radio_room">>
+    <<set $currentLocation to "hall_1_west_2">>
+<<elseif $currentLocation == "room201">>
+    <<set $currentLocation to "hall_1_west_3">>
+<<elseif $currentLocation == "room202" or $currentLocation == "roof_access">>
+    <<set $currentLocation to "hall_1_west_4">>
+<<elseif $currentLocation == "dept_offices">>
+    <<set $currentLocation to "hall_1_east_1">>
+<<elseif $currentLocation == "library">>
+    <<set $currentLocation to "hall_1_east_2">>
+<<elseif $currentLocation == "computer_lab" or $currentLocation == "server_room">>
+    <<set $currentLocation to "hall_1_east_3">>
+<<elseif $currentLocation == "stairs_1_west" or $currentLocation == "stairs_w">>
+    <<set $currentLocation to "hall_1_west_1">>
+<<elseif $currentLocation == "stairs_1_east" or $currentLocation == "stairs_e">>
+    <<set $currentLocation to "hall_1_east_1">>
+<<elseif not ["hall_1_center", "hall_1_west_1", "hall_1_west_2", "hall_1_west_3", "hall_1_west_4", "hall_1_east_1", "hall_1_east_2", "hall_1_east_3"].includes($currentLocation)>>
+    <<set $currentLocation to "hall_1_center">>
+<</if>>
+
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
+<<run setup.sound.play("upper_ambience", "audio/bgm/fluorescent_buzz.mp3", true, 0.3)>>
+
+/* Calculate NPC talk & mission count for Reyes briefing unlock */
+<<set _npcsVisited to [visited("Act3_School_Canteen"), visited("Act3_School_Infirmary"), visited("Act3_School_RadioRoom"), visited("Act3_School_Screening"), visited("Act3_School_SecurityRoom"), visited("Act3_School_Foyer")].filter(Boolean).length>>
+<<set _completedMissions to ($objectives ? $objectives.filter(function(o) { return o.status === "completed"; }).length : 0)>>
+<<set _reyesUnlocked to ($act3_reyes_unlocked or _npcsVisited >= 4 or _completedMissions >= 2 or $act3_reyes_triggered)>>
+<</nobr>>
+
+<h2>1ST FLOOR CORRIDOR — <<print $currentLocation.replace(/_/g, " ").toUpperCase()>></h2>
+
+<!-- REPLACED STATIC IMAGES WITH THE PDA MAP WIDGET -->
+<div style="margin-bottom: 20px;">
+    <<mapDisplay>>
+</div>
+
+You are on the upper level corridor. Carpeted floors muffle your footsteps. Trophy cases and administration plaques line the walls.
+
+<br><br>
+
+<<if not $act3_reyes_triggered and not isObjectiveCompleted("rescue_leader_711")>>
+    <<if _reyesUnlocked>>
+        <div style="margin-bottom:15px; padding: 10px; background: rgba(211, 84, 0, 0.15); border: 1px solid var(--accent-gold); border-left: 4px solid var(--accent-gold);">
+            <b style="color:var(--accent-gold); font-size:1.05em;">❗ [MAIN QUEST AVAILABLE]</b><br>
+            Officer Reyes is waiting at the Center Corridor square (in front of Headmaster's Office) for your Command briefing.
+        </div>
+    <<else>>
+        <div style="margin-bottom:15px; padding: 10px; background: rgba(0, 0, 0, 0.3); border: 1px solid #444; border-left: 4px solid #888;">
+            <span style="color:#ccc; font-size:0.88em;">🔒 <b>Command Briefing Locked:</b> Talk with survivors in the safehouse (Canteen, Infirmary, Radio Room, Screening Room) or complete at least 2 missions to unlock Officer Reyes & Sanctuary Command briefing.</span>
+        </div>
+    <</if>>
+<</if>>
+
+<!-- DYNAMIC ROOM ENTRY BUTTONS BASED ON CURRENT NODE -->
+<div class="choice-menu" style="margin-bottom:20px;">
+
+    /* CENTER HALLWAY (SQUARE IN FRONT OF HEADMASTER OFFICE) */
+    <<if $currentLocation == "hall_1_center">>
+        <<if not $act3_reyes_triggered and not isObjectiveCompleted("rescue_leader_711") and _reyesUnlocked>>
+            <div style="margin-bottom:15px; border: 2px solid var(--accent-gold); padding: 12px; background: rgba(80, 60, 0, 0.3); border-radius: 4px;">
+                <div style="color: var(--accent-gold); font-weight: bold; font-size: 1.05em; margin-bottom: 6px;">
+                    ❗ OFFICER REYES IS STANDING HERE IN FRONT OF THE HEADMASTER'S OFFICE
+                </div>
+                <button style="border-left-color:var(--accent-gold) !important; background: rgba(120, 90, 0, 0.4); width: 100%;">
+                    <<link "💬 Meet Officer Reyes & Command [STORY PROGRESSION]" "Act3_Meeting_Evelyn">>
+                        <<set $act3_reyes_triggered to true>>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-gold);">[MAIN QUEST]</b> Reyes signals that Sanctuary Command is ready for your briefing.</span>
+                </button>
+            </div>
+        <</if>>
+
+        <button style="border-left-color:var(--accent-blue) !important;">
+            <<link "💼 ENTER HEADMASTER'S OFFICE [SOUTH]">>
+                <<goto "Act3_School_Headmaster">>
+            <</link>>
+            <span class="btn-sub">Command office of Matriarch Evelyn.</span>
+        </button>
+
+    /* WEST HALLWAY 2: RADIO ROOM */
+    <<elseif $currentLocation == "hall_1_west_2">>
+        <button style="border-left-color:var(--accent-blue) !important;">
+            <<link "📻 ENTER SECURITY COMMS & RADIO ROOM [SOUTH]">>
+                <<goto "Act3_School_RadioRoom">>
+            <</link>>
+            <span class="btn-sub">Chloe's frequency scanner & radio station.</span>
+        </button>
+
+    /* WEST HALLWAY 3: ROOM 201 */
+    <<elseif $currentLocation == "hall_1_west_3">>
+        <button style="border-left-color:var(--accent-blue) !important;">
+            <<link "🚪 ENTER ROOM 201 [WEST]">>
+                <<goto "Act3_School_Room201">>
+            <</link>>
+            <span class="btn-sub">Ammunition & weapon storage locker.</span>
+        </button>
+
+    /* WEST HALLWAY 4: ROOM 202 & ROOF */
+    <<elseif $currentLocation == "hall_1_west_4">>
+        <button style="border-left-color:var(--accent-blue) !important;">
+            <<link "🚪 ENTER ROOM 202 [WEST]">>
+                <<goto "Act3_School_Room202">>
+            <</link>>
+            <span class="btn-sub">Off-duty guard sleeping quarter.</span>
+        </button>
+        <button style="border-left-color:var(--accent-blue) !important;">
+            <<link "🚪 ENTER ROOF ACCESS LANDING [NORTH]">>
+                <<goto "Act3_School_RoofAccess">>
+            <</link>>
+            <span class="btn-sub">Steel door to the rooftop lookout post.</span>
+        </button>
+
+    /* EAST HALLWAY 1: DEPARTMENT OFFICES */
+    <<elseif $currentLocation == "hall_1_east_1">>
+        <button style="border-left-color:var(--accent-blue) !important;">
+            <<link "📂 ENTER DEPARTMENT OFFICES [SOUTH]">>
+                <<goto "Act3_School_DeptOffices">>
+            <</link>>
+            <span class="btn-sub">Faculty lounge and records storage.</span>
+        </button>
+
+    /* EAST HALLWAY 2: LIBRARY */
+    <<elseif $currentLocation == "hall_1_east_2">>
+        <button style="border-left-color:var(--accent-blue) !important;">
+            <<link "📚 ENTER SCHOOL LIBRARY [EAST]">>
+                <<goto "Act3_School_Library">>
+            <</link>>
+            <span class="btn-sub">Reference archives and skill textbooks.</span>
+        </button>
+
+    /* EAST HALLWAY 3: COMP LAB & SERVERS */
+    <<elseif $currentLocation == "hall_1_east_3">>
+        <button style="border-left-color:var(--accent-blue) !important;">
+            <<link "💻 ENTER COMPUTER LAB [EAST]">>
+                <<goto "Act3_School_ComputerLab">>
+            <</link>>
+            <span class="btn-sub">Desktop terminals and local intranet.</span>
+        </button>
+        <button style="border-left-color:var(--accent-blue) !important;">
+            <<link "🖥️ ENTER SERVER ROOM [NORTH]">>
+                <<goto "Act3_School_ServerRoom">>
+            <</link>>
+            <span class="btn-sub">School network infrastructure.</span>
+        </button>
+    <</if>>
+
+</div>
+
+<!-- HALLWAY NODE NAVIGATION CONTROLS -->
+<div style="padding:10px; background:rgba(0,0,0,0.4); border-left:3px solid var(--accent-blue);">
+    <b style="color:var(--accent-blue);">🧭 CORRIDOR MOVEMENT:</b>
+    <hr style="border-color:#333; margin:8px 0;">
+
+    <div class="choice-menu">
+
+        <<if $currentLocation == "hall_1_center">>
+            <<button "⬅️ Walk West to West Corridor 1 (Stairs Junction)">> <<addTime 1>> <<set $currentLocation to "hall_1_west_1">> <<goto "Act3_School1Floor">> <</button>>
+            <<button "➡️ Walk East to East Corridor 1 (Stairs Junction)">> <<addTime 1>> <<set $currentLocation to "hall_1_east_1">> <<goto "Act3_School1Floor">> <</button>>
+
+        <<elseif $currentLocation == "hall_1_west_1">>
+            <<button "⬅️ Walk West to Radio Room Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_west_2">> <<goto "Act3_School1Floor">> <</button>>
+            <<button "➡️ Walk East to Center Junction">> <<addTime 1>> <<set $currentLocation to "hall_1_center">> <<goto "Act3_School1Floor">> <</button>>
+            <button style="border-left-color: var(--accent-gold) !important;">
+                <<link "🪜 GO DOWN TO GROUND FLOOR [WEST STAIRS]">>
+                    <<addTime 2>>
+                    <<set $currentLocation to "hall_g_west_1">>
+                    <<goto "Act3_SchoolGFloor">>
+                <</link>>
+                <span class="btn-sub">Descend West Stairs to Security Room Junction.</span>
+            </button>
+
+        <<elseif $currentLocation == "hall_1_west_2">>
+            <<button "⬆️ Walk North to Room 201 Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_west_3">> <<goto "Act3_School1Floor">> <</button>>
+            <<button "➡️ Walk East to West Corridor 1">> <<addTime 1>> <<set $currentLocation to "hall_1_west_1">> <<goto "Act3_School1Floor">> <</button>>
+
+        <<elseif $currentLocation == "hall_1_west_3">>
+            <<button "⬆️ Walk North to Room 202 & Roof Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_west_4">> <<goto "Act3_School1Floor">> <</button>>
+            <<button "⬇️ Walk South to Radio Room Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_west_2">> <<goto "Act3_School1Floor">> <</button>>
+
+        <<elseif $currentLocation == "hall_1_west_4">>
+            <<button "⬇️ Walk South to Room 201 Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_west_3">> <<goto "Act3_School1Floor">> <</button>>
+
+        <<elseif $currentLocation == "hall_1_east_1">>
+            <<button "➡️ Walk East to Library Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_east_2">> <<goto "Act3_School1Floor">> <</button>>
+            <<button "⬅️ Walk West to Center Junction">> <<addTime 1>> <<set $currentLocation to "hall_1_center">> <<goto "Act3_School1Floor">> <</button>>
+            <button style="border-left-color: var(--accent-gold) !important;">
+                <<link "🪜 GO DOWN TO GROUND FLOOR [EAST STAIRS]">>
+                    <<addTime 2>>
+                    <<set $currentLocation to "hall_g_east_2">>
+                    <<goto "Act3_SchoolGFloor">>
+                <</link>>
+                <span class="btn-sub">Descend East Stairs to Screening Junction.</span>
+            </button>
+
+        <<elseif $currentLocation == "hall_1_east_2">>
+            <<button "⬆️ Walk North to Computer Lab & Server Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_east_3">> <<goto "Act3_School1Floor">> <</button>>
+            <<button "⬅️ Walk West to East Corridor 1">> <<addTime 1>> <<set $currentLocation to "hall_1_east_1">> <<goto "Act3_School1Floor">> <</button>>
+
+        <<elseif $currentLocation == "hall_1_east_3">>
+            <<button "⬇️ Walk South to Library Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_east_2">> <<goto "Act3_School1Floor">> <</button>>
+
+        <<else>>
+            <<button "🔄 Return to Central Junction">>
+                <<set $currentLocation to "hall_1_center">>
+                <<goto "Act3_School1Floor">>
+            <</button>>
+        <</if>>
+
+    </div>
+</div>
+
+<!-- FORCE CAMERA TRACKING & FIX DUPLICATE MAP IDs -->
+<<script>>
+setTimeout(function() {
+    /* 1. Destroy the PDA map to prevent ID conflicts */
+    var pdaMap = document.getElementById("tab-map");
+    if (pdaMap) {
+        pdaMap.innerHTML = "<div style='padding:40px 20px; color:#5d8db5; text-align:center; font-style:italic;'>[ MAP FEED ROUTED TO MAIN HUD ]</div>";
+    }
+    
+    /* 2. Set a nice close-up zoom level for the main screen */
+    window.svgMapScale = 1.5;
+    
+    /* 3. Re-trigger the engine's map tracking on the visible map */
+    if (State.variables.currentLocation) {
+        window.updateMapGlow(State.variables.currentLocation);
+    }
+}, 150); /* 150ms delay ensures the passage is fully rendered before zooming */
+<</script>>

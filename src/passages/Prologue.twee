@@ -1,0 +1,206 @@
+:: Prologue {"position":"200,300","size":"100,100"}
+<<set $inCharCreation to false>>
+<<set $stamina to $stamina_max>>
+<<set $hp to $hp_max>>
+
+<!-- ======================================================= -->
+<!-- 1. JAVASCRIPT SETUP & AUDIO INITIALIZATION              -->
+<!-- ======================================================= -->
+<<script>>
+    /* 1. SETUP GAME STATE */
+    State.variables.gameClockActive = true;
+    
+    /* 2. AUDIO: Switch to eerie silence/low drone */
+    if(State.variables.creation_music) {
+        setup.sound.fade("creation_theme", 2000);
+        setTimeout(function() {
+            setup.sound.stop("creation_theme");
+            setup.sound.play("atmosphere", "audio/bgm/atmosphere.mp3", true, 0.6);
+        }, 2000);
+        State.variables.creation_music = false;
+    }
+    
+    ['clock', 'static', 'siren', 'scream', 'creation_theme'].forEach(function(id) {
+        if (setup.sound.tracks[id]) {
+            window.AudioDebugger.log('Stopping: ' + id, 'stop');
+            setup.sound.stop(id);
+        }
+    });
+    
+    window.AudioDebugger.log('Starting atmosphere track', 'play');
+
+    /* 3. STASH LOGIC */
+    if (!State.variables.hasPacked && State.variables.inventory && State.variables.inventory.length > 0) {
+        State.variables.tableStash = clone(State.variables.inventory);
+        State.variables.inventory =[];
+    }
+<</script>>
+
+
+<!-- ======================================================= -->
+<!-- 2. NARRATIVE INTRO & EMERGENCY BROADCAST                -->
+<!-- ======================================================= -->
+<center>
+    <h1>DAY 0: SUNDAY</h1>
+</center>
+
+The silence breaks. Not with a scream, but with a tone. 
+
+<div style="border: 2px solid red; background: rgba(50, 0, 0, 0.3); padding: 15px; margin: 20px 0; box-shadow: 0 0 15px red;">
+    <div class="glitch" style="font-size: 1.5em; color: red; font-weight: bold; width: 100%; text-align: center;">
+        EMERGENCY ALERT SYSTEM
+    </div>
+    <div style="text-align: center; color: white; letter-spacing: 2px; border-top: 1px solid red; margin-top: 10px; padding-top: 5px;">
+        CIVIL DANGER WARNING
+    </div>
+    <p style="text-align: center; color: #ffcccc; font-family: 'Courier Prime'; font-size: 0.9em; margin-top: 10px;">
+        "...remain indoors. Do not approach individuals exhibiting violent behavior. This is not a drill..."
+    </p>
+</div>
+
+The robotic voice cuts out. Static returns to the TV. 
+
+<br>
+<<chat "You" "image/avatars/player.gif" "left" "'Violent behavior...' They don't lock down the whole city for a standard riot. Something is very wrong.">>
+<br>
+
+
+<!-- ======================================================= -->
+<!-- 3. PLAYER STATE & INVENTORY VISUALIZATION               -->
+<!-- ======================================================= -->
+<<if $hasPacked>>
+    <!-- STATE: PACKED AND READY -->
+    <p>The weight of the bag feels reassuring on your back. You found a <b style="color:white">Kitchen Knife</b> and some <b style="color:brown">Stale Coffee</b> on the counter.</p> 
+    <p>The apartment feels foreign now. Dangerous. You need to move.</p>
+
+<<else>>
+    <!-- STATE: VULNERABLE -->
+    <p>You are standing in the middle of your living room in your pajamas. You feel naked. Vulnerable.</p>
+    <p>Your <b>Starter Gear</b> is scattered across the dining table.</p>
+    
+    <br>
+    <<chat "You" "image/avatars/player.gif" "left" "Focus. Get dressed. Grab the gear. Don't panic.">>
+    <br><br>
+    
+    <!-- VISUALIZES THE STASH ON TABLE -->
+    <div style="background:rgba(255,255,255,0.05); padding:20px; border:2px dashed #444; margin-bottom: 20px; max-width: 700px; margin-left: auto; margin-right: auto;">
+        <<if $tableStash && $tableStash.length > 0>>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 35px;">
+                <<for _i range $tableStash>>
+                    <div style="text-align:center;">
+                        <<print setup.items[_i.id].icon>><br>
+                        <span style="font-size:0.7em; color:#aaa; display: block; margin-top: 5px;">_i.id</span>
+                    </div>
+                <</for>>
+            </div>
+        <<else>>
+            <span style="color:#666;">(Empty)</span>
+        <</if>>
+    </div>
+<</if>>
+
+<hr style="border-color: #333; margin: 20px 0;">
+
+
+<!-- ======================================================= -->
+<!-- 4. CINEMATIC CHOICE MENU                                -->
+<!-- ======================================================= -->
+<div class="choice-menu">
+
+    <!-- ACTION: GATHER GEAR & LOOT ROOM -->
+    <<if !$hasPacked>>
+        <button>
+            <<link "GATHER GEAR & SEARCH ROOM">>
+                <<addTime 4>>
+                <<completeObjective "pack_gear">>
+     			<<activateObjective "leave_apt">>
+                <<script>>
+                    State.variables.inventory = clone(State.variables.tableStash);
+                    State.variables.tableStash =[];
+                    State.variables.hasPacked = true;
+                    
+                    /* SPAWN HOUSE LOOT FOR FOOTER SYSTEM */
+                    if (!State.variables.houseLootSpawned) {
+                        State.variables.floorItems["Prologue"] =[
+                            { id: "Stale Coffee", qty: 1 },
+                            { id: "Kitchen Knife", qty: 1 },
+                            { id: "T-Shirt", qty: 1 }
+                        ];
+                        State.variables.houseLootSpawned = true;
+                    }
+                    Engine.play(passage());
+                <</script>>
+            <</link>>
+            <span class="btn-sub">5 Minutes | Grab your starter items and look for supplies.</span>
+        </button>
+    <</if>>
+
+    <!-- ACTION: INTEL - PHONE (Hides after visiting) -->
+    <<if not visited("Prologue_Phone")>>
+        <button>
+            <<link "CHECK NEWS FEED">>
+                <<goto "Prologue_Phone">>
+            <</link>>
+            <span class="btn-sub">1 Minute | See what the internet knows.</span>
+        </button>
+    <</if>>
+
+    <!-- ACTION: INTEL - POLICE RADIO (Hides after visiting) -->
+    <<if not visited("Prologue_Radio")>>
+        <<if $job == "Police Officer">>
+            <button>
+                <<link "LISTEN TO EMERGENCY BAND [POLICE]">>
+                    <<addTime 3>>
+                    <<goto "Prologue_Radio">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[JOB: POLICE]</b> 4 Minutes | Monitor encrypted dispatch channels.</span>
+            </button>
+        <<elseif $skills.tech >= 1 and $int >= 4>>
+            <button>
+                <<link "HACK LOCAL POLICE CHATTER[TECH 1]">>
+                    <<addTime 5>>
+                    <<goto "Prologue_Radio">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[TECH 1 / INT 4]</b> 6 Minutes | You find the local dispatch frequency and bypass their basic scrambling.</span>
+            </button>
+        <<else>>
+            <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">ACCESS EMERGENCY BAND</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES POLICE OFFICER OR TECH 1 & INT 4] You lack the hardware or the hacking skills to splice into local police frequencies.</span>
+            </button>
+        <</if>>
+    <</if>>
+
+<!-- ACTION: INTEL - GOV FIREWALL (Hides after visiting) -->
+    <<if not visited("Prologue_Hacking")>>
+        <<if $skills.tech >= 3 and $int >= 6>>
+            <button>
+                <<link "BYPASS GOV FIREWALL [TECH 3]">>
+                    <<addTime 8>>
+                    <<goto "Prologue_Hacking">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[TECH 3 / INT 6]</b> 9 Minutes | Breach military-grade encryption to find the truth.</span>
+            </button>
+        <<else>>
+            <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                <span style="text-decoration: line-through;">BYPASS GOV FIREWALL</span><br>
+                <span class="btn-sub" style="color: #666;">[REQUIRES TECH 3 & INT 6] You lack the high-level expertise to breach military encryption.</span>
+            </button>
+        <</if>>
+    <</if>>
+
+    <!-- ACTION: EXIT (Only appears once gear is packed) -->
+    <<if $hasPacked>>
+        <button style="border-left-color: var(--accent-red) !important; margin-top: 15px;">
+          <<link "LEAVE APARTMENT">>
+               <<run setup.sound.stop('atmosphere')>>
+               <<run setup.sound.fade('atmosphere', 1000)>>
+               <<completeObjective "leave_apt">>
+               <<addObjective "escape_building" "Find a way down to the ground floor">>
+               <<goto "Hallway">>
+           <</link>>
+            <span class="btn-sub" style="color: #ff9999;">Exit to the 4th Floor Hallway. No turning back.</span>
+        </button>
+    <</if>>
+
+</div>

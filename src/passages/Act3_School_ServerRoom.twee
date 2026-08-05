@@ -1,0 +1,19 @@
+:: Act3_School_ServerRoom {"position":"1100,1900","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "server_room">>
+<<set $activeMap to "Highschool 1st Floor">>
+<</nobr>>
+
+<h2>1ST FLOOR — SERVER ROOM</h2>
+
+Server racks hum loudly in the air-conditioned enclosure.
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "🚪 Exit Server Room to Hallway [WEST]">>
+            <<set $currentLocation to "hall_1_east_2">>
+            <<goto "Act3_School1Floor">>
+        <</link>>
+    </button>
+</div>

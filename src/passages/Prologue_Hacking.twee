@@ -1,0 +1,85 @@
+:: Prologue_Hacking {"position":"300,400","size":"100,100"}
+<!-- ======================================================= -->
+<!-- 1. PASSAGE HEADER                                       -->
+<!-- ======================================================= -->
+<center>
+    <h1 class="glitch" style="color:var(--accent-green)">BYPASSING SECURITY...</h1>
+</center>
+
+<!-- ======================================================= -->
+<!-- 2. TERMINAL UI CONTAINER                                -->
+<!-- ======================================================= -->
+<div class="terminal-window">
+    
+    <!-- Terminal Title Bar -->
+    <div class="terminal-header">
+        SESSION: ADMIN_LOCAL_NODE // ENCRYPTED
+    </div>
+    
+    <!-- Dynamic Text Target (JS writes here) -->
+    <div id="hacker-terminal"></div>
+    
+    <!-- Blinking Cursor -->
+    <span class="terminal-cursor"></span>
+
+    <br>
+
+    <!-- ======================================================= -->
+    <!-- 3. TERMINAL FINISH STATE (HIDDEN ON LOAD)               -->
+    <!-- ======================================================= -->
+    <div id="terminal-finish" style="display:none; text-align:center;">
+        <span style="color:var(--accent-gold)">[!] SYSTEM DISCONNECTED [!]</span>
+        <br><br>
+        
+        <<button "LOGOUT & CLOSE LAPTOP">>
+            
+            /* Add the ODIN Lore to the player's database */
+            <<run window.addLore(
+                "DoD Manifest: Project ODIN", 
+                "ORIGIN: Classified Lab. Unauthorized Leak. EFFECT: Drive-infected subjects exhibit 900% increase in muscle density and total loss of higher brain function. STATUS: OUTBREAK UNCONTAINED. [!] Mutation 'Type-Tank' detected in Storage Garage 8-B. Prototype M82 Sniper + .50 BMG Stored there. ACCESS CODE: 8821"
+            )>>
+            
+            /* Return to the room */
+            <<goto "Prologue">>
+            
+        <</button>>
+    </div>
+    
+</div> <!-- End Terminal Window -->
+
+<!-- ======================================================= -->
+<!-- 4. JAVASCRIPT ANIMATION SEQUENCE                        -->
+<!-- ======================================================= -->
+<<script>>
+    /* --- A. DEFINE THE HACKING TEXT LINES --- */
+    var hackingText =[
+        
+        /* Phase 1: Connection & Bypass */
+        { text: "> Connecting to Local DoD Proxy...", speed: 40, pause: 800 },
+        { text: "> REQUEST: Access Folder /BIO-ORDNANCE/PROJECT_ODIN/", speed: 40, pause: 1000 },
+        { text: "> STATUS: 403 FORBIDDEN. Bypassing...", speed: 20, pause: 1200 },
+        { text: "> SUCCESS. Decrypting Manifest...", speed: 50, pause: 1000 },
+        { text: "------------------------------------------------", speed: 10, pause: 500 },
+        
+        /* Phase 2: Manifest Data */
+        { text: "SUBJECT: ODIN-DRIVE BIO-REANIMANT", speed: 40, pause: 400 },
+        { text: "ORIGIN: Classified Lab // Unauthorized Leak", speed: 40, pause: 400 },
+        { text: "EFFECT: Drive-infected subjects exhibit 900% increase in muscle density and total loss of higher brain function.", speed: 30, pause: 800 },
+        { text: "STATUS: OUTBREAK UNCONTAINED.", speed: 60, pause: 1200 },
+        { text: "------------------------------------------------", speed: 10, pause: 500 },
+        
+        /* Phase 3: Critical Alerts & Logout */
+        { text: "[!] CRITICAL ALERT: Mutation 'Type-Tank' detected in Storage Garage 8-B (Fort Mason Base). Subject is extremely aggressive.", speed: 40, pause: 1000 },
+        { text: "[!] LOG: Prototype M82-AntiMateriel Sniper + .50 BMG Stored in Garage 8-B. ACCESS CODE: 8821", speed: 50, pause: 2000 },
+        { text: "> TRACE DETECTED. TERMINATING SESSION...", speed: 20, pause: 500 }
+    ];
+
+    /* --- B. TRIGGER THE ANIMATION --- */
+    setTimeout(function() {
+        window.typeTerminal("hacker-terminal", hackingText);
+    }, 500);
+
+    /* --- C. SET STORY VARIABLES --- */
+    /* Set the flag so the player can use the 8821 code later in the game */
+    State.variables.secretLoreFound = true;
+<</script>>

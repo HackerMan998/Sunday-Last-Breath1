@@ -1,0 +1,217 @@
+:: StoryCaption {"position":"100,0","size":"100,100"}
+<<nobr>>
+
+/* ==========================================================
+   SECTION 1: TAB NAVIGATION
+   Controls which panel is visible in the sidebar.
+   ========================================================== */
+
+/* Row 1: Primary Tabs */
+<div class="sidebar-tabs-row1">
+    <button id="btn-main" class="sidebar-tab-btn active" onclick="switchSidebarTab('main')">
+        MAIN
+    </button>
+    <button id="btn-bag" class="sidebar-tab-btn" onclick="switchSidebarTab('bag')">
+        BAG
+    </button>
+    <button id="btn-skills" class="sidebar-tab-btn" onclick="switchSidebarTab('skills')">
+        SKILLS
+    </button>
+    <button id="btn-traits" class="sidebar-tab-btn" onclick="switchSidebarTab('traits')">
+        TRAITS
+    </button>
+</div>
+
+/* Row 2: Secondary/Utility Tabs */
+<div class="sidebar-tabs-row2" style="display: flex; gap: 2px;">
+    <button id="btn-map" class="sidebar-tab-btn" onclick="switchSidebarTab('map')">
+        MAP
+    </button>
+    <button id="btn-lore" class="sidebar-tab-btn" onclick="window.openLore()">
+        LORE
+    </button>
+</div>
+
+
+/* ==========================================================
+   SECTION 2: MAIN TAB (DASHBOARD)
+   Displays Character Info, Level, XP, and Vitals.
+   ========================================================== */
+
+<div id="tab-main" class="tab-content">
+    
+    /* Character Identity */
+    <div class="char-header">
+        <div class="char-name">$firstName $lastName</div>
+        <div class="char-sub">$gender | $job</div>
+    </div>
+
+     <!-- Active Objectives Log (NEW INSERTION) -->
+    <<objectiveLog>>
+    
+    /* Progression (Level and XP) */
+    <div class="level-display">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="color: var(--accent-gold); font-size: 1.2em; font-weight: bold;">
+                LVL $level
+            </span>
+            <span style="color: #666; font-size: 0.8em;">
+                $xp/$xp_req
+            </span>
+        </div>
+        <div class="bar-container" style="height: 8px;">
+            <div class="bar-fill xp" @style="'width:' + ($xp / $xp_req * 100) + '%'"></div>
+        </div>
+    </div>
+
+    /* Dynamic Safe House Trust Display (Shown only when in the safe house) */
+    <<if $inSafehouse>>
+        <div style="margin-bottom: 15px; padding: 10px; background: rgba(211, 84, 0, 0.05); border: 1px solid var(--accent-gold); border-left: 3px solid var(--accent-gold);">
+            <div class="bar-container vital" style="height: 22px;">
+                <div class="bar-fill trust" @style="'width:' + ($safehouseTrust / 100 * 100) + '%'"></div>
+                <div class="bar-text">
+                    <span class="bar-label" style="font-size:0.85em; font-weight:bold; color:var(--accent-gold);">SAFE HOUSE TRUST</span>
+                    <span class="bar-value" style="font-size:0.85em;">$safehouseTrust/100</span>
+                </div>
+            </div>
+        </div>
+    <</if>>
+    
+    /* Vitals (Survival Meters) */
+    <div class="vitals-section">
+        
+        /* Health Points */
+        <div class="vital-bar-wrapper">
+            <div class="bar-container vital">
+                <div class="bar-fill hp" @style="'width:' + ($hp / $hp_max * 100) + '%'"></div>
+                <div class="bar-text">
+                    <span class="bar-label">HEALTH</span>
+                    <span class="bar-value">$hp/$hp_max</span>
+                </div>
+            </div>
+        </div>
+        
+        /* Stamina (Energy) */
+        <div class="vital-bar-wrapper">
+            <div class="bar-container vital">
+                <div class="bar-fill stamina" @style="'width:' + ($stamina / $stamina_max * 100) + '%'"></div>
+                <div class="bar-text">
+                    <span class="bar-label">STAMINA</span>
+                    <span class="bar-value">$stamina/$stamina_max</span>
+                </div>
+            </div>
+        </div>
+        
+        /* Hunger Level */
+        <div class="vital-bar-wrapper">
+            <div class="bar-container vital">
+                <div class="bar-fill hunger" @style="'width:' + ($hunger / 100 * 100) + '%'"></div>
+                <div class="bar-text">
+                    <span class="bar-label">HUNGER</span>
+                    <span class="bar-value">$hunger/100</span>
+                </div>
+            </div>
+        </div>
+        
+        /* Thirst Level */
+        <div class="vital-bar-wrapper">
+            <div class="bar-container vital">
+                <div class="bar-fill thirst" @style="'width:' + ($thirst / 100 * 100) + '%'"></div>
+                <div class="bar-text">
+                    <span class="bar-label">THIRST</span>
+                    <span class="bar-value">$thirst/100</span>
+                </div>
+            </div>
+        </div>
+        
+        /* Humanity (Alignment) */
+        <div class="vital-bar-wrapper">
+            <div class="bar-container vital">
+                <div class="bar-fill humanity" @style="'width:' + ($hum / 100 * 100) + '%'"></div>
+                <div class="bar-text">
+                    <span class="bar-label">HUMANITY</span>
+                    <span class="bar-value">$hum/100</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+/* ==========================================================
+   SECTION 3: BAG TAB (INVENTORY)
+   Displays Equipped items and Backpack contents.
+   ========================================================== */
+
+<div id="tab-bag" class="tab-content" style="display: none;">
+    <div class="sidebar-header">EQUIPMENT</div>
+    <<equipDisplay>>
+    
+    <div class="sidebar-header">INVENTORY</div>
+    <<invDisplay>>
+</div>
+
+
+/* ==========================================================
+   SECTION 4: SKILLS & ATTRIBUTES TAB
+   Displays Radar Charts for Core Stats and Skills.
+   ========================================================== */
+
+<div id="tab-skills" class="tab-content" style="display: none;">
+    /* Attributes (STR, INT, AGI, etc.) */
+    <div class="sidebar-header">ATTRIBUTES</div>
+    <<attributeRadar>>
+
+    /* Skills (Shooting, Melee, etc.) */
+    <div class="sidebar-header" style="margin-top: 20px;">SKILLS</div>
+    <<skillRadar>>
+</div>
+
+
+/* ==========================================================
+   SECTION 5: TRAITS TAB
+   Lists all acquired perks and passive abilities.
+   ========================================================== */
+
+<div id="tab-traits" class="tab-content" style="display: none;">
+    <div class="sidebar-header">TRAITS & PERKS</div>
+    <<customTraitDisplay>>
+    
+    /* Empty State Logic */
+</div>
+
+
+/* ==========================================================
+   SECTION 6: MAP TAB
+   Displays the dynamic floor plan/location map.
+   ========================================================== */
+
+<div id="tab-map" class="tab-content" style="display: none;">
+    <div class="sidebar-header">LOCATION MAP</div>
+    <<mapDisplay>>
+</div>
+
+
+/* ==========================================================
+   SECTION 7: SIDEBAR FOOTER (SYSTEM CONTROLS)
+   Persistent buttons at the bottom of the UI.
+   ========================================================== */
+
+<div class="sidebar-footer">
+    /* Retro Slim Volume Slider */
+    <div class="volume-panel">
+        <span class="volume-label">VOLUME</span>
+        <input type="range" class="volume-slider" min="0" max="100" @value="$volMaster ?? 100">
+    </div>
+
+    /* System Menu Button */
+    <div style="margin-top: 10px;">
+        <<button "SYSTEM MENU">>
+            <<run (Dialog.create || Dialog.setup)("SYSTEM TERMINAL")>>
+            <<run Dialog.wiki(Story.get("System_Menu").text)>>
+            <<run Dialog.open()>>
+        <</button>>
+    </div>
+</div>
+
+<</nobr>>

@@ -1,0 +1,53 @@
+:: Create_FirstName {"position":"700,0","size":"100,100"}
+<center>
+<h1>IDENTITY: FIRST NAME</h1>
+<i>"What was your given name before the world fell silent?"</i>
+<br><br>
+
+<div class="job-container">
+    <!-- MALE NAMES -->
+    <<if $gender == "Male">>
+        <<button "James">> <<set $firstName to "James">> <<goto "Create_LastName">> <</button>>
+        <<button "Michael">> <<set $firstName to "Michael">> <<goto "Create_LastName">> <</button>>
+        <<button "Robert">> <<set $firstName to "Robert">> <<goto "Create_LastName">> <</button>>
+        <<button "William">> <<set $firstName to "William">> <<goto "Create_LastName">> <</button>>
+        <<button "David">> <<set $firstName to "David">> <<goto "Create_LastName">> <</button>>
+        <!-- Easter Egg Male -->
+        <<button "Neal">> <<set $firstName to "Neal">> <<goto "Create_LastName">> <</button>>
+
+    <!-- FEMALE NAMES -->
+    <<elseif $gender == "Female">>
+        <<button "Mary">> <<set $firstName to "Mary">> <<goto "Create_LastName">> <</button>>
+        <<button "Patricia">> <<set $firstName to "Patricia">> <<goto "Create_LastName">> <</button>>
+        <<button "Jennifer">> <<set $firstName to "Jennifer">> <<goto "Create_LastName">> <</button>>
+        <<button "Linda">> <<set $firstName to "Linda">> <<goto "Create_LastName">> <</button>>
+        <<button "Elizabeth">> <<set $firstName to "Elizabeth">> <<goto "Create_LastName">> <</button>>
+        <!-- Special Female Name -->
+        <<button "Nadia">> <<set $firstName to "Nadia">> <<goto "Create_LastName">> <</button>>
+
+    <!-- NON-BINARY OR CUSTOM GENDER NAMES -->
+    <<else>>
+        <<button "Alex">> <<set $firstName to "Alex">> <<goto "Create_LastName">> <</button>>
+        <<button "Jordan">> <<set $firstName to "Jordan">> <<goto "Create_LastName">> <</button>>
+        <<button "Taylor">> <<set $firstName to "Taylor">> <<goto "Create_LastName">> <</button>>
+        <<button "Quinn">> <<set $firstName to "Quinn">> <<goto "Create_LastName">> <</button>>
+        <<button "Casey">> <<set $firstName to "Casey">> <<goto "Create_LastName">> <</button>>
+        <<button "Skyler">> <<set $firstName to "Skyler">> <<goto "Create_LastName">> <</button>>
+    <</if>>
+</div>
+
+<hr>
+<div style="margin-top: 20px;">
+    Or enter your own:
+    <br>
+    <<textbox "$firstName" "" autofocus>>
+    <br><br>
+    <<button "Confirm First Name">> 
+        <<if $firstName is "" or $firstName is " ">>
+            <<run alert("Please enter a first name.")>>
+        <<else>>
+            <<goto "Create_LastName">> 
+        <</if>>
+    <</button>>
+</div>
+</center>

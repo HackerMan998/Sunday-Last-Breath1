@@ -1,0 +1,100 @@
+:: Act3_School_Canteen {"position":"600,1700","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "canteen">>
+<<set $activeMap to "Highschool Ground">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
+<</nobr>>
+
+<h2>GROUND FLOOR — CANTEEN</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+<<if _arrivedLate>>
+    <img src="image/Act3_Timberline/canteen_morning.gif" style="max-width: 100%; border: 1px solid #333;">
+<<else>>
+    <img src="image/Act3_Timberline/canteen_night.gif" style="max-width: 100%; border: 1px solid #333;">
+<</if>>
+</div>
+
+<<chat "Sadie" "image/avatars/canteen_sadie.gif" "right" "Please stay in line! One ration pack per family!">>
+<br><br>
+
+<<if $helped_sadie>>
+    <span style="color:var(--accent-green);">Sadie smiles as you approach. The ration line is organized and flowing smoothly.</span>
+    <br><br>
+    <<if not $eaten_canteen_meal>>
+        <div class="choice-menu">
+            <button>
+                <<link "Eat a hot ration meal [SADIE]">>
+                    <<addTime 15>>
+                    <<set $stamina to Math.min($stamina_max, $stamina + 40)>>
+                    <<set $hunger to 100>>
+                    <<set $eaten_canteen_meal to true>>
+                    <<goto "Act3_School_Canteen">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-green);">[+40 STAMINA] [HUNGER RESTORED]</b> Rest and eat.</span>
+            </button>
+        </div>
+    <<else>>
+        <span style="color:var(--accent-green);">You have already eaten your hot ration meal for today.</span>
+    <</if>>
+<<else>>
+    Sadie is stressed and struggling to stretch the emergency food supplies.
+    <br><br>
+    <div class="choice-menu">
+        <<if $inventory.find(i => i.id === "Canned Food" || i.id === "Energy Bar" || i.id === "Beef Jerky")>>
+            <button>
+                <<link "Donate scavenged food to Sadie [INVENTORY]">>
+                    <<addTime 10>>
+                    <<set $helped_sadie to true>>
+                    <<set $hum to Math.min(100, $hum + 15)>>
+                    <<run window.gainXP(25)>>
+                    <<run window.gainTrust(15)>>
+                    <<if $inventory.find(i => i.id === "Canned Food")>><<run setup.removeItem("Canned Food", 1)>><<elseif $inventory.find(i => i.id === "Energy Bar")>><<run setup.removeItem("Energy Bar", 1)>><<else>><<run setup.removeItem("Beef Jerky", 1)>><</if>>
+                    <<goto "Act3_School_Canteen">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-green);">[+15 HUMANITY] [+15 TRUST]</b> Donate extra rations.</span>
+            </button>
+        <</if>>
+        <<if $sadie_quest_active and $inventory.find(i => i.id === "Bottled Water" && i.qty >= 2)>>
+            <button>
+                <<link "Deliver 2x Bottled Water from Pantry to Sadie">>
+                    <<addTime 5>>
+                    <<set $helped_sadie to true>>
+                    <<completeObjective "fetch_water_sadie">>
+                    <<purgeCompleted>>
+                    <<run setup.removeItem("Bottled Water", 2)>>
+                    <<set $hum to Math.min(100, $hum + 15)>>
+                    <<run window.gainXP(40)>>
+                    <<run window.gainTrust(20)>>
+                    <<goto "Act3_School_Canteen">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-green);">[FETCH QUEST COMPLETE] [+20 TRUST]</b></span>
+            </button>
+        <<elseif not $sadie_quest_active>>
+            <button>
+                <<link "Ask Sadie if she needs supplies">>
+                    <<addTime 5>>
+                    <<set $sadie_quest_active to true>>
+                    <<addObjective "fetch_water_sadie" "Fetch 2x Bottled Water from the Pantry for Sadie">>
+                    <<goto "Act3_School_Canteen">>
+                <</link>>
+                <span class="btn-sub">Offer to fetch clean water from the Pantry.</span>
+            </button>
+        <</if>>
+    </div>
+<</if>>
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "🥫 Enter Food Pantry [SOUTH]">>
+            <<goto "Act3_School_Pantry">>
+        <</link>>
+    </button>
+    <button>
+        <<link "🚪 Exit Canteen to Hallway">>
+            <<set $currentLocation to "hall_g_west_1">>
+            <<goto "Act3_SchoolGFloor">>
+        <</link>>
+    </button>
+</div>

@@ -1,0 +1,572 @@
+:: StoryInit {"position":"0,0","size":"100,100"}
+/*  
+    =================================================================
+    STORYINIT: THE CORE ENGINE DATABASE
+    Sunday's Last Breath - Twine Survival Horror
+    =================================================================
+*/
+
+/* -----------------------------------------------------------------
+   1. PLAYER IDENTITY & PROGRESSION
+   ----------------------------------------------------------------- */
+<<set $firstName to "???">>
+<<set $lastName to "???">>
+<<set $name to "???">>
+<<set $gender to "???">>
+<<set $job to "???">>
+
+<<set $level to 1>>
+<<set $xp to 0>>
+<<set $xp_req to 100>>
+<<set $chapter to 0>>
+
+/* Control flag: Set to false in the Prologue to enable hunger/thirst decay */
+<<set $inCharCreation to true>>
+
+
+/* -----------------------------------------------------------------
+   2. VITALS (0 - 100 SCALE)
+   ----------------------------------------------------------------- */
+<<set $hp to 100>> 
+<<set $hp_max to 100>>
+
+<<set $stamina to 100>> 
+<<set $base_stamina_max to 100>> 
+<<set $stamina_max to 100>>
+
+<<set $hunger to 100>>  /* 100 = Full, 0 = Starving */
+<<set $thirst to 100>>  /* 100 = Hydrated, 0 = Dehydrated */
+<<set $hum to 50>>      /* 0 = Monster, 100 = Saint */
+
+
+/* -----------------------------------------------------------------
+   3. ATTRIBUTES (1 - 10 SCALE)
+   ----------------------------------------------------------------- */
+<<set $str to 3>>
+<<set $int to 3>>
+<<set $agi to 3>>
+<<set $cha to 3>>
+<<set $per to 3>>
+
+/* Customization points for the 'Student' class on a 1-10 scale */
+<<set $studentPoints to 5>> 
+
+
+/* -----------------------------------------------------------------
+   4. SKILLS (Proficiency Levels)
+   ----------------------------------------------------------------- */
+<<set $skills to {
+    shooting: 0,
+    melee: 0,
+    stealth: 0,
+    tech: 0,
+    medicine: 0,
+    scavenging: 0
+}>>
+
+
+/* -----------------------------------------------------------------
+   5. TRAITS & LORE LOGIC
+   ----------------------------------------------------------------- */
+<<set $traits to []>>
+<<set $acquiredTraits to []>>
+<<set $loreDatabase to []>>   /* Stores unlocked flavor text and logs */
+<<set $hobbyStep to 1>>        /* Track progress through hobby selection */
+<<set $pickedHobbies to []>>   /* Prevents picking the same hobby twice */
+
+
+/* -----------------------------------------------------------------
+   6. INVENTORY & EQUIPMENT SYSTEM
+   ----------------------------------------------------------------- */
+<<set $inventory to []>>
+<<set $bag_limit to 12>>
+
+<<set $equip to {
+    head: "none",
+    body: "none",
+    pants: "none",
+    boots: "none",
+    weapon: "none"
+}>>
+
+/* Tracks items dropped in specific passages */
+<<set $floorItems to {}>> 
+
+
+/* -----------------------------------------------------------------
+   7. WORLD TIME & CLOCK
+   ----------------------------------------------------------------- */
+<<set $gameDate to {
+    dayName: "SATURDAY",
+    month: "OCT",
+    date: 25,
+    year: 2025,
+    hour: 23,
+    minute: 45,
+    dayCount: 0
+}>>
+
+<<set setup.days to ["SATURDAY", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]>>
+<<set $gameClockActive to false>>
+
+
+/* -----------------------------------------------------------------
+   8. MASTER ITEM DATABASE (setup.items)
+   ----------------------------------------------------------------- */
+<<set setup.items to {
+    
+    /* --- RANGED WEAPONS --- */
+    "Glock 19": { 
+        icon: "<img src='image/ranged/glock-19.png'>", 
+        type: "weapon", acc: 60, targets: 1, desc: "Reliable 9mm police pistol." 
+    },
+    "Makarov": { 
+        icon: "<img src='image/ranged/makarov.png'>", 
+        type: "weapon", acc: 55, targets: 1, desc: "Rugged Soviet steel." 
+    },
+    "Taurus": { 
+        icon: "<img src='image/ranged/taurus.png'>", 
+        type: "weapon", acc: 50, targets: 1, desc: "Snub-nose revolver." 
+    },
+    "Revolver .38": { 
+        icon: "<img src='image/ranged/revolver_38.png'>", 
+        type: "weapon", acc: 55, targets: 1, desc: "Civilian defense weapon." 
+    },
+    "Five-Seven": { 
+        icon: "<img src='image/ranged/five-seven.png'>", 
+        type: "weapon", acc: 75, targets: 1, desc: "High velocity pistol." 
+    },
+    "Magnum": { 
+        icon: "<img src='image/ranged/magnum.png'>", 
+        type: "weapon", acc: 65, targets: 1, desc: "Hand cannon. High recoil." 
+    },
+    "MP5": { 
+        icon: "<img src='image/ranged/mp5.png'>", 
+        type: "weapon", acc: 75, targets: 3, desc: "9mm SMG. Fast firing." 
+    },
+    "M4A1": { 
+        icon: "<img src='image/ranged/m4a1.png'>", 
+        type: "weapon", acc: 80, targets: 2, desc: "Military carbine." 
+    },
+    "Barret M82": { 
+        icon: "<img src='image/ranged/barret-m82.png'>", 
+        type: "weapon", acc: 95, targets: 1, desc: "Anti-materiel rifle." 
+    },
+    "Spas-12": { 
+        icon: "<img src='image/ranged/spas-12.png'>", 
+        type: "weapon", acc: 60, targets: 3, desc: "Combat Shotgun." 
+    },
+    "Remington 870": { 
+        icon: "<img src='image/ranged/remington.png'>", 
+        type: "weapon", acc: 70, targets: 2, desc: "Pump-action shotgun." 
+    },
+    "Compound Bow": { 
+        icon: "<img src='image/ranged/bow.png'>", 
+        type: "weapon", acc: 85, desc: "Silent. Retrievable ammo." 
+    },
+    
+    /* --- MELEE WEAPONS --- */
+    "Crowbar": { 
+        icon: "<img src='image/melee/crowbar.png'>", 
+        type: "weapon", acc: 90, desc: "Steel tool. Breaches crates." 
+    },
+    "Combat Knife": { 
+        icon: "<img src='image/melee/knife.png'>", 
+        type: "weapon", acc: 80, desc: "Military blade. Silent." 
+    },
+    "Hunting Knife": { 
+        icon: "<img src='image/melee/hunting_knife.png'>", 
+        type: "weapon", acc: 85, desc: "Serrated blade. High damage." 
+    },
+    "Kitchen Knife": { 
+        icon: "<img src='image/melee/kitchen_knife.png'>", 
+        type: "weapon", acc: 70, desc: "Chef's knife. Sharp but fragile." 
+    },
+    "Sledgehammer": { 
+        icon: "<img src='image/melee/sledgehammer.png'>", 
+        type: "weapon", acc: 50, desc: "Breaches doors. Slow." 
+    },
+    "Scalpel": { 
+        icon: "<img src='image/melee/scalpel.png'>", 
+        type: "weapon", acc: 90, desc: "Medical blade. Precision." 
+    },
+    "Golf Club": { 
+        icon: "<img src='image/melee/golf_club.png'>", 
+        type: "weapon", acc: 60, desc: "Medium reach." 
+    },
+    "Baseball Bat": { 
+        icon: "<img src='image/melee/baseball_bat.png'>", 
+        type: "weapon", acc: 70, desc: "Good knockback." 
+    },
+    "Cane": { 
+        icon: "<img src='image/melee/cane.png'>", 
+        type: "weapon", acc: 50, desc: "Walking stick." 
+    },
+    "Tire Iron": { 
+        icon: "<img src='image/melee/tire_iron.png'>", 
+        type: "weapon", acc: 60, desc: "Rusted metal club." 
+    },
+    
+    /* --- AMMUNITION --- */
+    "9mm Ammo": { 
+        icon: "<img src='image/ammo/9mm.png'>", 
+        type: "ammo", stack: true, max: 60, desc: "Pistol rounds." 
+    },
+    "5.56mm Ammo": { 
+        icon: "<img src='image/ammo/5.56.png'>", 
+        type: "ammo", stack: true, max: 60, desc: "Rifle rounds." 
+    },
+    ".38 Ammo": { 
+        icon: "<img src='image/ammo/.38.png'>", 
+        type: "ammo", stack: true, max: 20, desc: "Revolver rounds." 
+    },
+    ".500 Magnum": { 
+        icon: "<img src='image/ammo/.500.png'>", 
+        type: "ammo", stack: true, max: 12, desc: "Heavy rounds." 
+    },
+    ".50 Cal": { 
+        icon: "<img src='image/ammo/.50.png'>", 
+        type: "ammo", stack: true, max: 10, desc: "Anti-materiel rounds." 
+    },
+    "Shotgun Shells": { 
+        icon: "<img src='image/ammo/shotgunshell.png'>", 
+        type: "ammo", stack: true, max: 20, desc: "Buckshot." 
+    },
+    "Arrows": { 
+        icon: "<img src='image/ammo/arrows.png'>", 
+        type: "ammo", stack: true, max: 20, desc: "Silent ammo." 
+    },
+    
+    /* --- WEARABLES --- */
+    "Leather Jacket": { 
+        icon: "<img src='image/clothes/jacket.png'>", 
+        type: "body", desc: "Minor bite protection." 
+    },
+    "Tactical Vest": { 
+        icon: "<img src='image/clothes/vest.png'>", 
+        type: "body", desc: "Ballistic protection." 
+    },
+    "T-Shirt": { 
+        icon: "<img src='image/clothes/tshirt.png'>", 
+        type: "body", desc: "No protection." 
+    },
+    "Jeans": { 
+        icon: "<img src='image/clothes/jeans.png'>", 
+        type: "pants", desc: "Durable denim." 
+    },
+    "Hiking Boots": { 
+        icon: "<img src='image/clothes/hiking_boots.png'>", 
+        type: "boots", desc: "+Stamina Efficiency." 
+    },
+    "Running Shoes": { 
+        icon: "<img src='image/clothes/running_shoes.png'>", 
+        type: "boots", desc: "Low noise." 
+    },
+    "Sneakers": { 
+        icon: "<img src='image/clothes/sneakers.png'>", 
+        type: "boots", desc: "Comfortable." 
+    },
+    "Hard Hat": { 
+        icon: "<img src='image/clothes/hardhat.png'>", 
+        type: "head", desc: "Impact protection." 
+    },
+    "Tinfoil Hat": { 
+        icon: "<img src='image/clothes/tinfoil_hat.png'>", 
+        type: "head", desc: "Blocks signals?" 
+    },
+    "Glasses": { 
+        icon: "<img src='image/clothes/glasses.png'>", 
+        type: "head", desc: "Vision correction." 
+    },
+    
+    /* --- CONSUMABLES --- */
+    "Bottled Water": { 
+        icon: "<img src='image/consumable/waterbottle.png'>", 
+        type: "consumable", stack: true, heal: 5, stamina: 10, thirst: 30, desc: "Hydration." 
+    },
+    "Canned Food": { 
+        icon: "<img src='image/consumable/canfood.png'>", 
+        type: "consumable", stack: true, heal: 20, stamina: 20, hunger: 40, desc: "Preserved food." 
+    },
+    "Beef Jerky": { 
+        icon: "<img src='image/consumable/jerky.png'>", 
+        type: "consumable", stack: true, heal: 10, stamina: 30, hunger: 30, desc: "High protein." 
+    },
+    "Stale Coffee": { 
+        icon: "<img src='image/consumable/coffee.png'>", 
+        type: "consumable", stack: true, stamina: 10, thirst: 10, desc: "Bitter. +10 Stamina." 
+    },
+    "Energy Bar": { 
+        icon: "<img src='image/consumable/energy_bar.png'>", 
+        type: "consumable", stack: true, heal: 5, stamina: 50, hunger: 20, desc: "+50 Stamina." 
+    },
+    "Bag of Chips": { 
+        icon: "<img src='image/consumable/chips.png'>", 
+        type: "consumable", stack: true, heal: 5, stamina: -10, hunger: 15, desc: "Greasy junk food." 
+    },
+    "Whiskey": { 
+        icon: "<img src='image/consumable/whiskey.png'>", 
+        type: "consumable", stack: true, heal: 10, stamina: 0, hum: 10, thirst: 5, desc: "+Morale / -Intellect." 
+    },
+    "Bottle of Vodka": { 
+        icon: "<img src='image/consumable/vodka.png'>", 
+        type: "consumable", stack: true, hum: 10, thirst: 5, desc: "Strong alcohol." 
+    },
+    "Family Photo": { 
+        icon: "<img src='image/consumable/photo.png'>", 
+        type: "consumable", stack: false, hum: 15, desc: "+15 Humanity." 
+    },
+    "First Aid Kit": { 
+        icon: "<img src='image/consumable/p3k.png'>", 
+        type: "consumable", stack: true, heal: 100, desc: "Full Heal." 
+    },
+    "Bandage": { 
+        icon: "<img src='image/consumable/bandage.png'>", 
+        type: "consumable", stack: true, heal: 15, desc: "Stops bleeding." 
+    },
+    "Painkillers": { 
+        icon: "<img src='image/consumable/painkiller.png'>", 
+        type: "consumable", stack: true, heal: 10, desc: "Reduces pain." 
+    },
+    "Antibiotics": { 
+        icon: "<img src='image/consumable/antibiotics.png'>", 
+        type: "consumable", stack: true, heal: 10, desc: "Cures Sickness." 
+    },
+    "Inhaler": { 
+        icon: "<img src='image/consumable/inhaler.png'>", 
+        type: "consumable", stack: true, heal: 0, stamina: 100, desc: "Restores Breath." 
+    },
+    "Sleeping Pills": { 
+        icon: "<img src='image/consumable/sleeping_pills.png'>", 
+        type: "consumable", stack: true, desc: "Forces sleep." 
+    },
+    
+    /* --- SKILL BOOKS --- */
+    "Manual: Mechanics": { 
+        icon: "<img src='image/gameplay/manual_tech.png'>", 
+        type: "consumable", skill: "tech", desc: "+1 Tech Skill." 
+    },
+    "Manual: Anatomy": { 
+        icon: "<img src='image/gameplay/manual_med.png'>", 
+        type: "consumable", skill: "medicine", desc: "+1 Medicine Skill." 
+    },
+    "Textbook": { 
+        icon: "<img src='image/gameplay/textbook.png'>", 
+        type: "consumable", xp: 50, desc: "+50 XP." 
+    },
+    
+    /* --- UTILITY & TOOLS --- */
+    "Flashlight": { 
+        icon: "<img src='image/utility/flashlight.png'>", 
+        type: "item", desc: "Infinite charge LED." 
+    },
+    "Fuse": { 
+        icon: "<img src='image/utility/fuse.png'>", 
+        type: "item", stack: true, desc: "Electronic fuse." 
+    },
+    "Work Gloves": { 
+        icon: "<img src='image/utility/gloves.png'>", 
+        type: "item", desc: "Protects hands." 
+    },
+    "Bleach": { 
+        icon: "<img src='image/utility/bleach.png'>", 
+        type: "item", desc: "Cleaning chemical." 
+    },
+    "Duct Tape": { 
+        icon: "<img src='image/utility/duct_tape.png'>", 
+        type: "item", desc: "Fixes everything." 
+    },
+    "Lockpicks": { 
+        icon: "<img src='image/utility/lockpicks.png'>", 
+        type: "item", desc: "Open locks silently." 
+    },
+    "Multi-Tool": { 
+        icon: "<img src='image/utility/multitool.png'>", 
+        type: "item", desc: "Screw, cut, fix." 
+    },
+    "Binoculars": { 
+        icon: "<img src='image/utility/binoculars.png'>", 
+        type: "item", desc: "Scout ahead." 
+    },
+    "Compass": { 
+        icon: "<img src='image/utility/compass.png'>", 
+        type: "item", desc: "Navigation." 
+    },
+    "Lighter": { 
+        icon: "<img src='image/utility/lighter.png'>", 
+        type: "item", desc: "Fire source." 
+    },
+    "Jerry Can": { 
+        icon: "<img src='image/utility/jerrycan.png'>", 
+        type: "item", desc: "Fuel storage." 
+    },
+    "Car Keys": { 
+        icon: "<img src='image/utility/car_keys.png'>", 
+        type: "item", desc: "Keys for a Sedan." 
+    },
+    "Bluetooth Speaker": { 
+        icon: "<img src='image/utility/speaker.png'>", 
+        type: "item", desc: "Electronic junk." 
+    },
+    "Ceramic Mug": { 
+        icon: "<img src='image/utility/mug.png'>", 
+        type: "item", desc: "Distraction item." 
+    },
+    "Hand Sanitizer": { 
+        icon: "<img src='image/utility/sanitizer.png'>", 
+        type: "item", desc: "Hygiene." 
+    },
+    "Pepper Spray": { 
+        icon: "<img src='image/utility/pepper_spray.png'>", 
+        type: "item", desc: "Stun human enemies." 
+    },
+    "Designer Bag": { 
+        icon: "<img src='image/utility/handbag.png'>", 
+        type: "item", desc: "Expensive fashion." 
+    },
+    "Gold Ring": { 
+        icon: "<img src='image/utility/gold_ring.png'>", 
+        type: "item", desc: "Valuable trade item." 
+    },
+    "Luxury Watch": { 
+        icon: "<img src='image/utility/watch.png'>", 
+        type: "item", desc: "High value trade item." 
+    },
+    "Encyclopedia": { 
+        icon: "<img src='image/utility/encyclopedia.png'>", 
+        type: "item", desc: "Heavy book." 
+    },
+    "Cigarettes": { 
+        icon: "<img src='image/utility/cigarettes.png'>", 
+        type: "item", stack: true, hum: 5, desc: "+Humanity. Trade." 
+    },
+    "Deck of Cards": { 
+        icon: "<img src='image/utility/cards.png'>", 
+        type: "item", desc: "Gambling." 
+    },
+    "Old Map": { 
+        icon: "<img src='image/utility/map.png'>", 
+        type: "item", desc: "Local map." 
+    },
+    "Guitar": { 
+        icon: "<img src='image/utility/guitar.png'>", 
+        type: "item", desc: "Musical instrument." 
+    },
+    "Batteries": { 
+        icon: "<img src='image/utility/batteries.png'>", 
+        type: "item", stack: true, desc: "Standard AA batteries." 
+    },
+    "Rope": { 
+        icon: "<img src='image/utility/rope.png'>", 
+        type: "item", desc: "Twelve meters of strong nylon rope." 
+    }
+}>>
+
+
+/* -----------------------------------------------------------------
+   9. GAMEPLAY MAPPINGS
+   ----------------------------------------------------------------- */
+<<set setup.ammoMap to {
+    "Glock 19": "9mm Ammo",
+    "Makarov": "9mm Ammo",
+    "Taurus": "9mm Ammo",
+    "Five-Seven": "9mm Ammo",
+    "MP5": "9mm Ammo",
+    "Magnum": ".500 Magnum",
+    "Spas-12": "Shotgun Shells",
+    "Remington 870": "Shotgun Shells",
+    "M4A1": "5.56mm Ammo",
+    "Barret M82": ".50 Cal",
+    "Compound Bow": "Arrows",
+    "Revolver .38": ".38 Ammo"
+}>>
+
+
+/* -----------------------------------------------------------------
+   10. ENGINE FUNCTIONS (JAVASCRIPT HELPERS)
+   ----------------------------------------------------------------- */
+
+/* --- ADD ITEM (WITH SPILLOVER LOGIC) --- */
+<<set setup.addItem = function(id, qty = 1, fromFloor = false) {
+    if (!setup.items[id]) return false;
+    
+    var targetList = State.variables.inventory;
+    var stack = setup.items[id].stack;
+    
+    /* 1. Try to stack in bag */
+    if (stack) {
+        let found = targetList.find(i => i.id === id);
+        if (found) { 
+            found.qty += qty; 
+            return true; 
+        }
+    }
+    
+    /* 2. Check for empty slots */
+    if (targetList.length < State.variables.bag_limit) {
+        targetList.push({ id: id, qty: qty });
+        return true;
+    }
+    
+    /* 3. Spillover (Bag is full) */
+    if (fromFloor) {
+        return false;
+    } else {
+        var currentPassage = passage();
+        if (!State.variables.floorItems) {
+            State.variables.floorItems = {};
+        }
+        if (!State.variables.floorItems[currentPassage]) {
+            State.variables.floorItems[currentPassage] = [];
+        }
+        
+        var roomLoot = State.variables.floorItems[currentPassage];
+        
+        if (stack) {
+            let floorStack = roomLoot.find(i => i.id === id);
+            if (floorStack) {
+                floorStack.qty += qty;
+                alert("Inventory Full! The " + id + " fell to the floor.");
+                return true;
+            }
+        }
+        
+        roomLoot.push({ id: id, qty: qty });
+        alert("Inventory Full! The " + id + " fell to the floor.");
+        return true; 
+    }
+}>>
+
+/* --- REMOVE ITEM --- */
+<<set setup.removeItem = function(id) {
+    var index = State.variables.inventory.findIndex(i => i.id === id);
+    if (index > -1) {
+        State.variables.inventory.splice(index, 1);
+    }
+}>>
+
+
+/* -----------------------------------------------------------------
+   11. INITIAL MAP CONFIGURATION
+   ----------------------------------------------------------------- */
+<<set $activeTab to "main">>
+<<set $currentLocation to "407">>
+<<set $activeMap to "4th Floor">>
+<<set $hallwaySection to 1>>
+
+/* Map Special Element: Exclamation Indicator */
+<<set $exclaim to "<span style='font-size:2em; color:white;'>!</span>">>
+
+
+
+/* Safe-house flags */
+<<set $inSafehouse to false>>
+<<set $safehouseTrust to 0>>
+
+/* -----------------------------------------------------------------
+ 9. ACTIVE OBJECTIVES SYSTEM
+ ----------------------------------------------------------------- */
+<<set $objectives to [
+    { id: "pack_gear", desc: "Gather your starter gear from the table", status: "active" },
+    { id: "leave_apt", desc: "Leave your apartment and head outside", status: "locked" }
+]>>

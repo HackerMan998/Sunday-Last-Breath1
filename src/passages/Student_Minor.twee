@@ -1,0 +1,93 @@
+:: Student_Minor {"position":"1000,200"}
+<<nobr>>
+<center>
+    <h1>UNIVERSITY TRANSCRIPT: MINOR</h1>
+    <div style="color:#888; font-style:italic; margin-bottom: 20px;">
+        "And what did you study on the side?"
+    </div>
+</center>
+
+<div class="academic-container">
+
+    <!-- MINOR: SHOOTING -->
+    <<if $skills.shooting < 3>>
+    <div class="academic-card">
+        <img src="image/hobby/shooting.gif">
+        <div class="ac-overlay"></div>
+        <div class="ac-content">
+            <div class="ac-title" style="color:var(--accent-red)">SHOOTING</div>
+            <div class="ac-desc">Target practice.</div>
+            <<button "SELECT MINOR">>
+                <<set $skills.shooting to 2>>
+                <<goto "SelectHobby">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <!-- MINOR: MELEE -->
+    <<if $skills.melee < 3>>
+    <div class="academic-card">
+        <img src="image/hobby/melee.gif">
+        <div class="ac-overlay"></div>
+        <div class="ac-content">
+            <div class="ac-title" style="color:var(--accent-gold)">MELEE</div>
+            <div class="ac-desc">Self-defense combat.</div>
+            <<button "SELECT MINOR">>
+                <<set $skills.melee to 2>>
+                <<goto "SelectHobby">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <!-- MINOR: STEALTH -->
+    <<if $skills.stealth < 3>>
+    <div class="academic-card">
+        <img src="image/hobby/stealth.gif">
+        <div class="ac-overlay"></div>
+        <div class="ac-content">
+            <div class="ac-title" style="color:#2ecc71">STEALTH</div>
+            <div class="ac-desc">Moving unseen.</div>
+            <<button "SELECT MINOR">>
+                <<set $skills.stealth to 2>>
+                <<goto "SelectHobby">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <!-- MINOR: TECH -->
+    <<if $skills.tech < 3>>
+    <div class="academic-card">
+        <img src="image/hobby/tech.gif">
+        <div class="ac-overlay"></div>
+        <div class="ac-content">
+            <div class="ac-title" style="color:var(--accent-blue)">TECH</div>
+            <div class="ac-desc">Hardware repair.</div>
+            <<button "SELECT MINOR">>
+                <<set $skills.tech to 2>>
+                <<goto "SelectHobby">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+    <!-- MINOR: MEDICINE -->
+    <<if $skills.medicine < 3>>
+    <div class="academic-card">
+        <img src="image/hobby/medicine.gif">
+        <div class="ac-overlay"></div>
+        <div class="ac-content">
+            <div class="ac-title" style="color:#3498db">MEDICINE</div>
+            <div class="ac-desc">First aid protocols.</div>
+            <<button "SELECT MINOR">>
+                <<set $skills.medicine to 2>>
+                <<goto "SelectHobby">>
+            <</button>>
+        </div>
+    </div>
+    <</if>>
+
+</div>
+<</nobr>>

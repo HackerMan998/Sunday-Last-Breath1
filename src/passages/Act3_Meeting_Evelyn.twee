@@ -1,0 +1,109 @@
+:: Act3_Meeting_Evelyn {"position":"750,1750","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "headmaster_office">>
+<<set $activeMap to "Highschool 1st Floor">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
+
+<<set _leaderName to "Matriarch Evelyn">>
+<<if def $anchor_name and $anchor_name != "myself" and $anchor_name != "my folks">>
+    <<set _leaderName to $anchor_name>>
+<<elseif $anchor == "parents">>
+    <<set _leaderName to "Matriarch Evelyn & Dad">>
+<</if>>
+<</nobr>>
+
+<h2>1ST FLOOR — COMMAND & HEADMASTER'S OFFICE</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+    <img src="image/Act3_Timberline/headmaster.gif" style="max-width: 100%; border: 1px solid #333;">
+</div>
+
+<!-- 1. REYES SUMMONS & DEBRIEF INITIATION -->
+<<chat "Reyes" "image/avatars/reyes.gif" "right" "Hey. You've been making yourself useful around Timberline. The survivors said you pulled your weight.">>
+
+<br><br>
+Officer Reyes wipes grease off her tactical gloves and steps up beside you as you enter the Command wing corridor.
+
+<br><br>
+<<if _arrivedLate>>
+    <span style="color:var(--accent-gold);">[LATE MORNING ARRIVAL]</span>
+    The harsh morning sun bleaches the high school glass. You arrived late after sunrise, but Command has been running non-stop since dawn broke.
+    <br><br>
+    <<chat "Reyes" "image/avatars/reyes.gif" "right" "We got in late, but Sanctuary Command wanted us for intake debriefing as soon as the perimeter patrol shifted. Let's go in.">>
+<<else>>
+    <span style="color:var(--accent-blue);">[EARLY NIGHT ARRIVAL]</span>
+    The cold pre-dawn rain hammers against the glass. You arrived early under cover of darkness, giving you time to observe the base's inner workings.
+    <br><br>
+    <<chat "Reyes" "image/avatars/reyes.gif" "right" "We made it inside early before the horde reached the south bridge. Commander Miller wanted to meet as soon as the shift changed. Let's go in.">>
+<</if>>
+
+<br><br>
+<!-- 2. ENTERING COMMAND OFFICE & EVELYN ENCOUNTER -->
+You and Reyes push open the heavy double doors into the Headmaster's Office. Topographic maps, radio transceivers, and ammo manifests clutter the mahogany desk. 
+<br><br>
+You expect to see Commander Miller leading the war table... but the main leather chair is empty.
+<br><br>
+Instead, <b>Matriarch Evelyn</b> stands at the desk, studying a map pinned with red warning flags.
+
+<br><br>
+<<chat "Reyes" "image/avatars/reyes.gif" "right" "Evelyn? Where's Commander Miller? I brought our new arrival up for the debriefing.">>
+
+<br><br>
+<<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "Miller isn't here, Reyes. He couldn't wait.">>
+
+<br><br>
+<<if _arrivedLate>>
+    <span style="color:var(--accent-gold);">[LATE MORNING ROUTE]</span>
+    <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "Because you two arrived late after sunrise, our generator fuel reserves hit critical low overnight. At first light, Miller mobilized our prime strike team and headed down Route 9 to raid the commercial strip.">>
+<<else>>
+    <span style="color:var(--accent-blue);">[EARLY NIGHT ROUTE]</span>
+    <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "Since you two got in early under cover of night, Miller seized the quiet window before dawn. He took a recon squad out to the Route 9 commercial strip to secure emergency fuel and medical drop crates.">>
+<</if>>
+
+<br><br>
+<!-- 3. EMERGENCY RADIO BROADCAST FROM CHLOE -->
+Before Reyes can reply, the desk radio transceiver bursts with violent static!
+<br><br>
+<div style="padding:12px; background:rgba(80,0,0,0.3); border:1px solid var(--accent-red); margin-bottom:15px;">
+    <b style="color:var(--accent-red);">📻 INCOMING EMERGENCY BROADCAST — CHANNEL 4</b>
+    <hr style="border-color:#552222; margin:6px 0;">
+    <<chat "Chloe (Radio Feed)" "image/avatars/radio_chloe.gif" "right" "Command, this is Radio Room! Red alert! We just picked up a MAYDAY transmission from Commander Miller's squad!">>
+    <br>
+    <<chat "Distress Signal" "image/avatars/radio_chloe.gif" "right" "...under heavy fire at the Route 9 7-Eleven! Scavengers blocked the pumps... infected swarming the glass front... we're pinned inside the walk-in cooler... need immediate support!">>
+</div>
+
+<br>
+Evelyn slams her fist onto the desk map!
+
+<br><br>
+<<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "Damn it! Our main guard team is locked on the bus barricades. If we pull sentries from the gate, the whole high school is defenseless.">>
+
+<br><br>
+Evelyn turns her sharp gaze directly toward you and Reyes.
+
+<br><br>
+<<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "You two are the only combat-ready squad on standby. Get down to that 7-Eleven on Route 9, break Miller's squad out of that trap, and bring our Commander back alive!">>
+
+<br><br>
+<<chat "Reyes" "image/avatars/reyes.gif" "right" "Consider it done. Gear up, partner. We're moving out right now.">>
+
+/* OBJECTIVE LIFECYCLE */
+<<addObjective "rescue_leader_711" "Respond to Commander Miller's distress signal at the Route 9 7-Eleven">>
+<<purgeCompleted>>
+
+<br><br>
+<div class="choice-menu">
+    <button style="border-left-color: var(--accent-red) !important;">
+        <<link "🚗 Depart with Reyes for the Route 9 7-Eleven" "Act3_7Eleven_Arrival">>
+            <<set $currentLocation to "seven_eleven_outskirts">>
+            <<addTime 15>>
+        <</link>>
+        <span class="btn-sub"><b style="color:var(--accent-red);">[IMMEDIATE RESCUE]</b> Ride out with Reyes to rescue Commander Miller from the overrun 7-Eleven.</span>
+    </button>
+    <button style="border-left-color: var(--accent-blue) !important;">
+        <<link "🎒 Prepare your gear in the Hub before departing" "Act3_SchoolGFloor">>
+            <<goto "Act3_SchoolGFloor">>
+        <</link>>
+        <span class="btn-sub">Return to the Ground Floor corridor to check equipment and supplies.</span>
+    </button>
+</div>

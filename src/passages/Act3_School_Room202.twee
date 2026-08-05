@@ -1,0 +1,19 @@
+:: Act3_School_Room202 {"position":"1300,1900","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "room_202">>
+<<set $activeMap to "Highschool 1st Floor">>
+<</nobr>>
+
+<h2>1ST FLOOR — ROOM 202</h2>
+
+Off-duty guard sleeping quarter.
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "🚪 Exit Room 202 to Hallway [EAST]">>
+            <<set $currentLocation to "hall_1_west_2">>
+            <<goto "Act3_School1Floor">>
+        <</link>>
+    </button>
+</div>

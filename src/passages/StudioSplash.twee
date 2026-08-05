@@ -1,0 +1,10 @@
+:: StudioSplash [splash-screen] {"position":"300,100"}
+<div class="studio-splash-container">
+    <img src="image/studio_logo.gif" class="splash-logo">
+    <h3 class="splash-presents">P R E S E N T S</h3>
+</div>
+
+<!-- Auto-forwards to the Disclaimer after 4 seconds -->
+<<timed 4.2s>>
+    <<goto "Disclaimer">>
+<</timed>>

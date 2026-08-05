@@ -1,0 +1,56 @@
+:: System_Menu {"position":"100,200","size":"100,100"}
+<<nobr>>
+<div style="font-family: 'Courier Prime', monospace; color: #ccc; padding: 10px;">
+
+	<!-- MENU HEADER -->
+	<div style="text-align: center; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 10px;">
+		<span style="letter-spacing: 3px; font-weight: bold; color: var(--accent-blue);">— SYSTEM ACCESS —</span>
+	</div>
+
+	<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+
+		/* =========================================================
+		   SECTION 1: PLAYER UTILITIES (File & Knowledge)
+		   ========================================================= */
+
+		<<button "💾 SAVE / LOAD">>
+			<<run Dialog.close()>>
+			<<run UI.saves()>>
+		<</button>>
+
+		<<button "📖 SURVIVAL GUIDE">>
+			<<run (Dialog.create || Dialog.setup)("SURVIVAL GUIDE")>>
+			<<run Dialog.wiki(Story.get("Help_Menu").text)>>
+			<<run Dialog.open()>>
+		<</button>>
+
+		<!-- HORIZONTAL SEPARATOR SPANNING BOTH COLUMNS -->
+		<div style="grid-column: span 2; margin: 5px 0;">
+			<hr style="border: 0; border-top: 1px dashed #444;">
+		</div>
+
+		/* =========================================================
+		   SECTION 2: CORE ENGINE (Hardware & Reset)
+		   ========================================================= */
+
+		<<button "⚙️ SETTINGS">>
+			<<run (Dialog.create || Dialog.setup)("SYSTEM SETTINGS")>>
+			<<run Dialog.wiki(Story.get("Settings_Menu").text)>>
+			<<run Dialog.open()>>
+		<</button>>
+
+		<<button "⚠️ RESTART">>
+			<<if confirm("CRITICAL: This will wipe all current progress. Proceed with System Restart?")>>
+				<<run Engine.restart()>>
+			<</if>>
+		<</button>>
+
+	</div>
+
+	<!-- FOOTER LOG -->
+	<div style="margin-top: 20px; font-size: 0.7em; color: #555; text-align: center;">
+		SESSION_ID: <<print Date.now()>> | STATUS: ENCRYPTED
+	</div>
+
+</div>
+<</nobr>>

@@ -1,0 +1,19 @@
+:: Act3_School_ComputerLab {"position":"1000,1900","size":"100,100"}
+<<nobr>>
+<<set $currentLocation to "computer_lab">>
+<<set $activeMap to "Highschool 1st Floor">>
+<</nobr>>
+
+<h2>1ST FLOOR — COMPUTER LAB</h2>
+
+Desktop terminals glow in standby power mode.
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "🚪 Exit Computer Lab to Hallway [WEST]">>
+            <<set $currentLocation to "hall_1_east_2">>
+            <<goto "Act3_School1Floor">>
+        <</link>>
+    </button>
+</div>

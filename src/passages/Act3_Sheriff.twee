@@ -1,0 +1,1117 @@
+:: Act3_Sheriff {"position":"450,1500","size":"100,100"}
+<<nobr>>
+<<if ndef $sheriff_phase>>
+    <<set $sheriff_phase    to 1>>
+    <<set $looted_booking   to false>>
+    <<set $looted_evidence  to false>>
+    <<set $looted_armory    to false>>
+    <<set $zombie_alerted   to false>>
+    <<set $made_noise       to false>>
+    <<set $stranger_met     to false>>
+    <<set $stranger_trust   to "none">>
+    <<set $companion_reyes  to false>>
+<</if>>
+
+/* ─── TIME OF DAY CHECK ─── */
+<<set _arrivedLate to visited("Act2_5_MarcusCabin")>>
+
+<<set _hasVane  to ($vane_status is "joined")>>
+<<set _hasMaya  to ($maya_status is "joined")>>
+<<set _hasDiane to (typeof $companions !== 'undefined' && $companions.includes("Diane"))>>
+
+<<set _isGun      to (setup.ammoMap && setup.ammoMap[$equip.weapon])>>
+<<set _isBlade    to ["Combat Knife","Hunting Knife","Kitchen Knife","Scalpel"].includes($equip.weapon)>>
+<<set _isBlunt    to ["Baseball Bat","Golf Club","Sledgehammer","Cane","Tire Iron","Crowbar"].includes($equip.weapon)>>
+<<set _isUnarmed  to ($equip.weapon == "none")>>
+<<set _hasMultiTool to ($inventory.find(i => i.id === "Multi-Tool") or $equip.weapon === "Multi-Tool")>>
+
+/* Check if any bladed weapon exists in the inventory */
+<<set _inventoryBlade to ($inventory.find(i => ["Combat Knife", "Hunting Knife", "Kitchen Knife", "Scalpel"].includes(i.id)) !== undefined)>>
+<<set _hasBlade to (_isBlade or _inventoryBlade)>>
+
+<<set _carCount to 1>>
+<<if _hasVane>>  <<set _carCount to _carCount + 1>><</if>>
+<<if _hasMaya>>  <<set _carCount to _carCount + 2>><</if>>
+<<if _hasDiane>> <<set _carCount to _carCount + 3>><</if>>
+<<set _carFull to (_carCount >= 4)>>
+<<set _hasKids to (_hasMaya or _hasDiane)>>
+<</nobr>>
+
+/*
+══════════════════════════════════════════════════════════════════════════
+     PHASE 1 — THE APPROACH
+══════════════════════════════════════════════════════════════════════════
+*/
+<<if $sheriff_phase == 1>>
+
+<h2>SUBSTATION — THE APPROACH</h2>
+
+<div style="margin-bottom:15px; text-align:center;">
+    <img src="image/Act3/substation_exterior.gif"
+         style="max-width:100%; border:1px solid #333; box-shadow:0 4px 8px rgba(0,0,0,0.5);">
+</div>
+
+The sedan creeps into the gravel lot behind the building, headlights cut. Up
+close, the blue star emblem on the facade reads <b>KING COUNTY SHERIFF —
+SUBSTATION 4</b>. 
+
+<<if _arrivedLate>>
+    The concrete block sits heavy under a pale morning mist. The emergency backup strobe reflecting off the barred windows is a weak, dying red pulse, struggling against the incoming daylight. The corpses piled at the front entrance are cold and stiff, coated in a layer of morning frost. 
+    <br><br>
+    Somewhere inside, a backup generator gives a dry, rattling metal cough, running low on fuel as it struggles to keep the station's grid alive.
+<<else>>
+    The concrete block is swallowed by the pitch-black night and freezing rain. The emergency backup strobe reflecting off the barred windows is blindingly bright, painting the wet pavement in pulsating red flashes. The corpses piled at the front entrance are fresh, blood still sluggishly washing away in the downpour.
+    <br><br>
+    Somewhere inside, a backup generator roars loudly with a fresh tank of gas, keeping the electronic security loops fully powered.
+<</if>>
+
+<<nobr>>
+<<if _hasVane and _hasMaya>>
+    <br><br>
+    Vane cuts the ignition without being asked, his jaw tight. In the
+    backseat, Maya has both arms around Lily, eyes locked on the barred
+    booking windows.
+    <br><br>
+    <<if _arrivedLate>>
+        <<chat "Maya" "image/avatars/maya.gif" "right" "Those barricades on the door weren't built from outside. They were built from in. The morning daylight doesn't make those bodies look any better. Something drove those officers to seal themselves inside, and then it broke through anyway.">>
+        <br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "The generator is on its last legs—we can hear the pistons grinding. If their dispatch logs survived, we need to grab them before the station's systems go completely dead.">>
+    <<else>>
+        <<chat "Maya" "image/avatars/maya.gif" "right" "Those barricades on the door weren't built from outside. They were built from in. The rain is washing the blood straight off the steps. It's too fresh. If we go in there in the dark, we're blind.">>
+        <br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "But the generator is running full throttle. The security system might still be fully online. If we find the terminal, we find the maps. We need to go in.">>
+    <</if>>
+    <br>
+    <<chat "You" "image/avatars/player.gif" "left" "Maya. Stay in the car. Lily doesn't wake up unless you need to drive. If you hear a sustained alarm—not one shot, a sustained alarm—you take the wheel and you don't stop until you're a kilometer south. Vane, rear fence. Now.">>
+
+<<elseif _hasVane and _hasDiane>>
+    <br><br>
+    Vane kills the headlights. In the back, Diane's grip on her sons
+    tightens without a word.
+    <br><br>
+    <<chat "Diane" "image/avatars/diane.gif" "right" "My husband's truck is gone, and this morning frost is covering dead men's faces. The law didn't save them. I am not watching my sons lose their last adult because you decided to play hero in a graveyard.">>
+    <br>
+    <<chat "Vane" "image/avatars/vane.gif" "right" "We aren't bringing the kids inside, Diane. The generator is chugging on its last fumes—we need to get the logs before the digital systems lock down completely. We don't have hours.">>
+    <br>
+    Diane looks at you directly. Not a question. A calculation.
+    <br><br>
+    <<chat "You" "image/avatars/player.gif" "left" "Diane. Keep the boys under the blanket. Hand on the gear shift. If I'm not back in twenty minutes, drive south and don't stop. I'm going in through the rear maintenance gate.">>
+
+<<elseif _hasVane>>
+    <br><br>
+    <<if _arrivedLate>>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Front is completely compromised. The morning fog is keeping the smell down, but those bodies are stiff. The generator is sputtering out—we have minutes before the building goes completely dark.">>
+    <<else>>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Front is completely compromised. Bodies look like they were dropped hours ago in the dark. But the generator is roaring—means the main breaker is still holding.">>
+    <</if>>
+    <br>
+    <<chat "You" "image/avatars/player.gif" "left" "Agreed. Weapon ready. Stay close, stay quiet. You don't fire unless I fire first.">>
+    <br>
+    Vane nods once. Already scanning the tree line.
+
+<<elseif _hasMaya>>
+    <br><br>
+    Maya's voice comes from the backseat. Low and precise.
+    <br><br>
+    <<if _arrivedLate>>
+        <<chat "Maya" "image/avatars/maya.gif" "right" "The daylight is coming up, but this fog is thick. What does 'things going bad' sound like in a building this quiet?">>
+    <<else>>
+        <<chat "Maya" "image/avatars/maya.gif" "right" "In this pitch black, I won't even see the threat until it's on us. What does 'things going bad' sound like?">>
+    <</if>>
+    <br>
+    <<chat "You" "image/avatars/player.gif" "left" "A building alarm. Sustained and mechanical. That means the horde at the front got redirected. If you hear it, you drive south. You don't look for me. Engine running, both hands on the wheel.">>
+    <br>
+    She holds your gaze for a moment. Then nods.
+
+<<elseif _hasDiane>>
+    <br><br>
+    Diane stares at the building with an expression that has moved past fear
+    into something quieter and more final.
+    <br><br>
+    <<chat "Diane" "image/avatars/diane.gif" "right" "The sun is up, but there's no life here. Marcus used to say the law was just the agreement people make when they're still afraid of each other. Looking at this place, I wonder what the agreement was.">>
+    <br>
+    She turns to you. Her voice is even.
+    <br><br>
+    <<chat "Diane" "image/avatars/diane.gif" "right" "Come back alive. My boys have lost enough.">>
+    <br>
+    <<chat "You" "image/avatars/player.gif" "left" "Lock the doors. Alarm means you drive. Don't wait.">>
+
+<<else>>
+    <br><br>
+    You kill the ignition. 
+    <<if _arrivedLate>>
+        The ticking of the cooling engine sounds too loud in the pale morning mist. You sit with your hands still on the wheel and let yourself feel the full weight of doing this alone.
+    <<else>>
+        The ticking of the cooling engine sounds too loud in the rain-soaked, dead quiet. You sit with your hands still on the wheel and let yourself feel the full weight of doing this alone.
+    <</if>>
+    <br><br>
+    Then you take that weight and put it somewhere you don't have to look at
+    right now. You can come back to it later. If there is a later.
+    <br><br>
+    Rear maintenance fence. That's your way in.
+<</if>>
+<</nobr>>
+
+<br><br>
+<div class="choice-menu">
+    <button>
+        <<link "Approach the back perimeter fence">>
+            <<set $sheriff_phase to 2>>
+            <<goto "Act3_Sheriff">>
+        <</link>>
+        <span class="btn-sub">Slip into the dark alley running along the east side of the building.</span>
+    </button>
+</div>
+
+/*
+══════════════════════════════════════════════════════════════════════════
+     PHASE 2 — THE PERIMETER FENCE & ENTRY
+══════════════════════════════════════════════════════════════════════════
+*/
+<<elseif $sheriff_phase == 2>>
+
+<h2>SUBSTATION — THE REAR PERIMETER</h2>
+
+You slip through the dense pine shadows into the maintenance alley. A
+ten-foot chain-link fence topped with rusted razor wire blocks access to
+the loading dock and the thick steel back door. Through the mesh, the rear
+entrance is visible: locked solid from inside. About eight feet off the
+loading dock, a narrow transom window has been left propped slightly open
+on a metal latch—a ventilation habit from before all of this, forgotten
+when everyone died.
+
+<<if _hasVane>>
+    <br><br>
+    You scale the fence with Vane's help and drop quietly onto the concrete
+    loading dock. The back door has no external handle—locked from inside.
+    <br><br>
+    <<if _arrivedLate>>
+        "The transom," Vane murmurs, studying the propped window. "The generator is practically dead, so the electronic locking solenoid is barely buzzing. If the power dies completely, the electronic locks might lock down permanently. Boost me. I'll slide through and hit the manual latch from inside."
+    <<else>>
+        "The transom," Vane murmurs, studying the propped window. "The generator is roaring, so the electronic locking solenoid will be highly responsive. Boost me. I slide through and hit the latch from inside."
+    <</if>>
+    <br><br>
+    You cup your hands. He steps up, grabs the sill, hauls his legs through
+    the gap, and drops into the records room below.
+    <br><br>
+    His boot clips the corner of a tall stack of metal filing trays.
+    <br><br>
+    The sound is catastrophic in the enclosed silence—a cascading
+    sheet-metal crash that rings through the entire building.
+    <br><br>
+    <i style="color:#aaa;">"Down,"</i> Vane hisses through the mesh.
+    <i style="color:#aaa;">"I'm down. But something heard that."</i>
+    <br><br>
+    In the loading dock shadow, a turned deputy—uniform torn, face a mask
+    of dried blood—snaps its head toward the sound. It draws a slow breath,
+    preparing the wet rattling shriek that will call everything in the front
+    lobby to this position.
+
+    <<if not $zombie_alerted>>
+        <div style="margin-top:20px; padding:15px; background:rgba(80,0,0,0.2); border-left:3px solid var(--accent-red);">
+            <b style="color:var(--accent-red);">⚠️ CRITICAL MOMENT.</b>
+            One window to silence the deputy before it alerts the horde.
+            Every option below carries a different noise cost.
+        </div>
+        <<set $zombie_alerted to true>>
+    <</if>>
+
+    <div class="choice-menu">
+
+        <<if $inventory.find(i => i.id === "Compound Bow") or $equip.weapon === "Compound Bow">>
+            <button>
+                <<link "Draw. Aim. Release. [COMPOUND BOW]">>
+                    <<set $sheriff_phase to 3>>
+                    <<goto "Act3_Sheriff">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-green);">[COMPOUND BOW]</b> The arrow takes the deputy through the eye socket. It folds without a sound. <b style="color:var(--accent-green);">Zero noise.</b></span>
+            </button>
+        <</if>>
+
+        <<if ($skills.stealth >= 2 or hasTrait("GHOST")) and _hasBlade>>
+            <button>
+                <<link "Close the distance. Brain stem. [STEALTH 2 / GHOST + BLADE]">>
+                    <<set $sheriff_phase to 3>>
+                    <<goto "Act3_Sheriff">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[STEALTH 2 / GHOST + BLADE]</b> You move along the fence line through its peripheral blind spot and drive your blade through the base of its skull before it can form the sound. <b style="color:var(--accent-green);">Zero noise.</b></span>
+            </button>
+        <<else>>
+            <button disabled style="opacity:0.4; cursor:not-allowed; border-color:#333;">
+                <span style="text-decoration:line-through;">Stealth takedown</span><br>
+                <span class="btn-sub" style="color:#666;">
+                    <<if not ($skills.stealth >= 2 or hasTrait("GHOST"))>>
+                        [REQUIRES STEALTH 2] You aren't quiet enough to close that distance before it turns.
+                    <<else>>
+                        [REQUIRES BLADED WEAPON] You have the stealth, but you lack a bladed weapon in your inventory or hand to perform a silent execution.
+                    <</if>>
+                </span>
+            </button>
+        <</if>>
+
+        <<if $str >= 6 or $skills.melee >= 2>>
+            <button>
+                <<link "Rush it. Ground it. Silence it. [STR 6 / MELEE 2]">>
+                    <<set $sheriff_phase to 3>>
+                    <<goto "Act3_Sheriff">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 6 / MELEE 2]</b> You cover the distance in two strides and slam it into the asphalt before it can fill its lungs. The crack of skull against concrete is sharp but singular—not enough to carry far. <b style="color:var(--accent-gold);">Low noise.</b></span>
+            </button>
+        <<else>>
+            <button disabled style="opacity:0.4; cursor:not-allowed; border-color:#333;">
+                <span style="text-decoration:line-through;">Tackle and silence it</span><br>
+                <span class="btn-sub" style="color:#666;">[REQUIRES STR 6 OR MELEE 2] You can't move fast enough or hit hard enough to drop it before it gets the sound out.</span>
+            </button>
+        <</if>>
+
+        <button style="border-left-color:var(--accent-red) !important;">
+            <<link "Wrestle it down. (Brute Force)">>
+                <<set $made_noise to true>>
+                <<set $hp -= 15>>
+                <<exert 20>>
+                <<set $sheriff_phase to 3>>
+                <<goto "Act3_Sheriff">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: INJURY + NOISE]</b> Costs 20 STAMINA and 15 HP. You tackle the deputy to the asphalt and choke it out the hard way, taking scratches in the process. The struggle is audible. <b style="color:var(--accent-red);">High noise generated.</b></span>
+        </button>
+
+    </div>
+
+<<else>>
+    <br><br>
+    The front entrance is a wall of the dead. Your only vector is over or
+    through the rear fence, alone.
+
+    <div class="choice-menu">
+
+        <<if $agi >= 6>>
+            <button>
+                <<link "Run. Spring off the dumpster. Catch the sill. [AGI 6]">>
+                    <<set $sheriff_phase to 3>>
+                    <<goto "Act3_Sheriff">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[AGI 6]</b> You hit the dumpster lid at full stride, push off, catch the transom sill, and pull through in one fluid motion. Land inside without a sound. <b style="color:var(--accent-green);">Zero noise.</b></span>
+            </button>
+        <<else>>
+            <button disabled style="opacity:0.4; cursor:not-allowed; border-color:#333;">
+                <span style="text-decoration:line-through;">Vault from the dumpster</span><br>
+                <span class="btn-sub" style="color:#666;">[REQUIRES AGI 6] You can't cover the distance fast enough to make that leap cleanly.</span>
+            </button>
+        <</if>>
+
+        <<if $str >= 6>>
+            <button>
+                <<link "Climb the fence by raw strength. [STR 6]">>
+                    <<exert 10>>
+                    <<set $sheriff_phase to 3>>
+                    <<goto "Act3_Sheriff">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 6]</b> Costs 10 STAMINA. You grab the chain-link and haul yourself hand-over-hand, slow and controlled. The fence gives one low metallic groan as you crest it. <b style="color:var(--accent-gold);">Low noise.</b></span>
+            </button>
+        <<else>>
+            <button disabled style="opacity:0.4; cursor:not-allowed; border-color:#333;">
+                <span style="text-decoration:line-through;">Climb by raw strength</span><br>
+                <span class="btn-sub" style="color:#666;">[REQUIRES STR 6] You lack the upper body strength to control the ascent quietly.</span>
+            </button>
+        <</if>>
+
+        <<if $equip.weapon == "Crowbar" or $equip.weapon == "Tire Iron" or $inventory.find(i => i.id === "Crowbar")>>
+            <button>
+                <<link "Pry the gate padlock. [CROWBAR / TIRE IRON]">>
+                    <<set $sheriff_phase to 3>>
+                    <<goto "Act3_Sheriff">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[PRYING TOOL]</b> You work the bar into the lock bracket and pop the bolt housing. The chain drops into your hand. Silent entry through the gate. <b style="color:var(--accent-green);">Zero noise.</b></span>
+            </button>
+        <<else>>
+            <button disabled style="opacity:0.4; cursor:not-allowed; border-color:#333;">
+                <span style="text-decoration:line-through;">Pry the gate padlock</span><br>
+                <span class="btn-sub" style="color:#666;">[REQUIRES CROWBAR OR TIRE IRON] No leverage tool equipped.</span>
+            </button>
+        <</if>>
+
+        <<if hasTrait("LOCKSMITH") or $inventory.find(i => i.id === "Lockpicks")>>
+            <button>
+                <<link "Pick the gate padlock. [LOCKSMITH / LOCKPICKS]">>
+                    <<set $sheriff_phase to 3>>
+                    <<goto "Act3_Sheriff">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[LOCKSMITH / LOCKPICKS]</b> Standard tumbler. Three seconds. The gate swings open without a sound. <b style="color:var(--accent-green);">Zero noise.</b></span>
+            </button>
+        <</if>>
+
+        <button style="border-left-color:var(--accent-red) !important;">
+            <<link "Scramble over the razor wire. (Brute Force)">>
+                <<exert 15>>
+                <<set $made_noise to true>>
+                <<set $sheriff_phase to 3>>
+                <<goto "Act3_Sheriff">>
+            <</link>>
+            <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: NOISE]</b> Costs 15 STAMINA. You haul yourself over without technique—one foot slips, the fence rattles hard. You drop onto the dock with a dull metal clang. <b style="color:var(--accent-red);">High noise generated.</b></span>
+        </button>
+
+    </div>
+<</if>>
+
+/*
+══════════════════════════════════════════════════════════════════════════
+     PHASE 3 — INTERIOR SCAVENGING
+══════════════════════════════════════════════════════════════════════════
+*/
+<<elseif $sheriff_phase == 3>>
+
+<h2>SUBSTATION — INTERIOR</h2>
+
+<<nobr>>
+<<if _hasVane and not $looted_booking and not $looted_evidence and not $looted_armory>>
+    <<if _arrivedLate>>
+        The heavy steel door groans open—the electronic lock is barely getting enough current to release. You step inside, Vane sliding the locking bar shut behind you. The air smells of gun oil, dry paper, and old copper. The emergency strobe in the front lobby is a dull, weak pulse in the morning mist filtering through the window. Dying. Patient.
+        <br><br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "...Generator is sputtering. If the main breaker trips, we're in total darkness. Grab what you can, and work fast.">>
+    <<else>>
+        The heavy steel door clicks open cleanly—powered by the active generator. You step inside, Vane sliding the locking bar shut behind you. The air smells of gun oil, dry paper, and old copper. The emergency strobe in the front lobby pulses red through the corridor window. Steady. Patient.
+        <br><br>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "...Strobe means the front horde is still oriented to the main entrance. We have power, and we have time. Work fast, work quiet.">>
+    <</if>>
+<<elseif not _hasVane and not $looted_booking and not $looted_evidence and not $looted_armory>>
+    <<if _arrivedLate>>
+        You drop to the tiled floor of the records room. The emergency backup light is a dying, erratic flutter in the corridor ahead—red, red, red, fading in the mist. The building hums with its last, shallow breath. You raise your weapon and move.
+    <<else>>
+        You drop to the tiled floor of the records room. The emergency backup light stutters in the corridor ahead—red, red, red, in the dark. The building hums with its own active breath. You raise your weapon and move.
+    <</if>>
+<</if>>
+<</nobr>>
+
+<br>
+Three zones. Nothing moving on this floor.
+
+<<run window.animateStatBar('.bar-fill.hp', $hp, $hp_max)>>
+<<run window.animateStatBar('.bar-fill.stamina', $stamina, $stamina_max)>>
+
+<div class="crisis-grid">
+
+    /* ══ ZONE 1: BOOKING DESK ══ */
+    <<if not $looted_booking>>
+        <div class="crisis-card">
+            <div class="crisis-text">
+                <img src="image/Act3/substation_booking.gif"
+                     style="max-width:100%; margin-bottom:10px; border:1px solid #222;">
+                <b style="color:var(--accent-blue);">The Booking Desk</b> —
+                Wrecked. Shattered glass, overturned terminals, the dried
+                black outline of where someone fell and didn't get up. But
+                under the bulletproof shield, the emergency dispatch terminal
+                is still flickering. Dimly. Alive.
+            </div>
+            <div class="choice-menu">
+                <button>
+                    <<link "Access the dispatch terminal (2 minutes)">>
+                        <<addTime 2>>
+                        <<set $looted_booking to true>>
+                        <<goto "Act3_Sheriff">>
+                    <</link>>
+                    <span class="btn-sub">Pull the local evacuation logs from the system.</span>
+                </button>
+            </div>
+        </div>
+    <<else>>
+        <div class="crisis-card" style="opacity:0.5;">
+            <div class="crisis-text">
+                <span style="color:var(--accent-green);">✓ [BOOKING DESK SEARCHED]</span>
+                <br><br>
+                <<nobr>>
+                <<if $job == "Police Officer">>
+                    The terminal gives you the full unredacted log. The
+                    evacuation directive sent all Timberline personnel and
+                    civilians to <b>the High School Sanctuary, northeast grid,
+                    Section 7</b>. But you keep reading. The final entry—
+                    timestamped 03:12 this morning—is a partial transmission
+                    from the substation's senior deputy before the system
+                    went dark:
+                    <br><br>
+                    <div style="padding:10px; background:rgba(60,0,0,0.3); border-left:2px solid var(--accent-red); font-size:0.85em; color:#ccc; font-style:italic;">
+                        "...high school compound has been compromised. Repeat,
+                        sanctuary is compromised. Unknown hostile element
+                        inside the perimeter—not infected. Requesting any
+                        available unit proceed with extreme caution to—"
+                    </div>
+                    <br>
+                    <span style="color:var(--accent-red); font-size:0.85em;">The transmission ends there.</span>
+                    <br><br>
+                    <i style="color:#666; font-size:0.8em;">You memorize the coordinates. You also memorize the warning.</i>
+                <<elseif $int >= 5 or hasTrait("THEORY")>>
+                    You find the evacuation directive—<b>all personnel
+                    redirected to the High School Sanctuary</b>—but something
+                    stops you. The log entries from the last several hours
+                    have been selectively deleted. Not by the infected.
+                    Someone sat at this terminal and manually wiped specific
+                    timestamps. You can see the gaps in the sequence numbers.
+                    Whatever happened at the sanctuary, someone didn't want
+                    it in the record.
+                    <br><br>
+                    <i style="color:#666; font-size:0.8em;">Coordinates memorized. Unease noted.</i>
+                <<else>>
+                    You find a printed evacuation directive pinned to the
+                    cork board behind the shattered desk:
+                    <div style="padding:8px 12px; background:rgba(0,0,0,0.3); border:1px dashed #555; margin:8px 0; font-size:0.85em; color:#ccc; font-style:italic;">
+                        ALL TIMBERLINE PERSONNEL AND SURVIVING CIVILIANS
+                        REDIRECTED TO THE HIGH SCHOOL SANCTUARY.
+                    </div>
+                    Coordinates are marked on the back in red pen. You
+                    memorize them.
+                <</if>>
+                <</nobr>>
+            </div>
+        </div>
+    <</if>>
+
+    /* ══ ZONE 2: EVIDENCE LOCKER ══ */
+    <<if not $looted_evidence>>
+        <div class="crisis-card">
+            <div class="crisis-text">
+                <img src="image/Act3/substation_evidence.gif"
+                     style="max-width:100%; margin-bottom:10px; border:1px solid #222;">
+                <b style="color:var(--accent-gold);">The Evidence Locker</b>
+                — A heavy steel-wire cage behind a padlock. Through the mesh:
+                stacked tactical gear boxes, police-issue ballistic plates
+                visible on the top shelf.
+                <<nobr>>
+                <<if $job == "Doctor" or hasTrait("FIELD MEDIC")>>
+                    <br><br>
+                    <span style="color:var(--accent-blue); font-size:0.85em;">Your eye goes immediately to the lower shelf—evidence bags with medical stamps. Confiscated pharmaceuticals logged as evidence before all of this started. Still sealed.</span>
+                <</if>>
+                <</nobr>>
+            </div>
+            <div class="choice-menu">
+
+                <<if hasTrait("LOCKSMITH") or $inventory.find(i => i.id === "Lockpicks")>>
+                    <button>
+                        <<link "Pick the cage lock. [LOCKSMITH / LOCKPICKS]">>
+                            <<set $looted_evidence to true>>
+                            <<run setup.addItem("Tactical Vest", 1)>>
+                            <<if $job == "Doctor" or hasTrait("FIELD MEDIC")>>
+                                <<run setup.addItem("Antibiotics", 2)>>
+                                <<run setup.addItem("Painkillers", 2)>>
+                            <</if>>
+                            <<goto "Act3_Sheriff">>
+                        <</link>>
+                        <<nobr>>
+                        <<if $job == "Doctor" or hasTrait("FIELD MEDIC")>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOCKSMITH + FIELD MEDIC]</b> The lock drops in four seconds. You take the Tactical Vest and clear the medical evidence shelf. Acquire: <b>Tactical Vest</b>, <b>2× Antibiotics</b>, <b>2× Painkillers</b>. <b style="color:var(--accent-green);">Zero noise.</b></span>
+                        <<else>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOCKSMITH / LOCKPICKS]</b> The lock drops in four seconds. Silent. Acquire: <b>Tactical Vest</b>. <b style="color:var(--accent-green);">Zero noise.</b></span>
+                        <</if>>
+                        <</nobr>>
+                    </button>
+
+                <<elseif $equip.weapon == "Crowbar" or $inventory.find(i => i.id === "Crowbar")>>
+                    <button>
+                        <<link "Pry the cage lock. [CROWBAR]">>
+                            <<set $looted_evidence to true>>
+                            <<run setup.addItem("Tactical Vest", 1)>>
+                            <<if $job == "Doctor" or hasTrait("FIELD MEDIC")>>
+                                <<run setup.addItem("Antibiotics", 1)>>
+                            <</if>>
+                            <<goto "Act3_Sheriff">>
+                        <</link>>
+                        <<nobr>>
+                        <<if $job == "Doctor" or hasTrait("FIELD MEDIC")>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[CROWBAR + FIELD MEDIC]</b> You lever the bracket off the brick frame. Sharp crack of metal, contained. Acquire: <b>Tactical Vest</b>, <b>1× Antibiotics</b>. <b style="color:var(--accent-gold);">Low noise.</b></span>
+                        <<else>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[CROWBAR]</b> You lever the bracket off the brick frame. Sharp crack, contained to the room. Acquire: <b>Tactical Vest</b>. <b style="color:var(--accent-gold);">Low noise.</b></span>
+                        <</if>>
+                        <</nobr>>
+                    </button>
+
+                <<else>>
+                    <button>
+                        <<link "Smash the cage lock. (Brute Force)">>
+                            <<exert 15>>
+                            <<set $made_noise to true>>
+                            <<set $looted_evidence to true>>
+                            <<run setup.addItem("Tactical Vest", 1)>>
+                            <<goto "Act3_Sheriff">>
+                        <</link>>
+                        <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: NOISE]</b> Costs 15 STAMINA. The metallic ringing echoes through the entire building. Acquire: <b>Tactical Vest</b>. <b style="color:var(--accent-red);">High noise generated.</b></span>
+                    </button>
+                <</if>>
+
+            </div>
+        </div>
+    <<else>>
+        <div class="crisis-card" style="opacity:0.5;">
+            <div class="crisis-text">
+                <span style="color:var(--accent-green);">✓ [EVIDENCE LOCKER CLEARED]</span>
+                You've secured what was behind the cage.
+            </div>
+        </div>
+    <</if>>
+
+    /* ══ ZONE 3: ARMORY SAFE ══ */
+    <<if not $looted_armory>>
+        <div class="crisis-card">
+            <div class="crisis-text">
+                <img src="image/Act3/substation_armory.gif"
+                     style="max-width:100%; margin-bottom:10px; border:1px solid #222;">
+                <b style="color:var(--accent-red);">The Armory Safe</b> — A
+                heavy municipal safe mounted in the rear weapons locker. 
+                <<if _arrivedLate>>
+                    The digital keypad is dark and completely lifeless. The generator has run out of fuel, and the electronic override solenoid is dead. The safe was never opened during the breach, but now it is sealed shut by dead electronics.
+                <<else>>
+                    The digital keypad is dark but the LED indicator glows amber—still powered by the backup generator. This safe was never opened during the breach.
+                <</if>>
+                <<nobr>>
+                <<if $job == "Burglar" or hasTrait("LOCKSMITH")>>
+                    <br><br>
+                    <span style="color:var(--accent-blue); font-size:0.85em;">Your eye catches a personal duty locker against the far wall, separate from the main safe. Combination-style spin lock. A deputy's nameplate on the door: <i>SGT. REYES.</i></span>
+                <</if>>
+                <</nobr>>
+            </div>
+            <div class="choice-menu">
+
+                <<if $job == "Police Officer">>
+                    <<if _arrivedLate>>
+                        <button disabled style="opacity:0.4; cursor:not-allowed; border-color:#333;">
+                            <span style="text-decoration:line-through;">Key in the municipal override code.</span><br>
+                            <span class="btn-sub" style="color:#666;">[KEYPAD OFFLINE] The digital override cannot be entered because the backup generator has failed. You must use physical means.</span>
+                        </button>
+                    <<else>>
+                        <button>
+                            <<link "Key in the municipal override code. [POLICE OFFICER]">>
+                                <<set $looted_armory to true>>
+                                <<run setup.addItem("Remington 870", 1)>>
+                                <<run setup.addItem("Shotgun Shells", 12)>>
+                                <<goto "Act3_Sheriff">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[POLICE BACKGROUND]</b> You key the county default override sequence from memory. The safe opens cleanly. Acquire: <b>Remington 870 Shotgun</b>, <b>12× Shotgun Shells</b>. <b style="color:var(--accent-green);">Zero noise.</b></span>
+                        </button>
+                    <</if>>
+
+                <<elseif $job == "Burglar" or hasTrait("LOCKSMITH")>>
+                    <button>
+                        <<link "Work Sgt. Reyes's personal locker. [BURGLAR / LOCKSMITH]">>
+                            <<set $looted_armory to true>>
+                            <<run setup.addItem("FN Five-Seven", 1)>>
+                            <<run setup.addItem("5.7x28mm Ammo", 20)>>
+                            <<goto "Act3_Sheriff">>
+                        <</link>>
+                        <span class="btn-sub"><b style="color:var(--accent-gold);">[BURGLAR / LOCKSMITH]</b> You ignore the main safe and work the mechanical spin lock on the personal locker in under thirty seconds. Sergeant Reyes's off-books sidearm. Acquire: <b>FN Five-Seven Pistol</b>, <b>20× 5.7mm Ammo</b>. <b style="color:var(--accent-green);">Zero noise.</b></span>
+                    </button>
+                    <button>
+                        <<link "Attempt the main safe anyway. (Brute Force)">>
+                            <<exert 20>>
+                            <<set $made_noise to true>>
+                            <<set $looted_armory to true>>
+                            <<run setup.addItem("Remington 870", 1)>>
+                            <<run setup.addItem("Shotgun Shells", 8)>>
+                            <<goto "Act3_Sheriff">>
+                        <</link>>
+                        <span class="btn-sub"><b style="color:var(--accent-red);">[BRUTE FORCE]</b> Costs 20 STAMINA. You hammer the lock box until the latch shears. The noise fills the building. Acquire: <b>Remington 870</b>, <b>8× Shotgun Shells</b>. <b style="color:var(--accent-red);">High noise generated.</b></span>
+                    </button>
+
+                <<elseif $skills.tech >= 2 or _hasMultiTool>>
+                    <<if _arrivedLate>>
+                        <button>
+                            <<link "Wire a manual bypass to release the physical deadbolt. [TECH 2 / MULTI-TOOL]">>
+                                <<set $looted_armory to true>>
+                                <<run setup.addItem("Remington 870", 1)>>
+                                <<run setup.addItem("Shotgun Shells", 8)>>
+                                <<goto "Act3_Sheriff">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[TECH 2 / MULTI-TOOL]</b> Keypad has no power, but you bypass the circuit by manually feeding energy from a scavenged cell to pop the physical solenoid. Acquire: <b>Remington 870 Shotgun</b>, <b>8× Shotgun Shells</b>. <b style="color:var(--accent-green);">Zero noise.</b></span>
+                        </button>
+                    <<else>>
+                        <button>
+                            <<link "Bypass the solenoid circuit. [TECH 2 / MULTI-TOOL]">>
+                                <<set $looted_armory to true>>
+                                <<run setup.addItem("Remington 870", 1)>>
+                                <<run setup.addItem("Shotgun Shells", 8)>>
+                                <<goto "Act3_Sheriff">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[TECH 2 / MULTI-TOOL]</b> You get behind the active keypad panel and bridge the latch circuit directly. The safe opens without a sound. Acquire: <b>Remington 870 Shotgun</b>, <b>8× Shotgun Shells</b>. <b style="color:var(--accent-green);">Zero noise.</b></span>
+                        </button>
+                    <</if>>
+
+                <<else>>
+                    <button>
+                        <<link "Bash the lock box until it gives. (Brute Force)">>
+                            <<exert 20>>
+                            <<set $made_noise to true>>
+                            <<set $looted_armory to true>>
+                            <<run setup.addItem("Remington 870", 1)>>
+                            <<run setup.addItem("Shotgun Shells", 8)>>
+                            <<goto "Act3_Sheriff">>
+                        <</link>>
+                        <span class="btn-sub"><b style="color:var(--accent-red);">[BRUTE FORCE]</b> Costs 20 STAMINA. You hammer the lock box until the latch shears. The sound fills the entire building. Acquire: <b>Remington 870</b>, <b>8× Shotgun Shells</b>. <b style="color:var(--accent-red);">High noise generated.</b></span>
+                    </button>
+                <</if>>
+
+            </div>
+        </div>
+    <<else>>
+        <div class="crisis-card" style="opacity:0.5;">
+            <div class="crisis-text">
+                <span style="color:var(--accent-green);">✓ [ARMORY CLEARED]</span>
+                Weapons secured.
+            </div>
+        </div>
+    <</if>>
+
+</div>
+
+<<if $looted_booking or $looted_evidence or $looted_armory>>
+    <div style="margin-top:20px; text-align:center;">
+        <button>
+            <<link "Make for the exit">>
+                <<set $sheriff_phase to 4>>
+                <<goto "Act3_Sheriff">>
+            <</link>>
+            <span class="btn-sub">Head back toward the rear loading dock.</span>
+        </button>
+    </div>
+<</if>>
+
+/*
+══════════════════════════════════════════════════════════════════════════
+     PHASE 4 — THE EXIT
+══════════════════════════════════════════════════════════════════════════
+*/
+<<elseif $sheriff_phase == 4>>
+
+<<if not $made_noise>>
+
+    <h2>SUBSTATION — CLEAR EXIT</h2>
+
+    <div style="margin-bottom:15px; text-align:center;">
+        <img src="image/Act3/substation_loadingdock.gif"
+             style="max-width:100%; border:1px solid #333; box-shadow:0 4px 8px rgba(0,0,0,0.5);">
+    </div>
+
+    You move back through the records room the way you came. The strobe
+    still pulses in the front lobby—red, red, red—but nothing has shifted.
+    The horde at the front entrance hasn't moved. Nothing found you.
+    <br><br>
+    You ease the steel door open and step out onto the loading dock. Cold
+    fog. Clean air. Clean exit.
+    <br><br>
+    You drop off the dock, move through the alley—and stop.
+    <br><br>
+    Someone is leaning against the exterior fence in the dark. Arms crossed.
+    Watching the alley entrance. Tactical respirator pulled down around their
+    neck. They straighten when they see you come through and they don't reach
+    for a weapon.
+    <br><br>
+    <<nobr>>
+    <<if _hasVane>>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "...How long has she been standing there?">>
+        <br>
+    <</if>>
+    <</nobr>>
+    <i>"Deputy Reyes,"</i> the stranger says, addressing you directly.
+    <i>"Off-duty when it started. I've been running resupply runs back to
+    this station since the grid went down—keeping the generator alive,
+    pulling files off the terminal before it dies for good. I watched you
+    go in through the rear fence. I've been out here the whole time."</i>
+    <br><br>
+    She studies you for a moment. Then:
+    <br><br>
+    <i>"You went in quiet and came out quiet. That's either trained or
+    instinct. Either way it tells me you're worth talking to—because I
+    have something you need and you're clearly heading somewhere I know
+    better than you do."</i>
+
+    <<set $stranger_met to true>>
+
+    <br><br>
+    <div class="choice-menu">
+        <button>
+            <<link "\"Talk then. What do you know?\"">>
+                <<set $stranger_trust to "trusted">>
+                <<set $sheriff_phase to 5>>
+                <<goto "Act3_Sheriff">>
+            <</link>>
+            <span class="btn-sub">She waited outside while you were in there. She had every opportunity to run or to cause trouble. She did neither.</span>
+        </button>
+
+        <<if hasTrait("TRUST NO ONE") or hasTrait("LIE DETECTOR")>>
+            <button>
+                <<link "\"You've been watching me this whole time. Why? Who sent you?\" [TRUST NO ONE / LIE DETECTOR]">>
+                    <<set $stranger_trust to "interrogated">>
+                    <<set $sheriff_phase to 5>>
+                    <<goto "Act3_Sheriff">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[TRUST NO ONE / LIE DETECTOR]</b> Someone watching you without announcing themselves isn't a good samaritan. They're an observer. You want to know what they were observing <i>for.</i></span>
+            </button>
+        <</if>>
+
+        <<if hasTrait("DIPLOMAT") or hasTrait("SILVER TONGUE") or $cha >= 7>>
+            <button>
+                <<link "\"I'm $firstName. You kept watch while I was inside. That means something. What do you need?\" [DIPLOMAT / CHA 7]">>
+                    <<set $stranger_trust to "allied">>
+                    <<set $sheriff_phase to 5>>
+                    <<goto "Act3_Sheriff">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[DIPLOMAT / CHA 7]</b> Lead with your name and acknowledge what she did. An exchange of debts is how trust starts when there isn't time for anything else.</span>
+            </button>
+        <</if>>
+    </div>
+
+<<else>>
+
+    <h2>SUBSTATION — LOCKDOWN</h2>
+
+    <div style="margin-bottom:15px; text-align:center;">
+        <img src="image/Act3/substation_loadingdock.gif"
+             style="max-width:100%; border:1px solid #333; box-shadow:0 4px 8px rgba(0,0,0,0.5);">
+    </div>
+
+    <<nobr>>
+    <<run setup.sound.play("siren_alarm", "audio/sfx/car_alarm_wail.mp3", true, 0.8)>>
+    <</nobr>>
+
+    You haven't cleared the records room when the building detonates with
+    sound—a municipal klaxon hammering every emergency speaker
+    simultaneously. The front strobe switches from periodic to continuous
+    flood. Through the lobby window, the horde reorients. Dozens of bodies
+    turning inward as one, pressing toward the interior corridor.
+    <br><br>
+    The automated security shutters begin descending. Steel grates dropping
+    in sequence, one after another, sealing the building into isolated
+    compartments. One drops behind you with a grinding finality—leaving
+    eight inches of clearance at the bottom. The lock bolt drives home with
+    a mechanical thud.
+    <br><br>
+    The horde fills the lobby glass wall. Palms against the reinforced pane,
+    building pressure.
+    <br><br>
+    <<nobr>>
+    <<if _hasVane>>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Grate is locked. Front is full. Think—there has to be another way through.">>
+        <br>
+    <</if>>
+    <</nobr>>
+    In the adjacent records office, a figure appears behind the thick glass
+    panel. Tactical respirator. Heavy tinted goggles. Police surplus jacket
+    over civilian clothes. Already at the master control terminal—not
+    looting, not panicking. <i>Working.</i>
+    <br><br>
+    The locked grate above you screams metal-on-metal. Stops. Grinds upward
+    centimeter by centimeter—until it holds at roughly fifty centimeters of
+    clearance. The horde at the lobby glass surges at the sound.
+    <br><br>
+    The figure kicks out the records office window pane, draws a flashbang
+    from her vest, and pitches it blind down the lobby corridor. White-out
+    detonation. Thunderclap. The front of the horde staggers, clawing at
+    its own eyes.
+    <br><br>
+    The stranger drops to her knees, slides under the grate, and looks
+    directly at you through tinted goggles.
+    <br><br>
+    <i>"Reyes. Deputy Reyes. I tripped the generator breaker—caused the
+    lockdown. That grate won't hold long. Get under it. <b>Now.</b>"</i>
+
+    <<set $stranger_met to true>>
+
+    <br><br>
+    <div style="padding:12px 15px; background:rgba(20,20,30,0.5); border-left:3px solid var(--accent-gold); margin-bottom:10px;">
+        <b style="color:var(--accent-gold);">FIFTEEN SECONDS.</b> The flashbang won't last. React.
+    </div>
+
+    <div class="choice-menu">
+        <button>
+            <<link "Drop. Slide. Go.">>
+                <<set $stranger_trust to "trusted">>
+                <<set $sheriff_phase to 5>>
+                <<goto "Act3_Sheriff">>
+            <</link>>
+            <span class="btn-sub">She opened the exit. You take it. Questions come after you're breathing fresh air.</span>
+        </button>
+
+        <<if hasTrait("TRUST NO ONE") or hasTrait("LIE DETECTOR")>>
+            <button>
+                <<link "\"Name. Reason. Five seconds.\" [TRUST NO ONE / LIE DETECTOR]">>
+                    <<set $stranger_trust to "interrogated">>
+                    <<set $sheriff_phase to 5>>
+                    <<addTime 1>>
+                    <<goto "Act3_Sheriff">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[TRUST NO ONE / LIE DETECTOR]</b> 1 Minute. You read people. You read her right now before you commit. It only takes five seconds when you know what to look for.</span>
+            </button>
+        <</if>>
+
+        <<if hasTrait("DIPLOMAT") or hasTrait("SILVER TONGUE") or $cha >= 7>>
+            <button>
+                <<link "\"I'm $firstName. Pull us through and I owe you one.\" [DIPLOMAT / CHA 7]">>
+                    <<set $stranger_trust to "allied">>
+                    <<set $sheriff_phase to 5>>
+                    <<goto "Act3_Sheriff">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-gold);">[DIPLOMAT / CHA 7]</b> Lead with your name. Make it human. An exchange in a crisis is worth more than blind compliance.</span>
+            </button>
+        <</if>>
+    </div>
+
+<</if>>
+
+/*
+══════════════════════════════════════════════════════════════════════════
+     PHASE 5 — TRUST REACTION + CAR CAPACITY
+══════════════════════════════════════════════════════════════════════════
+*/
+<<elseif $sheriff_phase == 5>>
+
+<<nobr>><<run setup.sound.stop("siren_alarm")>><</nobr>>
+
+<<if $stranger_trust == "interrogated">>
+
+    <h2>SUBSTATION — THE LOADING DOCK</h2>
+
+    She doesn't blink. Doesn't stall.
+    <br><br>
+    <i>"Deputy Reyes. I've been running solo resupply to this station since
+    the grid went down—keeping the generator alive so I can keep pulling
+    files off the terminal. I've been watching this building every night.
+    I tripped the lockdown on purpose when I saw you go in through the
+    rear fence."</i>
+    <br><br>
+    <<nobr>>
+    <<if hasTrait("LIE DETECTOR")>>
+        <div style="padding:10px 14px; background:rgba(0,30,50,0.3); border-left:3px solid var(--accent-blue); margin:10px 0; font-size:0.85em;">
+            <span style="color:var(--accent-blue);">[LIE DETECTOR]</span>
+            Controlled breathing. Steady pupils. Jaw tension from stress,
+            not deception. She's telling the truth—or everything she
+            believes to be true, which amounts to the same thing.
+        </div>
+    <</if>>
+    <br>
+    <i>"Now can we move? Because I have things to tell you about where
+    you're going that you need to hear while you're still in a position
+    to change how you walk in."</i>
+    <br><br>
+    <</nobr>>
+    Good enough. You move.
+    <br><br>
+
+<<elseif $stranger_trust == "allied">>
+
+    <h2>SUBSTATION — THE LOADING DOCK</h2>
+
+    Something shifts in her posture. Not warmth—more like a decision
+    being made.
+    <br><br>
+    <i>"Reyes,"</i> she says. <i>"Deputy Reyes. And yes—you owe me one.
+    I'll collect later. Move now."</i>
+    <br><br>
+    <<nobr>>
+    <<if $made_noise>>
+        <<if _arrivedLate>>
+            You slide under the grate. Cold dock. Siren muffled instantly by six inches of brick behind you. The morning sun struggles to cut through the heavy gray mist as you find your footing.
+        <<else>>
+            You slide under the grate. Cold dock. Siren muffled instantly by six inches of brick behind you. The pouring rain is cold on your neck.
+        <</if>>
+    <</if>>
+    <</nobr>>
+    <br><br>
+
+<<else>>
+
+    <h2>SUBSTATION — THE LOADING DOCK</h2>
+
+    <<nobr>>
+    <<if $made_noise>>
+        <<if _arrivedLate>>
+            You hit the floor and slide. Cold concrete. The alarm receding the moment the steel door shuts behind you. On your feet. Moving through the dense morning fog.
+        <<else>>
+            You hit the floor and slide. Cold concrete. The alarm receding the moment the steel door shuts behind you. On your feet. Moving through the dark downpour.
+        <</if>>
+    <</if>>
+    <</nobr>>
+    <br><br>
+
+<</if>>
+
+Reyes moves fast but doesn't sprint—controlled, deliberate, scanning
+corners before rounding them. She knows this alley. She's run it before.
+<br><br>
+Your car comes into view through the fog.
+<br><br>
+She stops.
+<br><br>
+She's looking through the windshield.
+
+<<nobr>>
+<<if _carFull and _hasKids>>
+    <br><br>
+    The car is packed. She can see it immediately—bodies pressed against
+    the glass, a child's face watching her through the window with wide,
+    exhausted eyes. She goes still for a moment. Something crosses her
+    expression that she doesn't quite manage to keep off her face. Not
+    pity. Something older than that. Something that has its own weight.
+    <br><br>
+    <<chat "Reyes" "image/avatars/reyes.gif" "right" "You've got kids in there.">>
+    <br>
+    Not a question.
+    <br><br>
+    <<chat "Reyes" "image/avatars/reyes.gif" "right" "Okay. Change of plan. I'm not squeezing into that car and burning your fuel—you're already running heavy and you've got children to protect. I've got bikes stashed in the maintenance shed around the east corner. I've been on two wheels since the first hour. Quiet, no gas, fits gaps a car can't touch. I'll ride ahead and keep the path clear. You follow my tail light.">>
+    <<set $reyes_rides_bike to true>>
+    <<set $sheriff_phase to 6>>
+
+<<elseif _carFull>>
+    <br><br>
+    She counts the silhouettes through the windshield. Does the math
+    quietly. Then exits the alley, her jaw set.
+    <br><br>
+    <<chat "Reyes" "image/avatars/reyes.gif" "right" "That sedan is already over weight. You put me in there and you're one bad road surface from a blown tire with nowhere to run.">>
+    <br>
+    She tilts her head toward the east corner of the building.
+    <br><br>
+    <<chat "Reyes" "image/avatars/reyes.gif" "right" "I've got bikes in the maintenance shed. I've been running on two wheels since the first hour—quiet, no fuel drain, fits gaps a car can't. I'll take the lead. You follow.">>
+    <<set $reyes_rides_bike to true>>
+    <<set $sheriff_phase to 6>>
+
+<<elseif _hasKids>>
+    <br><br>
+    She's about to reach for the door handle when she spots the children
+    through the glass. Her hand drops.
+    <br><br>
+    <<chat "Reyes" "image/avatars/reyes.gif" "right" "You're moving with kids.">>
+    <br>
+    A beat.
+    <br><br>
+    <<chat "Reyes" "image/avatars/reyes.gif" "right" "I have bikes. Maintenance shed, east corner. I've been on two wheels since the first hour—no engine noise, no fuel drain. I'll take point on the route to the sanctuary. Safer for them if I'm clearing the path ahead rather than adding weight to a car with children in it.">>
+    <<set $reyes_rides_bike to true>>
+    <<set $sheriff_phase to 6>>
+
+<<else>>
+    <br><br>
+    She glances at the car, then back at you.
+    <br><br>
+    <<chat "Reyes" "image/avatars/reyes.gif" "right" "I've got a bike in the maintenance shed—east corner. I've been riding since the first hour. Quiet, no gas, and I know a back route to the sanctuary that keeps you off the main road entirely. I can ride ahead or get in the back seat. Your call.">>
+<</if>>
+<</nobr>>
+
+<<if not _carFull and not _hasKids>>
+    <br><br>
+    <div class="choice-menu">
+        <button>
+            <<link "Take the bike. Lead us in.">>
+                <<set $reyes_rides_bike to true>>
+                <<set $sheriff_phase to 6>>
+                <<goto "Act3_Sheriff">>
+            <</link>>
+            <span class="btn-sub">She knows the roads and she knows the checkpoint. Let her do what she's built for.</span>
+        </button>
+        <button>
+            <<link "Get in the car. I want you where I can see you.">>
+                <<set $reyes_rides_bike to false>>
+                <<set $sheriff_phase to 6>>
+                <<goto "Act3_Sheriff">>
+            <</link>>
+            <span class="btn-sub">
+            <<nobr>>
+            <<if hasTrait("TRUST NO ONE")>>
+                <b style="color:var(--accent-gold);">[TRUST NO ONE]</b> You don't let someone you just met ride out ahead of your group unsupervised.
+            <<else>>
+                Keep the group together. Slower, but unified.
+            <</if>>
+            <</nobr>>
+            </span>
+        </button>
+    </div>
+<<else>>
+    <<nobr>><<goto "Act3_Sheriff">><</nobr>>
+<</if>>
+
+/*
+══════════════════════════════════════════════════════════════════════════
+     PHASE 6 — THE ESCORT OUT
+══════════════════════════════════════════════════════════════════════════
+*/
+<<elseif $sheriff_phase == 6>>
+
+<<nobr>><<run setup.sound.stop("siren_alarm")>><</nobr>>
+
+<<if $reyes_rides_bike>>
+
+    <h2>SUBSTATION — THE ESCORT</h2>
+
+    Reyes doesn't wait for second thoughts. She's already moving toward
+    the east corner of the building at a fast walk.
+    <br><br>
+    Less than ninety seconds later, she rolls a mountain bike out of the
+    maintenance shed—matte black frame, no reflectors, the kind of
+    deliberately low-profile setup that isn't an accident. A second bike
+    leans against the shed wall behind it.
+    <br><br>
+    <<nobr>>
+    <<if _hasVane>>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "She had those ready. She's been doing this a while.">>
+        <br>
+        He says it quietly. Not critically. Just noting what it means about
+        how long this has been going on—and how quickly she adapted.
+    <<elseif _hasMaya>>
+        Through the windshield, Maya watches Reyes check the tires with
+        practiced efficiency. Some of the tension leaves her shoulders.
+        Not all of it. But some.
+    <<elseif _hasDiane>>
+        Diane watches from the passenger seat with the flat expression of
+        someone who has survived past the point of surprise. One of her
+        boys presses his face to the glass to get a better look at the bike.
+    <</if>>
+    <</nobr>>
+    <br><br>
+    Reyes pulls up alongside your window. She clips a small red light to
+    the seat post—barely visible, just enough to track in fog.
+    <br><br>
+    <<chat "Reyes" "image/avatars/reyes.gif" "right" "Follow the red light. Keep a twenty-meter gap—if I stop suddenly, something's in the road. Kill your headlights when I kill mine. When we reach the checkpoint fence, stay in the car and let me do the talking.">>
+    <br><br>
+    She holds your gaze for one moment longer than strictly necessary.
+    <br><br>
+    <<chat "Reyes" "image/avatars/reyes.gif" "right" "The people running the sanctuary right now—just let me handle the introduction. It'll go better.">>
+    <br><br>
+    She doesn't explain what she means by <i>better.</i>
+    <br><br>
+    She pushes off and rolls into the fog ahead of you. The small red light
+    bobs once, then steadies—a dim ruby point floating north through the dark.
+
+<<else>>
+
+    <h2>SUBSTATION — THE ESCORT</h2>
+
+    Reyes gets in. The car is tight but workable. She sets the respirator
+    on her knee and faces forward without ceremony.
+    <br><br>
+    <<chat "Reyes" "image/avatars/reyes.gif" "right" "North on the main road. I'll tell you when to turn. When we reach the checkpoint fence, let me get out first and speak to them before you roll up. They know my face.">>
+    <br><br>
+    A pause.
+    <br><br>
+    <<chat "Reyes" "image/avatars/reyes.gif" "right" "The people running the sanctuary right now—just let me handle the introduction. It'll go better.">>
+    <br><br>
+    She doesn't explain what she means by <i>better.</i>
+
+<</if>>
+
+<br><br>
+The engine turns over. The fog closes in behind you as you pull out of
+the gravel lot, the dark silhouette of Substation 4 swallowed by the mist.
+<br><br>
+Whatever Reyes knows about what's waiting at the high school—she'll tell
+you when she're ready. Or you'll find out when you get there.
+
+<<nobr>>
+<<set $companion_reyes to true>>
+<<set $sheriff_phase to undefined>>
+<</nobr>>
+
+<div style="margin-top:30px; text-align:center;">
+    <button>
+        <<link "Follow Reyes north toward the sanctuary">>
+        	    <<completeObjective "find_intel">>
+    			<<addObjective "reach_safehaven" "Find and gain entry into the High School Sanctuary">>
+    			<<purgeCompleted>> /* METHOD B: Sweeps the HUD clean for Act 3 Sanctuary */
+            <<goto "Act3_ArrivalSchool">>
+        <</link>>
+        <span class="btn-sub">She knows the checkpoint. She knows the people inside. Whatever <i>better</i> means—you need her right now more than you need the answer.</span>
+    </button>
+</div>
+
+<</if>>

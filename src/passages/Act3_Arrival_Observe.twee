@@ -1,0 +1,191 @@
+:: Act3_Arrival_Observe {"position":"550,1400","size":"100,100"}
+<<nobr>>
+/* =====================================================================
+     ACT 3: ARRIVAL - OBSERVATION RESOLUTION
+   ===================================================================== */
+
+<<set $currentLocation to "Town_Outskirts">>
+
+/* 1. TIME OF DAY CHECK */
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
+
+/* 2. COMPANION EXISTENCE CHECKS */
+<<set _hasVane to ($vane_status == "joined")>>
+<<set _hasMaya to (typeof $companions !== 'undefined' && ($companions.includes("Maya") or $maya_status == "joined"))>>
+<<set _hasDiane to (typeof $companions !== 'undefined' && $companions.includes("Diane"))>>
+<</nobr>>
+
+<h2>THE OUTSKIRTS — TIMBERLINE</h2>
+
+<div style="margin-bottom: 15px; text-align: center;">
+<<if _arrivedLate>>
+    <img src="image/Act3/outskirts_morning.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+<<else>>
+    <img src="image/Act3/outskirts_night.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+<</if>>
+</div>
+
+<<if _arrivedLate>>
+    You twist the key and the sedan's engine dies with a low, ticking sigh. The headlights flicker out, and the pale, freezing mist of morning presses against the glass. The heavy rain from the night has stopped, but the fog rolling off the pine canopy is thick, illuminated by a weak gray sun struggling to rise. You slept a few hours at the cabin, but the exhaustion still sits heavy in your joints. 
+    <br><br>
+    Ten minutes pass in silence. In the cold light of day, you watch both structures carefully, reading the still, eerie shapes.
+<<else>>
+    You twist the key and the sedan's engine dies with a low, ticking sigh. The headlights flicker out, plunging the car into the absolute blackness of 4:30 AM. The rain continues to beat a relentless, cold drum against the metal roof. The world is pitch black, and the air is thick with freezing fog. You are running on nothing but empty fuel vapors and raw, trembling adrenaline.
+    <br><br>
+    Ten minutes pass in silence. In the dead of night, you wait for your eyes to fully adjust, staring intently into the dark.
+<</if>>
+
+<br><br>
+
+<!-- TACTICAL OBSERVATION CARDS -->
+<div class="crisis-grid">
+
+    <!-- SUBSTATION INTEL -->
+    <div class="crisis-card">
+        <img src="image/Act3/substation_exterior.gif" style="height: 180px; object-fit: cover;">
+        <div class="crisis-text">
+            <b style="color:var(--accent-red);">LEFT: SUBSTATION 4</b>
+            <hr style="border-color:#222; margin: 8px 0;">
+            <<if _arrivedLate>>
+                The dark mounds blocking the glass doors are bodies—stiff, cold, and covered in morning dew. The emergency red strobe is dead, and the backup generator is completely silent, having run out of fuel hours ago.
+                <br><br>
+                The east-side fence is wired shut from the <i>outside</i>, sealing the threat within. Because the generator is dead, the building is in total darkness and the digital security systems are entirely offline.
+            <<else>>
+                The dark mounds blocking the glass doors are bodies—freshly killed deputies and civilians in torn winter wear. Through the dark, you hear the loud, mechanical roar of an emergency backup generator running on its first tank of fuel, powering a red strobe that pulses aggressively through the barred windows.
+                <br><br>
+                The east-side fence is wired shut from the <i>outside</i>, sealing the threat within. Because the power is active, the station's digital security systems are still online.
+            <</if>>
+        </div>
+    </div>
+
+    <!-- SUBURBAN HOME INTEL -->
+    <div class="crisis-card">
+        <<if _arrivedLate>>
+            <img src="image/Act3/suburban_house_morning.gif" style="height: 180px; object-fit: cover;">
+        <<else>>
+            <img src="image/Act3/suburban_house_night.gif" style="height: 180px; object-fit: cover;">
+        <</if>>
+        <div class="crisis-text">
+            <b style="color:var(--accent-blue);">RIGHT: COLONIAL HOME</b>
+            <hr style="border-color:#222; margin: 8px 0;">
+            <<if _arrivedLate>>
+                In the pale morning light, this house stands out as strangely intact. The dark wool blanket pinned over the window looks highly conspicuous in the daylight. There is no amber glow anymore—the candle has burned down to a dead wax stub, or the occupant blew it out at dawn.
+                <br><br>
+                A fresh bicycle track leads around toward the back garage. The occupant is likely exhausted after a long night of watching and may be asleep.
+            <<else>>
+                In a neighborhood of broken glass, this entrance is shut tight, its windows unbroken. The blanket covering the lower-left window is pinned precisely to prevent light leaks, but in the pitch black, a bright, warm amber candle glow escapes from the bottom edge.
+                <br><br>
+                A fresh bicycle track leads around toward the back garage. The occupant is awake, using a fresh candle, and likely hyper-vigilant in the dead of night.
+            <</if>>
+        </div>
+    </div>
+
+</div>
+
+<!-- COMPANION DIALOGUE SECTIONS -->
+<<nobr>>
+<<if _hasVane and _hasMaya>>
+    <br><br>
+    Vane leans forward between the seats, his voice a quiet breath against the headrest.
+    <br><br>
+    <<if _arrivedLate>>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "The station is dead silent. Generator must have run out of fuel. If we try to get into their safes or terminals, we'll have to use brute force.">>
+    <<else>>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "Hear that hum? The station's generator is still running. If we can get inside, we might be able to bypass their electronic locks cleanly.">>
+    <</if>>
+    <br>
+    In the backseat, Maya shifts Lily slightly in her sleep, her voice equally low.
+    <br><br>
+    <<if _arrivedLate>>
+        <<chat "Maya" "image/avatars/maya.gif" "right" "The candle in the house is out. In this daylight, that blanket on the window stands out like a sore thumb. They've been awake all night; they might be asleep now.">>
+    <<else>>
+        <<chat "Maya" "image/avatars/maya.gif" "right" "That candle in the window is fresh, burning in the pitch black. Whoever is inside is awake, hiding, and holding their breath. If we go there, we're dealing with someone on high alert.">>
+    <</if>>
+
+<<elseif _hasVane and _hasDiane>>
+    <br><br>
+    Vane points quietly at the substation.
+    <br><br>
+    <<if _arrivedLate>>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "The station is completely dark—the power is out. It's dangerous, but if we go, we'll need tools to pry our way into the armory.">>
+    <<else>>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "The emergency strobe is flashing; the power is still on. If we move fast, we can use their systems before the fuel runs out.">>
+    <</if>>
+    <br>
+    Diane watches the house, her face set in a hard, tired line.
+    <br><br>
+    <<if _arrivedLate>>
+        <<chat "Diane" "image/avatars/diane.gif" "right" "The candle is dead, and the morning fog is rolling in. If someone's inside, they're resting. We should go quietly, for the boys' sake.">>
+    <<else>>
+        <<chat "Diane" "image/avatars/diane.gif" "right" "The candle is bright. They're awake in the dark. It's a sanctuary, Vane. We need to approach with our hands up.">>
+    <</if>>
+
+<<elseif _hasVane>>
+    <br><br>
+    <<if _arrivedLate>>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "The station is completely dark, and the candle in the house is dead. The world has slowed down. We can slip into the house while they sleep, or pry our way into the dead station.">>
+    <<else>>
+        <<chat "Vane" "image/avatars/vane.gif" "right" "The station's generator is roaring, and the house has a fresh candle. Both places are active. Which one are we gambling our last drop of fuel on?">>
+    <</if>>
+
+<<elseif _hasMaya>>
+    <br><br>
+    <<if _arrivedLate>>
+        <<chat "Maya" "image/avatars/maya.gif" "right" "The station's power is out, and the things inside are cold. The house is quiet, the candle burned down. If we go to the house, we might catch them off guard.">>
+    <<else>>
+        <<chat "Maya" "image/avatars/maya.gif" "right" "The station is surrounded by the dead, but they're locked behind that fence. The house has a fresh, bright candle. Whoever is in there is watching the road. We need to decide who we are prepared to face.">>
+    <</if>>
+
+<<elseif _hasDiane>>
+    <br><br>
+    <<chat "Diane" "image/avatars/diane.gif" "right" "Marcus always said the quiet ones are the ones who make it. The person in that house isn't looking for a fight, but they'll defend what's theirs. The station is a graveyard. If you want gear, we go left. If you want a safe place for my boys, we go right.">>
+    <br><br>
+    <<if _arrivedLate>>
+        <<chat "Diane" "image/avatars/diane.gif" "right" "The morning is cold, and the candle's dead. We'll need to break things to get into the station. If we go to the house, they might be asleep.">>
+    <<else>>
+        <<chat "Diane" "image/avatars/diane.gif" "right" "The candle is bright in the dark. Whoever is in that house is holding on, watching. The station's generator is loud. If we want weapons, we go left. If we want safety, we go right.">>
+    <</if>>
+
+<<else>>
+    <br><br>
+    <<if _arrivedLate>>
+        You study the split. In the gray morning light, the silent substation is a tomb—its generator dead, its digital locks frozen. The colonial house is quiet; its candle has burned out, meaning the survivor inside may have finally gone to sleep.
+    <<else>>
+        You study the split. In the pitch black of 4:30 AM, the roaring generator at the substation means the power is still active, but the dead outside are fresh. The colonial house's bright candle means someone is awake, watching, and waiting.
+    <</if>>
+<</if>>
+<</nobr>>
+
+<br><br>
+
+<div class="choice-menu">
+
+    <!-- Option A: Sheriff Substation -->
+    <button>
+        <<link "Investigate the concrete substation to the left">>
+            <<addTime 5>>
+            <<set $act3_location to "sheriff">>
+            <<goto "Act3_Sheriff">>
+        <</link>>
+        <<if _arrivedLate>>
+            <span class="btn-sub">Approach the quiet yard. The generator is dead; electronic systems are offline, requiring physical force to clear path.</span>
+        <<else>>
+            <span class="btn-sub">Approach the active yard. The generator is loud; electronic systems are online and bypassable if you move fast.</span>
+        <</if>>
+    </button>
+
+    <!-- Option B: Suburban Home -->
+    <button>
+        <<link "Search the two-story home to the right">>
+            <<addTime 5>>
+            <<set $act3_location to "suburban_home">>
+            <<goto "Act3_Home">>
+        <</link>>
+        <<if _arrivedLate>>
+            <span class="btn-sub">Approach the colonial home. The candle is out; the occupant may be exhausted and sleeping, making stealth easier.</span>
+        <<else>>
+            <span class="btn-sub">Approach the colonial home. A fresh candle burns behind the blanket; the occupant is awake and highly alert in the dark.</span>
+        <</if>>
+    </button>
+
+</div>
