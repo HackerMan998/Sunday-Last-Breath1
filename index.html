@@ -1176,9 +1176,9 @@ html, body {
 }
 
 .tv-static-img {
-    max-height: 40vh !important; /* Let image scale without crushing text */
+    max-height: 38vh !important; /* Let image scale without crushing text */
     max-width: 100%;
-    object-fit: contain;
+    object-fit:contain;
     border: 2px solid #333;
     border-radius: 4px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
@@ -1189,7 +1189,7 @@ html, body {
     flex: 0 1 auto; /* Takes only the space it needs */
     height: auto; /* Allows box to expand for choices/buttons */
     min-height: 25vh;
-    max-height: 45vh; /* Prevents it from eating the whole screen */
+    max-height: 55vh; /* Prevents it from eating the whole screen */
     overflow-y: auto; /* Adds a scrollbar ONLY if text is massive */
     width: 100%;
     background: rgba(8, 8, 12, 0.96);
@@ -1236,8 +1236,8 @@ html, body {
 
 /* Animated Click-to-Continue Prompt */
 .vn-prompt-text {
-    position: relative;
-    bottom: 14px;
+    position:fixed;
+    bottom: 20px;
     right: 30px;
     color: #e74c3c;
     font-family: 'Oswald', sans-serif;
