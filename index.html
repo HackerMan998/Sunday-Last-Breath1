@@ -1349,6 +1349,55 @@ html, body {
 
 .floor-item-card a:hover {
   background: #2ecc71;
+}
+
+/* --- OVERRIDE KHUSUS UNTUK LAYAR EAS BROADCAST (CINEMATIC BACKGROUND) --- */
+
+/* 1. Gambar TV lepas dari area atas dan menjadi background layar penuh */
+body.eas-broadcast-active .tv-static-img {
+    position: fixed !important; /* Menempel di background */
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    object-fit: cover !important;
+    opacity: 0.25 !important; /* Dibuat lebih redup agar tidak bertabrakan dengan teks */
+    z-index: -1 !important; /* Ditaruh di layer paling belakang (di bawah segalanya) */
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    transition: opacity 0.5s ease-out;
+}
+
+/* 2. Kotak VN tetap di bawah, tingginya otomatis menyesuaikan teks EAS */
+body.eas-broadcast-active .vn-dialogue-box {
+    position: relative !important;
+    height: auto !important; /* Kembali dinamis, mengikuti panjang teks */
+    max-height: 85vh !important; /* Batas aman agar tidak menutupi HUD/Menu di atas */
+    background: rgba(8, 8, 12, 0.90) !important; /* Gelap semi-transparan */
+    overflow-y: hidden !important; /* Hilangkan scrollbar */
+    padding-bottom: 30px !important;
+    justify-content: flex-start !important;
+    transition: max-height 0.4s ease-out;
+}
+
+/* 3. Penyesuaian perataan teks EAS */
+body.eas-broadcast-active #vn-text {
+    font-size: 1.05em;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* --- FIX UNTUK GRID ITEM DI PROLOGUE --- */
+.prologue-gear-grid img {
+    max-width: 100% !important; /* Mencegah gambar tumpang tindih ke samping */
+    height: 45px !important; /* Membatasi tinggi agar seragam dan tidak memicu scrollbar */
+    object-fit: contain !important; /* Memastikan rasio gambar tidak gepeng */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); /* Memberikan efek 3D yang elegan */
+    margin: 0 auto;
+    display: block;
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "engines.js" */
 /* =================================================================
    SUNDAY'S LAST BREATH -- STORY JAVASCRIPT
@@ -3941,7 +3990,10 @@ window.VNEngine = {
         if (self.timer) clearInterval(self.timer);
         
         self.targetEl.html('');
-        $('.vn-prompt-text').hide(); // Hide 'Next' prompt while typing
+        
+        // 1. SEMBUNYIKAN PROMPT DAN TOMBOL SAAT MENGETIK
+        $('.vn-prompt-text').hide(); 
+        $('#vn-action-area, .choice-menu').hide(); 
         
         let index = 0;
         self.timer = setInterval(function() {
@@ -3954,17 +4006,22 @@ window.VNEngine = {
         }, speed);
     },
 
-    // Instantly reveal all text
+    // Instantly reveal all text and buttons
     complete: function() {
         if (this.timer) clearInterval(this.timer);
         if (this.targetEl) this.targetEl.html(this.fullText);
         this.typing = false;
-        $('.vn-prompt-text').fadeIn(200); // Show blinking prompt
+        
+        // 2. MUNCULKAN PROMPT DAN TOMBOL SECARA MULUS SAAT TEKS SELESAI
+        $('.vn-prompt-text').fadeIn(200); 
+        $('#vn-action-area, .choice-menu').fadeIn(600); // 600ms memberikan efek fade-in yang dramatis
     },
 
     // Handle clicks: Skip typing IF typing, else Advance passage
     handleInteraction: function() {
         if (this.typing) {
+            // Jika pemain mengklik layar saat teks masih mengetik, 
+            // fungsi complete() akan dipanggil: teks langsung penuh & tombol langsung muncul
             this.complete();
         } else {
             const $link = $('#vn-advance a, .vn-advance-link');
@@ -15296,6 +15353,9 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
 &lt;&lt;script&gt;&gt;
     State.variables.gameClockActive = true;
     
+    /* PENGAMAN: Pastikan class UI kembali normal jika passage direfresh */
+    $(&quot;body&quot;).removeClass(&quot;eas-broadcast-active&quot;);
+    
     if(State.variables.creation_music) {
         setup.sound.fade(&quot;creation_theme&quot;, 2000);
         setTimeout(function() {
@@ -15337,7 +15397,7 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
                     &lt;div style=&quot;text-align: center; color: white; letter-spacing: 4px; border-top: 1px solid #8a1c1c; margin-top: 5px; padding-top: 5px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
                         CIVIL DANGER WARNING
                     &lt;/div&gt;
-                    &lt;p style=&quot;color: #ffcccc; font-family: &#39;Courier Prime&#39;, monospace; font-size: 0.9em; margin-top: 10px; margin-bottom: 0;&quot;&gt;
+                    &lt;p style=&quot;color: #ffcccc; font-family: &#39;Courier Prime&#39;, monospace; margin-top: 10px; margin-bottom: 0;&quot;&gt;
                         &quot;The following message is transmitted at the request of the King County Sheriff&#39;s Office. This is not a test.&lt;br&gt;&lt;br&gt;
                         A Civil Danger Warning is in effect for the Seattle metropolitan area. At 21:46, authorities reported a rapidly spreading biological hazard. Affected individuals exhibit extreme, unprovoked violence. The pathogen is highly contagious through fluid contact.&lt;br&gt;&lt;br&gt;
                         Shelter in place immediately. Major interstates are closed. Lock all doors, turn off lights, and remain completely silent. Do not approach infected individuals.&lt;br&gt;&lt;br&gt;
@@ -15345,7 +15405,10 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
                     &lt;/p&gt;
                 &lt;/div&gt;
                 &lt;&lt;script&gt;&gt;
-                    /* PLAY TTS EMERGENCY BROADCAST HERE (Set to loop until cut off) */
+                    /* PICU KELAS CSS KHUSUS EAS DI SINI */
+                    $(&quot;body&quot;).addClass(&quot;eas-broadcast-active&quot;);
+                    
+                    /* PLAY TTS EMERGENCY BROADCAST HERE */
                     setup.sound.play(&quot;ebs_warning&quot;, &quot;audio/sfx/ebs_warning.mp3&quot;, true, 0.8);
                 &lt;&lt;/script&gt;&gt;
             &lt;&lt;/if&gt;&gt;
@@ -15372,13 +15435,29 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
                 &lt;&lt;if $hubStep is 2&gt;&gt;
                     &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;
                         &lt;&lt;script&gt;&gt;
+                            /* KEMBALIKAN UI KE UKURAN NORMAL SAAT KLIK NEXT */
+                            $(&quot;body&quot;).removeClass(&quot;eas-broadcast-active&quot;);
+
                             /* KILLS THE ROBOTIC VOICE AND RESTARTS THE CREEPY STATIC */
                             setup.sound.stop(&quot;ebs_warning&quot;);
                             setup.sound.play(&quot;static&quot;, &quot;audio/sfx/static.mp3&quot;, true, 0.3);
                         &lt;&lt;/script&gt;&gt;
                         The robotic voice cuts out. Static returns to the TV. 
                         &lt;br&gt;&lt;br&gt;
-                        &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;&#39;Lethal force authorized...&#39; They don&#39;t lock down the whole city for a standard riot. Something is very wrong.&quot;&gt;&gt;
+                        
+                        &lt;!-- REAKSI DINAMIS BERDASARKAN TRAIT ATAU JOB --&gt;
+                        &lt;&lt;if hasTrait(&quot;PARANOID&quot;)&gt;&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;&#39;Shelter in place.&#39; Right. Wait in a fourth-floor box with a single exit while the military shoots anything that moves. That&#39;s not a shelter. That&#39;s a coffin.&quot;&gt;&gt;
+                        &lt;&lt;elseif $job == &quot;Police Officer&quot;&gt;&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;&#39;Lethal force authorized...&#39; The Guard doesn&#39;t deploy for a standard riot. If they establish a quarantine cordon around this block, I&#39;ll be trapped here.&quot;&gt;&gt;
+                        &lt;&lt;elseif $job == &quot;Doctor&quot; or hasTrait(&quot;FIELD MEDIC&quot;)&gt;&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;&#39;Biological hazard. Extreme violence.&#39; In an apartment complex with shared ventilation and paper-thin walls... staying here is suicide.&quot;&gt;&gt;
+                        &lt;&lt;else&gt;&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;&#39;Lethal force authorized...&#39; They don&#39;t lock down the whole city for mass hysteria. And this front door isn&#39;t heavy enough to keep a panicked mob out.&quot;&gt;&gt;
+                        &lt;&lt;/if&gt;&gt;
+                        
+                        &lt;br&gt;
+                        Through the thin walls of your apartment, you can hear it. The distant, overlapping wail of sirens. And closer... the muffled sound of heavy, frantic footsteps pounding down the hallway outside your door.
                     &lt;&lt;/replace&gt;&gt;
                     
                 &lt;!-- PAGE 3: THE GEAR --&gt;
@@ -15387,23 +15466,25 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
                         &lt;div class=&quot;vn-speaker&quot;&gt;LIVING ROOM&lt;/div&gt;&lt;br&gt;
                         You are standing in the middle of your living room in your pajamas. You feel naked. Vulnerable. 
                         &lt;br&gt;&lt;br&gt;
-                        Your &lt;b&gt;Starter Gear&lt;/b&gt; is scattered across your cramped desk, illuminated by the red glow of the TV.
+                        You glance around the dim room, illuminated only by the harsh red glow of the TV. Your everyday carry—keys, phone, small tools—sits on the cramped desk. But your heavier equipment rests by the front door, exactly where you dropped it after yesterday&#39;s shift. 
+                        &lt;br&gt;&lt;br&gt;
+                        It&#39;s not a tactical survival kit. But right now, the tools of your trade are the only thing standing between you and whatever violent outbreak is tearing the city apart.
                         &lt;br&gt;&lt;br&gt;
                         
-                        &lt;div style=&quot;background:rgba(255,255,255,0.05); padding:10px; border:1px dashed #444; margin: 5px auto; max-width: 600px; border-radius: 4px;&quot;&gt;
-                            &lt;&lt;if $tableStash &amp;&amp; $tableStash.length &gt; 0&gt;&gt;
-                                &lt;div style=&quot;display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 15px;&quot;&gt;
-                                    &lt;&lt;for _i range $tableStash&gt;&gt;
-                                        &lt;div style=&quot;text-align:center;&quot;&gt;
-                                            &lt;&lt;print setup.items[_i.id].icon&gt;&gt;&lt;br&gt;
-                                            &lt;span style=&quot;font-size:0.7em; color:#aaa; display: block; margin-top: 5px;&quot;&gt;_i.id&lt;/span&gt;
-                                        &lt;/div&gt;
-                                    &lt;&lt;/for&gt;&gt;
-                                &lt;/div&gt;
-                            &lt;&lt;else&gt;&gt;
-                                &lt;div style=&quot;text-align:center; color:#666; font-style:italic;&quot;&gt;(Table is empty)&lt;/div&gt;
-                            &lt;&lt;/if&gt;&gt;
-                        &lt;/div&gt;
+                        &lt;div style=&quot;background:rgba(255,255,255,0.05); padding:15px; border:1px dashed #444; margin: 10px auto; max-width: 600px; border-radius: 4px;&quot;&gt;
+                        &lt;&lt;if $tableStash &amp;&amp; $tableStash.length &gt; 0&gt;&gt;
+                            &lt;div class=&quot;prologue-gear-grid&quot; style=&quot;display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 15px; align-items: end;&quot;&gt;
+                                &lt;&lt;for _i range $tableStash&gt;&gt;
+                                    &lt;div style=&quot;text-align:center;&quot;&gt;
+                                        &lt;&lt;print setup.items[_i.id].icon&gt;&gt;&lt;br&gt;
+                                        &lt;span style=&quot;font-size:0.7em; color:#aaa; display: block; margin-top: 8px; line-height: 1.2;&quot;&gt;_i.id&lt;/span&gt;
+                                    &lt;/div&gt;
+                                &lt;&lt;/for&gt;&gt;
+                            &lt;/div&gt;
+                        &lt;&lt;else&gt;&gt;
+                            &lt;div style=&quot;text-align:center; color:#666; font-style:italic;&quot;&gt;(Table is empty)&lt;/div&gt;
+                        &lt;&lt;/if&gt;&gt;
+                    &lt;/div&gt;
                     &lt;&lt;/replace&gt;&gt;
                     
                 &lt;!-- PAGE 4: THE MENU --&gt;
@@ -15418,94 +15499,137 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
             &lt;&lt;/link&gt;&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="58" name="Prologue_Hacking" tags="" position="300,400" size="100,100">&lt;!-- ======================================================= --&gt;
-&lt;!-- 1. PASSAGE HEADER                                       --&gt;
-&lt;!-- ======================================================= --&gt;
-&lt;center&gt;
-    &lt;h1 class=&quot;glitch&quot; style=&quot;color:var(--accent-green)&quot;&gt;BYPASSING SECURITY...&lt;/h1&gt;
-&lt;/center&gt;
-
-&lt;!-- ======================================================= --&gt;
-&lt;!-- 2. TERMINAL UI CONTAINER                                --&gt;
-&lt;!-- ======================================================= --&gt;
-&lt;div class=&quot;terminal-window&quot;&gt;
-    
-    &lt;!-- Terminal Title Bar --&gt;
-    &lt;div class=&quot;terminal-header&quot;&gt;
-        SESSION: ADMIN_LOCAL_NODE // ENCRYPTED
-    &lt;/div&gt;
-    
-    &lt;!-- Dynamic Text Target (JS writes here) --&gt;
-    &lt;div id=&quot;hacker-terminal&quot;&gt;&lt;/div&gt;
-    
-    &lt;!-- Blinking Cursor --&gt;
-    &lt;span class=&quot;terminal-cursor&quot;&gt;&lt;/span&gt;
-
-    &lt;br&gt;
-
-    &lt;!-- ======================================================= --&gt;
-    &lt;!-- 3. TERMINAL FINISH STATE (HIDDEN ON LOAD)               --&gt;
-    &lt;!-- ======================================================= --&gt;
-    &lt;div id=&quot;terminal-finish&quot; style=&quot;display:none; text-align:center;&quot;&gt;
-        &lt;span style=&quot;color:var(--accent-gold)&quot;&gt;[!] SYSTEM DISCONNECTED [!]&lt;/span&gt;
-        &lt;br&gt;&lt;br&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="58" name="Prologue_Hacking" tags="" position="300,400" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: center; align-items: center; max-height: 100vh !important; padding: 20px;&quot;&gt;
         
-        &lt;&lt;button &quot;LOGOUT &amp; CLOSE LAPTOP&quot;&gt;&gt;
+        &lt;div style=&quot;width: 100%; max-width: 650px; margin: 0 auto; background: #020202; border: 2px solid #333; border-top: 4px solid var(--accent-green); border-radius: 4px; box-shadow: 0 10px 30px rgba(0,255,0,0.1); overflow: hidden; position: relative;&quot;&gt;
             
-            /* Add the ODIN Lore to the player&#39;s database */
-            &lt;&lt;run window.addLore(
-                &quot;DoD Manifest: Project ODIN&quot;, 
-                &quot;ORIGIN: Classified Lab. Unauthorized Leak. EFFECT: Drive-infected subjects exhibit 900% increase in muscle density and total loss of higher brain function. STATUS: OUTBREAK UNCONTAINED. [!] Mutation &#39;Type-Tank&#39; detected in Storage Garage 8-B. Prototype M82 Sniper + .50 BMG Stored there. ACCESS CODE: 8821&quot;
-            )&gt;&gt;
+            &lt;div style=&quot;background: #0a0a0a; padding: 8px 15px; display: flex; justify-content: space-between; font-family: &#39;Share Tech Mono&#39;, monospace; font-size: 0.8em; color: var(--accent-green); border-bottom: 1px solid #222;&quot;&gt;
+                &lt;span&gt;SYS_ADMIN - SECURE_NODE_04&lt;/span&gt;
+                &lt;span class=&quot;glitch&quot; style=&quot;color:var(--accent-red);&quot;&gt;[ENCRYPTED]&lt;/span&gt;
+            &lt;/div&gt;
             
-            /* Return to the room */
-            &lt;&lt;goto &quot;Prologue&quot;&gt;&gt;
+            &lt;div id=&quot;scramble-terminal&quot; style=&quot;padding: 20px; font-family: &#39;Courier Prime&#39;, monospace; font-size: 0.9em; line-height: 1.6; color: #4af626; text-shadow: 0 0 5px rgba(74, 246, 38, 0.4); min-height: 250px;&quot;&gt;
+            &lt;/div&gt;
             
-        &lt;&lt;/button&gt;&gt;
-    &lt;/div&gt;
-    
-&lt;/div&gt; &lt;!-- End Terminal Window --&gt;
+        &lt;/div&gt;
 
-&lt;!-- ======================================================= --&gt;
-&lt;!-- 4. JAVASCRIPT ANIMATION SEQUENCE                        --&gt;
-&lt;!-- ======================================================= --&gt;
+        &lt;div id=&quot;terminal-finish&quot; style=&quot;display:none; text-align:center; margin-top: 25px;&quot;&gt;
+            &lt;div style=&quot;max-width: 600px; margin: 0 auto 20px auto; font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; text-align: center;&quot;&gt;
+                &lt;b style=&quot;color:var(--accent-red);&quot;&gt;&#39;SECTOR PURGE AT 0600 HOURS.&#39;&lt;/b&gt; The military isn&#39;t trying to contain the outbreak. They are going to wipe the entire city off the map at dawn. You need to leave. Right now.
+                &lt;br&gt;&lt;br&gt;
+                But you got something else. A &lt;b&gt;Tier-1 Military Clearance Passkey&lt;/b&gt; saved directly to your device. It won&#39;t help you fight your way out of this hallway, but if you survive this nightmare... it might be your only ticket into the national safe zones.
+            &lt;/div&gt;
+
+            &lt;div class=&quot;choice-menu&quot; style=&quot;max-width: 400px; margin: 0 auto;&quot;&gt;
+                &lt;button&gt;
+                    &lt;&lt;link &quot;WIPE DRIVE &amp; CLOSE LAPTOP&quot;&gt;&gt;
+                        &lt;&lt;run window.addLore(
+                            &quot;DoD Intercept: Operation WILDFIRE&quot;, 
+                            &quot;The outbreak is uncontained. The military considers the city a lost cause and has ordered a &#39;Sector Purge&#39; (firebombing) at 0600 hours. I managed to download a Tier-1 Military Clearance Passkey before severing the connection.&quot;
+                        )&gt;&gt;
+                        &lt;&lt;set $military_clearance_key to true&gt;&gt;
+                        &lt;&lt;goto &quot;Prologue&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;Save the Tier-1 Passkey to your PDA and log off.&lt;/span&gt;
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;&lt;/nobr&gt;&gt;
+
 &lt;&lt;script&gt;&gt;
-    /* --- A. DEFINE THE HACKING TEXT LINES --- */
-    var hackingText =[
-        
-        /* Phase 1: Connection &amp; Bypass */
-        { text: &quot;&gt; Connecting to Local DoD Proxy...&quot;, speed: 40, pause: 800 },
-        { text: &quot;&gt; REQUEST: Access Folder /BIO-ORDNANCE/PROJECT_ODIN/&quot;, speed: 40, pause: 1000 },
-        { text: &quot;&gt; STATUS: 403 FORBIDDEN. Bypassing...&quot;, speed: 20, pause: 1200 },
-        { text: &quot;&gt; SUCCESS. Decrypting Manifest...&quot;, speed: 50, pause: 1000 },
-        { text: &quot;------------------------------------------------&quot;, speed: 10, pause: 500 },
-        
-        /* Phase 2: Manifest Data */
-        { text: &quot;SUBJECT: ODIN-DRIVE BIO-REANIMANT&quot;, speed: 40, pause: 400 },
-        { text: &quot;ORIGIN: Classified Lab // Unauthorized Leak&quot;, speed: 40, pause: 400 },
-        { text: &quot;EFFECT: Drive-infected subjects exhibit 900% increase in muscle density and total loss of higher brain function.&quot;, speed: 30, pause: 800 },
-        { text: &quot;STATUS: OUTBREAK UNCONTAINED.&quot;, speed: 60, pause: 1200 },
-        { text: &quot;------------------------------------------------&quot;, speed: 10, pause: 500 },
-        
-        /* Phase 3: Critical Alerts &amp; Logout */
-        { text: &quot;[!] CRITICAL ALERT: Mutation &#39;Type-Tank&#39; detected in Storage Garage 8-B (Fort Mason Base). Subject is extremely aggressive.&quot;, speed: 40, pause: 1000 },
-        { text: &quot;[!] LOG: Prototype M82-AntiMateriel Sniper + .50 BMG Stored in Garage 8-B. ACCESS CODE: 8821&quot;, speed: 50, pause: 2000 },
-        { text: &quot;&gt; TRACE DETECTED. TERMINATING SESSION...&quot;, speed: 20, pause: 500 }
+    setup.sound.play(&quot;static&quot;, &quot;audio/sfx/static.mp3&quot;, true, 0.1);
+
+    var hackingText = [
+        &quot;&gt; BYPASSING 256-BIT AES ENCRYPTION...&quot;,
+        &quot;&gt; ACCESSING SECURE MILITARY NODE...&quot;,
+        &quot;&gt; DOWNLOADING CLASSIFIED DIRECTIVE: OPR_WILDFIRE&quot;,
+        &quot;------------------------------------------------&quot;,
+        &quot;THREAT LEVEL : CATEGORY 5 (EXTINCTION)&quot;,
+        &quot;PATHOGEN     : NEURO-AGGRESSIVE MUTAGEN (UNKNOWN ORIGIN)&quot;,
+        &quot;STATUS       : QUARANTINE FAILED. INFECTION RATE 87%.&quot;,
+        &quot;DIRECTIVE    : INITIATE SECTOR PURGE (FIREBOMBING) AT 0600 HOURS.&quot;,
+        &quot;------------------------------------------------&quot;,
+        &quot;&gt; DOWNLOADING ATTACHMENT: EVAC_PROTOCOLS.DAT&quot;,
+        &quot;&gt; EXTRACTION POINT &#39;ECHO&#39; COORDINATES SECURED.&quot;,
+        &quot;&gt; GENERATING TIER-1 MILITARY CLEARANCE PASSKEY...&quot;,
+        &quot;------------------------------------------------&quot;,
+        &quot;[!] WARNING: TRACE DETECTED. SEVERING CONNECTION.&quot;
     ];
 
-    /* --- B. TRIGGER THE ANIMATION --- */
-    setTimeout(function() {
-        window.typeTerminal(&quot;hacker-terminal&quot;, hackingText);
-    }, 500);
+    var chars = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&amp;*&lt;&gt;&quot;;
+    var lineIndex = 0;
 
-    /* --- C. SET STORY VARIABLES --- */
-    /* Set the flag so the player can use the 8821 code later in the game */
-    State.variables.secretLoreFound = true;
+    function scrambleLine() {
+        var terminal = document.getElementById(&quot;scramble-terminal&quot;);
+        if (!terminal) {
+            setup.sound.stop(&quot;static&quot;);
+            return;
+        }
+
+        if (lineIndex &gt;= hackingText.length) {
+            var finishBtn = document.getElementById(&quot;terminal-finish&quot;);
+            if (finishBtn) finishBtn.style.display = &quot;block&quot;;
+            setup.sound.stop(&quot;static&quot;);
+            return;
+        }
+
+        var originalText = hackingText[lineIndex];
+        var lineDiv = document.createElement(&quot;div&quot;);
+        
+        if (originalText.includes(&quot;PURGE&quot;) || originalText.includes(&quot;[!]&quot;)) {
+            lineDiv.style.color = &quot;var(--accent-red)&quot;;
+            lineDiv.style.textShadow = &quot;0 0 5px rgba(255, 0, 0, 0.6)&quot;;
+        } else if (originalText.includes(&quot;TIER-1&quot;)) {
+            lineDiv.style.color = &quot;var(--accent-gold)&quot;;
+        }
+
+        terminal.appendChild(lineDiv);
+
+        var iterations = 0;
+        var maxIterations = 20; 
+        
+        var interval = setInterval(function() {
+            if (!document.getElementById(&quot;scramble-terminal&quot;)) {
+                clearInterval(interval);
+                return;
+            }
+
+            var currentText = &quot;&quot;;
+            for (var i = 0; i &lt; originalText.length; i++) {
+                if (i &lt; (iterations / maxIterations) * originalText.length) {
+                    currentText += originalText[i];
+                } else {
+                    if (originalText[i] === &quot; &quot;) {
+                        currentText += &quot; &quot;;
+                    } else {
+                        currentText += chars[Math.floor(Math.random() * chars.length)];
+                    }
+                }
+            }
+            
+            lineDiv.innerText = currentText;
+            iterations++;
+
+            if (iterations &gt; maxIterations) {
+                clearInterval(interval);
+                lineDiv.innerText = originalText; 
+                lineIndex++;
+                setTimeout(scrambleLine, 400); 
+            }
+        }, 30); 
+    }
+
+    setTimeout(scrambleLine, 500);
 &lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="59" name="Prologue_Menu" tags="" position="500,100" size="100,100">&lt;hr style=&quot;border-color: #333; margin: 0 0 15px 0;&quot;&gt;
 &lt;div class=&quot;choice-menu&quot;&gt;
     &lt;&lt;if !$hasPacked&gt;&gt;
         &lt;button&gt;
-            &lt;&lt;link &quot;GATHER GEAR &amp; SEARCH ROOM&quot;&gt;&gt;
+            &lt;&lt;link &quot;GATHER YOUR GEAR &amp; SUPPLIES&quot;&gt;&gt;
                 &lt;&lt;addTime 4&gt;&gt;
                 &lt;&lt;completeObjective &quot;pack_gear&quot;&gt;&gt;
                 &lt;&lt;activateObjective &quot;leave_apt&quot;&gt;&gt;
@@ -15524,8 +15648,15 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
                     Engine.play(&quot;Prologue&quot;);
                 &lt;&lt;/script&gt;&gt;
             &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;5 Minutes | Grab your starter items and look for supplies.&lt;/span&gt;
+            &lt;span class=&quot;btn-sub&quot;&gt;4 Minutes | Gear up. Grab your work equipment by the door and raid the kitchen for anything useful.&lt;/span&gt;
         &lt;/button&gt;
+    &lt;&lt;else&gt;&gt;
+        &lt;!-- Umpan balik visual agar pemain merasa puas setelah mengambil barang --&gt;
+        &lt;div style=&quot;padding:10px; background:rgba(0,100,0,0.1); border-left:3px solid var(--accent-green); margin-bottom:10px;&quot;&gt;
+            &lt;span style=&quot;color:var(--accent-green); font-family: &#39;Courier Prime&#39;, monospace; font-size: 0.85em;&quot;&gt;
+                ✓ You geared up. You strapped on your heavy equipment, shoved the smaller items into your pockets, and pulled a Kitchen Knife from the block.
+            &lt;/span&gt;
+        &lt;/div&gt;
     &lt;&lt;/if&gt;&gt;
 
     &lt;&lt;if not visited(&quot;Prologue_Phone&quot;)&gt;&gt;
@@ -15533,7 +15664,7 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
             &lt;&lt;link &quot;CHECK NEWS FEED&quot;&gt;&gt;
                 &lt;&lt;goto &quot;Prologue_Phone&quot;&gt;&gt;
             &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;1 Minute | See what the internet knows.&lt;/span&gt;
+            &lt;span class=&quot;btn-sub&quot;&gt;1 Minute | See what the internet knows before the grid goes down.&lt;/span&gt;
         &lt;/button&gt;
     &lt;&lt;/if&gt;&gt;
 
@@ -15543,19 +15674,19 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
                 &lt;&lt;link &quot;LISTEN TO EMERGENCY BAND [POLICE]&quot;&gt;&gt;
                     &lt;&lt;addTime 3&gt;&gt;&lt;&lt;goto &quot;Prologue_Radio&quot;&gt;&gt;
                 &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[JOB: POLICE]&lt;/b&gt; 4 Minutes | Monitor encrypted dispatch channels.&lt;/span&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[JOB: POLICE]&lt;/b&gt; 3 Minutes | Monitor encrypted dispatch channels. Find out where the lines are breaking.&lt;/span&gt;
             &lt;/button&gt;
         &lt;&lt;elseif $skills.tech &gt;= 1 and $int &gt;= 4&gt;&gt;
             &lt;button&gt;
                 &lt;&lt;link &quot;HACK LOCAL POLICE CHATTER [TECH 1]&quot;&gt;&gt;
                     &lt;&lt;addTime 5&gt;&gt;&lt;&lt;goto &quot;Prologue_Radio&quot;&gt;&gt;
                 &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TECH 1 / INT 4]&lt;/b&gt; 6 Minutes | Find the dispatch frequency and bypass their scrambling.&lt;/span&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TECH 1 / INT 4]&lt;/b&gt; 5 Minutes | Find the dispatch frequency and bypass their scrambling.&lt;/span&gt;
             &lt;/button&gt;
         &lt;&lt;else&gt;&gt;
             &lt;button disabled style=&quot;opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
                 &lt;span style=&quot;text-decoration: line-through;&quot;&gt;ACCESS EMERGENCY BAND&lt;/span&gt;&lt;br&gt;
-                &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES POLICE OFFICER OR TECH 1 &amp; INT 4] You lack the hardware or skills.&lt;/span&gt;
+                &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES POLICE OR TECH 1 &amp; INT 4] You lack the hardware or skills to intercept scrambled radio traffic.&lt;/span&gt;
             &lt;/button&gt;
         &lt;&lt;/if&gt;&gt;
     &lt;&lt;/if&gt;&gt;
@@ -15566,7 +15697,7 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
                 &lt;&lt;link &quot;BYPASS GOV FIREWALL [TECH 3]&quot;&gt;&gt;
                     &lt;&lt;addTime 8&gt;&gt;&lt;&lt;goto &quot;Prologue_Hacking&quot;&gt;&gt;
                 &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TECH 3 / INT 6]&lt;/b&gt; 9 Minutes | Breach military-grade encryption.&lt;/span&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TECH 3 / INT 6]&lt;/b&gt; 8 Minutes | Breach military-grade encryption to find out what they aren&#39;t telling the public.&lt;/span&gt;
             &lt;/button&gt;
         &lt;&lt;else&gt;&gt;
             &lt;button disabled style=&quot;opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
@@ -15585,107 +15716,189 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
                 &lt;&lt;addObjective &quot;escape_building&quot; &quot;Find a way down to the ground floor&quot;&gt;&gt;
                 &lt;&lt;goto &quot;Hallway&quot;&gt;&gt;
             &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot; style=&quot;color: #ff9999;&quot;&gt;Exit to the 4th Floor Hallway. No turning back.&lt;/span&gt;
+            &lt;span class=&quot;btn-sub&quot; style=&quot;color: #ff9999;&quot;&gt;Exit to the 4th Floor Hallway. Ready your weapon. There is no turning back.&lt;/span&gt;
         &lt;/button&gt;
     &lt;&lt;/if&gt;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="60" name="Prologue_Phone" tags="" position="100,400" size="100,100">&lt;!-- ========================================== --&gt;
-&lt;!-- 1. PASSAGE HEADER                          --&gt;
-&lt;!-- ========================================== --&gt;
-&lt;center&gt;
-    &lt;h1&gt;📱 SMARTPHONE: SOCIAL FEED&lt;/h1&gt;
-&lt;/center&gt;
-&lt;br&gt;
-
-&lt;!-- ========================================== --&gt;
-&lt;!-- 2. INTRODUCTORY NARRATIVE                  --&gt;
-&lt;!-- ========================================== --&gt;
-The screen glows with a frantic blur of notifications. You open &#39;X-Feed&#39; and the top trend is simply &lt;span style=&quot;color:red; font-weight:bold;&quot;&gt;#ZOMBIE&lt;/span&gt;.
-
-&lt;!-- ========================================== --&gt;
-&lt;!-- 3. SOCIAL FEED UI BOX                      --&gt;
-&lt;!-- ========================================== --&gt;
-&lt;div style=&quot;background:#050505; border:1px solid #222; padding:15px; font-family: sans-serif; font-size:0.9em;&quot;&gt;
-    
-    &lt;!-- Tweet 1: Civilian Report --&gt;
-    &lt;b style=&quot;color:var(--accent-blue)&quot;&gt;@CityScanner:&lt;/b&gt; Does anyone know what&#39;s happening at the 5th St Hospital? Seeing police in gas masks. Stay away!! 
-    &lt;br&gt;&lt;hr style=&quot;border-color:#111&quot;&gt;
-    
-    &lt;!-- Tweet 2: Official News --&gt;
-    &lt;b style=&quot;color:var(--accent-blue)&quot;&gt;@NewsWire_Breaking:&lt;/b&gt; EMERGENCY: CDC reporting &quot;unprecedented neuro-aggressive outbreak.&quot; Reports of reanimation among the recently deceased are UNCONFIRMED.
-    &lt;br&gt;&lt;hr style=&quot;border-color:#111&quot;&gt;
-    
-    &lt;!-- Tweet 3: Found Footage --&gt;
-    &lt;b style=&quot;color:var(--accent-blue)&quot;&gt;@User_9921:&lt;/b&gt;[ATTACHED VIDEO: BLURRY] Look at his face! That&#39;s not rabies! He took three shots and kept coming! Oh god, he&#39;s— [VIDEO ENDS]
-    
-&lt;/div&gt;
-&lt;br&gt;
-
-&lt;!-- ========================================== --&gt;
-&lt;!-- 4. OUTRO NARRATIVE                         --&gt;
-&lt;!-- ========================================== --&gt;
-The comments are a storm of denial, prayers, and instructions to &quot;aim for the head.&quot; One post catches your eye: a map of local military checkpoints being set up. They are barricading the bridge already.
-&lt;br&gt;&lt;br&gt;
-
-&lt;!-- ========================================== --&gt;
-&lt;!-- 5. PLAYER ACTIONS &amp; LORE UPDATE            --&gt;
-&lt;!-- ========================================== --&gt;
-&lt;div style=&quot;text-align:center;&quot;&gt;
-	&lt;&lt;button &quot;Back to Room&quot;&gt;&gt;
-    
-        /* Add information to the Lore Database upon leaving */
-		&lt;&lt;run window.addLore(&quot;X-Feed Timeline (Day 0)&quot;, &quot;CDC reporting unprecedented neuro-aggressive outbreak. Reanimation among the recently deceased confirmed. The military is already barricading the bridges out of the city.&quot;)&gt;&gt;
-		
-        &lt;&lt;goto &quot;Prologue&quot;&gt;&gt;
-	&lt;&lt;/button&gt;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="61" name="Prologue_Radio" tags="" position="200,400" size="100,100">&lt;!-- ========================================== --&gt;
-&lt;!-- HEADER                                     --&gt;
-&lt;!-- ========================================== --&gt;
-&lt;center&gt;
-    &lt;h1&gt;📻 RADIO: DISPATCH BAND&lt;/h1&gt;
-&lt;/center&gt;
-&lt;br&gt;
-
-&lt;!-- ========================================== --&gt;
-&lt;!-- RADIO BROADCAST DIALOGUE                   --&gt;
-&lt;!-- ========================================== --&gt;
-The radio crackles with static, then a voice cuts through—sharp, professional, but bordering on a scream.
-
-&lt;i&gt;&quot;Dispatch, this is Unit 4-Charlie! We are at the precinct! They aren&#39;t staying down! I repeat, standard center-mass shots are INEFFECTIVE! Requesting Permission for &#39;Code Black&#39; engagement!&quot;&lt;/i&gt;
-
-&lt;br&gt;&lt;br&gt;
-
-A calm, female voice responds: 
-&lt;br&gt;
-&lt;i&gt;&quot;4-Charlie, Permission for Code Black is GRANTED. All units, be advised: Target neutralization requires complete destruction of the cerebral cortex. Use extreme caution. Do not allow skin contact.&quot;&lt;/i&gt;
-
-&lt;!-- ========================================== --&gt;
-&lt;!-- VISUAL SEPARATOR                           --&gt;
-&lt;!-- ========================================== --&gt;
-&lt;hr style=&quot;border-color: #333; margin: 20px 0;&quot;&gt;
-
-&lt;!-- ========================================== --&gt;
-&lt;!-- LORE REVEAL &amp; PLAYER THOUGHTS              --&gt;
-&lt;!-- ========================================== --&gt;
-You hear a code word you remember from training: &lt;b style=&quot;color:var(--accent-red)&quot;&gt;&#39;PROJECT ODIN&#39;&lt;/b&gt;. It was a rumor about a drug intended to bring fatally wounded soldiers back to the fight—a &quot;second life&quot; for the frontline. 
-
-&lt;br&gt;&lt;br&gt;
-
-It seems the &quot;Second Life&quot; didn&#39;t care about the soldier&#39;s mind. Only their hunger.
-
-&lt;br&gt;&lt;br&gt;
-
-&lt;!-- ========================================== --&gt;
-&lt;!-- ACTION BUTTONS                             --&gt;
-&lt;!-- ========================================== --&gt;
-&lt;div style=&quot;text-align:center;&quot;&gt;
-    &lt;&lt;button &quot;Back to Room&quot;&gt;&gt;
-    
-        /* Save the radio transcript to the player&#39;s Lore Database */
-        &lt;&lt;run window.addLore(&quot;Police Dispatch Transcript&quot;, &quot;Permission for &#39;Code Black&#39; GRANTED. All units, be advised: Target neutralization requires complete destruction of the cerebral cortex. Use extreme caution. Do not allow skin contact.&quot;)&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="60" name="Prologue_Phone" tags="" position="100,400" size="100,100">&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: center; align-items: center; max-height: 100vh !important; padding: 20px;&quot;&gt;
         
-        &lt;&lt;goto &quot;Prologue&quot;&gt;&gt;
+        &lt;!-- NARRATIVE INTRO --&gt;
+        &lt;div style=&quot;max-width: 600px; margin: 0 auto 20px auto; font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; text-align: center;&quot;&gt;
+            You pull your phone from your pocket. The screen is cracked, glowing harshly in the dim room. You open the feed. The timeline is refreshing so fast it&#39;s making you dizzy.
+        &lt;/div&gt;
+
+        &lt;!-- ========================================== --&gt;
+        &lt;!-- SMARTPHONE UI CONTAINER                    --&gt;
+        &lt;!-- ========================================== --&gt;
+        &lt;div style=&quot;width: 100%; max-width: 380px; margin: 0 auto; background: #050505; border: 2px solid #222; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); overflow: hidden; position: relative;&quot;&gt;
+            
+            &lt;!-- STATUS BAR --&gt;
+            &lt;div style=&quot;background: #000; padding: 6px 15px; display: flex; justify-content: space-between; font-family: &#39;Courier Prime&#39;, monospace; font-size: 0.7em; color: #888; border-bottom: 1px solid #1a1a1a;&quot;&gt;
+                &lt;span style=&quot;color: var(--accent-red); animation: cursor-blink 1.5s infinite;&quot;&gt;⚠ NO SIGNAL&lt;/span&gt;
+                &lt;span&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;12%&lt;/b&gt; 🔋&lt;/span&gt;
+            &lt;/div&gt;
+
+            &lt;!-- FEED HEADER --&gt;
+            &lt;div style=&quot;padding: 12px 15px; background: rgba(20,20,20,0.8); border-bottom: 1px solid #333; font-family: &#39;Oswald&#39;, sans-serif; font-size: 1.1em; color: #fff;&quot;&gt;
+                Trending: &lt;span style=&quot;color:var(--accent-red); letter-spacing: 1px;&quot;&gt;#SeattleLockdown&lt;/span&gt;
+            &lt;/div&gt;
+
+            &lt;!-- FEED BODY --&gt;
+            &lt;div style=&quot;max-height: 400px; overflow-y: auto; padding-bottom: 10px;&quot;&gt;
+                
+                &lt;!-- Tweet 1: Confusion/Riot --&gt;
+                &lt;div style=&quot;padding: 15px 15px 10px 15px; border-bottom: 1px solid #1a1a1a;&quot;&gt;
+                    &lt;div style=&quot;display: flex; align-items: center; margin-bottom: 8px;&quot;&gt;
+                        &lt;div style=&quot;width: 32px; height: 32px; border-radius: 50%; background: #333; margin-right: 12px; display: flex; align-items: center; justify-content: center; font-family: sans-serif; font-weight: bold; color: #555;&quot;&gt;C&lt;/div&gt;
+                        &lt;div style=&quot;line-height: 1.1; font-family: sans-serif;&quot;&gt;
+                            &lt;b style=&quot;color: #fff; font-size: 0.9em;&quot;&gt;CityScanner&lt;/b&gt;&lt;br&gt;
+                            &lt;span style=&quot;color: #666; font-size: 0.75em;&quot;&gt;@CityScanner_WA • 2m&lt;/span&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div style=&quot;font-family: sans-serif; font-size: 0.85em; color: #ddd; line-height: 1.4; margin-bottom: 8px;&quot;&gt;
+                        Does anyone know what&#39;s happening at the 5th St Hospital? Seeing police in gas masks and riot gear. They aren&#39;t letting ambulances through. Stay away!!
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;!-- Tweet 2: Official News --&gt;
+                &lt;div style=&quot;padding: 15px 15px 10px 15px; border-bottom: 1px solid #1a1a1a;&quot;&gt;
+                    &lt;div style=&quot;display: flex; align-items: center; margin-bottom: 8px;&quot;&gt;
+                        &lt;div style=&quot;width: 32px; height: 32px; border-radius: 50%; background: var(--accent-blue); margin-right: 12px; display: flex; align-items: center; justify-content: center; font-family: sans-serif; font-weight: bold; color: #000;&quot;&gt;N&lt;/div&gt;
+                        &lt;div style=&quot;line-height: 1.1; font-family: sans-serif;&quot;&gt;
+                            &lt;b style=&quot;color: #fff; font-size: 0.9em;&quot;&gt;NewsWire Breaking ☑&lt;/b&gt;&lt;br&gt;
+                            &lt;span style=&quot;color: #666; font-size: 0.75em;&quot;&gt;@NewsWire_Alerts • 4m&lt;/span&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div style=&quot;font-family: sans-serif; font-size: 0.85em; color: #ddd; line-height: 1.4; margin-bottom: 8px;&quot;&gt;
+                        EMERGENCY: CDC reporting &quot;unprecedented neuro-aggressive pathogen&quot; causing extreme psychosis and unprovoked violence. Authorities urge citizens to avoid public spaces.
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;!-- Tweet 3: Found Footage (The Terror) --&gt;
+                &lt;div style=&quot;padding: 15px 15px 10px 15px; border-bottom: 1px solid #1a1a1a; background: rgba(50,0,0,0.1);&quot;&gt;
+                    &lt;div style=&quot;display: flex; align-items: center; margin-bottom: 8px;&quot;&gt;
+                        &lt;div style=&quot;width: 32px; height: 32px; border-radius: 50%; background: #442222; margin-right: 12px; display: flex; align-items: center; justify-content: center; font-family: sans-serif; font-weight: bold; color: #aaa;&quot;&gt;U&lt;/div&gt;
+                        &lt;div style=&quot;line-height: 1.1; font-family: sans-serif;&quot;&gt;
+                            &lt;b style=&quot;color: #fff; font-size: 0.9em;&quot;&gt;User_9921&lt;/b&gt;&lt;br&gt;
+                            &lt;span style=&quot;color: #666; font-size: 0.75em;&quot;&gt;@anon_9921 • 11m&lt;/span&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div style=&quot;font-family: sans-serif; font-size: 0.85em; color: #ddd; line-height: 1.4; margin-bottom: 8px;&quot;&gt;
+                        &lt;span style=&quot;color:var(--accent-red); font-size:0.8em; font-weight:bold;&quot;&gt;[ATTACHED VIDEO: BLURRY]&lt;/span&gt;&lt;br&gt;
+                        Look at his face! That&#39;s not rabies! The cops shot him three times in the chest and he kept running! Oh my god, he&#39;s— &lt;br&gt;
+                        &lt;i style=&quot;color:#888;&quot;&gt;[VIDEO ENDS UNEXPECTEDLY]&lt;/i&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                
+                &lt;!-- Loading Spinner --&gt;
+                &lt;div style=&quot;text-align: center; padding: 15px; color: #444; font-family: sans-serif; font-size: 0.8em;&quot;&gt;
+                    &lt;span class=&quot;glitch&quot;&gt;Connection lost. Tap to retry.&lt;/span&gt;
+                &lt;/div&gt;
+
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- ========================================== --&gt;
+        &lt;!-- NARRATIVE OUTRO &amp; ACTIONS                  --&gt;
+        &lt;!-- ========================================== --&gt;
+        &lt;br&gt;&lt;br&gt;
+        &lt;div style=&quot;max-width: 600px; margin: 0 auto; font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; text-align: center; margin-bottom: 20px;&quot;&gt;
+            The comments are a storm of denial, prayers, and wild conspiracies. One post catches your eye: a traffic map showing military checkpoints. &lt;i&gt;They are barricading the bridges out of the city.&lt;/i&gt; 
+            &lt;br&gt;&lt;br&gt;
+            Before you can scroll further, the little loading icon freezes. The signal drops completely. The internet is gone.
+        &lt;/div&gt;
+
+        &lt;div class=&quot;choice-menu&quot; style=&quot;max-width: 400px; margin: 0 auto;&quot;&gt;
+            &lt;button&gt;
+                &lt;&lt;link &quot;Lower the phone and get back to reality&quot;&gt;&gt;
+                    
+                    /* Add information to the Lore Database upon leaving */
+                    &lt;&lt;run window.addLore(&quot;X-Feed Timeline (Day 0)&quot;, &quot;CDC reported an unprecedented neuro-aggressive pathogen causing extreme psychosis. Violence escalating. Videos show infected individuals ignoring fatal chest wounds. The military barricaded the bridges before the cellular network collapsed.&quot;)&gt;&gt;
+                    
+                    &lt;&lt;goto &quot;Prologue&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;Add Intel to Lore Database.&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="61" name="Prologue_Radio" tags="" position="200,400" size="100,100">&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;&lt;script&gt;&gt;
+        /* Memutar audio radio secara otomatis saat layar dimuat */
+        setup.sound.play(&quot;police_radio&quot;, &quot;audio/sfx/police_radio.mp3&quot;, false, 0.9);
+    &lt;&lt;/script&gt;&gt;
+
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: center; align-items: center; max-height: 100vh !important; padding: 20px;&quot;&gt;
         
-    &lt;&lt;/button&gt;&gt;
+        &lt;!-- NARRATIVE INTRO --&gt;
+        &lt;div style=&quot;max-width: 600px; margin: 0 auto 20px auto; font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; text-align: center;&quot;&gt;
+            &lt;&lt;if $job == &quot;Police Officer&quot;&gt;&gt;
+                You pull your emergency-band scanner from your gear bag. Your hands are shaking slightly as you dial into the encrypted precinct frequency.
+            &lt;&lt;else&gt;&gt;
+                You boot up your rig, your fingers flying across the mechanical keyboard. You bypass the local scramblers, hunting for raw, unencrypted police chatter.
+            &lt;&lt;/if&gt;&gt;
+            The speaker hisses with white noise before a voice breaks through.
+        &lt;/div&gt;
+
+        &lt;!-- ========================================== --&gt;
+        &lt;!-- RADIO UI CONTAINER                         --&gt;
+        &lt;!-- ========================================== --&gt;
+        &lt;div style=&quot;width: 100%; max-width: 500px; margin: 0 auto; background: #050505; border: 2px solid #333; border-top: 4px solid var(--accent-gold); border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); overflow: hidden; position: relative;&quot;&gt;
+            
+            &lt;!-- FREQUENCY DISPLAY --&gt;
+            &lt;div style=&quot;background: #111; padding: 10px 15px; display: flex; justify-content: space-between; font-family: &#39;Share Tech Mono&#39;, monospace; font-size: 0.9em; color: var(--accent-gold); border-bottom: 1px solid #222;&quot;&gt;
+                &lt;span class=&quot;glitch&quot;&gt;FREQ: 154.790 MHz&lt;/span&gt;
+                &lt;span style=&quot;animation: cursor-blink 1s infinite;&quot;&gt;● REC&lt;/span&gt;
+            &lt;/div&gt;
+
+            &lt;!-- AUDIO TRANSCRIPT --&gt;
+            &lt;div style=&quot;padding: 20px; font-family: &#39;Courier Prime&#39;, monospace; font-size: 0.85em; line-height: 1.5; color: #a3c2c2;&quot;&gt;
+                
+                &lt;span style=&quot;color: #666;&quot;&gt;[STATIC HISS]&lt;/span&gt;&lt;br&gt;&lt;br&gt;
+
+                &lt;b style=&quot;color: #fff;&quot;&gt;UNIT 4-CHARLIE:&lt;/b&gt;&lt;br&gt;
+                &lt;i&gt;&quot;Dispatch, 4-Charlie! We&#39;ve lost the 5th Street barricade! They are not stopping! I repeat, shooting them in the chest does nothing! They just keep coming!&quot;&lt;/i&gt;&lt;br&gt;&lt;br&gt;
+
+                &lt;span style=&quot;color: #666;&quot;&gt;[HEAVY THUD / STRUGGLE]&lt;/span&gt;&lt;br&gt;&lt;br&gt;
+
+                &lt;b style=&quot;color: #fff;&quot;&gt;UNIT 4-CHARLIE:&lt;/b&gt;&lt;br&gt;
+                &lt;i&gt;&quot;God damn it, get off the damn car! Dispatch, standard protocol is useless! Requesting authorization for unrestricted lethal force!&quot;&lt;/i&gt;&lt;br&gt;&lt;br&gt;
+
+                &lt;span style=&quot;color: #666;&quot;&gt;[RADIO SQUELCH]&lt;/span&gt;&lt;br&gt;&lt;br&gt;
+
+                &lt;b style=&quot;color: #fff;&quot;&gt;DISPATCH (CALM):&lt;/b&gt;&lt;br&gt;
+                &lt;i&gt;&quot;4-Charlie, unrestricted lethal force is authorized. All units, listen carefully. Standard rules of engagement are suspended. Body shots will not stop them. You must destroy the brain. Aim for the head. I repeat... aim for the head. Avoid all physical contact.&quot;&lt;/i&gt;&lt;br&gt;&lt;br&gt;
+
+                &lt;span style=&quot;color: #666;&quot;&gt;[SIGNAL CUTS OUT]&lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- ========================================== --&gt;
+        &lt;!-- NARRATIVE OUTRO &amp; ACTIONS                  --&gt;
+        &lt;!-- ========================================== --&gt;
+        &lt;br&gt;&lt;br&gt;
+        &lt;div style=&quot;max-width: 600px; margin: 0 auto; font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; text-align: center; margin-bottom: 20px;&quot;&gt;
+            &lt;&lt;if $job == &quot;Police Officer&quot;&gt;&gt;
+                &lt;b style=&quot;color:var(--accent-red);&quot;&gt;&#39;Standard rules of engagement are suspended.&#39;&lt;/b&gt; Total lethal force. No warnings, no arrests, no hesitation. They only issue that for active warzones. You stare at the radio. Whatever is out there, the law is officially dead.
+            &lt;&lt;else&gt;&gt;
+                &lt;b style=&quot;color:var(--accent-red);&quot;&gt;&#39;You must destroy the brain.&#39;&lt;/b&gt; You stare at the blinking green light of your monitor. The police aren&#39;t trying to control a riot. They are executing people in the streets. 
+            &lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;choice-menu&quot; style=&quot;max-width: 400px; margin: 0 auto;&quot;&gt;
+            &lt;button&gt;
+                &lt;&lt;link &quot;Kill the radio and step back&quot;&gt;&gt;
+                    
+                    /* Add information to the Lore Database upon leaving */
+                    &lt;&lt;run window.addLore(&quot;Radio Intercept (Day 0)&quot;, &quot;Police dispatch authorized unrestricted lethal force. Standard body shots are ineffective against the infected. Neutralization requires destroying the brain. All physical contact must be avoided.&quot;)&gt;&gt;
+                    
+                    &lt;&lt;goto &quot;Prologue&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;Add tactical intel to your PDA.&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="62" name="Prologue_WakeUp" tags="" position="500,0" size="100,100">&lt;&lt;set $inventory to []&gt;&gt;
 &lt;&lt;set $gameClockActive to false&gt;&gt; /* Time is frozen during intro */
 &lt;&lt;set $step to 1&gt;&gt;

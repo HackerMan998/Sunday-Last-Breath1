@@ -1,51 +1,105 @@
 :: Prologue_Phone {"position":"100,400","size":"100,100"}
-<!-- ========================================== -->
-<!-- 1. PASSAGE HEADER                          -->
-<!-- ========================================== -->
-<center>
-    <h1>📱 SMARTPHONE: SOCIAL FEED</h1>
-</center>
-<br>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: center; align-items: center; max-height: 100vh !important; padding: 20px;">
+        
+        <!-- NARRATIVE INTRO -->
+        <div style="max-width: 600px; margin: 0 auto 20px auto; font-family: 'Courier Prime', monospace; color: #ccc; text-align: center;">
+            You pull your phone from your pocket. The screen is cracked, glowing harshly in the dim room. You open the feed. The timeline is refreshing so fast it's making you dizzy.
+        </div>
 
-<!-- ========================================== -->
-<!-- 2. INTRODUCTORY NARRATIVE                  -->
-<!-- ========================================== -->
-The screen glows with a frantic blur of notifications. You open 'X-Feed' and the top trend is simply <span style="color:red; font-weight:bold;">#ZOMBIE</span>.
+        <!-- ========================================== -->
+        <!-- SMARTPHONE UI CONTAINER                    -->
+        <!-- ========================================== -->
+        <div style="width: 100%; max-width: 380px; margin: 0 auto; background: #050505; border: 2px solid #222; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); overflow: hidden; position: relative;">
+            
+            <!-- STATUS BAR -->
+            <div style="background: #000; padding: 6px 15px; display: flex; justify-content: space-between; font-family: 'Courier Prime', monospace; font-size: 0.7em; color: #888; border-bottom: 1px solid #1a1a1a;">
+                <span style="color: var(--accent-red); animation: cursor-blink 1.5s infinite;">⚠ NO SIGNAL</span>
+                <span><b style="color:var(--accent-red);">12%</b> 🔋</span>
+            </div>
 
-<!-- ========================================== -->
-<!-- 3. SOCIAL FEED UI BOX                      -->
-<!-- ========================================== -->
-<div style="background:#050505; border:1px solid #222; padding:15px; font-family: sans-serif; font-size:0.9em;">
-    
-    <!-- Tweet 1: Civilian Report -->
-    <b style="color:var(--accent-blue)">@CityScanner:</b> Does anyone know what's happening at the 5th St Hospital? Seeing police in gas masks. Stay away!! 
-    <br><hr style="border-color:#111">
-    
-    <!-- Tweet 2: Official News -->
-    <b style="color:var(--accent-blue)">@NewsWire_Breaking:</b> EMERGENCY: CDC reporting "unprecedented neuro-aggressive outbreak." Reports of reanimation among the recently deceased are UNCONFIRMED.
-    <br><hr style="border-color:#111">
-    
-    <!-- Tweet 3: Found Footage -->
-    <b style="color:var(--accent-blue)">@User_9921:</b>[ATTACHED VIDEO: BLURRY] Look at his face! That's not rabies! He took three shots and kept coming! Oh god, he's— [VIDEO ENDS]
-    
-</div>
-<br>
+            <!-- FEED HEADER -->
+            <div style="padding: 12px 15px; background: rgba(20,20,20,0.8); border-bottom: 1px solid #333; font-family: 'Oswald', sans-serif; font-size: 1.1em; color: #fff;">
+                Trending: <span style="color:var(--accent-red); letter-spacing: 1px;">#SeattleLockdown</span>
+            </div>
 
-<!-- ========================================== -->
-<!-- 4. OUTRO NARRATIVE                         -->
-<!-- ========================================== -->
-The comments are a storm of denial, prayers, and instructions to "aim for the head." One post catches your eye: a map of local military checkpoints being set up. They are barricading the bridge already.
-<br><br>
+            <!-- FEED BODY -->
+            <div style="max-height: 400px; overflow-y: auto; padding-bottom: 10px;">
+                
+                <!-- Tweet 1: Confusion/Riot -->
+                <div style="padding: 15px 15px 10px 15px; border-bottom: 1px solid #1a1a1a;">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: #333; margin-right: 12px; display: flex; align-items: center; justify-content: center; font-family: sans-serif; font-weight: bold; color: #555;">C</div>
+                        <div style="line-height: 1.1; font-family: sans-serif;">
+                            <b style="color: #fff; font-size: 0.9em;">CityScanner</b><br>
+                            <span style="color: #666; font-size: 0.75em;">@CityScanner_WA • 2m</span>
+                        </div>
+                    </div>
+                    <div style="font-family: sans-serif; font-size: 0.85em; color: #ddd; line-height: 1.4; margin-bottom: 8px;">
+                        Does anyone know what's happening at the 5th St Hospital? Seeing police in gas masks and riot gear. They aren't letting ambulances through. Stay away!!
+                    </div>
+                </div>
 
-<!-- ========================================== -->
-<!-- 5. PLAYER ACTIONS & LORE UPDATE            -->
-<!-- ========================================== -->
-<div style="text-align:center;">
-	<<button "Back to Room">>
-    
-        /* Add information to the Lore Database upon leaving */
-		<<run window.addLore("X-Feed Timeline (Day 0)", "CDC reporting unprecedented neuro-aggressive outbreak. Reanimation among the recently deceased confirmed. The military is already barricading the bridges out of the city.")>>
-		
-        <<goto "Prologue">>
-	<</button>>
+                <!-- Tweet 2: Official News -->
+                <div style="padding: 15px 15px 10px 15px; border-bottom: 1px solid #1a1a1a;">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--accent-blue); margin-right: 12px; display: flex; align-items: center; justify-content: center; font-family: sans-serif; font-weight: bold; color: #000;">N</div>
+                        <div style="line-height: 1.1; font-family: sans-serif;">
+                            <b style="color: #fff; font-size: 0.9em;">NewsWire Breaking ☑</b><br>
+                            <span style="color: #666; font-size: 0.75em;">@NewsWire_Alerts • 4m</span>
+                        </div>
+                    </div>
+                    <div style="font-family: sans-serif; font-size: 0.85em; color: #ddd; line-height: 1.4; margin-bottom: 8px;">
+                        EMERGENCY: CDC reporting "unprecedented neuro-aggressive pathogen" causing extreme psychosis and unprovoked violence. Authorities urge citizens to avoid public spaces.
+                    </div>
+                </div>
+
+                <!-- Tweet 3: Found Footage (The Terror) -->
+                <div style="padding: 15px 15px 10px 15px; border-bottom: 1px solid #1a1a1a; background: rgba(50,0,0,0.1);">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: #442222; margin-right: 12px; display: flex; align-items: center; justify-content: center; font-family: sans-serif; font-weight: bold; color: #aaa;">U</div>
+                        <div style="line-height: 1.1; font-family: sans-serif;">
+                            <b style="color: #fff; font-size: 0.9em;">User_9921</b><br>
+                            <span style="color: #666; font-size: 0.75em;">@anon_9921 • 11m</span>
+                        </div>
+                    </div>
+                    <div style="font-family: sans-serif; font-size: 0.85em; color: #ddd; line-height: 1.4; margin-bottom: 8px;">
+                        <span style="color:var(--accent-red); font-size:0.8em; font-weight:bold;">[ATTACHED VIDEO: BLURRY]</span><br>
+                        Look at his face! That's not rabies! The cops shot him three times in the chest and he kept running! Oh my god, he's— <br>
+                        <i style="color:#888;">[VIDEO ENDS UNEXPECTEDLY]</i>
+                    </div>
+                </div>
+                
+                <!-- Loading Spinner -->
+                <div style="text-align: center; padding: 15px; color: #444; font-family: sans-serif; font-size: 0.8em;">
+                    <span class="glitch">Connection lost. Tap to retry.</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- NARRATIVE OUTRO & ACTIONS                  -->
+        <!-- ========================================== -->
+        <br><br>
+        <div style="max-width: 600px; margin: 0 auto; font-family: 'Courier Prime', monospace; color: #ccc; text-align: center; margin-bottom: 20px;">
+            The comments are a storm of denial, prayers, and wild conspiracies. One post catches your eye: a traffic map showing military checkpoints. <i>They are barricading the bridges out of the city.</i> 
+            <br><br>
+            Before you can scroll further, the little loading icon freezes. The signal drops completely. The internet is gone.
+        </div>
+
+        <div class="choice-menu" style="max-width: 400px; margin: 0 auto;">
+            <button>
+                <<link "Lower the phone and get back to reality">>
+                    
+                    /* Add information to the Lore Database upon leaving */
+                    <<run window.addLore("X-Feed Timeline (Day 0)", "CDC reported an unprecedented neuro-aggressive pathogen causing extreme psychosis. Violence escalating. Videos show infected individuals ignoring fatal chest wounds. The military barricaded the bridges before the cellular network collapsed.")>>
+                    
+                    <<goto "Prologue">>
+                <</link>>
+                <span class="btn-sub">Add Intel to Lore Database.</span>
+            </button>
+        </div>
+
+    </div>
 </div>

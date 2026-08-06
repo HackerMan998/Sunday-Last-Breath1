@@ -10,6 +10,9 @@
 <<script>>
     State.variables.gameClockActive = true;
     
+    /* PENGAMAN: Pastikan class UI kembali normal jika passage direfresh */
+    $("body").removeClass("eas-broadcast-active");
+    
     if(State.variables.creation_music) {
         setup.sound.fade("creation_theme", 2000);
         setTimeout(function() {
@@ -51,7 +54,7 @@
                     <div style="text-align: center; color: white; letter-spacing: 4px; border-top: 1px solid #8a1c1c; margin-top: 5px; padding-top: 5px; font-family: 'Oswald', sans-serif;">
                         CIVIL DANGER WARNING
                     </div>
-                    <p style="color: #ffcccc; font-family: 'Courier Prime', monospace; font-size: 0.9em; margin-top: 10px; margin-bottom: 0;">
+                    <p style="color: #ffcccc; font-family: 'Courier Prime', monospace; margin-top: 10px; margin-bottom: 0;">
                         "The following message is transmitted at the request of the King County Sheriff's Office. This is not a test.<br><br>
                         A Civil Danger Warning is in effect for the Seattle metropolitan area. At 21:46, authorities reported a rapidly spreading biological hazard. Affected individuals exhibit extreme, unprovoked violence. The pathogen is highly contagious through fluid contact.<br><br>
                         Shelter in place immediately. Major interstates are closed. Lock all doors, turn off lights, and remain completely silent. Do not approach infected individuals.<br><br>
@@ -59,7 +62,10 @@
                     </p>
                 </div>
                 <<script>>
-                    /* PLAY TTS EMERGENCY BROADCAST HERE (Set to loop until cut off) */
+                    /* PICU KELAS CSS KHUSUS EAS DI SINI */
+                    $("body").addClass("eas-broadcast-active");
+                    
+                    /* PLAY TTS EMERGENCY BROADCAST HERE */
                     setup.sound.play("ebs_warning", "audio/sfx/ebs_warning.mp3", true, 0.8);
                 <</script>>
             <</if>>
@@ -86,13 +92,29 @@
                 <<if $hubStep is 2>>
                     <<replace "#vn-text">>
                         <<script>>
+                            /* KEMBALIKAN UI KE UKURAN NORMAL SAAT KLIK NEXT */
+                            $("body").removeClass("eas-broadcast-active");
+
                             /* KILLS THE ROBOTIC VOICE AND RESTARTS THE CREEPY STATIC */
                             setup.sound.stop("ebs_warning");
                             setup.sound.play("static", "audio/sfx/static.mp3", true, 0.3);
                         <</script>>
                         The robotic voice cuts out. Static returns to the TV. 
                         <br><br>
-                        <<chat "You" "image/avatars/player.gif" "left" "'Lethal force authorized...' They don't lock down the whole city for a standard riot. Something is very wrong.">>
+                        
+                        <!-- REAKSI DINAMIS BERDASARKAN TRAIT ATAU JOB -->
+                        <<if hasTrait("PARANOID")>>
+                            <<chat "You" "image/avatars/player.gif" "left" "'Shelter in place.' Right. Wait in a fourth-floor box with a single exit while the military shoots anything that moves. That's not a shelter. That's a coffin.">>
+                        <<elseif $job == "Police Officer">>
+                            <<chat "You" "image/avatars/player.gif" "left" "'Lethal force authorized...' The Guard doesn't deploy for a standard riot. If they establish a quarantine cordon around this block, I'll be trapped here.">>
+                        <<elseif $job == "Doctor" or hasTrait("FIELD MEDIC")>>
+                            <<chat "You" "image/avatars/player.gif" "left" "'Biological hazard. Extreme violence.' In an apartment complex with shared ventilation and paper-thin walls... staying here is suicide.">>
+                        <<else>>
+                            <<chat "You" "image/avatars/player.gif" "left" "'Lethal force authorized...' They don't lock down the whole city for mass hysteria. And this front door isn't heavy enough to keep a panicked mob out.">>
+                        <</if>>
+                        
+                        <br>
+                        Through the thin walls of your apartment, you can hear it. The distant, overlapping wail of sirens. And closer... the muffled sound of heavy, frantic footsteps pounding down the hallway outside your door.
                     <</replace>>
                     
                 <!-- PAGE 3: THE GEAR -->
@@ -101,23 +123,25 @@
                         <div class="vn-speaker">LIVING ROOM</div><br>
                         You are standing in the middle of your living room in your pajamas. You feel naked. Vulnerable. 
                         <br><br>
-                        Your <b>Starter Gear</b> is scattered across your cramped desk, illuminated by the red glow of the TV.
+                        You glance around the dim room, illuminated only by the harsh red glow of the TV. Your everyday carry—keys, phone, small tools—sits on the cramped desk. But your heavier equipment rests by the front door, exactly where you dropped it after yesterday's shift. 
+                        <br><br>
+                        It's not a tactical survival kit. But right now, the tools of your trade are the only thing standing between you and whatever violent outbreak is tearing the city apart.
                         <br><br>
                         
-                        <div style="background:rgba(255,255,255,0.05); padding:10px; border:1px dashed #444; margin: 5px auto; max-width: 600px; border-radius: 4px;">
-                            <<if $tableStash && $tableStash.length > 0>>
-                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 15px;">
-                                    <<for _i range $tableStash>>
-                                        <div style="text-align:center;">
-                                            <<print setup.items[_i.id].icon>><br>
-                                            <span style="font-size:0.7em; color:#aaa; display: block; margin-top: 5px;">_i.id</span>
-                                        </div>
-                                    <</for>>
-                                </div>
-                            <<else>>
-                                <div style="text-align:center; color:#666; font-style:italic;">(Table is empty)</div>
-                            <</if>>
-                        </div>
+                        <div style="background:rgba(255,255,255,0.05); padding:15px; border:1px dashed #444; margin: 10px auto; max-width: 600px; border-radius: 4px;">
+                        <<if $tableStash && $tableStash.length > 0>>
+                            <div class="prologue-gear-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 15px; align-items: end;">
+                                <<for _i range $tableStash>>
+                                    <div style="text-align:center;">
+                                        <<print setup.items[_i.id].icon>><br>
+                                        <span style="font-size:0.7em; color:#aaa; display: block; margin-top: 8px; line-height: 1.2;">_i.id</span>
+                                    </div>
+                                <</for>>
+                            </div>
+                        <<else>>
+                            <div style="text-align:center; color:#666; font-style:italic;">(Table is empty)</div>
+                        <</if>>
+                    </div>
                     <</replace>>
                     
                 <!-- PAGE 4: THE MENU -->

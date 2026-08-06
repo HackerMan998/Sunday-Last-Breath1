@@ -1244,3 +1244,52 @@ html, body {
 .floor-item-card a:hover {
   background: #2ecc71;
 }
+
+/* --- OVERRIDE KHUSUS UNTUK LAYAR EAS BROADCAST (CINEMATIC BACKGROUND) --- */
+
+/* 1. Gambar TV lepas dari area atas dan menjadi background layar penuh */
+body.eas-broadcast-active .tv-static-img {
+    position: fixed !important; /* Menempel di background */
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    object-fit: cover !important;
+    opacity: 0.25 !important; /* Dibuat lebih redup agar tidak bertabrakan dengan teks */
+    z-index: -1 !important; /* Ditaruh di layer paling belakang (di bawah segalanya) */
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    transition: opacity 0.5s ease-out;
+}
+
+/* 2. Kotak VN tetap di bawah, tingginya otomatis menyesuaikan teks EAS */
+body.eas-broadcast-active .vn-dialogue-box {
+    position: relative !important;
+    height: auto !important; /* Kembali dinamis, mengikuti panjang teks */
+    max-height: 85vh !important; /* Batas aman agar tidak menutupi HUD/Menu di atas */
+    background: rgba(8, 8, 12, 0.90) !important; /* Gelap semi-transparan */
+    overflow-y: hidden !important; /* Hilangkan scrollbar */
+    padding-bottom: 30px !important;
+    justify-content: flex-start !important;
+    transition: max-height 0.4s ease-out;
+}
+
+/* 3. Penyesuaian perataan teks EAS */
+body.eas-broadcast-active #vn-text {
+    font-size: 1.05em;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* --- FIX UNTUK GRID ITEM DI PROLOGUE --- */
+.prologue-gear-grid img {
+    max-width: 100% !important; /* Mencegah gambar tumpang tindih ke samping */
+    height: 45px !important; /* Membatasi tinggi agar seragam dan tidak memicu scrollbar */
+    object-fit: contain !important; /* Memastikan rasio gambar tidak gepeng */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); /* Memberikan efek 3D yang elegan */
+    margin: 0 auto;
+    display: block;
+}

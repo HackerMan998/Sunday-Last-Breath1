@@ -1,85 +1,128 @@
 :: Prologue_Hacking {"position":"300,400","size":"100,100"}
-<!-- ======================================================= -->
-<!-- 1. PASSAGE HEADER                                       -->
-<!-- ======================================================= -->
-<center>
-    <h1 class="glitch" style="color:var(--accent-green)">BYPASSING SECURITY...</h1>
-</center>
-
-<!-- ======================================================= -->
-<!-- 2. TERMINAL UI CONTAINER                                -->
-<!-- ======================================================= -->
-<div class="terminal-window">
-    
-    <!-- Terminal Title Bar -->
-    <div class="terminal-header">
-        SESSION: ADMIN_LOCAL_NODE // ENCRYPTED
-    </div>
-    
-    <!-- Dynamic Text Target (JS writes here) -->
-    <div id="hacker-terminal"></div>
-    
-    <!-- Blinking Cursor -->
-    <span class="terminal-cursor"></span>
-
-    <br>
-
-    <!-- ======================================================= -->
-    <!-- 3. TERMINAL FINISH STATE (HIDDEN ON LOAD)               -->
-    <!-- ======================================================= -->
-    <div id="terminal-finish" style="display:none; text-align:center;">
-        <span style="color:var(--accent-gold)">[!] SYSTEM DISCONNECTED [!]</span>
-        <br><br>
+<<nobr>>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: center; align-items: center; max-height: 100vh !important; padding: 20px;">
         
-        <<button "LOGOUT & CLOSE LAPTOP">>
+        <div style="width: 100%; max-width: 650px; margin: 0 auto; background: #020202; border: 2px solid #333; border-top: 4px solid var(--accent-green); border-radius: 4px; box-shadow: 0 10px 30px rgba(0,255,0,0.1); overflow: hidden; position: relative;">
             
-            /* Add the ODIN Lore to the player's database */
-            <<run window.addLore(
-                "DoD Manifest: Project ODIN", 
-                "ORIGIN: Classified Lab. Unauthorized Leak. EFFECT: Drive-infected subjects exhibit 900% increase in muscle density and total loss of higher brain function. STATUS: OUTBREAK UNCONTAINED. [!] Mutation 'Type-Tank' detected in Storage Garage 8-B. Prototype M82 Sniper + .50 BMG Stored there. ACCESS CODE: 8821"
-            )>>
+            <div style="background: #0a0a0a; padding: 8px 15px; display: flex; justify-content: space-between; font-family: 'Share Tech Mono', monospace; font-size: 0.8em; color: var(--accent-green); border-bottom: 1px solid #222;">
+                <span>SYS_ADMIN - SECURE_NODE_04</span>
+                <span class="glitch" style="color:var(--accent-red);">[ENCRYPTED]</span>
+            </div>
             
-            /* Return to the room */
-            <<goto "Prologue">>
+            <div id="scramble-terminal" style="padding: 20px; font-family: 'Courier Prime', monospace; font-size: 0.9em; line-height: 1.6; color: #4af626; text-shadow: 0 0 5px rgba(74, 246, 38, 0.4); min-height: 250px;">
+            </div>
             
-        <</button>>
-    </div>
-    
-</div> <!-- End Terminal Window -->
+        </div>
 
-<!-- ======================================================= -->
-<!-- 4. JAVASCRIPT ANIMATION SEQUENCE                        -->
-<!-- ======================================================= -->
+        <div id="terminal-finish" style="display:none; text-align:center; margin-top: 25px;">
+            <div style="max-width: 600px; margin: 0 auto 20px auto; font-family: 'Courier Prime', monospace; color: #ccc; text-align: center;">
+                <b style="color:var(--accent-red);">'SECTOR PURGE AT 0600 HOURS.'</b> The military isn't trying to contain the outbreak. They are going to wipe the entire city off the map at dawn. You need to leave. Right now.
+                <br><br>
+                But you got something else. A <b>Tier-1 Military Clearance Passkey</b> saved directly to your device. It won't help you fight your way out of this hallway, but if you survive this nightmare... it might be your only ticket into the national safe zones.
+            </div>
+
+            <div class="choice-menu" style="max-width: 400px; margin: 0 auto;">
+                <button>
+                    <<link "WIPE DRIVE & CLOSE LAPTOP">>
+                        <<run window.addLore(
+                            "DoD Intercept: Operation WILDFIRE", 
+                            "The outbreak is uncontained. The military considers the city a lost cause and has ordered a 'Sector Purge' (firebombing) at 0600 hours. I managed to download a Tier-1 Military Clearance Passkey before severing the connection."
+                        )>>
+                        <<set $military_clearance_key to true>>
+                        <<goto "Prologue">>
+                    <</link>>
+                    <span class="btn-sub">Save the Tier-1 Passkey to your PDA and log off.</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<</nobr>>
+
 <<script>>
-    /* --- A. DEFINE THE HACKING TEXT LINES --- */
-    var hackingText =[
-        
-        /* Phase 1: Connection & Bypass */
-        { text: "> Connecting to Local DoD Proxy...", speed: 40, pause: 800 },
-        { text: "> REQUEST: Access Folder /BIO-ORDNANCE/PROJECT_ODIN/", speed: 40, pause: 1000 },
-        { text: "> STATUS: 403 FORBIDDEN. Bypassing...", speed: 20, pause: 1200 },
-        { text: "> SUCCESS. Decrypting Manifest...", speed: 50, pause: 1000 },
-        { text: "------------------------------------------------", speed: 10, pause: 500 },
-        
-        /* Phase 2: Manifest Data */
-        { text: "SUBJECT: ODIN-DRIVE BIO-REANIMANT", speed: 40, pause: 400 },
-        { text: "ORIGIN: Classified Lab // Unauthorized Leak", speed: 40, pause: 400 },
-        { text: "EFFECT: Drive-infected subjects exhibit 900% increase in muscle density and total loss of higher brain function.", speed: 30, pause: 800 },
-        { text: "STATUS: OUTBREAK UNCONTAINED.", speed: 60, pause: 1200 },
-        { text: "------------------------------------------------", speed: 10, pause: 500 },
-        
-        /* Phase 3: Critical Alerts & Logout */
-        { text: "[!] CRITICAL ALERT: Mutation 'Type-Tank' detected in Storage Garage 8-B (Fort Mason Base). Subject is extremely aggressive.", speed: 40, pause: 1000 },
-        { text: "[!] LOG: Prototype M82-AntiMateriel Sniper + .50 BMG Stored in Garage 8-B. ACCESS CODE: 8821", speed: 50, pause: 2000 },
-        { text: "> TRACE DETECTED. TERMINATING SESSION...", speed: 20, pause: 500 }
+    setup.sound.play("static", "audio/sfx/static.mp3", true, 0.1);
+
+    var hackingText = [
+        "> BYPASSING 256-BIT AES ENCRYPTION...",
+        "> ACCESSING SECURE MILITARY NODE...",
+        "> DOWNLOADING CLASSIFIED DIRECTIVE: OPR_WILDFIRE",
+        "------------------------------------------------",
+        "THREAT LEVEL : CATEGORY 5 (EXTINCTION)",
+        "PATHOGEN     : NEURO-AGGRESSIVE MUTAGEN (UNKNOWN ORIGIN)",
+        "STATUS       : QUARANTINE FAILED. INFECTION RATE 87%.",
+        "DIRECTIVE    : INITIATE SECTOR PURGE (FIREBOMBING) AT 0600 HOURS.",
+        "------------------------------------------------",
+        "> DOWNLOADING ATTACHMENT: EVAC_PROTOCOLS.DAT",
+        "> EXTRACTION POINT 'ECHO' COORDINATES SECURED.",
+        "> GENERATING TIER-1 MILITARY CLEARANCE PASSKEY...",
+        "------------------------------------------------",
+        "[!] WARNING: TRACE DETECTED. SEVERING CONNECTION."
     ];
 
-    /* --- B. TRIGGER THE ANIMATION --- */
-    setTimeout(function() {
-        window.typeTerminal("hacker-terminal", hackingText);
-    }, 500);
+    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*<>";
+    var lineIndex = 0;
 
-    /* --- C. SET STORY VARIABLES --- */
-    /* Set the flag so the player can use the 8821 code later in the game */
-    State.variables.secretLoreFound = true;
+    function scrambleLine() {
+        var terminal = document.getElementById("scramble-terminal");
+        if (!terminal) {
+            setup.sound.stop("static");
+            return;
+        }
+
+        if (lineIndex >= hackingText.length) {
+            var finishBtn = document.getElementById("terminal-finish");
+            if (finishBtn) finishBtn.style.display = "block";
+            setup.sound.stop("static");
+            return;
+        }
+
+        var originalText = hackingText[lineIndex];
+        var lineDiv = document.createElement("div");
+        
+        if (originalText.includes("PURGE") || originalText.includes("[!]")) {
+            lineDiv.style.color = "var(--accent-red)";
+            lineDiv.style.textShadow = "0 0 5px rgba(255, 0, 0, 0.6)";
+        } else if (originalText.includes("TIER-1")) {
+            lineDiv.style.color = "var(--accent-gold)";
+        }
+
+        terminal.appendChild(lineDiv);
+
+        var iterations = 0;
+        var maxIterations = 20; 
+        
+        var interval = setInterval(function() {
+            if (!document.getElementById("scramble-terminal")) {
+                clearInterval(interval);
+                return;
+            }
+
+            var currentText = "";
+            for (var i = 0; i < originalText.length; i++) {
+                if (i < (iterations / maxIterations) * originalText.length) {
+                    currentText += originalText[i];
+                } else {
+                    if (originalText[i] === " ") {
+                        currentText += " ";
+                    } else {
+                        currentText += chars[Math.floor(Math.random() * chars.length)];
+                    }
+                }
+            }
+            
+            lineDiv.innerText = currentText;
+            iterations++;
+
+            if (iterations > maxIterations) {
+                clearInterval(interval);
+                lineDiv.innerText = originalText; 
+                lineIndex++;
+                setTimeout(scrambleLine, 400); 
+            }
+        }, 30); 
+    }
+
+    setTimeout(scrambleLine, 500);
 <</script>>

@@ -1,51 +1,79 @@
 :: Prologue_Radio {"position":"200,400","size":"100,100"}
-<!-- ========================================== -->
-<!-- HEADER                                     -->
-<!-- ========================================== -->
-<center>
-    <h1>📻 RADIO: DISPATCH BAND</h1>
-</center>
-<br>
+<div class="vn-container">
+    <<script>>
+        /* Memutar audio radio secara otomatis saat layar dimuat */
+        setup.sound.play("police_radio", "audio/sfx/police_radio.mp3", false, 0.9);
+    <</script>>
 
-<!-- ========================================== -->
-<!-- RADIO BROADCAST DIALOGUE                   -->
-<!-- ========================================== -->
-The radio crackles with static, then a voice cuts through—sharp, professional, but bordering on a scream.
-
-<i>"Dispatch, this is Unit 4-Charlie! We are at the precinct! They aren't staying down! I repeat, standard center-mass shots are INEFFECTIVE! Requesting Permission for 'Code Black' engagement!"</i>
-
-<br><br>
-
-A calm, female voice responds: 
-<br>
-<i>"4-Charlie, Permission for Code Black is GRANTED. All units, be advised: Target neutralization requires complete destruction of the cerebral cortex. Use extreme caution. Do not allow skin contact."</i>
-
-<!-- ========================================== -->
-<!-- VISUAL SEPARATOR                           -->
-<!-- ========================================== -->
-<hr style="border-color: #333; margin: 20px 0;">
-
-<!-- ========================================== -->
-<!-- LORE REVEAL & PLAYER THOUGHTS              -->
-<!-- ========================================== -->
-You hear a code word you remember from training: <b style="color:var(--accent-red)">'PROJECT ODIN'</b>. It was a rumor about a drug intended to bring fatally wounded soldiers back to the fight—a "second life" for the frontline. 
-
-<br><br>
-
-It seems the "Second Life" didn't care about the soldier's mind. Only their hunger.
-
-<br><br>
-
-<!-- ========================================== -->
-<!-- ACTION BUTTONS                             -->
-<!-- ========================================== -->
-<div style="text-align:center;">
-    <<button "Back to Room">>
-    
-        /* Save the radio transcript to the player's Lore Database */
-        <<run window.addLore("Police Dispatch Transcript", "Permission for 'Code Black' GRANTED. All units, be advised: Target neutralization requires complete destruction of the cerebral cortex. Use extreme caution. Do not allow skin contact.")>>
+    <div class="vn-dialogue-box" style="justify-content: center; align-items: center; max-height: 100vh !important; padding: 20px;">
         
-        <<goto "Prologue">>
-        
-    <</button>>
+        <!-- NARRATIVE INTRO -->
+        <div style="max-width: 600px; margin: 0 auto 20px auto; font-family: 'Courier Prime', monospace; color: #ccc; text-align: center;">
+            <<if $job == "Police Officer">>
+                You pull your emergency-band scanner from your gear bag. Your hands are shaking slightly as you dial into the encrypted precinct frequency.
+            <<else>>
+                You boot up your rig, your fingers flying across the mechanical keyboard. You bypass the local scramblers, hunting for raw, unencrypted police chatter.
+            <</if>>
+            The speaker hisses with white noise before a voice breaks through.
+        </div>
+
+        <!-- ========================================== -->
+        <!-- RADIO UI CONTAINER                         -->
+        <!-- ========================================== -->
+        <div style="width: 100%; max-width: 500px; margin: 0 auto; background: #050505; border: 2px solid #333; border-top: 4px solid var(--accent-gold); border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); overflow: hidden; position: relative;">
+            
+            <!-- FREQUENCY DISPLAY -->
+            <div style="background: #111; padding: 10px 15px; display: flex; justify-content: space-between; font-family: 'Share Tech Mono', monospace; font-size: 0.9em; color: var(--accent-gold); border-bottom: 1px solid #222;">
+                <span class="glitch">FREQ: 154.790 MHz</span>
+                <span style="animation: cursor-blink 1s infinite;">● REC</span>
+            </div>
+
+            <!-- AUDIO TRANSCRIPT -->
+            <div style="padding: 20px; font-family: 'Courier Prime', monospace; font-size: 0.85em; line-height: 1.5; color: #a3c2c2;">
+                
+                <span style="color: #666;">[STATIC HISS]</span><br><br>
+
+                <b style="color: #fff;">UNIT 4-CHARLIE:</b><br>
+                <i>"Dispatch, 4-Charlie! We've lost the 5th Street barricade! They are not stopping! I repeat, shooting them in the chest does nothing! They just keep coming!"</i><br><br>
+
+                <span style="color: #666;">[HEAVY THUD / STRUGGLE]</span><br><br>
+
+                <b style="color: #fff;">UNIT 4-CHARLIE:</b><br>
+                <i>"God damn it, get off the damn car! Dispatch, standard protocol is useless! Requesting authorization for unrestricted lethal force!"</i><br><br>
+
+                <span style="color: #666;">[RADIO SQUELCH]</span><br><br>
+
+                <b style="color: #fff;">DISPATCH (CALM):</b><br>
+                <i>"4-Charlie, unrestricted lethal force is authorized. All units, listen carefully. Standard rules of engagement are suspended. Body shots will not stop them. You must destroy the brain. Aim for the head. I repeat... aim for the head. Avoid all physical contact."</i><br><br>
+
+                <span style="color: #666;">[SIGNAL CUTS OUT]</span>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- NARRATIVE OUTRO & ACTIONS                  -->
+        <!-- ========================================== -->
+        <br><br>
+        <div style="max-width: 600px; margin: 0 auto; font-family: 'Courier Prime', monospace; color: #ccc; text-align: center; margin-bottom: 20px;">
+            <<if $job == "Police Officer">>
+                <b style="color:var(--accent-red);">'Standard rules of engagement are suspended.'</b> Total lethal force. No warnings, no arrests, no hesitation. They only issue that for active warzones. You stare at the radio. Whatever is out there, the law is officially dead.
+            <<else>>
+                <b style="color:var(--accent-red);">'You must destroy the brain.'</b> You stare at the blinking green light of your monitor. The police aren't trying to control a riot. They are executing people in the streets. 
+            <</if>>
+        </div>
+
+        <div class="choice-menu" style="max-width: 400px; margin: 0 auto;">
+            <button>
+                <<link "Kill the radio and step back">>
+                    
+                    /* Add information to the Lore Database upon leaving */
+                    <<run window.addLore("Radio Intercept (Day 0)", "Police dispatch authorized unrestricted lethal force. Standard body shots are ineffective against the infected. Neutralization requires destroying the brain. All physical contact must be avoided.")>>
+                    
+                    <<goto "Prologue">>
+                <</link>>
+                <span class="btn-sub">Add tactical intel to your PDA.</span>
+            </button>
+        </div>
+
+    </div>
 </div>

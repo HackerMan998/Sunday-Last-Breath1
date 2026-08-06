@@ -2589,7 +2589,10 @@ window.VNEngine = {
         if (self.timer) clearInterval(self.timer);
         
         self.targetEl.html('');
-        $('.vn-prompt-text').hide(); // Hide 'Next' prompt while typing
+        
+        // 1. SEMBUNYIKAN PROMPT DAN TOMBOL SAAT MENGETIK
+        $('.vn-prompt-text').hide(); 
+        $('#vn-action-area, .choice-menu').hide(); 
         
         let index = 0;
         self.timer = setInterval(function() {
@@ -2602,17 +2605,22 @@ window.VNEngine = {
         }, speed);
     },
 
-    // Instantly reveal all text
+    // Instantly reveal all text and buttons
     complete: function() {
         if (this.timer) clearInterval(this.timer);
         if (this.targetEl) this.targetEl.html(this.fullText);
         this.typing = false;
-        $('.vn-prompt-text').fadeIn(200); // Show blinking prompt
+        
+        // 2. MUNCULKAN PROMPT DAN TOMBOL SECARA MULUS SAAT TEKS SELESAI
+        $('.vn-prompt-text').fadeIn(200); 
+        $('#vn-action-area, .choice-menu').fadeIn(600); // 600ms memberikan efek fade-in yang dramatis
     },
 
     // Handle clicks: Skip typing IF typing, else Advance passage
     handleInteraction: function() {
         if (this.typing) {
+            // Jika pemain mengklik layar saat teks masih mengetik, 
+            // fungsi complete() akan dipanggil: teks langsung penuh & tombol langsung muncul
             this.complete();
         } else {
             const $link = $('#vn-advance a, .vn-advance-link');
