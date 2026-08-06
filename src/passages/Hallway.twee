@@ -1,13 +1,7 @@
 :: Hallway {"position":"150,500","size":"200,100"}
 <<nobr>>
-/* =====================================================================
- 1. INITIALIZATION & AUDIO DATA
- Set up passage variables and define ambient sound layers
-========================================================================
-*/
 <<set $droneFile to "audio/bgm/hallway_drone.mp3">>
 
-/* INDIVIDUAL VOLUME CONTROL FOR EACH AMBIENT SOUND */
 <<set $ambientSounds to[
     {file: "audio/sfx/distant_scream1.mp3", volume: 0.8},
     {file: "audio/sfx/distant_scream2.mp3", volume: 0.8},
@@ -28,202 +22,164 @@
     {file: "audio/sfx/zombiewalking1.mp3", volume: 0.6}
 ]>>
 
-/* Set default hallway section if undefined */
 <<if not $hallwaySection>>
     <<set $hallwaySection to 1>>
 <</if>>
 
 <<set $currentLocation to "Hallway_" + $hallwaySection>>
-<</nobr>>
 
-
-/* =====================================================================
-   2. AUDIO ENGINE SCRIPT
-   Handles the logic for playing/stopping hallway ambiance dynamically
-======================================================================== */
-<<run setTimeout(function() {
+<<script>>
+setTimeout(function() {
     var sv = State.variables;
-    console.log('🚪 Entering HALLWAY (Section ' + sv.hallwaySection + ')');
-    
     var alreadyInHallway = sv.isInHallway === true;
     
     if (!alreadyInHallway) {
-        console.log('🆕 First time in hallway - cleaning up old audio');
-        
-        /* Stop atmosphere track */
         if (setup.sound && setup.sound.tracks && setup.sound.tracks.atmosphere) {
             setup.sound.stop('atmosphere');
         }
         
-        /* Unload existing Howler instances to free memory */
         if (typeof Howler !== 'undefined') {
             Howler.unload();
         }
         
-        /* Reset tracks registry */
         if (setup && setup.sound && setup.sound.tracks) {
             setup.sound.tracks = {};
         }
         
-        console.log('✅ Cleanup done');
         sv.isInHallway = true;
         
-        /* Start Hallway Engine */
         setTimeout(function() {
-            console.log('▶️ Starting hallway audio with individual volumes:');
-            sv.ambientSounds.forEach(function(sound) {
-                var filename = sound.file.split('/').pop();
-                console.log('   🔊 ' + filename + ' → ' + Math.round(sound.volume * 100) + '%');
-            });
-            
             if (window.HallwayAmbience) {
                 window.HallwayAmbience.start(sv.droneFile, sv.ambientSounds, true);
-                console.log('✅ Hallway audio started (Drone: 100%)');
-            } else {
-                console.error('❌ HallwayAmbience not found');
             }
         }, 500);
-    } else {
-        console.log('🔄 Already in hallway - audio continues');
     }
-}, 10);>>
+}, 10);
+<</script>>
 
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
 
-<!-- =====================================================================
-     3. UI: LOCATION HEADER
-====================================================================== -->
-<div style="text-align:center; color:#666; font-size:0.8em; margin-bottom:10px; letter-spacing:2px;">
-    THE ASCOTT RESIDENCY - 4TH FLOOR
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            THE ASCOTT RESIDENCY - 4TH FLOOR
+        </div>
+
+        <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+            <<if $hallwaySection == 1>>
+                <img src="image/hallway/hall_406_407.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
+            <<elseif $hallwaySection == 2>>
+                <img src="image/hallway/hall_404_405.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
+            <<elseif $hallwaySection == 3>>
+                <img src="image/hallway/hall_402_403.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
+            <<elseif $hallwaySection == 4>>
+                <img src="image/hallway/hall_end.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
+            <</if>>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <<if $hallwaySection == 1>>
+                The door to your apartment clicks shut behind you, sealing away the only safe place you have left. 
+                <br><br>
+                <span style="color:var(--accent-blue); font-weight:bold;">UPPER HALLWAY.</span> The emergency lights above are failing, casting long, twitching shadows across the cheap carpet. It's too quiet here, making every distant scream outside echo through the vents. To your right is your unit (407). To your left is <b>Unit 408</b>.
+            
+            <<elseif $hallwaySection == 2>>
+                <span style="color:var(--accent-blue); font-weight:bold;">MID-HALLWAY.</span> Dust motes dance in the flickering light. You can hear a dog barking relentlessly from behind door 404, its claws scratching desperately against the wood. Across the hall, the reinforced door of <b>Unit 405</b> stands silent. The air here smells faintly of gunpowder.
+            
+            <<elseif $hallwaySection == 3>>
+                <span style="color:var(--accent-blue); font-weight:bold;">LOWER HALLWAY.</span> The lights are completely dead in this section. The metallic, coppery tang of blood mixes with the smell of ozone. Jarringly, soft classical music plays from behind the chained door of <b>Unit 402</b>. Across from it is <b>Unit 403</b>.
+            
+            <<elseif $hallwaySection == 4>>
+                <span style="color:var(--accent-blue); font-weight:bold;">HALLWAY END.</span> The corridor terminates at the heavy fire doors leading to the stairwell. Bloody handprints smear the glass viewing pane. From <b>Unit 401</b>, loud, obnoxious pop music thumps through the wood, completely masking the sounds of the nightmare happening outside.
+            <</if>>
+        </div>
+
+        <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+            <<if $hallwaySection == 1>>
+                <button>
+                    <<link "INVESTIGATE UNIT 408">>
+                        <<set $isInHallway to false>>
+                        <<run window.HallwayAmbience.stop()>>
+                        <<goto "Unit_408">>
+                    <</link>>
+                    <span class="btn-sub">The Professor's door. Electronic lock. Total silence inside.</span>
+                </button>
+
+            <<elseif $hallwaySection == 2>>
+                <button>
+                    <<link "INVESTIGATE UNIT 405">>
+                        <<set $isInHallway to false>>
+                        <<run window.HallwayAmbience.stop()>>
+                        <<goto "Unit_405">>
+                    <</link>>
+                    <span class="btn-sub">The Hunter's door. Heavy steel frame. Faint smell of cordite.</span>
+                </button>
+
+            <<elseif $hallwaySection == 3>>
+                <button>
+                    <<link "INVESTIGATE UNIT 402">>
+                        <<set $isInHallway to false>>
+                        <<run window.HallwayAmbience.stop()>>
+                        <<goto "Unit_402">>
+                    <</link>>
+                    <span class="btn-sub">The Andersons' door. Chained from the inside. Classical music playing.</span>
+                </button>
+
+            <<elseif $hallwaySection == 4>>
+                <button>
+                    <<link "INVESTIGATE UNIT 401">>
+                        <<set $isInHallway to false>>
+                        <<run window.HallwayAmbience.stop()>>
+                        <<goto "Unit_401">>
+                    <</link>>
+                    <span class="btn-sub">The Party door. Slightly ajar. Music is loud enough to hide your footsteps.</span>
+                </button>
+                <button>
+                    <<link "CHECK UTILITY CLOSET">>
+                        <<set $isInHallway to false>>
+                        <<run window.HallwayAmbience.stop()>>
+                        <<goto "Utility_Closet">>
+                    <</link>>
+                        <span class="btn-sub">Maintenance room. The handle feels jammed.</span>
+                </button>
+                <button style="border-left-color: var(--accent-red) !important; margin-top: 15px;">
+                    <<link "ENTER STAIRWELL (EXIT)">>
+                        <<set $isInHallway to false>>
+                        <<run window.HallwayAmbience.stop()>>
+                        <<purgeCompleted>>
+                        <<goto "Stairwell_Entrance">>
+                    <</link>>
+                    <span class="btn-sub" style="color:#ff9999;">Point of no return. Push through the bloody fire doors and head down.</span>
+                </button>
+            <</if>>
+
+            <hr style="border-color: #333; margin: 20px 0;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                
+                <<if $hallwaySection > 1>>
+                    <button style="background: rgba(255,255,255,0.05) !important; border-color: #555 !important;">
+                        <<link "▲ RETREAT UP THE HALL">>
+                            <<set $hallwaySection -= 1>>
+                            <<goto "Hallway">>
+                        <</link>>
+                    </button>
+                <<else>>
+                    <div style="opacity:0.3; border:1px solid #333; padding:10px; text-align:center; background: rgba(0,0,0,0.3); font-family: 'Oswald', sans-serif;">DEAD END</div>
+                <</if>>
+
+                <<if $hallwaySection < 4>>
+                    <button style="background: rgba(255,255,255,0.05) !important; border-color: #555 !important;">
+                        <<link "▼ ADVANCE DOWN THE HALL">>
+                            <<set $hallwaySection += 1>>
+                            <<goto "Hallway">>
+                        <</link>>
+                    </button>
+                <<else>>
+                    <div style="opacity:0.3; border:1px solid #333; padding:10px; text-align:center; background: rgba(0,0,0,0.3); font-family: 'Oswald', sans-serif;">STAIRWELL DOORS</div>
+                <</if>>
+
+            </div>
+        </div> 
+
+    </div>
 </div>
-
-
-<!-- =====================================================================
-     4. UI: DYNAMIC VISUALS
-     Updates the hallway GIF based on the player's current section
-====================================================================== -->
-<div style="max-width: 1200px; width: 95%; margin: 20px auto; border: 3px solid #2a1a1a; overflow: hidden; position: relative; box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 50px rgba(0, 0, 0, 0.5); background: #000;">
-    <<if $hallwaySection == 1>>
-        <img src="file:///image/hallway/hall_406_407.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
-    <<elseif $hallwaySection == 2>>
-        <img src="file:///image/hallway/hall_404_405.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
-    <<elseif $hallwaySection == 3>>
-        <img src="file:///image/hallway/hall_402_403.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
-    <<elseif $hallwaySection == 4>>
-        <img src="file:///image/hallway/hall_end.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
-    <</if>>
-</div>
-
-
-<!-- =====================================================================
-     5. NARRATIVE TEXT
-     Atmosphere descriptions that change as you walk down the hall
-====================================================================== -->
-<div style="background: rgba(0,0,0,0.5); padding: 15px; border: 1px solid #333; box-shadow: inset 0 0 15px #000; font-family: 'Courier Prime', monospace;">
-    <<if $hallwaySection == 1>>
-        <span style="color:var(--accent-blue)">Upper Hallway.</span> The emergency lights flicker, casting long, twitching shadows. To your right is your unit (407). To your left is <b>Unit 406</b>.
-    <<elseif $hallwaySection == 2>>
-        <span style="color:var(--accent-blue)">Mid-Hallway.</span> The air is thick with dust. You hear a dog barking relentlessly from behind door 404. To your right is <b>Unit 405</b>.
-    <<elseif $hallwaySection == 3>>
-        <span style="color:var(--accent-blue)">Lower Hallway.</span> It is darker here. A smell of copper and ozone hangs in the air. To the right is <b>Unit 403</b>, to the left is <b>Unit 402</b>.
-    <<elseif $hallwaySection == 4>>
-        <span style="color:var(--accent-blue)">Hallway End.</span> The corridor terminates at the fire door. Muffled pop music thumps erratically from <b>Unit 401</b>.
-    <</if>>
-</div>
-<br>
-
-
-<div class="choice-menu">
-    <!-- =================================================================
-         6. ROOM INVESTIGATION CHOICES
-         Dynamic buttons for interacting with specific doors
-    ================================================================== -->
-    <<if $hallwaySection == 1>>
-        <button>
-            <<link "INVESTIGATE UNIT 406 (The Professor)">>
-                <<set $isInHallway to false>>
-                <<run window.HallwayAmbience.stop()>>
-                <<goto "Unit_406">>
-            <</link>>
-            <span class="btn-sub">Electronic Lock. Total silence inside.</span>
-        </button>
-
-    <<elseif $hallwaySection == 2>>
-        <button>
-            <<link "INVESTIGATE UNIT 405 (The Hunter)">>
-                <<set $isInHallway to false>>
-                <<run window.HallwayAmbience.stop()>>
-                <<goto "Unit_405">>
-            <</link>>
-            <span class="btn-sub">Reinforced Door. The air smells like gunpowder here.</span>
-        </button>
-
-    <<elseif $hallwaySection == 3>>
-        <button>
-            <<link "INVESTIGATE UNIT 402 (The Andersons)">>
-                <<set $isInHallway to false>>
-                <<run window.HallwayAmbience.stop()>>
-                <<goto "Unit_402">>
-            <</link>>
-            <span class="btn-sub">Door is chained from inside. Faint classical music.</span>
-        </button>
-
-    <<elseif $hallwaySection == 4>>
-        <button>
-            <<link "INVESTIGATE UNIT 401 (The Party)">>
-                <<set $isInHallway to false>>
-                <<run window.HallwayAmbience.stop()>>
-                <<goto "Unit_401">>
-            <</link>>
-            <span class="btn-sub">The door is slightly ajar. Music is loud.</span>
-        </button>
-        <button>
-            <<link "CHECK UTILITY CLOSET">>
-                <<set $isInHallway to false>>
-                <<run window.HallwayAmbience.stop()>>
-                <<goto "Utility_Closet">>
-            <</link>>
-            <span class="btn-sub">Maintenance room. The handle is jammed.</span>
-        </button>
-<button style="border-left-color: var(--accent-gold) !important;">
-    <<link "ENTER STAIRWELL (EXIT)">>
-        <<set $isInHallway to false>>
-        <<run window.HallwayAmbience.stop()>>
-        <<purgeCompleted>> /* METHOD B: Purges completed apartment objectives */
-        <<goto "Stairwell_Entrance">>
-    <</link>>
-    <span class="btn-sub">Point of no return. You can't come back to this floor.</span>
-</button>
-    <</if>>
-
-    <!-- =================================================================
-         7. NAVIGATION CONTROLS
-         Move up/down the hallway (Disables at ends)
-    ================================================================== -->
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
-        
-        <!-- UP BUTTON -->
-        <<if $hallwaySection > 1>>
-            <button>
-                <<link "⬆️ MOVE UP">>
-                    <<set $hallwaySection -= 1>>
-                    <<goto "Hallway">>
-                <</link>>
-            </button>
-        <<else>>
-            <div style="opacity:0.3; border:1px solid #333; padding:10px; text-align:center; background: rgba(0,0,0,0.3);">END OF HALL</div>
-        <</if>>
-
-        <!-- DOWN BUTTON -->
-        <<if $hallwaySection < 4>>
-            <button>
-                <<link "⬇️ MOVE DOWN">>
-                    <<set $hallwaySection += 1>>
-                    <<goto "Hallway">>
-                <</link>>
-            </button>
-        <<else>>
-            <div style="opacity:0.3; border:1px solid #333; padding:10px; text-align:center; background: rgba(0,0,0,0.3);">STAIRWELL</div>
-        <</if>>
-
-    </div> <!-- End Navigation Controls -->
-</div> <!-- End Choice Menu -->
+<</nobr>>

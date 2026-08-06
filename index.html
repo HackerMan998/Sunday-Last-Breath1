@@ -4081,7 +4081,7 @@ window.preloadAssets = function(assetList) {
             }
         }
     });
-};</script><tw-tag name="Initialize" color="red"></tw-tag><tw-tag name="PassageReady" color="green"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-passagedata pid="1" name="Act2_5_MarcusCabin" tags="" position="450,1300" size="100,100">&lt;&lt;nobr&gt;&gt;
+};</script><tw-tag name="widget" color="purple"></tw-tag><tw-tag name="Initialize" color="red"></tw-tag><tw-tag name="PassageReady" color="green"></tw-tag><tw-passagedata pid="1" name="Act2_5_MarcusCabin" tags="" position="450,1300" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* ====================================================================
    INITIALIZATION &amp; STATE SETUP
    ==================================================================== */
@@ -13447,14 +13447,8 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
 		&lt;/button&gt;
 	&lt;/div&gt;
 &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="48" name="Hallway" tags="" position="150,500" size="200,100">&lt;&lt;nobr&gt;&gt;
-/* =====================================================================
- 1. INITIALIZATION &amp; AUDIO DATA
- Set up passage variables and define ambient sound layers
-========================================================================
-*/
 &lt;&lt;set $droneFile to &quot;audio/bgm/hallway_drone.mp3&quot;&gt;&gt;
 
-/* INDIVIDUAL VOLUME CONTROL FOR EACH AMBIENT SOUND */
 &lt;&lt;set $ambientSounds to[
     {file: &quot;audio/sfx/distant_scream1.mp3&quot;, volume: 0.8},
     {file: &quot;audio/sfx/distant_scream2.mp3&quot;, volume: 0.8},
@@ -13475,205 +13469,167 @@ you when she&#39;re ready. Or you&#39;ll find out when you get there.
     {file: &quot;audio/sfx/zombiewalking1.mp3&quot;, volume: 0.6}
 ]&gt;&gt;
 
-/* Set default hallway section if undefined */
 &lt;&lt;if not $hallwaySection&gt;&gt;
     &lt;&lt;set $hallwaySection to 1&gt;&gt;
 &lt;&lt;/if&gt;&gt;
 
 &lt;&lt;set $currentLocation to &quot;Hallway_&quot; + $hallwaySection&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
 
-
-/* =====================================================================
-   2. AUDIO ENGINE SCRIPT
-   Handles the logic for playing/stopping hallway ambiance dynamically
-======================================================================== */
-&lt;&lt;run setTimeout(function() {
+&lt;&lt;script&gt;&gt;
+setTimeout(function() {
     var sv = State.variables;
-    console.log(&#39;🚪 Entering HALLWAY (Section &#39; + sv.hallwaySection + &#39;)&#39;);
-    
     var alreadyInHallway = sv.isInHallway === true;
     
     if (!alreadyInHallway) {
-        console.log(&#39;🆕 First time in hallway - cleaning up old audio&#39;);
-        
-        /* Stop atmosphere track */
         if (setup.sound &amp;&amp; setup.sound.tracks &amp;&amp; setup.sound.tracks.atmosphere) {
             setup.sound.stop(&#39;atmosphere&#39;);
         }
         
-        /* Unload existing Howler instances to free memory */
         if (typeof Howler !== &#39;undefined&#39;) {
             Howler.unload();
         }
         
-        /* Reset tracks registry */
         if (setup &amp;&amp; setup.sound &amp;&amp; setup.sound.tracks) {
             setup.sound.tracks = {};
         }
         
-        console.log(&#39;✅ Cleanup done&#39;);
         sv.isInHallway = true;
         
-        /* Start Hallway Engine */
         setTimeout(function() {
-            console.log(&#39;▶️ Starting hallway audio with individual volumes:&#39;);
-            sv.ambientSounds.forEach(function(sound) {
-                var filename = sound.file.split(&#39;/&#39;).pop();
-                console.log(&#39;   🔊 &#39; + filename + &#39; → &#39; + Math.round(sound.volume * 100) + &#39;%&#39;);
-            });
-            
             if (window.HallwayAmbience) {
                 window.HallwayAmbience.start(sv.droneFile, sv.ambientSounds, true);
-                console.log(&#39;✅ Hallway audio started (Drone: 100%)&#39;);
-            } else {
-                console.error(&#39;❌ HallwayAmbience not found&#39;);
             }
         }, 500);
-    } else {
-        console.log(&#39;🔄 Already in hallway - audio continues&#39;);
     }
-}, 10);&gt;&gt;
+}, 10);
+&lt;&lt;/script&gt;&gt;
 
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
-&lt;!-- =====================================================================
-     3. UI: LOCATION HEADER
-====================================================================== --&gt;
-&lt;div style=&quot;text-align:center; color:#666; font-size:0.8em; margin-bottom:10px; letter-spacing:2px;&quot;&gt;
-    THE ASCOTT RESIDENCY - 4TH FLOOR
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            THE ASCOTT RESIDENCY - 4TH FLOOR
+        &lt;/div&gt;
+
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;&lt;if $hallwaySection == 1&gt;&gt;
+                &lt;img src=&quot;image/hallway/hall_406_407.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;elseif $hallwaySection == 2&gt;&gt;
+                &lt;img src=&quot;image/hallway/hall_404_405.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;elseif $hallwaySection == 3&gt;&gt;
+                &lt;img src=&quot;image/hallway/hall_402_403.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;elseif $hallwaySection == 4&gt;&gt;
+                &lt;img src=&quot;image/hallway/hall_end.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
+
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;&lt;if $hallwaySection == 1&gt;&gt;
+                The door to your apartment clicks shut behind you, sealing away the only safe place you have left. 
+                &lt;br&gt;&lt;br&gt;
+                &lt;span style=&quot;color:var(--accent-blue); font-weight:bold;&quot;&gt;UPPER HALLWAY.&lt;/span&gt; The emergency lights above are failing, casting long, twitching shadows across the cheap carpet. It&#39;s too quiet here, making every distant scream outside echo through the vents. To your right is your unit (407). To your left is &lt;b&gt;Unit 408&lt;/b&gt;.
+            
+            &lt;&lt;elseif $hallwaySection == 2&gt;&gt;
+                &lt;span style=&quot;color:var(--accent-blue); font-weight:bold;&quot;&gt;MID-HALLWAY.&lt;/span&gt; Dust motes dance in the flickering light. You can hear a dog barking relentlessly from behind door 404, its claws scratching desperately against the wood. Across the hall, the reinforced door of &lt;b&gt;Unit 405&lt;/b&gt; stands silent. The air here smells faintly of gunpowder.
+            
+            &lt;&lt;elseif $hallwaySection == 3&gt;&gt;
+                &lt;span style=&quot;color:var(--accent-blue); font-weight:bold;&quot;&gt;LOWER HALLWAY.&lt;/span&gt; The lights are completely dead in this section. The metallic, coppery tang of blood mixes with the smell of ozone. Jarringly, soft classical music plays from behind the chained door of &lt;b&gt;Unit 402&lt;/b&gt;. Across from it is &lt;b&gt;Unit 403&lt;/b&gt;.
+            
+            &lt;&lt;elseif $hallwaySection == 4&gt;&gt;
+                &lt;span style=&quot;color:var(--accent-blue); font-weight:bold;&quot;&gt;HALLWAY END.&lt;/span&gt; The corridor terminates at the heavy fire doors leading to the stairwell. Bloody handprints smear the glass viewing pane. From &lt;b&gt;Unit 401&lt;/b&gt;, loud, obnoxious pop music thumps through the wood, completely masking the sounds of the nightmare happening outside.
+            &lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;choice-menu&quot; style=&quot;max-width: 700px; width: 100%; margin: 0 auto;&quot;&gt;
+            &lt;&lt;if $hallwaySection == 1&gt;&gt;
+                &lt;button&gt;
+                    &lt;&lt;link &quot;INVESTIGATE UNIT 408&quot;&gt;&gt;
+                        &lt;&lt;set $isInHallway to false&gt;&gt;
+                        &lt;&lt;run window.HallwayAmbience.stop()&gt;&gt;
+                        &lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;The Professor&#39;s door. Electronic lock. Total silence inside.&lt;/span&gt;
+                &lt;/button&gt;
+
+            &lt;&lt;elseif $hallwaySection == 2&gt;&gt;
+                &lt;button&gt;
+                    &lt;&lt;link &quot;INVESTIGATE UNIT 405&quot;&gt;&gt;
+                        &lt;&lt;set $isInHallway to false&gt;&gt;
+                        &lt;&lt;run window.HallwayAmbience.stop()&gt;&gt;
+                        &lt;&lt;goto &quot;Unit_405&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;The Hunter&#39;s door. Heavy steel frame. Faint smell of cordite.&lt;/span&gt;
+                &lt;/button&gt;
+
+            &lt;&lt;elseif $hallwaySection == 3&gt;&gt;
+                &lt;button&gt;
+                    &lt;&lt;link &quot;INVESTIGATE UNIT 402&quot;&gt;&gt;
+                        &lt;&lt;set $isInHallway to false&gt;&gt;
+                        &lt;&lt;run window.HallwayAmbience.stop()&gt;&gt;
+                        &lt;&lt;goto &quot;Unit_402&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;The Andersons&#39; door. Chained from the inside. Classical music playing.&lt;/span&gt;
+                &lt;/button&gt;
+
+            &lt;&lt;elseif $hallwaySection == 4&gt;&gt;
+                &lt;button&gt;
+                    &lt;&lt;link &quot;INVESTIGATE UNIT 401&quot;&gt;&gt;
+                        &lt;&lt;set $isInHallway to false&gt;&gt;
+                        &lt;&lt;run window.HallwayAmbience.stop()&gt;&gt;
+                        &lt;&lt;goto &quot;Unit_401&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;The Party door. Slightly ajar. Music is loud enough to hide your footsteps.&lt;/span&gt;
+                &lt;/button&gt;
+                &lt;button&gt;
+                    &lt;&lt;link &quot;CHECK UTILITY CLOSET&quot;&gt;&gt;
+                        &lt;&lt;set $isInHallway to false&gt;&gt;
+                        &lt;&lt;run window.HallwayAmbience.stop()&gt;&gt;
+                        &lt;&lt;goto &quot;Utility_Closet&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;Maintenance room. The handle feels jammed.&lt;/span&gt;
+                &lt;/button&gt;
+                &lt;button style=&quot;border-left-color: var(--accent-red) !important; margin-top: 15px;&quot;&gt;
+                    &lt;&lt;link &quot;ENTER STAIRWELL (EXIT)&quot;&gt;&gt;
+                        &lt;&lt;set $isInHallway to false&gt;&gt;
+                        &lt;&lt;run window.HallwayAmbience.stop()&gt;&gt;
+                        &lt;&lt;purgeCompleted&gt;&gt;
+                        &lt;&lt;goto &quot;Stairwell_Entrance&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot; style=&quot;color:#ff9999;&quot;&gt;Point of no return. Push through the bloody fire doors and head down.&lt;/span&gt;
+                &lt;/button&gt;
+            &lt;&lt;/if&gt;&gt;
+
+            &lt;hr style=&quot;border-color: #333; margin: 20px 0;&quot;&gt;
+            &lt;div style=&quot;display:grid; grid-template-columns: 1fr 1fr; gap:15px;&quot;&gt;
+                
+                &lt;&lt;if $hallwaySection &gt; 1&gt;&gt;
+                    &lt;button style=&quot;background: rgba(255,255,255,0.05) !important; border-color: #555 !important;&quot;&gt;
+                        &lt;&lt;link &quot;▲ RETREAT UP THE HALL&quot;&gt;&gt;
+                            &lt;&lt;set $hallwaySection -= 1&gt;&gt;
+                            &lt;&lt;goto &quot;Hallway&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                    &lt;/button&gt;
+                &lt;&lt;else&gt;&gt;
+                    &lt;div style=&quot;opacity:0.3; border:1px solid #333; padding:10px; text-align:center; background: rgba(0,0,0,0.3); font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;DEAD END&lt;/div&gt;
+                &lt;&lt;/if&gt;&gt;
+
+                &lt;&lt;if $hallwaySection &lt; 4&gt;&gt;
+                    &lt;button style=&quot;background: rgba(255,255,255,0.05) !important; border-color: #555 !important;&quot;&gt;
+                        &lt;&lt;link &quot;▼ ADVANCE DOWN THE HALL&quot;&gt;&gt;
+                            &lt;&lt;set $hallwaySection += 1&gt;&gt;
+                            &lt;&lt;goto &quot;Hallway&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                    &lt;/button&gt;
+                &lt;&lt;else&gt;&gt;
+                    &lt;div style=&quot;opacity:0.3; border:1px solid #333; padding:10px; text-align:center; background: rgba(0,0,0,0.3); font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;STAIRWELL DOORS&lt;/div&gt;
+                &lt;&lt;/if&gt;&gt;
+
+            &lt;/div&gt;
+        &lt;/div&gt; 
+
+    &lt;/div&gt;
 &lt;/div&gt;
-
-
-&lt;!-- =====================================================================
-     4. UI: DYNAMIC VISUALS
-     Updates the hallway GIF based on the player&#39;s current section
-====================================================================== --&gt;
-&lt;div style=&quot;max-width: 1200px; width: 95%; margin: 20px auto; border: 3px solid #2a1a1a; overflow: hidden; position: relative; box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 50px rgba(0, 0, 0, 0.5); background: #000;&quot;&gt;
-    &lt;&lt;if $hallwaySection == 1&gt;&gt;
-        &lt;img src=&quot;file:///image/hallway/hall_406_407.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);&quot;&gt;
-    &lt;&lt;elseif $hallwaySection == 2&gt;&gt;
-        &lt;img src=&quot;file:///image/hallway/hall_404_405.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);&quot;&gt;
-    &lt;&lt;elseif $hallwaySection == 3&gt;&gt;
-        &lt;img src=&quot;file:///image/hallway/hall_402_403.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);&quot;&gt;
-    &lt;&lt;elseif $hallwaySection == 4&gt;&gt;
-        &lt;img src=&quot;file:///image/hallway/hall_end.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);&quot;&gt;
-    &lt;&lt;/if&gt;&gt;
-&lt;/div&gt;
-
-
-&lt;!-- =====================================================================
-     5. NARRATIVE TEXT
-     Atmosphere descriptions that change as you walk down the hall
-====================================================================== --&gt;
-&lt;div style=&quot;background: rgba(0,0,0,0.5); padding: 15px; border: 1px solid #333; box-shadow: inset 0 0 15px #000; font-family: &#39;Courier Prime&#39;, monospace;&quot;&gt;
-    &lt;&lt;if $hallwaySection == 1&gt;&gt;
-        &lt;span style=&quot;color:var(--accent-blue)&quot;&gt;Upper Hallway.&lt;/span&gt; The emergency lights flicker, casting long, twitching shadows. To your right is your unit (407). To your left is &lt;b&gt;Unit 406&lt;/b&gt;.
-    &lt;&lt;elseif $hallwaySection == 2&gt;&gt;
-        &lt;span style=&quot;color:var(--accent-blue)&quot;&gt;Mid-Hallway.&lt;/span&gt; The air is thick with dust. You hear a dog barking relentlessly from behind door 404. To your right is &lt;b&gt;Unit 405&lt;/b&gt;.
-    &lt;&lt;elseif $hallwaySection == 3&gt;&gt;
-        &lt;span style=&quot;color:var(--accent-blue)&quot;&gt;Lower Hallway.&lt;/span&gt; It is darker here. A smell of copper and ozone hangs in the air. To the right is &lt;b&gt;Unit 403&lt;/b&gt;, to the left is &lt;b&gt;Unit 402&lt;/b&gt;.
-    &lt;&lt;elseif $hallwaySection == 4&gt;&gt;
-        &lt;span style=&quot;color:var(--accent-blue)&quot;&gt;Hallway End.&lt;/span&gt; The corridor terminates at the fire door. Muffled pop music thumps erratically from &lt;b&gt;Unit 401&lt;/b&gt;.
-    &lt;&lt;/if&gt;&gt;
-&lt;/div&gt;
-&lt;br&gt;
-
-
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;!-- =================================================================
-         6. ROOM INVESTIGATION CHOICES
-         Dynamic buttons for interacting with specific doors
-    ================================================================== --&gt;
-    &lt;&lt;if $hallwaySection == 1&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;INVESTIGATE UNIT 406 (The Professor)&quot;&gt;&gt;
-                &lt;&lt;set $isInHallway to false&gt;&gt;
-                &lt;&lt;run window.HallwayAmbience.stop()&gt;&gt;
-                &lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Electronic Lock. Total silence inside.&lt;/span&gt;
-        &lt;/button&gt;
-
-    &lt;&lt;elseif $hallwaySection == 2&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;INVESTIGATE UNIT 405 (The Hunter)&quot;&gt;&gt;
-                &lt;&lt;set $isInHallway to false&gt;&gt;
-                &lt;&lt;run window.HallwayAmbience.stop()&gt;&gt;
-                &lt;&lt;goto &quot;Unit_405&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Reinforced Door. The air smells like gunpowder here.&lt;/span&gt;
-        &lt;/button&gt;
-
-    &lt;&lt;elseif $hallwaySection == 3&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;INVESTIGATE UNIT 402 (The Andersons)&quot;&gt;&gt;
-                &lt;&lt;set $isInHallway to false&gt;&gt;
-                &lt;&lt;run window.HallwayAmbience.stop()&gt;&gt;
-                &lt;&lt;goto &quot;Unit_402&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Door is chained from inside. Faint classical music.&lt;/span&gt;
-        &lt;/button&gt;
-
-    &lt;&lt;elseif $hallwaySection == 4&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;INVESTIGATE UNIT 401 (The Party)&quot;&gt;&gt;
-                &lt;&lt;set $isInHallway to false&gt;&gt;
-                &lt;&lt;run window.HallwayAmbience.stop()&gt;&gt;
-                &lt;&lt;goto &quot;Unit_401&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;The door is slightly ajar. Music is loud.&lt;/span&gt;
-        &lt;/button&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;CHECK UTILITY CLOSET&quot;&gt;&gt;
-                &lt;&lt;set $isInHallway to false&gt;&gt;
-                &lt;&lt;run window.HallwayAmbience.stop()&gt;&gt;
-                &lt;&lt;goto &quot;Utility_Closet&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Maintenance room. The handle is jammed.&lt;/span&gt;
-        &lt;/button&gt;
-&lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
-    &lt;&lt;link &quot;ENTER STAIRWELL (EXIT)&quot;&gt;&gt;
-        &lt;&lt;set $isInHallway to false&gt;&gt;
-        &lt;&lt;run window.HallwayAmbience.stop()&gt;&gt;
-        &lt;&lt;purgeCompleted&gt;&gt; /* METHOD B: Purges completed apartment objectives */
-        &lt;&lt;goto &quot;Stairwell_Entrance&quot;&gt;&gt;
-    &lt;&lt;/link&gt;&gt;
-    &lt;span class=&quot;btn-sub&quot;&gt;Point of no return. You can&#39;t come back to this floor.&lt;/span&gt;
-&lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
-
-    &lt;!-- =================================================================
-         7. NAVIGATION CONTROLS
-         Move up/down the hallway (Disables at ends)
-    ================================================================== --&gt;
-    &lt;div style=&quot;display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;&quot;&gt;
-        
-        &lt;!-- UP BUTTON --&gt;
-        &lt;&lt;if $hallwaySection &gt; 1&gt;&gt;
-            &lt;button&gt;
-                &lt;&lt;link &quot;⬆️ MOVE UP&quot;&gt;&gt;
-                    &lt;&lt;set $hallwaySection -= 1&gt;&gt;
-                    &lt;&lt;goto &quot;Hallway&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-            &lt;/button&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;div style=&quot;opacity:0.3; border:1px solid #333; padding:10px; text-align:center; background: rgba(0,0,0,0.3);&quot;&gt;END OF HALL&lt;/div&gt;
-        &lt;&lt;/if&gt;&gt;
-
-        &lt;!-- DOWN BUTTON --&gt;
-        &lt;&lt;if $hallwaySection &lt; 4&gt;&gt;
-            &lt;button&gt;
-                &lt;&lt;link &quot;⬇️ MOVE DOWN&quot;&gt;&gt;
-                    &lt;&lt;set $hallwaySection += 1&gt;&gt;
-                    &lt;&lt;goto &quot;Hallway&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-            &lt;/button&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;div style=&quot;opacity:0.3; border:1px solid #333; padding:10px; text-align:center; background: rgba(0,0,0,0.3);&quot;&gt;STAIRWELL&lt;/div&gt;
-        &lt;&lt;/if&gt;&gt;
-
-    &lt;/div&gt; &lt;!-- End Navigation Controls --&gt;
-&lt;/div&gt; &lt;!-- End Choice Menu --&gt;</tw-passagedata><tw-passagedata pid="49" name="Help_Menu" tags="" position="0,200" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="49" name="Help_Menu" tags="" position="0,200" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;div style=&quot;font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; line-height: 1.2; padding: 10px;&quot;&gt;
 
     &lt;!-- SECTION 1 --&gt;
@@ -19062,386 +19018,379 @@ You press your ear to the door. The silence on the other side isn&#39;t empty si
     &lt;/button&gt;
 
 &lt;&lt;/if&gt;&gt; &lt;!-- End of Inside Room Phase checks --&gt;
-&lt;&lt;/if&gt;&gt; &lt;!-- End of Main Location (Inside/Outside) check --&gt;</tw-passagedata><tw-passagedata pid="78" name="Unit_406" tags="" position="0,650" size="100,100">&lt;!-- ======================================================= --&gt;
+&lt;&lt;/if&gt;&gt; &lt;!-- End of Main Location (Inside/Outside) check --&gt;</tw-passagedata><tw-passagedata pid="78" name="Unit_408" tags="" position="0,650" size="100,100">&lt;!-- ======================================================= --&gt;
 &lt;!-- INITIALIZATION &amp; SETUP                                  --&gt;
 &lt;!-- ======================================================= --&gt;
 &lt;&lt;nobr&gt;&gt;
     /* AUDIO: Ticking Clock Room Tone */
     &lt;&lt;run setup.sound.play(&quot;ticking_clock&quot;, &quot;audio/sfx/tick.mp3&quot;, true, 0.2)&gt;&gt;
 
-    &lt;&lt;set $currentLocation to &quot;406&quot;&gt;&gt;
+    &lt;&lt;set $currentLocation to &quot;408&quot;&gt;&gt;
     
     /* Variable Defaults */
-    &lt;&lt;if not $room406_opened&gt;&gt;&lt;&lt;set $room406_opened to false&gt;&gt;&lt;&lt;/if&gt;&gt;
-    &lt;&lt;if not $failed_406_attempts&gt;&gt;&lt;&lt;set $failed_406_attempts to 0&gt;&gt;&lt;&lt;/if&gt;&gt;
-    &lt;&lt;if not $studied_406_mechanics&gt;&gt;&lt;&lt;set $studied_406_mechanics to false&gt;&gt;&lt;&lt;/if&gt;&gt;
-    &lt;&lt;if not $studied_406_anatomy&gt;&gt;&lt;&lt;set $studied_406_anatomy to false&gt;&gt;&lt;&lt;/if&gt;&gt;
-    &lt;&lt;if not $looted_406&gt;&gt;&lt;&lt;set $looted_406 to false&gt;&gt;&lt;&lt;/if&gt;&gt;
-    &lt;&lt;if not $read_406_journal&gt;&gt;&lt;&lt;set $read_406_journal to false&gt;&gt;&lt;&lt;/if&gt;&gt;
-    &lt;&lt;if not $looted_406_kitchen&gt;&gt;&lt;&lt;set $looted_406_kitchen to false&gt;&gt;&lt;&lt;/if&gt;&gt;
+    &lt;&lt;if not $room408_opened&gt;&gt;&lt;&lt;set $room408_opened to false&gt;&gt;&lt;&lt;/if&gt;&gt;
+    &lt;&lt;if not $failed_408_attempts&gt;&gt;&lt;&lt;set $failed_408_attempts to 0&gt;&gt;&lt;&lt;/if&gt;&gt;
+    &lt;&lt;if not $studied_408_mechanics&gt;&gt;&lt;&lt;set $studied_408_mechanics to false&gt;&gt;&lt;&lt;/if&gt;&gt;
+    &lt;&lt;if not $studied_408_anatomy&gt;&gt;&lt;&lt;set $studied_408_anatomy to false&gt;&gt;&lt;&lt;/if&gt;&gt;
+    &lt;&lt;if not $looted_408&gt;&gt;&lt;&lt;set $looted_408 to false&gt;&gt;&lt;&lt;/if&gt;&gt;
+    &lt;&lt;if not $read_408_journal&gt;&gt;&lt;&lt;set $read_408_journal to false&gt;&gt;&lt;&lt;/if&gt;&gt;
+    &lt;&lt;if not $looted_408_kitchen&gt;&gt;&lt;&lt;set $looted_408_kitchen to false&gt;&gt;&lt;&lt;/if&gt;&gt;
 
     /* Setup Physical Bypass Costs */
     &lt;&lt;set _baseCost to 15&gt;&gt;
     &lt;&lt;set _halfCost to Math.round(_baseCost / 2)&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
+&lt;&lt;nobr&gt;&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
-&lt;!-- ======================================================= --&gt;
-&lt;!-- PHASE 1: EXTERIOR (THE KEYPAD)                          --&gt;
-&lt;!-- ======================================================= --&gt;
-&lt;&lt;if not $room406_opened&gt;&gt;
-    &lt;h2&gt;UNIT 406 — THE KEYPAD&lt;/h2&gt;
+        &lt;!-- ======================================================= --&gt;
+        &lt;!-- PHASE 1: EXTERIOR (THE KEYPAD)                          --&gt;
+        &lt;!-- ======================================================= --&gt;
+        &lt;&lt;if not $room408_opened&gt;&gt;
+            &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+                UNIT 408 - THE KEYPAD
+            &lt;/div&gt;
 
-    Professor Harmon taught history and behavioral sociology at the university. You&#39;d chatted with him in the elevator a few times — he always smelled like old paper and peppermint tea, and he talked about the psychology of collapsing civilizations the way most people talked about the weather. *Inevitable. Interesting. Nothing personal.*
+            &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+                Professor Harmon taught history and behavioral sociology at the university. You&#39;d chatted with him in the elevator a few times — he always smelled like old paper and peppermint tea. He talked about the psychology of collapsing civilizations the way most people talked about the weather. &lt;i&gt;Inevitable. Fascinating. Nothing personal.&lt;/i&gt;
+                &lt;br&gt;&lt;br&gt;
+                The door is sealed with a heavy electronic lock. A small keypad glows faintly in the dark hallway, its LEDs casting a cold blue light across your fingers. Four blank digits. Waiting.
+                &lt;br&gt;&lt;br&gt;
+                Someone has taped a yellowed index card above the scanner. The handwriting is spidery, hurried, and precise:
 
-    The door is sealed with an electronic lock. A small keypad glows faintly in the dark, its LEDs casting cold blue light across your fingers. Four blank digits. Waiting.
+                &lt;div style=&quot;padding:10px; background:#0a0a0a; border:1px solid #333; color:#aaa; font-style:italic; margin:10px 0; text-align:center;&quot;&gt;
+                    &quot;If I&#39;m not answering, I&#39;m either dead or I finally took my own advice and ran.&lt;br&gt;Either way, you&#39;re not getting in.&quot;
+                &lt;/div&gt;
 
-    Someone has taped a yellowed index card above it. His handwriting, spidery and precise:
+                You almost smile. Almost.
+                &lt;br&gt;&lt;br&gt;
+                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Dark sense of humor. I hope you made it out of the city, Professor.&quot;&gt;&gt;
+            &lt;/div&gt;
 
-    &lt;div style=&quot;padding:10px; background:#0a0a0a; border:1px solid #333; font-family:&#39;Courier Prime&#39;,monospace; color:#aaa; font-style:italic; margin:10px 0; text-align:center;&quot;&gt;
-    *&quot;If I&#39;m not answering, I&#39;m either dead or at the library.*
-    *Either way, you&#39;re not getting in.&quot;*
-    &lt;/div&gt;
+            &lt;div class=&quot;choice-menu&quot; style=&quot;max-width: 700px; width: 100%; margin: 0 auto;&quot;&gt;
+                
+                &lt;!-- KEYPAD STATE: BRICKED --&gt;
+                &lt;&lt;if $room408_locked_out&gt;&gt;
+                    &lt;div style=&quot;padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin-bottom:15px; text-align:center;&quot;&gt;
+                        ⛔ &lt;b&gt;PERMANENTLY LOCKED OUT.&lt;/b&gt; The keypad triggered its security failsafe after three wrong attempts. The software is sealed. You will have to bypass it physically.
+                    &lt;/div&gt;
+                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Damn it. It bricked itself. Time to do this the hard way.&quot;&gt;&gt;
+                
+                &lt;!-- KEYPAD STATE: ACTIVE --&gt;
+                &lt;&lt;else&gt;&gt;
+                    &lt;div style=&quot;margin-bottom:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-blue);&quot;&gt;
+                        &lt;b style=&quot;color:var(--accent-blue);&quot;&gt;⚙️ HOW DO YOU PROCEED?&lt;/b&gt;&lt;br&gt;&lt;br&gt;
 
-    You almost smile. Almost.
+                        &lt;!-- SECRET LORE CHECK: HIDDEN PATH KEPT --&gt;
+                        &lt;&lt;if visited(&quot;Prologue_Phone&quot;)&gt;&gt;
+                            &lt;button&gt;
+                                &lt;&lt;link &quot;📱 Enter the code you saw on your phone (8445)&quot;&gt;&gt;
+                                    &lt;&lt;set $room408_opened to true&gt;&gt;
+                                    &lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;span class=&quot;btn-sub&quot;&gt;1 Minute | You saw a text from him earlier. You didn&#39;t know what it was for at the time. Now you do.&lt;/span&gt;
+                            &lt;/button&gt;
+                        &lt;&lt;/if&gt;&gt;
 
-    &lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Dark sense of humor. I hope you made it out of here, Professor.&quot;&gt;&gt;
-    &lt;br&gt;
+                        &lt;!-- FAILED ATTEMPT WARNING --&gt;
+                        &lt;&lt;if $failed_408_attempts &gt; 0&gt;&gt;
+                            &lt;div style=&quot;padding:8px; background:rgba(138,28,28,0.2); border:1px solid #8a1c1c; color:#ff9999; margin-bottom:10px;&quot;&gt;
+                                ⚠️ &lt;b&gt;WRONG CODE.&lt;/b&gt; Attempts remaining: &lt;&lt;print 3 - $failed_408_attempts&gt;&gt;. Three failures trigger the lockout permanently.
+                            &lt;/div&gt;
+                        &lt;&lt;/if&gt;&gt;
 
-    &lt;!-- ------------------------------------------------------- --&gt;
-    &lt;!-- KEYPAD STATE: BRICKED                                   --&gt;
-    &lt;!-- ------------------------------------------------------- --&gt;
-    &lt;&lt;if $room406_locked_out&gt;&gt;
-        &lt;div style=&quot;padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin:10px 0;&quot;&gt;
-            ⛔ &lt;b&gt;PERMANENTLY LOCKED OUT.&lt;/b&gt; The keypad triggered its security failsafe after three wrong attempts. The software is sealed. You will have to bypass it physically.
-        &lt;/div&gt;
-        &lt;br&gt;
-        &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Damn it. It bricked itself. Time to do this the hard way.&quot;&gt;&gt;
-        &lt;br&gt;
-
-    &lt;!-- ------------------------------------------------------- --&gt;
-    &lt;!-- KEYPAD STATE: ACTIVE                                    --&gt;
-    &lt;!-- ------------------------------------------------------- --&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;div style=&quot;margin-top:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-blue);&quot;&gt;
-            &lt;b style=&quot;color:var(--accent-blue);&quot;&gt;⚙️ HOW DO YOU PROCEED?&lt;/b&gt;&lt;br&gt;&lt;br&gt;
-
-            &lt;div class=&quot;choice-menu&quot;&gt;
-
-                &lt;!-- SECRET LORE CHECK: HIDDEN PATH KEPT --&gt;
-                &lt;&lt;if visited(&quot;Prologue_Phone&quot;)&gt;&gt;
-                    &lt;button&gt;
-                        &lt;&lt;link &quot;📱 Enter the code you saw on your phone — 8-4-4-5&quot;&gt;&gt;
-                            &lt;&lt;set $room406_opened to true&gt;&gt;
-                            &lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
-                        &lt;&lt;/link&gt;&gt;
-                        &lt;span class=&quot;btn-sub&quot;&gt;1 Minute | You saw it in a text thread. Didn&#39;t know what it was for at the time. Now you do.&lt;/span&gt;
-                    &lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-
-                &lt;!-- FAILED ATTEMPT WARNING --&gt;
-                &lt;&lt;if $failed_406_attempts &gt; 0&gt;&gt;
-                    &lt;div style=&quot;padding:8px; background:rgba(138,28,28,0.2); border:1px solid #8a1c1c; color:#ff9999; margin-bottom:10px;&quot;&gt;
-                        ⚠️ &lt;b&gt;WRONG CODE.&lt;/b&gt; Attempts remaining: &lt;&lt;print 3 - $failed_406_attempts&gt;&gt;. Three failures trigger the lockout permanently.
+                        &lt;!-- MANUAL ENTRY --&gt;
+                        &lt;div style=&quot;margin-bottom: 10px;&quot;&gt;
+                            &lt;&lt;textbox &quot;$player_code_attempt&quot; &quot;&quot; autofocus&gt;&gt;
+                        &lt;/div&gt;
+                        &lt;button&gt;
+                            &lt;&lt;link &quot;🔢 Enter a code manually&quot;&gt;&gt;
+                                &lt;&lt;if $player_code_attempt == &quot;8445&quot;&gt;&gt;
+                                    &lt;&lt;set $room408_opened to true&gt;&gt;
+                                    &lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                                &lt;&lt;else&gt;&gt;
+                                    &lt;&lt;addTime 1&gt;&gt;
+                                    &lt;&lt;set $failed_408_attempts += 1&gt;&gt;
+                                    &lt;&lt;if $failed_408_attempts &gt;= 3&gt;&gt;
+                                        &lt;&lt;set $room408_locked_out to true&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                                &lt;&lt;/if&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;1 Minute | Four digits. Think carefully — you only get three attempts before the failsafe triggers.&lt;/span&gt;
+                        &lt;/button&gt;
                     &lt;/div&gt;
                 &lt;&lt;/if&gt;&gt;
 
-                &lt;!-- MANUAL ENTRY --&gt;
-                &lt;&lt;textbox &quot;$player_code_attempt&quot; &quot;&quot; autofocus&gt;&gt;
-                &lt;button&gt;
-                    &lt;&lt;link &quot;🔢 Enter a code manually&quot;&gt;&gt;
-                        &lt;&lt;if $player_code_attempt == &quot;8445&quot;&gt;&gt;
-                            &lt;&lt;set $room406_opened to true&gt;&gt;
-                            &lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
+                &lt;!-- HARDWARE BYPASS GRID (Always available) --&gt;
+                &lt;div style=&quot;margin-top:10px; padding:15px; background:rgba(80,0,0,0.2); border-left:3px solid var(--accent-gold);&quot;&gt;
+                    &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;⚠️ HARDWARE BYPASS&lt;/b&gt;&lt;br&gt;&lt;br&gt;
+
+                    &lt;!-- FAILED BRUTE FORCE WARNING MESSAGE --&gt;
+                    &lt;&lt;if $room408_bruteforce_fail&gt;&gt;
+                        &lt;div style=&quot;padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin-bottom:15px; text-align:center;&quot;&gt;
+                            ❌ &lt;b&gt;BRUTE FORCE FAILED.&lt;/b&gt; You battered the housing, but the internal deadbolt didn&#39;t budge. Your hands are bleeding, and you just wasted precious energy. 
+                        &lt;/div&gt;
+                        &lt;&lt;unset $room408_bruteforce_fail&gt;&gt;
+                    &lt;&lt;/if&gt;&gt;
+
+                    &lt;div style=&quot;display: grid; grid-template-columns: 1fr 1fr; gap: 10px;&quot;&gt;
+
+                        &lt;!-- 1. PLAYER JOB: BURGLAR --&gt;
+                        &lt;&lt;if $job == &quot;Burglar&quot;&gt;&gt;
+                            &lt;button style=&quot;height: 100%;&quot;&gt;
+                                &lt;&lt;link &quot;Override the electronic latch&quot;&gt;&gt;
+                                    &lt;&lt;addTime 2&gt;&gt;&lt;&lt;exert _halfCost&gt;&gt;&lt;&lt;set $room408_opened to true&gt;&gt;&lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[BURGLAR]&lt;/b&gt; Cost: &lt;&lt;print _halfCost&gt;&gt; STAMINA. You&#39;ve cracked tougher systems than this apartment lock.&lt;/span&gt;
+                            &lt;/button&gt;
                         &lt;&lt;else&gt;&gt;
-                            &lt;&lt;addTime 1&gt;&gt;
-                            &lt;&lt;set $failed_406_attempts += 1&gt;&gt;
-                            &lt;&lt;if $failed_406_attempts &gt;= 3&gt;&gt;
-                                &lt;&lt;set $room406_locked_out to true&gt;&gt;
-                            &lt;&lt;/if&gt;&gt;
-                            &lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
+                            &lt;button disabled style=&quot;height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
+                                &lt;span style=&quot;text-decoration: line-through;&quot;&gt;Override the electronic latch&lt;/span&gt;&lt;br&gt;
+                                &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES BURGLAR] You lack the specialized knowledge to trick the mechanism.&lt;/span&gt;
+                            &lt;/button&gt;
                         &lt;&lt;/if&gt;&gt;
+
+                        &lt;!-- 2. PLAYER TRAIT: LOCKSMITH --&gt;
+                        &lt;&lt;if hasTrait(&quot;LOCKSMITH&quot;)&gt;&gt;
+                            &lt;button style=&quot;height: 100%;&quot;&gt;
+                                &lt;&lt;link &quot;Exploit the mechanical failsafe&quot;&gt;&gt;
+                                    &lt;&lt;addTime 3&gt;&gt;&lt;&lt;exert _halfCost&gt;&gt;&lt;&lt;set $room408_opened to true&gt;&gt;&lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[LOCKSMITH]&lt;/b&gt; Cost: &lt;&lt;print _halfCost&gt;&gt; STAMINA. Every electronic lock has a physical override pin. You find it.&lt;/span&gt;
+                            &lt;/button&gt;
+                        &lt;&lt;else&gt;&gt;
+                            &lt;button disabled style=&quot;height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
+                                &lt;span style=&quot;text-decoration: line-through;&quot;&gt;Exploit the failsafe&lt;/span&gt;&lt;br&gt;
+                                &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES LOCKSMITH] You don&#39;t know where the physical override pin is located.&lt;/span&gt;
+                            &lt;/button&gt;
+                        &lt;&lt;/if&gt;&gt;
+
+                        &lt;!-- 3. PLAYER SKILL: TECH 2 --&gt;
+                        &lt;&lt;if $skills.tech &gt;= 2&gt;&gt;
+                            &lt;button style=&quot;height: 100%;&quot;&gt;
+                                &lt;&lt;link &quot;Bypass the keypad circuit&quot;&gt;&gt;
+                                    &lt;&lt;addTime 4&gt;&gt;&lt;&lt;exert _halfCost&gt;&gt;&lt;&lt;set $room408_opened to true&gt;&gt;&lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TECH 2]&lt;/b&gt; Cost: &lt;&lt;print _halfCost&gt;&gt; STAMINA. You pull the panel and bridge the latch relay wire.&lt;/span&gt;
+                            &lt;/button&gt;
+                        &lt;&lt;else&gt;&gt;
+                            &lt;button disabled style=&quot;height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
+                                &lt;span style=&quot;text-decoration: line-through;&quot;&gt;Bypass the keypad circuit&lt;/span&gt;&lt;br&gt;
+                                &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES TECH 2] You lack the knowledge to safely hotwire the board.&lt;/span&gt;
+                            &lt;/button&gt;
+                        &lt;&lt;/if&gt;&gt;
+
+                        &lt;!-- 4. PLAYER ITEM: MULTI-TOOL --&gt;
+                        &lt;&lt;if $inventory.find(i =&gt; i.id === &quot;Multi-Tool&quot;)&gt;&gt;
+                            &lt;button style=&quot;height: 100%;&quot;&gt;
+                                &lt;&lt;link &quot;Disassemble the housing&quot;&gt;&gt;
+                                    &lt;&lt;addTime 3&gt;&gt;&lt;&lt;exert _halfCost&gt;&gt;&lt;&lt;set $room408_opened to true&gt;&gt;&lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[MULTI-TOOL]&lt;/b&gt; Cost: &lt;&lt;print _halfCost&gt;&gt; STAMINA. You unscrew the faceplate and retract the deadbolt.&lt;/span&gt;
+                            &lt;/button&gt;
+                        &lt;&lt;else&gt;&gt;
+                            &lt;button disabled style=&quot;height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
+                                &lt;span style=&quot;text-decoration: line-through;&quot;&gt;Disassemble the housing&lt;/span&gt;&lt;br&gt;
+                                &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES MULTI-TOOL] You don&#39;t have tools to take the faceplate off.&lt;/span&gt;
+                            &lt;/button&gt;
+                        &lt;&lt;/if&gt;&gt;
+
+                        &lt;!-- 5. PLAYER ATTRIBUTE: PERCEPTION 6 --&gt;
+                        &lt;&lt;if $per &gt;= 6 and not $room408_locked_out&gt;&gt;
+                            &lt;button style=&quot;height: 100%;&quot;&gt;
+                                &lt;&lt;link &quot;Read the finger smudges&quot;&gt;&gt;
+                                    &lt;&lt;exert 0&gt;&gt;&lt;&lt;set $room408_opened to true&gt;&gt;&lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[PER 6]&lt;/b&gt; Cost: 0 STAMINA. The 8, 4, and 5 keys have heavy smudges. You guess the sequence.&lt;/span&gt;
+                            &lt;/button&gt;
+                        &lt;&lt;else&gt;&gt;
+                            &lt;button disabled style=&quot;height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
+                                &lt;span style=&quot;text-decoration: line-through;&quot;&gt;Read the finger smudges&lt;/span&gt;&lt;br&gt;
+                                &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES PER 6] Your eyes aren&#39;t sharp enough to pick up wear patterns.&lt;/span&gt;
+                            &lt;/button&gt;
+                        &lt;&lt;/if&gt;&gt;
+
+                        &lt;!-- 6. LAST RESORT: BRUTE FORCE (RNG) --&gt;
+                        &lt;button style=&quot;grid-column: span 2; border-left-color: var(--accent-red) !important;&quot;&gt;
+                            &lt;&lt;link &quot;Smash the keypad housing [BRUTE FORCE]&quot;&gt;&gt;
+                                &lt;&lt;addTime 3&gt;&gt;
+                                &lt;&lt;exert _baseCost&gt;&gt;
+                                &lt;&lt;if $str &gt;= 6&gt;&gt;
+                                    &lt;&lt;set $room408_opened to true&gt;&gt;
+                                &lt;&lt;else&gt;&gt;
+                                    &lt;&lt;if random(1, 100) &lt;= 70&gt;&gt;
+                                        &lt;&lt;set $room408_opened to true&gt;&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        &lt;&lt;set $room408_bruteforce_fail to true&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                &lt;&lt;/if&gt;&gt;
+                                &lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;
+                                &lt;&lt;if $str &gt;= 6&gt;&gt;
+                                    &lt;b style=&quot;color:var(--accent-red);&quot;&gt;[LAST RESORT: 100% SUCCESS]&lt;/b&gt; Cost: &lt;&lt;print _baseCost&gt;&gt; STAMINA. Your high STR guarantees entry.
+                                &lt;&lt;else&gt;&gt;
+                                    &lt;b style=&quot;color:var(--accent-red);&quot;&gt;[LAST RESORT: 70% CHANCE]&lt;/b&gt; Cost: &lt;&lt;print _baseCost&gt;&gt; STAMINA. You batter the housing, hoping it breaks free.
+                                &lt;&lt;/if&gt;&gt;
+                            &lt;/span&gt;
+                        &lt;/button&gt;
+
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;hr style=&quot;border-color: #333; margin: 20px 0;&quot;&gt;
+                &lt;button style=&quot;background: rgba(255,255,255,0.05) !important; border-color: #555 !important;&quot;&gt;
+                    &lt;&lt;link &quot;🚪 Give up and return to the hallway&quot;&gt;&gt;
+                        &lt;&lt;unset $room408_bruteforce_fail&gt;&gt;
+                        &lt;&lt;run setup.sound.fade(&quot;ticking_clock&quot;, 1000)&gt;&gt;
+                        &lt;&lt;set $hallwaySection to 1&gt;&gt;
+                        &lt;&lt;goto &quot;Hallway&quot;&gt;&gt;
                     &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;1 Minute | Four digits. Think carefully — you only get three attempts before the failsafe triggers.&lt;/span&gt;
                 &lt;/button&gt;
             &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;&lt;/if&gt;&gt;
 
-
-    &lt;!-- ======================================================= --&gt;
-    &lt;!-- HARDWARE BYPASS GRID (Always available)                 --&gt;
-    &lt;!-- ======================================================= --&gt;
-    &lt;div style=&quot;margin-top:20px; padding:15px; background:rgba(80,0,0,0.2); border-left:3px solid var(--accent-gold);&quot;&gt;
-        &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;⚠️ HARDWARE BYPASS&lt;/b&gt;&lt;br&gt;&lt;br&gt;
-
-        &lt;!-- FAILED BRUTE FORCE WARNING MESSAGE --&gt;
-        &lt;&lt;if $room406_bruteforce_fail&gt;&gt;
-            &lt;div style=&quot;padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin-bottom:15px; text-align:center;&quot;&gt;
-                ❌ &lt;b&gt;BRUTE FORCE FAILED.&lt;/b&gt; You battered the housing, but the internal deadbolt didn&#39;t budge. Your hands are bleeding, and you just wasted precious energy. 
+        &lt;!-- ======================================================= --&gt;
+        &lt;!-- PHASE 2: INSIDE THE STUDY (OPENED)                      --&gt;
+        &lt;!-- ======================================================= --&gt;
+        &lt;&lt;else&gt;&gt;
+            &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+                UNIT 408 - THE PROFESSOR&#39;S STUDY
             &lt;/div&gt;
-            &lt;&lt;unset $room406_bruteforce_fail&gt;&gt;
+
+            &lt;!-- TAMBAHKAN GAMBAR DI SINI --&gt;
+            &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+                &lt;img src=&quot;image/unit408.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;/div&gt;
+
+            &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+                The heavy door swings open into darkness.
+                &lt;br&gt;&lt;br&gt;
+                The smell reaches you first: old paper, dust, and something faintly sweet like peppermint. But there is also the stark emptiness of a room that has been hastily abandoned.
+                &lt;br&gt;&lt;br&gt;
+                The Professor is gone. Drawers are pulled open. His heavy winter coat and hiking backpack are missing from the coat rack. But he couldn&#39;t take the books. Floor-to-ceiling shelves line all four walls. Journals and monographs are stacked three deep on the coffee table. 
+                &lt;br&gt;&lt;br&gt;
+                His reading glasses sit folded on an open book — &lt;i&gt;The Fall of Rome&lt;/i&gt;, marked with a yellow sticky note:
+
+                &lt;div style=&quot;padding:10px; background:#0a0a0a; border:1px solid #333; color:#aaa; font-style:italic; margin:10px 0; text-align:center;&quot;&gt;
+                    &quot;Every empire ends. We&#39;re just living in the intermission. Take what you need.&quot;
+                &lt;/div&gt;
+
+                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;He didn&#39;t just see this coming. He packed up and left before the alarms even started.&quot;&gt;&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;choice-menu&quot; style=&quot;max-width: 700px; width: 100%; margin: 0 auto;&quot;&gt;
+                &lt;div style=&quot;margin-bottom:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-blue);&quot;&gt;
+                    &lt;b style=&quot;color:var(--accent-blue);&quot;&gt;📚 WHAT DO YOU DO?&lt;/b&gt;&lt;br&gt;&lt;br&gt;
+                    &lt;div style=&quot;font-family: &#39;Courier Prime&#39;, monospace; color: #aaa; font-size: 0.85em; margin-bottom: 15px;&quot;&gt;
+                        You don&#39;t have time to read entire books while the city burns outside. But Harmon didn&#39;t just leave books—he left survival manuals with frantic, handwritten notes shoved between the pages.
+                    &lt;/div&gt;
+
+                    &lt;!-- ACTION: STUDY MECHANICS --&gt;
+                    &lt;&lt;if not $studied_408_mechanics&gt;&gt;
+                        &lt;button&gt;
+                            &lt;&lt;link &quot;📖 Skim &#39;Advanced Mechanics&#39; notes (20 minutes)&quot;&gt;&gt;
+                                &lt;&lt;addTime 19&gt;&gt;
+                                &lt;&lt;set $studied_408_mechanics to true&gt;&gt;
+                                &lt;&lt;set $skills.tech += 1&gt;&gt;
+                                &lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[TECH +1]&lt;/b&gt; You flip through the bookmarked pages. His notes on jury-rigging engines and bypassing civilian security systems are brilliant. You memorize what you can.&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;&lt;else&gt;&gt;
+                        &lt;div style=&quot;padding:8px; background:rgba(255,255,255,0.05); color:#888; font-style:italic; font-size:0.85em; margin-bottom:10px; text-align:center;&quot;&gt;
+                            📖 You&#39;ve already stripped the engineering textbook of all its useful notes.
+                        &lt;/div&gt;
+                    &lt;&lt;/if&gt;&gt;
+
+                    &lt;!-- ACTION: STUDY ANATOMY --&gt;
+                    &lt;&lt;if not $studied_408_anatomy&gt;&gt;
+                        &lt;button&gt;
+                            &lt;&lt;link &quot;📖 Skim &#39;Gray&#39;s Anatomy&#39; notes (20 minutes)&quot;&gt;&gt;
+                                &lt;&lt;addTime 19&gt;&gt;
+                                &lt;&lt;set $studied_408_anatomy to true&gt;&gt;
+                                &lt;&lt;set $skills.medicine += 1&gt;&gt;
+                                &lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[MEDICINE +1]&lt;/b&gt; He aggressively highlighted chapters on trauma care, blood-borne pathogens, and the central nervous system. You commit the diagrams to memory.&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;&lt;else&gt;&gt;
+                        &lt;div style=&quot;padding:8px; background:rgba(255,255,255,0.05); color:#888; font-style:italic; font-size:0.85em; margin-bottom:10px; text-align:center;&quot;&gt;
+                            📖 You&#39;ve already absorbed the highlighted trauma care procedures.
+                        &lt;/div&gt;
+                    &lt;&lt;/if&gt;&gt;
+
+                    &lt;!-- ACTION: READ LORE JOURNAL --&gt;
+                    &lt;&lt;if not $read_408_journal&gt;&gt;
+                        &lt;button&gt;
+                            &lt;&lt;link &quot;📓 Read his personal journal (10 minutes)&quot;&gt;&gt;
+                                &lt;&lt;set $read_408_journal to true&gt;&gt;
+                                &lt;&lt;set $per += 1&gt;&gt;
+                                &lt;&lt;addTime 9&gt;&gt;
+                                &lt;&lt;run window.addLore(&quot;Professor Harmon&#39;s Journal&quot;, &quot;His handwriting degrades into a frantic scrawl toward the end. He documented unmarked FEMA transports operating at night and the CDC&#39;s total blackout protocols. His last entry reads: &#39;The state lies because panic moves faster than infection. But cognitive dissonance is the real plague. My neighbors ignore the sirens, convinced the Guard has it handled. We are actively choosing not to see the end.&#39;&quot;)&gt;&gt;
+                                &lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[PER +1]&lt;/b&gt; His handwriting degrades into a frantic scrawl toward the end. He documented unmarked FEMA transports operating at night and the CDC&#39;s blackout protocols.&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;&lt;else&gt;&gt;
+                        &lt;div style=&quot;padding:8px; background:rgba(255,255,255,0.05); color:#888; font-style:italic; font-size:0.85em; margin-bottom:10px; text-align:center;&quot;&gt;
+                            📓 You&#39;ve already read the journal and added the intel to your PDA.
+                        &lt;/div&gt;
+                    &lt;&lt;/if&gt;&gt;
+
+                    &lt;!-- ACTION: LOOT KITCHEN --&gt;
+                    &lt;&lt;if not $looted_408_kitchen&gt;&gt;
+                        &lt;button&gt;
+                            &lt;&lt;link &quot;🍵 Search the abandoned kitchen (5 minutes)&quot;&gt;&gt;
+                                &lt;&lt;set $looted_408_kitchen to true&gt;&gt;
+                                &lt;&lt;addTime 4&gt;&gt;
+                                &lt;&lt;run setup.addItem(&quot;Canned Food&quot;, 1)&gt;&gt;
+                                &lt;&lt;run setup.addItem(&quot;Energy Bar&quot;, 1)&gt;&gt;
+                                &lt;&lt;run setup.addItem(&quot;Bottled Water&quot;, 2)&gt;&gt;
+                                &lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;He packed light, leaving the heavier items behind. You find canned food, an energy bar, and sealed bottles of water.&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;&lt;/if&gt;&gt;
+
+                    &lt;!-- ACTION: LOOT STUDY --&gt;
+                    &lt;&lt;if not $looted_408&gt;&gt;
+                        &lt;button&gt;
+                            &lt;&lt;link &quot;🔍 Raid the desk drawers (5 minutes)&quot;&gt;&gt;
+                                &lt;&lt;addTime 4&gt;&gt;
+                                &lt;&lt;set $looted_408 to true&gt;&gt;
+                                &lt;&lt;run setup.addItem(&quot;Encyclopedia&quot;, 1)&gt;&gt;
+                                &lt;&lt;run setup.addItem(&quot;Flashlight&quot;, 1)&gt;&gt;
+                                &lt;&lt;goto &quot;Unit_408&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;You find a heavy, hard-bound Encyclopedia (could be used for blunt force) and a fully charged Flashlight.&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;&lt;/if&gt;&gt;
+                &lt;/div&gt;
+
+                &lt;!-- COMPLETION STATE --&gt;
+                &lt;&lt;if $studied_408_mechanics and $studied_408_anatomy and $read_408_journal and $looted_408_kitchen and $looted_408&gt;&gt;
+                    &lt;div style=&quot;padding:15px; background:rgba(0,100,0,0.1); border-left:3px solid var(--accent-green); text-align:center; color:#99cc99; margin-bottom:20px;&quot;&gt;
+                        &lt;i&gt;You&#39;ve stripped the room of everything valuable — knowledge and supplies both. The rest is just dead weight.&lt;/i&gt;
+                    &lt;/div&gt;
+                &lt;&lt;/if&gt;&gt;
+
+                &lt;hr style=&quot;border-color: #333; margin: 20px 0;&quot;&gt;
+                &lt;button style=&quot;background: rgba(255,255,255,0.05) !important; border-color: #555 !important;&quot;&gt;
+                    &lt;&lt;link &quot;🚪 Leave the study and return to the hallway&quot;&gt;&gt;
+                        &lt;&lt;run setup.sound.fade(&quot;ticking_clock&quot;, 1000)&gt;&gt;
+                        &lt;&lt;set $hallwaySection to 1&gt;&gt;
+                        &lt;&lt;goto &quot;Hallway&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                &lt;/button&gt;
+            &lt;/div&gt;
         &lt;&lt;/if&gt;&gt;
 
-        &lt;div style=&quot;display: grid; grid-template-columns: 1fr 1fr; gap: 10px;&quot; class=&quot;choice-menu&quot;&gt;
-
-            &lt;!-- 1. PLAYER JOB: BURGLAR --&gt;
-            &lt;&lt;if $job == &quot;Burglar&quot;&gt;&gt;
-                &lt;button style=&quot;height: 100%;&quot;&gt;
-                    &lt;&lt;link &quot;Override the electronic latch [BURGLAR]&quot;&gt;&gt;
-                        &lt;&lt;addTime 2&gt;&gt;&lt;&lt;exert _halfCost&gt;&gt;&lt;&lt;set $room406_opened to true&gt;&gt;&lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[JOB]&lt;/b&gt; Cost: &lt;&lt;print _halfCost&gt;&gt; STAMINA (Halved). You&#39;ve cracked tougher systems than this apartment lock.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;else&gt;&gt;
-                &lt;button disabled style=&quot;height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
-                    &lt;span style=&quot;text-decoration: line-through;&quot;&gt;Override the electronic latch&lt;/span&gt;&lt;br&gt;
-                    &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES BURGLAR] You lack the specialized occupational knowledge to trick the locking mechanism.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;/if&gt;&gt;
-
-            &lt;!-- 2. PLAYER TRAIT: LOCKSMITH --&gt;
-            &lt;&lt;if hasTrait(&quot;LOCKSMITH&quot;)&gt;&gt;
-                &lt;button style=&quot;height: 100%;&quot;&gt;
-                    &lt;&lt;link &quot;Exploit the mechanical failsafe [LOCKSMITH]&quot;&gt;&gt;
-                        &lt;&lt;addTime 3&gt;&gt;&lt;&lt;exert _halfCost&gt;&gt;&lt;&lt;set $room406_opened to true&gt;&gt;&lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TRAIT]&lt;/b&gt; Cost: &lt;&lt;print _halfCost&gt;&gt; STAMINA (Halved). Every electronic lock has a physical override pin. You find it.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;else&gt;&gt;
-                &lt;button disabled style=&quot;height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
-                    &lt;span style=&quot;text-decoration: line-through;&quot;&gt;Exploit the failsafe&lt;/span&gt;&lt;br&gt;
-                    &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES LOCKSMITH TRAIT] You don&#39;t know where the physical override pin is located.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;/if&gt;&gt;
-
-            &lt;!-- 3. PLAYER SKILL: TECH 2 --&gt;
-            &lt;&lt;if $skills.tech &gt;= 2&gt;&gt;
-                &lt;button style=&quot;height: 100%;&quot;&gt;
-                    &lt;&lt;link &quot;Bypass the keypad circuit [TECH 2]&quot;&gt;&gt;
-                        &lt;&lt;addTime 4&gt;&gt;&lt;&lt;exert _halfCost&gt;&gt;&lt;&lt;set $room406_opened to true&gt;&gt;&lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[SKILL]&lt;/b&gt; Cost: &lt;&lt;print _halfCost&gt;&gt; STAMINA (Halved). You pull the panel, find the latch relay wire, and bridge the circuit.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;else&gt;&gt;
-                &lt;button disabled style=&quot;height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
-                    &lt;span style=&quot;text-decoration: line-through;&quot;&gt;Bypass the keypad circuit&lt;/span&gt;&lt;br&gt;
-                    &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES TECH 2] You lack the technical knowledge to safely hotwire the circuit board.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;/if&gt;&gt;
-
-            &lt;!-- 4. PLAYER ITEM: MULTI-TOOL --&gt;
-            &lt;&lt;if $inventory.find(i =&gt; i.id === &quot;Multi-Tool&quot;)&gt;&gt;
-                &lt;button style=&quot;height: 100%;&quot;&gt;
-                    &lt;&lt;link &quot;Disassemble the housing [MULTI-TOOL]&quot;&gt;&gt;
-                        &lt;&lt;addTime 3&gt;&gt;&lt;&lt;exert _halfCost&gt;&gt;&lt;&lt;set $room406_opened to true&gt;&gt;&lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[ITEM]&lt;/b&gt; Cost: &lt;&lt;print _halfCost&gt;&gt; STAMINA (Halved). You unscrew the faceplate and manually retract the deadbolt with pliers.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;else&gt;&gt;
-                &lt;button disabled style=&quot;height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
-                    &lt;span style=&quot;text-decoration: line-through;&quot;&gt;Disassemble the housing&lt;/span&gt;&lt;br&gt;
-                    &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES MULTI-TOOL] You don&#39;t have a screwdriver or pliers to take the faceplate off.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;/if&gt;&gt;
-
-            &lt;!-- 5. PLAYER ATTRIBUTE: PERCEPTION 60 --&gt;
-            &lt;&lt;if $per &gt;= 60 and not $room406_locked_out&gt;&gt;
-                &lt;button style=&quot;height: 100%;&quot;&gt;
-                    &lt;&lt;link &quot;Read the finger smudges [PER 60]&quot;&gt;&gt;
-                        &lt;&lt;exert 0&gt;&gt;&lt;&lt;set $room406_opened to true&gt;&gt;&lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[ATTRIBUTE]&lt;/b&gt; Cost: 0 STAMINA. The 8, 4, and 5 keys have heavy oil smudges. It only takes a second to guess the sequence.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;else&gt;&gt;
-                &lt;button disabled style=&quot;height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
-                    &lt;span style=&quot;text-decoration: line-through;&quot;&gt;Read the finger smudges&lt;/span&gt;&lt;br&gt;
-                    &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES PER 60 AND ACTIVE KEYPAD] Your eyes aren&#39;t sharp enough to pick up the wear patterns on the keys.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;/if&gt;&gt;
-
-            &lt;!-- 6. LAST RESORT: BRUTE FORCE (RNG) --&gt;
-            &lt;button style=&quot;grid-column: span 2; border-left-color: var(--accent-red) !important;&quot;&gt;
-                &lt;&lt;link &quot;Smash the keypad housing [BRUTE FORCE]&quot;&gt;&gt;
-                    &lt;&lt;addTime 3&gt;&gt;
-                    &lt;&lt;exert _baseCost&gt;&gt;
-                    &lt;!-- DYNAMIC RNG LOGIC --&gt;
-                    &lt;&lt;if $str &gt;= 60&gt;&gt;
-                        &lt;&lt;set $room406_opened to true&gt;&gt;
-                    &lt;&lt;else&gt;&gt;
-                        &lt;&lt;if random(1, 100) &lt;= 70&gt;&gt;
-                            &lt;&lt;set $room406_opened to true&gt;&gt;
-                        &lt;&lt;else&gt;&gt;
-                            &lt;&lt;set $room406_bruteforce_fail to true&gt;&gt;
-                        &lt;&lt;/if&gt;&gt;
-                    &lt;&lt;/if&gt;&gt;
-                    &lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;
-                    &lt;&lt;if $str &gt;= 60&gt;&gt;
-                        &lt;b style=&quot;color:var(--accent-red);&quot;&gt;[LAST RESORT: 100% SUCCESS]&lt;/b&gt; Cost: &lt;&lt;print _baseCost&gt;&gt; STAMINA. Your high Strength guarantees you can shatter the housing.
-                    &lt;&lt;else&gt;&gt;
-                        &lt;b style=&quot;color:var(--accent-red);&quot;&gt;[LAST RESORT: 70% SUCCESS CHANCE]&lt;/b&gt; Cost: &lt;&lt;print _baseCost&gt;&gt; STAMINA. You batter the plastic housing, hoping the internal mechanism breaks free.
-                    &lt;&lt;/if&gt;&gt;
-                    &lt;br&gt;&lt;i style=&quot;color:#ff9999;&quot;&gt;(If you lack the Stamina, this will drain your HP).&lt;/i&gt;
-                &lt;/span&gt;
-            &lt;/button&gt;
-
-        &lt;/div&gt;
     &lt;/div&gt;
-
-    &lt;!-- RETREAT BUTTON --&gt;
-    &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
-        &lt;button&gt;
-        &lt;&lt;link &quot;🚪 Give up — return to the hallway&quot;&gt;&gt;
-            &lt;&lt;unset $room406_bruteforce_fail&gt;&gt; &lt;!-- Clears the fail flag if they leave --&gt;
-            &lt;&lt;run setup.sound.fade(&quot;ticking_clock&quot;, 1000)&gt;&gt;
-            &lt;&lt;set $hallwaySection to 1&gt;&gt;
-            &lt;&lt;goto &quot;Hallway&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-        &lt;span class=&quot;btn-sub&quot;&gt;Back to the corridor. Section 1.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;/div&gt;
-
-
-&lt;!-- ======================================================= --&gt;
-&lt;!-- PHASE 2: INSIDE THE STUDY (OPENED)                      --&gt;
-&lt;!-- ======================================================= --&gt;
-&lt;&lt;else&gt;&gt;
-    &lt;h2&gt;UNIT 406 — THE PROFESSOR&#39;S STUDY&lt;/h2&gt;
-
-    The door swings open into darkness.
-
-    The smell reaches you first. Old paper. Dust. Something faintly sweet — peppermint. The kind of smell that has been in a space for so long it has become the space itself.
-
-    Every surface is covered in books. Floor-to-ceiling shelves on all four walls. Journals and monographs stacked three deep on the coffee table. Annotated syllabi pinned to a corkboard above the desk, beside a hand-drawn timeline that stretches across three taped-together sheets of graph paper.
-
-    The Professor is not here.
-
-    His reading glasses sit folded on an open book — *The Fall of Rome*, marked with a yellow sticky note:
-
-    &lt;div style=&quot;padding:10px; background:#0a0a0a; border:1px solid #333; font-family:&#39;Courier Prime&#39;,monospace; color:#aaa; font-style:italic; margin:10px 0;&quot;&gt;
-    *&quot;Every empire ends. We&#39;re just living in the intermission.&quot;*
-    &lt;/div&gt;
-
-    &lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;He saw this coming from miles away. I just hope he had enough time to appreciate being right.&quot;&gt;&gt;
-    &lt;br&gt;
-
-    &lt;!-- ------------------------------------------------------- --&gt;
-    &lt;!-- STUDY ACTIONS &amp; LOOTING                                 --&gt;
-    &lt;!-- ------------------------------------------------------- --&gt;
-    &lt;div style=&quot;margin-top:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-blue);&quot;&gt;
-        &lt;b style=&quot;color:var(--accent-blue);&quot;&gt;📚 WHAT DO YOU DO?&lt;/b&gt;&lt;br&gt;&lt;br&gt;
-
-        &lt;div class=&quot;choice-menu&quot;&gt;
-
-            &lt;!-- ACTION: STUDY MECHANICS --&gt;
-            &lt;&lt;if not $studied_406_mechanics&gt;&gt;
-                &lt;button&gt;
-                    &lt;&lt;link &quot;📖 Study &#39;Advanced Mechanics &amp; Engineering&#39; (30 minutes)&quot;&gt;&gt;
-                        &lt;&lt;addTime 29&gt;&gt;
-                        &lt;&lt;set $studied_406_mechanics to true&gt;&gt;
-                        &lt;&lt;set $skills.tech += 1&gt;&gt;
-                        &lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;TECH +1. His annotations turn a textbook into a field guide. You learn more in thirty minutes than you expected to retain.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;else&gt;&gt;
-                &lt;div style=&quot;padding:6px; color:#555; font-style:italic; font-size:0.9em; margin-bottom:6px;&quot;&gt;📖 You&#39;ve already read the engineering text. The margins are full of his handwriting.&lt;/div&gt;
-            &lt;&lt;/if&gt;&gt;
-
-            &lt;!-- ACTION: STUDY ANATOMY --&gt;
-            &lt;&lt;if not $studied_406_anatomy&gt;&gt;
-                &lt;button&gt;
-                    &lt;&lt;link &quot;📖 Study &#39;Gray&#39;s Anatomy — Medical Edition&#39; (30 minutes)&quot;&gt;&gt;
-                        &lt;&lt;addTime 29&gt;&gt;
-                        &lt;&lt;set $studied_406_anatomy to true&gt;&gt;
-                        &lt;&lt;set $skills.medicine += 1&gt;&gt;
-                        &lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;MEDICINE +1. He flagged every relevant chapter. The man prepared for something. Maybe this, specifically.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;else&gt;&gt;
-                &lt;div style=&quot;padding:6px; color:#555; font-style:italic; font-size:0.9em; margin-bottom:6px;&quot;&gt;📖 You&#39;ve already read the anatomy text. You can feel the knowledge settling into you.&lt;/div&gt;
-            &lt;&lt;/if&gt;&gt;
-
-            &lt;!-- ACTION: READ LORE JOURNAL --&gt;
-            &lt;&lt;if not $read_406_journal&gt;&gt;
-                &lt;button&gt;
-                    &lt;&lt;link &quot;📓 Read the Professor&#39;s personal journal (10 minutes)&quot;&gt;&gt;
-                        &lt;&lt;set $read_406_journal to true&gt;&gt;
-                        &lt;&lt;set $per += 3&gt;&gt;
-                        &lt;&lt;addTime 9&gt;&gt;
-                        /* ADD TO LORE DATABASE */
-                        &lt;&lt;run window.addLore(&quot;Professor Harmon&#39;s Journal&quot;, &quot;His entries don&#39;t just track the virus—they track the cover-up. He documented unmarked FEMA transports at night, the CDC&#39;s blackout protocols, and the psychological breakdown of the public. His last entry reads: &#39;The state lies because panic moves faster than infection. But cognitive dissonance is the real plague. I watch my neighbors ignore the sirens, convinced the National Guard has it handled. We are actively choosing not to see the end.&#39;&quot;)&gt;&gt;
-                        &lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;PERCEPTION +3. His entries don&#39;t just track the virus—they track the cover-up. He documented unmarked FEMA transports at night, the CDC&#39;s blackout protocols, and the psychological breakdown of the public. Reading it changes how you see the threat.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;else&gt;&gt;
-                &lt;div style=&quot;padding:6px; color:#555; font-style:italic; font-size:0.9em; margin-bottom:6px;&quot;&gt;📓 The journal sits where you left it. His last entry: &lt;i&gt;&quot;The state lies because panic moves faster than infection. But cognitive dissonance is the real plague. I watch my neighbors ignore the sirens, convinced the National Guard has it handled. We are actively choosing not to see the end.&quot;&lt;/i&gt;&lt;/div&gt;
-                &lt;br&gt;
-                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;They knew. FEMA, the CDC... they were covering it up while we were all just sitting in our living rooms.&quot;&gt;&gt;
-                &lt;br&gt;
-            &lt;&lt;/if&gt;&gt;
-
-            &lt;!-- ACTION: LOOT KITCHEN --&gt;
-            &lt;&lt;if not $looted_406_kitchen&gt;&gt;
-                &lt;button&gt;
-                    &lt;&lt;link &quot;🍵 Search the kitchen (3 minutes)&quot;&gt;&gt;
-                        &lt;&lt;set $looted_406_kitchen to true&gt;&gt;
-                        &lt;&lt;addTime 2&gt;&gt;
-                        &lt;&lt;run setup.addItem(&quot;Canned Food&quot;, 1)&gt;&gt;
-                        &lt;&lt;run setup.addItem(&quot;Energy Bar&quot;, 1)&gt;&gt;
-                        /* WATER LOOT FOR FAILED RNG ATTEMPTS */
-                        &lt;&lt;run setup.addItem(&quot;Bottled Water&quot;, 2)&gt;&gt;
-                        &lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;He kept his kitchen the same way he kept his study — methodical. A can of food, a wrapped energy bar, and two sealed bottles of water tucked beside the kettle.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;/if&gt;&gt;
-
-            &lt;!-- ACTION: LOOT STUDY --&gt;
-            &lt;&lt;if not $looted_406&gt;&gt;
-                &lt;button&gt;
-                    &lt;&lt;link &quot;🔍 Search the study thoroughly (5 minutes)&quot;&gt;&gt;
-                        &lt;&lt;addTime 4&gt;&gt;
-                        &lt;&lt;set $looted_406 to true&gt;&gt;
-                        &lt;&lt;run setup.addItem(&quot;Encyclopedia&quot;, 1)&gt;&gt;
-                        &lt;&lt;run setup.addItem(&quot;Flashlight&quot;, 1)&gt;&gt;
-                        &lt;&lt;goto &quot;Unit_406&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;An encyclopedia — heavy, but useful as reference or blunt force. And a flashlight in the desk drawer, fully charged, batteries new.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;else&gt;&gt;
-                &lt;div style=&quot;padding:6px; color:#555; font-style:italic; font-size:0.9em; margin-bottom:6px;&quot;&gt;You&#39;ve already searched the study. Nothing left but books and the ghost of peppermint tea.&lt;/div&gt;
-            &lt;&lt;/if&gt;&gt;
-
-            &lt;!-- COMPLETION STATE --&gt;
-            &lt;&lt;if $studied_406_mechanics and $studied_406_anatomy and $read_406_journal and $looted_406_kitchen and $looted_406&gt;&gt;
-                &lt;br&gt;
-                &lt;div style=&quot;padding:10px; background:rgba(0,100,0,0.2); border:1px solid var(--accent-green); font-style:italic; color:#99cc99;&quot;&gt;
-                    You&#39;ve taken everything of value here — knowledge and supplies both. You hope he made it somewhere with good books.
-                &lt;/div&gt;
-                &lt;br&gt;
-                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Thanks, Professor. I&#39;ll put this to good use.&quot;&gt;&gt;
-            &lt;&lt;/if&gt;&gt;
-
-            &lt;br&gt;
-            &lt;button&gt;
-                &lt;&lt;link &quot;🚪 Leave and return to the hallway&quot;&gt;&gt;
-                    &lt;&lt;run setup.sound.fade(&quot;ticking_clock&quot;, 1000)&gt;&gt;
-                    &lt;&lt;set $hallwaySection to 1&gt;&gt;
-                    &lt;&lt;goto &quot;Hallway&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;Back to the corridor. Section 1.&lt;/span&gt;
-            &lt;/button&gt;
-
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="79" name="Utility_Closet" tags="" position="400,650" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="79" name="Utility_Closet" tags="" position="400,650" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* ===================================================================== */
 /* 0. INITIALIZATION &amp; SETUP                                             */
 /* ===================================================================== */
