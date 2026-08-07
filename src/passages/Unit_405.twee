@@ -52,7 +52,7 @@
                     <!-- WARNING IF TRAP ALREADY TRIGGERED PREVIOUSLY -->
                     <<if $room405_trap_triggered>>
                         <div style="padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin-bottom:15px; text-align:center;">
-                            ❌ <b>TRAP TRIGGERED.</b> Your ears are ringing. The blank shell detonated, and the noise echoed down the entire building. The wire is gone now.
+                            ❌ <b>TRAP TRIGGERED.</b> Your ears are ringing. The blank shell detonated, and the noise echoed down the entire floor. The wire is gone now.
                         </div>
                     <</if>>
 

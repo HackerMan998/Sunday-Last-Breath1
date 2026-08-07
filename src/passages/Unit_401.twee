@@ -285,7 +285,7 @@
                                 <<set $turned_off_music to true>>
                                 <<goto "Unit_401">>
                             <</link>>
-                            <span class="btn-sub"><b style="color:var(--accent-green);">[STEALTH BONUS]</b> Reduces noise on this floor. The silence that replaces it is heavier than the music was.</span>
+                            <span class="btn-sub"><b style="color:var(--accent-green);"></b> Turn off the music on this unit then the silence will replaces the noise.</span>
                         </button>
                     <<else>>
                         <div style="padding:8px; background:rgba(255,255,255,0.05); color:#888; font-style:italic; font-size:0.85em; margin-bottom:10px; text-align:center;">
