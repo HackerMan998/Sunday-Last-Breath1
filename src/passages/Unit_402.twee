@@ -1,367 +1,340 @@
 :: Unit_402 {"position":"200,600","size":"100,100"}
+<!-- ======================================================= -->
+<!-- INITIALIZATION & SETUP                                  -->
+<!-- ======================================================= -->
 <<nobr>>
-/* ====================================================================
-   INITIALIZATION & STATE SETUP
-   ==================================================================== */
+    /* Start Vinyl Chopin Loop */
+    <<run setup.sound.play("chopin_piano", "audio/bgm/chopin.mp3", true, 0.4)>>
 
-/* Start Vinyl Chopin Loop */
-<<run setup.sound.play("chopin_piano", "audio/bgm/chopin.mp3", true, 0.4)>>
+    /* Set Location */
+    <<set $currentLocation to "402">>
 
-/* Set Location */
-<<set $currentLocation to "402">>
+    /* Initialize Room State Variables */
+    <<if not $room402_opened>>        <<set $room402_opened to false>>        <</if>>
+    <<if not $looted_402_weapon>>     <<set $looted_402_weapon to false>>     <</if>>
+    <<if not $looted_402_ring>>       <<set $looted_402_ring to false>>       <</if>>
+    <<if not $took_402_photo>>        <<set $took_402_photo to false>>        <</if>>
+    <<if not $looted_402_kitchen>>    <<set $looted_402_kitchen to false>>    <</if>>
+    <<if not $looted_402_bathroom>>   <<set $looted_402_bathroom to false>>   <</if>>
+    <<if not $read_402_note>>         <<set $read_402_note to false>>         <</if>>
 
-/* Initialize Room State Variables (If they don't exist yet) */
-<<if not $room402_opened>>        <<set $room402_opened to false>>        <</if>>
-<<if not $looted_402_weapon>>     <<set $looted_402_weapon to false>>     <</if>>
-<<if not $looted_402_ring>>       <<set $looted_402_ring to false>>       <</if>>
-<<if not $took_402_photo>>        <<set $took_402_photo to false>>        <</if>>
-<<if not $looted_402_kitchen>>    <<set $looted_402_kitchen to false>>    <</if>>
-<<if not $looted_402_bathroom>>   <<set $looted_402_bathroom to false>>   <</if>>
-<<if not $read_402_note>>         <<set $read_402_note to false>>         <</if>>
+    /* Evaluate Item Dependencies */
+    <<set _hasKnife to ($equip.weapon == "Combat Knife" or $equip.weapon == "Kitchen Knife" or $equip.weapon == "Hunting Knife")>>
+    <<set _hasMultiTool to $inventory.find(i => i.id == "Multi-Tool")>>
 
-/* Evaluate Item Dependencies for Teased Paths */
-<<set _hasKnife to ($equip.weapon == "Combat Knife" or $equip.weapon == "Kitchen Knife" or $equip.weapon == "Hunting Knife")>>
-<<set _hasMultiTool to $inventory.find(i => i.id == "Multi-Tool")>>
-
-/* Setup Physical Bypass Costs */
-<<set _baseCost to 10>>
-<<set _halfCost to Math.round(_baseCost / 2)>>
+    /* Setup Physical Bypass Costs */
+    <<set _baseCost to 10>>
+    <<set _halfCost to Math.round(_baseCost / 2)>>
 <</nobr>>
 
-<<if not $room402_opened>>
-<!-- ======================================================= -->
-<!-- PHASE 1: THE HALLWAY & LOCKED DOOR                      -->
-<!-- ======================================================= -->
+<<nobr>>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
 
-<h2>UNIT 402 — THE CHAIN</h2>
+        <!-- ======================================================= -->
+        <!-- PHASE 1: THE HALLWAY & LOCKED DOOR                      -->
+        <!-- ======================================================= -->
+        <<if not $room402_opened>>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                UNIT 402 - THE CHAIN
+            </div>
 
-The Andersons. You remember them vaguely — a middle-aged couple and their teenage daughter. They always dressed too nicely for 8 a.m. on a Sunday. The father wore a tie to collect his mail.
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                The Andersons. You remember them vaguely — a middle-aged couple and their teenage daughter. They always dressed too nicely for 8 a.m. on a Sunday. The father wore a tie just to collect his mail.
+                <br><br>
+                The door is unlocked. You push it open two inches before it catches on a heavy steel chain lock.
+                <br><br>
+                Through the gap, you see the lights are on. A turntable spins in the corner of the living room. Classical music drifts from the speakers — a piano piece, slow and mournful, occasionally catching on a scratch in the vinyl. The sound of it sits so wrong against everything happening outside.
+                <br><br>
+                And there's a smell. Not decay. Something sharper. Chemical. Clinical. Like a hospital corridor scrubbed too clean with industrial bleach.
+                <br><br>
+                <<chat "You" "image/avatars/player.gif" "left" "Chopin. And bleach. Why would someone be deep-cleaning right now?">>
+            </div>
 
-The door is unlocked. You push it open two inches before it catches on a chain lock.
-
-Through the gap: lights on. A turntable spins in the corner of the living room. Classical music from the speakers — a piano piece, slow and mournful, occasionally catching on a scratch in the vinyl. The sound of it sits wrong against everything happening outside.
-
-And there's a smell. Not decay. Something sharper. Chemical. Clinical. Like a hospital corridor scrubbed too clean.
-<br>
-
-<!-- CHAT BUBBLE: Deducting the situation from the hallway -->
-<<chat "You" "image/avatars/player.gif" "left" "Chopin. And bleach. Why would someone be cleaning right now? Unless... they aren't planning to leave.">>
-<br>
-
-<!-- ========================================== -->
-<!-- 6-TIER HARDWARE BYPASS GRID                -->
-<!-- ========================================== -->
-<div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-gold);">
-    <b style="color:var(--accent-gold);">🔗 THE CHAIN BLOCKS YOUR ENTRY. HOW DO YOU GET IN?</b><br><br>
-
-    <!-- FAILED BRUTE FORCE WARNING MESSAGE -->
-    <<if $room402_bruteforce_fail>>
-        <div style="padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin-bottom:15px; text-align:center;">
-            ❌ <b>BRUTE FORCE FAILED.</b> You slammed your shoulder into the door, but the steel chain held firm. You made a massive racket and bruised yourself for nothing.
-        </div>
-        <<unset $room402_bruteforce_fail>>
-    <</if>>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;" class="choice-menu">
-
-        <!-- 1. PLAYER JOB (BURGLAR) -->
-        <<if $job == "Burglar">>
-            <button style="height: 100%;">
-                <<link "Slip the chain lock [BURGLAR]">>
-                    <<addTime 1>><<exert _halfCost>>
-                    <<set $room402_opened to true>>
-                    <<set $room402_entry_method to "silent">>
-                    <<goto "Unit_402">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-gold);">[JOB]</b> Cost: <<print _halfCost>> STAMINA (Halved). A rubber band and a thumbtack are all you need to pull the slider back from the outside. Silent entry.</span>
-            </button>
-        <<else>>
-            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">Slip the chain lock</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES BURGLAR] You lack the illicit occupational knowledge to manipulate the lock from the outside.</span>
-            </button>
-        <</if>>
-
-        <!-- 2. PLAYER TRAIT (LOCKSMITH / GHOST) -->
-        <<if hasTrait("LOCKSMITH") or hasTrait("GHOST")>>
-            <button style="height: 100%;">
-                <<link "Work the gap[LOCKSMITH/GHOST]">>
-                    <<addTime 2>><<exert _halfCost>>
-                    <<set $room402_opened to true>>
-                    <<set $room402_entry_method to "silent">>
-                    <<goto "Unit_402">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-gold);">[TRAIT]</b> Cost: <<print _halfCost>> STAMINA (Halved). Chain locks have a weak point where the slider meets the track. You find it. Silent entry.</span>
-            </button>
-        <<else>>
-            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">Work the gap</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES LOCKSMITH OR GHOST] You lack the specialized infiltration knowledge to bypass the chain mechanism.</span>
-            </button>
-        <</if>>
-
-        <!-- 3. PLAYER SKILL & TOOL (TECH + MULTI-TOOL) -->
-        <<if $skills.tech >= 1 and _hasMultiTool>>
-            <button style="height: 100%;">
-                <<link "Unscrew the chain mount [TECH 1 + MULTI-TOOL]">>
-                    <<addTime 9>><<exert _halfCost>>
-                    <<set $room402_opened to true>>
-                    <<set $room402_entry_method to "silent">>
-                    <<goto "Unit_402">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-gold);">[SKILL + ITEM]</b> Cost: <<print _halfCost>> STAMINA (Halved). Slow and deliberate. The screws back out cleanly. The chain falls into your palm. Silent entry.</span>
-            </button>
-        <<elseif _hasMultiTool>>
-            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">Unscrew the chain mount</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES TECH 1] You have the tool, but you don't know how to safely dismantle the lock mechanism from this angle.</span>
-            </button>
-        <<else>>
-            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">Unscrew the chain mount</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES MULTI-TOOL] The screws are exposed. You could dismantle the bracket easily if you had a screwdriver.</span>
-            </button>
-        <</if>>
-
-        <!-- 4. PLAYER ITEM & AGILITY (AGI 5 + KNIFE) -->
-        <<if $agi >= 5 and _hasKnife>>
-            <button style="height: 100%;">
-                <<link "Slide the chain with your blade [AGI 5 + KNIFE]">>
-                    <<addTime 4>><<exert _halfCost>>
-                    <<set $room402_opened to true>>
-                    <<set $room402_entry_method to "silent">>
-                    <<goto "Unit_402">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-gold);">[ATTRIBUTE + ITEM]</b> Cost: <<print _halfCost>> STAMINA (Halved). Patience and a steady hand. You guide the chain off its track. Silent entry.</span>
-            </button>
-        <<elseif _hasKnife>>
-            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">Slide the chain with your blade</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES AGI 5] You have a knife, but your hands aren't steady enough to work the blade through the gap without dropping it.</span>
-            </button>
-        <<else>>
-            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">Slide the chain with a blade</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES THIN BLADE] You could probably slide the chain off its track, but you don't have a knife equipped.</span>
-            </button>
-        <</if>>
-
-        <!-- 5. PLAYER ATTRIBUTE (STR 4) -->
-        <<if $str >= 4>>
-            <button style="height: 100%;">
-                <<link "Kick the door — break the chain mount [STR 4]">>
-                    <<addTime 1>><<exert _halfCost>>
-                    <<set $room402_opened to true>>
-                    <<set $room402_entry_method to "loud">>
-                    <<goto "Unit_402">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-gold);">[ATTRIBUTE]</b> Cost: <<print _halfCost>> STAMINA (Halved). You kick the door near the deadbolt. The chain bracket tears from the wall. <span style="color:#ff9999;">LOUD ENTRY.</span></span>
-            </button>
-        <<else>>
-            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">Kick the door — break the mount</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES STR 4] You aren't strong enough to kick the deadbolt out of the frame.</span>
-            </button>
-        <</if>>
-
-        <!-- 6. LAST RESORT (70% RNG CHANCE) -->
-        <button style="grid-column: span 2; border-left-color: var(--accent-red) !important;">
-            <<link "Throw your weight against the door [BRUTE FORCE]">>
-                <<addTime 3>>
-                <<exert _baseCost>>
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
                 
-                <!-- 70% RNG LOGIC -->
-                <<if random(1, 100) <= 70>>
-                    <<set $room402_opened to true>>
-                    <<set $room402_entry_method to "loud">>
-                <<else>>
-                    <<set $room402_bruteforce_fail to true>>
-                <</if>>
-                <<goto "Unit_402">>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-red);">[LAST RESORT: 70% SUCCESS CHANCE]</b> Cost: <<print _baseCost>> STAMINA. Back up and slam your shoulder into the wood, hoping the screws rip out of the frame. <br><i style="color:#ff9999;">(LOUD ENTRY. Drains HP if Stamina is low).</i></span>
-        </button>
+                <div id="room402-interactions">
+                    <div style="margin-bottom:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-gold);">
+                        <b style="color:var(--accent-gold);">🔗 THE CHAIN BLOCKS YOUR ENTRY. HOW DO YOU GET IN?</b><br><br>
 
-    </div>
-</div>
+                        <!-- FAILED BRUTE FORCE WARNING MESSAGE -->
+                        <<if $room402_bruteforce_fail>>
+                            <div style="padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin-bottom:15px; text-align:center;">
+                                ❌ <b>BRUTE FORCE FAILED.</b> You slammed your shoulder into the door, but the steel chain held firm. You made a massive racket and bruised yourself for nothing.
+                            </div>
+                            <<unset $room402_bruteforce_fail>>
+                        <</if>>
 
-<!-- ABORT / LEAVE BUTTON -->
-<div class="choice-menu" style="margin-top:20px;">
-    <button>
-        <<link "🚪 Leave it — walk away">>
-            <<unset $room402_bruteforce_fail>>
-            <<run setup.sound.fade("chopin_piano", 2000)>>
-            <<set $hallwaySection to 3>>
-            <<goto "Hallway">>
-        <</link>>
-        <span class="btn-sub">Return to the hallway. Section 3.</span>
-    </button>
-</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
 
-<<else>>
-<!-- ======================================================= -->
-<!-- PHASE 2: INSIDE THE QUIET ROOM (DOOR OPENED)            -->
-<!-- ======================================================= -->
+                            <!-- 1. PLAYER JOB (BURGLAR) -->
+                            <<if $job == "Burglar">>
+                                <button style="height: 100%;">
+                                    <<link "Slip the chain lock [BURGLAR]">>
+                                        <<addTime 1>><<exert _halfCost>><<set $room402_opened to true>><<set $room402_entry_method to "silent">><<goto "Unit_402">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[JOB]</b> Cost: <<print _halfCost>> STAMINA. A rubber band and a thumbtack are all you need to pull the slider back. Silent entry.</span>
+                                </button>
+                            <<else>>
+                                <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                    <span style="text-decoration: line-through;">Slip the chain lock</span><br>
+                                    <span class="btn-sub" style="color: #666;">[REQUIRES BURGLAR] You lack the illicit knowledge to manipulate the lock from the outside.</span>
+                                </button>
+                            <</if>>
 
-<h2>UNIT 402 — THE QUIET ROOM</h2>
+                            <!-- 2. PLAYER TRAIT (LOCKSMITH / GHOST) -->
+                            <<if hasTrait("LOCKSMITH") or hasTrait("GHOST")>>
+                                <button style="height: 100%;">
+                                    <<link "Work the gap [TRAIT]">>
+                                        <<addTime 2>><<exert _halfCost>><<set $room402_opened to true>><<set $room402_entry_method to "silent">><<goto "Unit_402">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[LOCKSMITH/GHOST]</b> Cost: <<print _halfCost>> STAMINA. Chain locks have a weak point. You find it. Silent entry.</span>
+                                </button>
+                            <<else>>
+                                <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                    <span style="text-decoration: line-through;">Work the gap</span><br>
+                                    <span class="btn-sub" style="color: #666;">[REQUIRES LOCKSMITH/GHOST] You lack the specialized infiltration knowledge.</span>
+                                </button>
+                            <</if>>
 
-<!-- LOUD ENTRY WARNING -->
-<<if $room402_entry_method == "loud">>
-    <div style="padding:10px; background:rgba(138,28,28,0.2); border-left:3px solid var(--accent-red); margin-bottom:15px; font-style:italic; color:#ff9999;">
-        The chain bracket tears from the wall with a crack that carries through the building. Somewhere below you, something stirs. You are not alone on this floor.
-    </div>
-<</if>>
+                            <!-- 3. PLAYER SKILL & TOOL (TECH + MULTI-TOOL) -->
+                            <<if $skills.tech >= 1 and _hasMultiTool>>
+                                <button style="height: 100%;">
+                                    <<link "Unscrew the mount [TECH + TOOL]">>
+                                        <<addTime 9>><<exert _halfCost>><<set $room402_opened to true>><<set $room402_entry_method to "silent">><<goto "Unit_402">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[TECH 1 + MULTI-TOOL]</b> Cost: <<print _halfCost>> STAMINA. The screws back out cleanly. Silent entry.</span>
+                                </button>
+                            <<elseif _hasMultiTool>>
+                                <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                    <span style="text-decoration: line-through;">Unscrew the mount</span><br>
+                                    <span class="btn-sub" style="color: #666;">[REQUIRES TECH 1] You have the tool, but don't know how to dismantle it from this angle.</span>
+                                </button>
+                            <<else>>
+                                <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                    <span style="text-decoration: line-through;">Unscrew the mount</span><br>
+                                    <span class="btn-sub" style="color: #666;">[REQUIRES MULTI-TOOL] You could dismantle the bracket if you had a screwdriver.</span>
+                                </button>
+                            <</if>>
 
-You step inside.
+                            <!-- 4. PLAYER ITEM & AGILITY (AGI 5 + KNIFE) -->
+                            <<if $agi >= 5 and _hasKnife>>
+                                <button style="height: 100%;">
+                                    <<link "Slide the chain [AGI 5 + KNIFE]">>
+                                        <<addTime 4>><<exert _halfCost>><<set $room402_opened to true>><<set $room402_entry_method to "silent">><<goto "Unit_402">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[AGI 5 + KNIFE]</b> Cost: <<print _halfCost>> STAMINA. Patience and a steady hand. You guide the chain off its track.</span>
+                                </button>
+                            <<elseif _hasKnife>>
+                                <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                    <span style="text-decoration: line-through;">Slide the chain</span><br>
+                                    <span class="btn-sub" style="color: #666;">[REQUIRES AGI 5] Your hands aren't steady enough to work the blade through the gap.</span>
+                                </button>
+                            <<else>>
+                                <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                    <span style="text-decoration: line-through;">Slide the chain</span><br>
+                                    <span class="btn-sub" style="color: #666;">[REQUIRES THIN BLADE] You don't have a knife equipped.</span>
+                                </button>
+                            <</if>>
 
-The piano swells to meet you. Chopin — *Nocturne in E-flat major*. The kind of piece that sounds like a formal goodbye.
+                            <!-- 5. LOUD ENTRY: BRUTE FORCE (PURE STAT / RNG CHECK) -->
+                            <<if $str >= 4>>
+                                <button style="grid-column: span 2; border-left-color: var(--accent-gold) !important;">
+                                    <<link "Kick the door to break the mount [STR 4/4]">>
+                                        <<addTime 1>><<exert _halfCost>><<set $room402_opened to true>><<set $room402_entry_method to "loud">><<goto "Unit_402">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[STR <<print $str>>/4]</b> Cost: <<print _halfCost>> STAMINA. You kick the deadbolt area. The bracket tears from the wall easily. <span style="color:#ff9999;">LOUD ENTRY.</span></span>
+                                </button>
+                            <<else>>
+                                <button style="grid-column: span 2; border-left-color: var(--accent-red) !important;">
+                                    <<link "Throw your weight against the door [RNG CHANCE]">>
+                                        <<addTime 3>>
+                                        <<exert _baseCost>>
+                                        <<if random(1, 100) <= 70>>
+                                            <<set $room402_opened to true>>
+                                            <<set $room402_entry_method to "loud">>
+                                        <<else>>
+                                            <<set $room402_bruteforce_fail to true>>
+                                        <</if>>
+                                        <<goto "Unit_402">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-red);">[STR <<print $str>>/4 — 70% SUCCESS CHANCE]</b> Cost: <<print _baseCost>> STAMINA. You aren't strong enough to kick it down cleanly. You'll have to slam your shoulder into it and hope the screws give out before your bones do. <span style="color:#ff9999;">LOUD ENTRY.</span></span>
+                                </button>
+                            <</if>>
 
-The apartment is immaculate. No signs of struggle. No broken glass. No blood. Every surface dusted. Every picture on the wall perfectly level.
+                        </div>
+                    </div>
 
-The Anderson family is sitting at the dining table.
+                    <hr style="border-color: #333; margin: 20px 0;">
+                    <button style="background: rgba(255,255,255,0.05) !important; border-color: #555 !important;">
+                        <<link "🚪 Leave it and walk away">>
+                            <<unset $room402_bruteforce_fail>>
+                            <<run setup.sound.fade("chopin_piano", 2000)>>
+                            <<set $hallwaySection to 3>>
+                            <<goto "Hallway">>
+                        <</link>>
+                    </button>
+                </div>
+            </div>
 
-Mr. Anderson is at the head, hands folded neatly in his lap. Mrs. Anderson is to his right, her head tilted back slightly, eyes closed, as if she simply fell asleep at dinner. Their daughter — Emma, you think — is slumped forward with her cheek resting on her folded arms, her dark hair spread across the place setting like a veil.
-
-Three wine glasses sit before them. Empty.
-
-On the center of the table, a sheet of notepaper, folded once:
-
-<!-- LORE NOTE -->
-<div style="padding:15px; background:#000; border:2px solid #444; font-family:'Courier Prime',monospace; color:#ddd; font-style:italic; margin:15px 0;">
-    *To whoever finds us:*<br><br>
-    
-    *We are not victims. We made a choice. We watched the news all morning and understood what was coming.*<br><br>
-    
-    *We will not become those things. We will not let Emma suffer through what follows.*<br><br>
-    
-    *The music is Chopin. It was her favorite. We wanted the last sound she heard to be something beautiful.*<br><br>
-    
-    *Take what you need. We don't need any of it anymore.*<br><br>
-    
-    *— The Andersons*
-</div>
-
-You stand there for a long moment. The piano keeps playing.
-<br>
-
-<!-- CHAT BUBBLE: Processing the suicide -->
-<<chat "You" "image/avatars/player.gif" "left" "They made a choice. They went out on their own terms... I can't decide if that's giving up, or the only real control anyone has left.">>
-<br>
-
-There is a revolver on the floor near Mr. Anderson's foot. Small caliber. He must have held it and set it down when he decided this wasn't the way.
-
-<!-- ========================================== -->
-<!-- LOOTING MENU                               -->
-<!-- ========================================== -->
-<div style="margin-top:20px; padding:15px; background:rgba(80,0,0,0.2); border-left:3px solid var(--accent-red);">
-    <b style="color:var(--accent-red);">💀 WHAT DO YOU TAKE?</b><br><br>
-
-    <div class="choice-menu">
-
-        <!-- LOOT: WEAPON -->
-        <<if not $looted_402_weapon>>
-            <button>
-                <<link "🔫 Take the revolver from the floor (2 minutes)">>
-                    <<set $looted_402_weapon to true>>
-                    <<addTime 1>>
-                    <<run setup.addItem("Revolver .38", 1)>>
-                    <<run setup.addItem(".38 Ammo", 5)>>
-                    <<goto "Unit_402">>
-                <</link>>
-                <span class="btn-sub">A .38 revolver, fully loaded. Five rounds. He couldn't bring himself to use it. It's yours now.</span>
-            </button>
-        <</if>>
-
-        <!-- LOOT: KITCHEN -->
-        <<if not $looted_402_kitchen>>
-            <button>
-                <<link "🍽️ Search the kitchen (3 minutes)">>
-                    <<set $looted_402_kitchen to true>>
-                    <<addTime 2>>
-                    <<run setup.addItem("Canned Food", 2)>>
-                    <<run setup.addItem("Bottled Water", 1)>>
-                    <<goto "Unit_402">>
-                <</link>>
-                <span class="btn-sub">The pantry is stocked — they were prepared. Two cans of food and a sealed water bottle. The note said to take what you need.</span>
-            </button>
-        <</if>>
-
-        <!-- LOOT: BATHROOM -->
-        <<if not $looted_402_bathroom>>
-            <button>
-                <<link "💊 Check the medicine cabinet (2 minutes)">>
-                    <<set $looted_402_bathroom to true>>
-                    <<addTime 1>>
-                    <<run setup.addItem("Painkillers", 2)>>
-                    <<run setup.addItem("Antiseptic", 1)>>
-                    <<goto "Unit_402">>
-                <</link>>
-                <span class="btn-sub">Prescription painkillers and a bottle of antiseptic. You take what's useful. The note said it was okay. You tell yourself that.</span>
-            </button>
-        <</if>>
-
-        <!-- LOOT: RING -->
-        <<if not $looted_402_ring>>
-            <button>
-                <<link "💍 Take Mrs. Anderson's wedding ring (1 minute)">>
-                    <<set $looted_402_ring to true>>
-                    <<set $hum -= 10>>
-                    <<run setup.addItem("Gold Ring", 1)>>
-                    <<goto "Unit_402">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-red);">[HUMANITY −10]</b> She's still wearing it. The note said take what you need. You're not sure a wedding ring qualifies. You take it anyway.</span>
-            </button>
-        <</if>>
-
-        <!-- LOOT: PHOTO -->
-        <<if not $took_402_photo>>
-            <button>
-                <<link "📷 Take the family photo from the mantle (1 minute)">>
-                    <<set $took_402_photo to true>>
-                    <<run setup.addItem("Family Photo", 1)>>
-                    <<goto "Unit_402">>
-                <</link>>
-                <span class="btn-sub">The four of them at a beach somewhere. All laughing. You don't know why you take it. You just do.</span>
-            </button>
-        <</if>>
-
-        <!-- LORE: READ NOTE -->
-        <<if not $read_402_note>>
-            <button>
-                <<link "🔍 Sit and read the full note properly (5 minutes)">>
-                    <<set $read_402_note to true>>
-                    <<set $hum += 5>>
-                    <<addTime 4>>
-                    /* ADD TO LORE DATABASE */
-                    <<run window.addLore("The Andersons' Note", "We are not victims. We made a choice. We watched the news all morning and understood what was coming. We will not become those things. We will not let Emma suffer through what follows. The music is Chopin. It was her favorite.")>>
-                    <<goto "Unit_402">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-green);">[HUMANITY +5]</b> They asked whoever found them to read it. Someone should. You figure it might as well be you.</span>
-            </button>
+        <!-- ======================================================= -->
+        <!-- PHASE 2: INSIDE THE QUIET ROOM (DOOR OPENED)            -->
+        <!-- ======================================================= -->
         <<else>>
-            <div style="padding:8px; background:rgba(0,0,0,0.2); border:1px solid #333; font-style:italic; color:#666; margin-bottom:8px;">
-                You've already read the note. The piano is still playing. You hope she really did love Chopin.
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                UNIT 402 - THE QUIET ROOM
+            </div>
+
+            <!-- AI GENERATED IMAGE HERE -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/unit402.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <!-- LOUD ENTRY WARNING -->
+                <<if $room402_entry_method == "loud">>
+                    <div style="padding:10px; background:rgba(138,28,28,0.2); border-left:3px solid var(--accent-red); margin-bottom:15px; font-style:italic; color:#ff9999;">
+                        The chain bracket tears from the wall with a loud *CRACK* that carries through the building. Somewhere below you, something stirs. You are not alone on this floor.
+                    </div>
+                <</if>>
+
+                You step inside.
+                <br><br>
+                The piano swells to meet you. Chopin — <i>Nocturne in E-flat major</i>. The kind of piece that sounds like a formal goodbye. The apartment is immaculate. No signs of struggle. No broken glass. No blood. Every surface is dusted. 
+                <br><br>
+                The Anderson family is sitting at the dining table.
+                <br><br>
+                Mr. Anderson is at the head, hands folded neatly in his lap. Mrs. Anderson is to his right, her head tilted back slightly, eyes closed, as if she simply fell asleep after a long day. Their teenage daughter, Emma, is slumped forward with her cheek resting on her folded arms.
+                <br><br>
+                Three wine glasses sit before them. Empty. A faint residue of white powder clings to the bottom of the crystal.
+                <br><br>
+                On the center of the table is a sheet of notepaper, folded once:
+
+                <!-- LORE NOTE -->
+                <div style="padding:15px; background:#0a0a0a; border:1px solid #333; color:#aaa; font-style:italic; margin:15px 0;">
+                    "To whoever finds us:
+                    <br><br>
+                    We heard the emergency broadcast on the amateur radio. They said the infection has mutated. Airborne. They said the military isn't evacuating the city anymore—they are welding the apartment doors shut and pumping gas through the vents to sterilize the grid. 
+                    <br><br>
+                    We refuse to suffocate in the dark. We will not let Emma suffer through that kind of pain. We found a merciful way out before the soldiers reach our floor.
+                    <br><br>
+                    The music is Chopin. We wanted the last thing we felt to be peace. May God forgive us."
+                </div>
+
+                <<chat "You" "image/avatars/player.gif" "left" "Airborne? Pumping gas? That... that was a conspiracy rumor floating around the internet before the cell towers fell. It wasn't real. My God... they did this for nothing.">>
+                <br>
+                There is a small caliber revolver on the floor near Mr. Anderson's foot. He must have loaded it, panicked, and realized he couldn't shoot his own family. He chose the poison instead.
+            </div>
+
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                <div style="margin-bottom:20px; padding:15px; background:rgba(80,0,0,0.2); border-left:3px solid var(--accent-red);">
+                    <b style="color:var(--accent-red);">💀 WHAT DO YOU TAKE?</b><br><br>
+
+                    <!-- LOOT: WEAPON -->
+                    <<if not $looted_402_weapon>>
+                        <button>
+                            <<link "🔫 Take the revolver from the floor (2 minutes)">>
+                                <<set $looted_402_weapon to true>>
+                                <<addTime 1>>
+                                <<run setup.addItem("Revolver .38", 1)>>
+                                <<run setup.addItem(".38 Ammo", 5)>>
+                                <<goto "Unit_402">>
+                            <</link>>
+                            <span class="btn-sub">A .38 revolver, fully loaded. Five rounds. He couldn't bring himself to use it. It's yours now.</span>
+                        </button>
+                    <</if>>
+
+                    <!-- LOOT: KITCHEN -->
+                    <<if not $looted_402_kitchen>>
+                        <button>
+                            <<link "🍽️ Search the kitchen (3 minutes)">>
+                                <<set $looted_402_kitchen to true>>
+                                <<addTime 2>>
+                                <<run setup.addItem("Canned Food", 2)>>
+                                <<run setup.addItem("Bottled Water", 1)>>
+                                <<goto "Unit_402">>
+                            <</link>>
+                            <span class="btn-sub">The pantry is fully stocked — they were prepared to survive for weeks before the panic set in. You take two cans and a water bottle.</span>
+                        </button>
+                    <</if>>
+
+                    <!-- LOOT: BATHROOM -->
+                    <<if not $looted_402_bathroom>>
+                        <button>
+                            <<link "💊 Check the medicine cabinet (2 minutes)">>
+                                <<set $looted_402_bathroom to true>>
+                                <<addTime 1>>
+                                <<run setup.addItem("Painkillers", 2)>>
+                                <<run setup.addItem("Antiseptic", 1)>>
+                                <<goto "Unit_402">>
+                            <</link>>
+                            <span class="btn-sub">You find prescription painkillers and a bottle of antiseptic. You try not to look at the empty pill bottles in the trash can.</span>
+                        </button>
+                    <</if>>
+
+                    <!-- LOOT: RING -->
+                    <<if not $looted_402_ring>>
+                        <button>
+                            <<link "💍 Take Mrs. Anderson's wedding ring (1 minute)">>
+                                <<set $looted_402_ring to true>>
+                                <<set $hum -= 10>>
+                                <<run setup.addItem("Gold Ring", 1)>>
+                                <<goto "Unit_402">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-red);">[HUMANITY −10]</b> She's still wearing it. Taking it feels like crossing a line you can't uncross. You take it anyway.</span>
+                        </button>
+                    <</if>>
+
+                    <!-- LOOT: PHOTO -->
+                    <<if not $took_402_photo>>
+                        <button>
+                            <<link "📷 Take the family photo from the mantle (1 minute)">>
+                                <<set $took_402_photo to true>>
+                                <<run setup.addItem("Family Photo", 1)>>
+                                <<goto "Unit_402">>
+                            <</link>>
+                            <span class="btn-sub">The four of them at a beach somewhere. All laughing. You don't know why you take it. You just do.</span>
+                        </button>
+                    <</if>>
+
+                    <!-- LORE: READ NOTE -->
+                    <<if not $read_402_note>>
+                        <button>
+                            <<link "🔍 Keep the suicide note (1 minute)">>
+                                <<set $read_402_note to true>>
+                                <<set $per += 1>>
+                                <<addTime 1>>
+                                <<run window.addLore("The Andersons' Note", "They killed themselves after hearing a fake radio broadcast claiming the military was gassing the building. Misinformation travels faster than the virus.")>>
+                                <<goto "Unit_402">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-green);">[PER +1]</b> You log the details into your PDA as a grim reminder: fear will kill you just as fast as the infected.</span>
+                        </button>
+                    <<else>>
+                        <div style="padding:8px; background:rgba(255,255,255,0.05); color:#888; font-style:italic; font-size:0.85em; margin-bottom:10px; text-align:center;">
+                            📝 You already logged the note. The piano is still playing.
+                        </div>
+                    <</if>>
+
+                    <!-- EVERYTHING COMPLETED -->
+                    <<if $looted_402_weapon and $looted_402_kitchen and $looted_402_bathroom and $took_402_photo and $read_402_note>>
+                        <div style="padding:15px; background:rgba(0,100,0,0.1); border-left:3px solid var(--accent-green); text-align:center; color:#99cc99; margin-bottom:20px;">
+                            <i>There is nothing left to take. The piano is still playing. You close the door quietly behind you.</i>
+                        </div>
+                    <</if>>
+                </div>
+
+                <hr style="border-color: #333; margin: 20px 0;">
+                <button style="background: rgba(255,255,255,0.05) !important; border-color: #555 !important;">
+                    <<link "🚪 Leave them in peace — return to the hallway">>
+                        <<run setup.sound.fade("chopin_piano", 2500)>>
+                        <<set $hallwaySection to 3>>
+                        <<goto "Hallway">>
+                    <</link>>
+                </button>
             </div>
         <</if>>
-
-        <!-- EVERYTHING COMPLETED -->
-        <<if $looted_402_weapon and $looted_402_kitchen and $looted_402_bathroom and $took_402_photo and $read_402_note>>
-            <br>
-            <div style="padding:10px; background:rgba(0,100,0,0.2); border:1px solid var(--accent-green); font-style:italic; color:#99cc99;">
-                There is nothing left to take that isn't theirs to keep. The piano is still playing. You close the door quietly behind you.
-            </div>
-        <</if>>
-
-        <!-- EXIT BUTTON -->
-        <button>
-            <<link "🚪 Leave them in peace — return to the hallway">>
-                <<run setup.sound.fade("chopin_piano", 2500)>>
-                <<set $hallwaySection to 3>>
-                <<goto "Hallway">>
-            <</link>>
-            <span class="btn-sub">Back to the corridor. Section 3.</span>
-        </button>
 
     </div>
 </div>
-<</if>>
+<</nobr>>
