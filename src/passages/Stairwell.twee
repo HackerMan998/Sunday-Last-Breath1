@@ -34,7 +34,7 @@
                 4TH FLOOR - STAIRWELL DESCENT
             </div>
 
-            <!-- AI GENERATED IMAGE HERE -->
+            <!-- GAMBAR 1: ENTRANCE -->
             <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
                 <img src="image/act1/stairwell4F.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
             </div>
@@ -160,15 +160,27 @@
             </div>
 
         <!-- ======================================================= -->
-        <!-- PHASE 2: DESCENT RESOLUTION & THE BARRICADE             -->
+        <!-- PHASE 2: DESCENT RESOLUTION & THE BLOOD REACTION        -->
         <!-- ======================================================= -->
         <<elseif $stair_phase == 2>>
-            <<set $activeMap to "Stairwell 2F">>
-            <<set $currentLocation to "F2 Entrance">>
             <<set _sawHorrors to (visited("Unit_401") or $room402_opened or $room405_opened or $room406_opened)>>
 
             <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
                 STAIRWELL - THE DESCENT
+            </div>
+
+            <!-- LOGIKA GAMBAR DINAMIS -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <<if $descentMethod == "quick_fail">>
+                    <!-- GAMBAR 2: JATUH -->
+                    <img src="image/act1/stairwell_tumble.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+                <<elseif $descentMethod == "flashlight" or $descentMethod == "lighter">>
+                    <!-- GAMBAR 3: SENTER/KOREK -->
+                    <img src="image/act1/stairwell_flashlight.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+                <<else>>
+                    <!-- GAMBAR 1 (DEFAULT): AMAN TAPI GELAP -->
+                    <img src="image/act1/stairwell4F.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+                <</if>>
             </div>
 
             <!-- NARRATIVE: DESCENT RESULT -->
@@ -247,15 +259,32 @@
                     <</if>>
                 </div>
             <</if>>
+            
+            <!-- TOMBOL UNTUK LANJUT KE PHASE 3 -->
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                <button>
+                    <<link "Turn the corner to the next landing">>
+                        <<set $stair_phase to 3>>
+                        <<goto "Stairwell">>
+                    <</link>>
+                    <span class="btn-sub">Continue your descent.</span>
+                </button>
+            </div>
 
-            <!-- NARRATIVE: THE BARRICADE -->
+        <!-- ======================================================= -->
+        <!-- PHASE 3: THE BARRICADE                                  -->
+        <!-- ======================================================= -->
+        <<elseif $stair_phase == 3>>
+            <<set $activeMap to "Stairwell 2F">>
+            <<set $currentLocation to "F2 Entrance">>
+            
             <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
                 THE BARRICADE
             </div>
 
-            <!-- AI GENERATED IMAGE HERE -->
+            <!-- GAMBAR 4: BARRICADE -->
             <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
-                <img src="image/stairwell_barricade.jpg" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+                <img src="image/act1/stairwell_barricade.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
             </div>
 
             <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
