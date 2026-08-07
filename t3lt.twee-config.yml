@@ -34,3 +34,7 @@ sugarcube-2:
       name: skillRadar
     gainTrust:
       name: gainTrust
+    customTraitDisplay:
+      name: customTraitDisplay
+    Minigame_QTE:
+      name: Minigame_QTE

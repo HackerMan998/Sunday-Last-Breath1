@@ -814,3 +814,76 @@
 <<widget "setChar">>
   <<replace ".vn-stage">><img src="$args[0]" class="vn-character"><</replace>>
 <</widget>>
+
+<<widget "Minigame_QTE">>
+    /* 
+       Argumen 0: Kecepatan kursor (Default 2.8)
+       Argumen 1: Lebar Safe Zone dalam % (Default 20) 
+       Contoh pemanggilan: <<Minigame_QTE 3.5 15>>
+    */
+    <<set _qteSpeed to $args[0] || 2.8>>
+    <<set _qteWidth to $args[1] || 20>>
+    <<set _qteLeft to 50 - (_qteWidth / 2)>>
+    <<set _qteRight to 50 + (_qteWidth / 2)>>
+
+    <div id="qte-container" style="background: rgba(0,0,0,0.8); padding: 20px; border: 1px solid var(--accent-red); margin-top: 10px; text-align: center;">
+        <b style="color: var(--accent-red); font-size: 1.2em; letter-spacing: 2px;">⚠️ MANUAL DISARM INITIATED</b>
+        <p style="font-size: 0.9em; color: #ccc; margin: 15px 0; font-family: 'Courier Prime', monospace;">Keep the tension steady. Click the button when the red line is inside the <b style="color:var(--accent-green);">GREEN safe zone</b>!</p>
+        
+        <div id="qte-bar" style="width: 100%; height: 40px; background: #111; border: 2px solid #444; position: relative; overflow: hidden; margin-bottom: 20px; border-radius: 4px;">
+            <!-- Safe Zone (Dihitung dinamis dari argumen) -->
+            <div id="qte-safe" @style="'position: absolute; left: ' + _qteLeft + '%; width: ' + _qteWidth + '%; height: 100%; background: var(--accent-green); opacity: 0.4;'"></div>
+            <!-- Moving Cursor -->
+            <div id="qte-cursor" style="position: absolute; left: 0%; top: -5px; width: 4px; height: 50px; background: red; box-shadow: 0 0 10px red;"></div>
+        </div>
+
+        <button id="qte-btn" style="width: 100%; font-weight: bold; font-size: 1.1em; padding: 15px; border-color: var(--accent-red);">HOLD BREATH & STOP</button>
+    </div>
+
+    <<script>>
+        setTimeout(function() {
+            var cursor = document.getElementById("qte-cursor");
+            var btn = document.getElementById("qte-btn");
+            if (!cursor || !btn) return;
+            
+            var position = 0;
+            var direction = 1;
+            
+            /* Mengambil parameter dari Twine */
+            var speed = State.temporary.qteSpeed;
+            var safeMin = State.temporary.qteLeft;
+            var safeMax = State.temporary.qteRight;
+            
+            var interval = setInterval(function() {
+                if (!document.getElementById("qte-cursor")) {
+                    clearInterval(interval);
+                    return;
+                }
+                position += speed * direction;
+                if (position >= 98 || position <= 0) {
+                    direction *= -1;
+                }
+                cursor.style.left = position + "%";
+            }, 20);
+
+            btn.onclick = function() {
+                clearInterval(interval);
+                btn.disabled = true;
+                
+                if (position >= safeMin && position <= safeMax) {
+                    btn.innerText = "SUCCESS! TENSION HELD.";
+                    btn.style.borderColor = "var(--accent-green)";
+                    btn.style.color = "var(--accent-green)";
+                    /* Mengeklik link 'WIN' yang disembunyikan di passage pemanggil */
+                    setTimeout(function() { document.querySelector("#qte-win-trigger a, #qte-win-trigger button").click(); }, 1500);
+                } else {
+                    btn.innerText = "FAILED! THE WIRE SNAPPED!";
+                    btn.style.borderColor = "var(--accent-red)";
+                    btn.style.color = "var(--accent-red)";
+                    /* Mengeklik link 'LOSE' yang disembunyikan di passage pemanggil */
+                    setTimeout(function() { document.querySelector("#qte-lose-trigger a, #qte-lose-trigger button").click(); }, 1500);
+                }
+            };
+        }, 100);
+    <</script>>
+<</widget>>

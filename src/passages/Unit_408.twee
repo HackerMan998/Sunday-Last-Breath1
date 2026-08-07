@@ -52,185 +52,213 @@
 
             <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
                 
-                <!-- KEYPAD STATE: BRICKED -->
-                <<if $room408_locked_out>>
-                    <div style="padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin-bottom:15px; text-align:center;">
-                        ⛔ <b>PERMANENTLY LOCKED OUT.</b> The keypad triggered its security failsafe after three wrong attempts. The software is sealed. You will have to bypass it physically.
-                    </div>
-                    <<chat "You" "image/avatars/player.gif" "left" "Damn it. It bricked itself. Time to do this the hard way.">>
+                <!-- WRAPPER UNTUK MENYEMBUNYIKAN MENU SAAT MINIGAME AKTIF -->
+                <div id="room408-interactions">
                 
-                <!-- KEYPAD STATE: ACTIVE -->
-                <<else>>
-                    <div style="margin-bottom:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-blue);">
-                        <b style="color:var(--accent-blue);">⚙️ HOW DO YOU PROCEED?</b><br><br>
-
-                        <!-- SECRET LORE CHECK: HIDDEN PATH KEPT -->
-                        <<if visited("Prologue_Phone")>>
-                            <button>
-                                <<link "📱 Enter the code you saw on your phone (8445)">>
-                                    <<set $room408_opened to true>>
-                                    <<goto "Unit_408">>
-                                <</link>>
-                                <span class="btn-sub">1 Minute | You saw a text from him earlier. You didn't know what it was for at the time. Now you do.</span>
-                            </button>
-                        <</if>>
-
-                        <!-- FAILED ATTEMPT WARNING -->
-                        <<if $failed_408_attempts > 0>>
-                            <div style="padding:8px; background:rgba(138,28,28,0.2); border:1px solid #8a1c1c; color:#ff9999; margin-bottom:10px;">
-                                ⚠️ <b>WRONG CODE.</b> Attempts remaining: <<print 3 - $failed_408_attempts>>. Three failures trigger the lockout permanently.
-                            </div>
-                        <</if>>
-
-                        <!-- MANUAL ENTRY -->
-                        <div style="margin-bottom: 10px;">
-                            <<textbox "$player_code_attempt" "" autofocus>>
-                        </div>
-                        <button>
-                            <<link "🔢 Enter a code manually">>
-                                <<if $player_code_attempt == "8445">>
-                                    <<set $room408_opened to true>>
-                                    <<goto "Unit_408">>
-                                <<else>>
-                                    <<addTime 1>>
-                                    <<set $failed_408_attempts += 1>>
-                                    <<if $failed_408_attempts >= 3>>
-                                        <<set $room408_locked_out to true>>
-                                    <</if>>
-                                    <<goto "Unit_408">>
-                                <</if>>
-                            <</link>>
-                            <span class="btn-sub">1 Minute | Four digits. Think carefully — you only get three attempts before the failsafe triggers.</span>
-                        </button>
-                    </div>
-                <</if>>
-
-                <!-- HARDWARE BYPASS GRID (Always available) -->
-                <div style="margin-top:10px; padding:15px; background:rgba(80,0,0,0.2); border-left:3px solid var(--accent-gold);">
-                    <b style="color:var(--accent-gold);">⚠️ HARDWARE BYPASS</b><br><br>
-
-                    <!-- FAILED BRUTE FORCE WARNING MESSAGE -->
-                    <<if $room408_bruteforce_fail>>
+                    <!-- KEYPAD STATE: BRICKED -->
+                    <<if $room408_locked_out>>
                         <div style="padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin-bottom:15px; text-align:center;">
-                            ❌ <b>BRUTE FORCE FAILED.</b> You battered the housing, but the internal deadbolt didn't budge. Your hands are bleeding, and you just wasted precious energy. 
+                            ⛔ <b>PERMANENTLY LOCKED OUT.</b> The keypad triggered its security failsafe after three wrong attempts. The software is sealed. You will have to bypass it physically.
                         </div>
-                        <<unset $room408_bruteforce_fail>>
+                        <<chat "You" "image/avatars/player.gif" "left" "Damn it. It bricked itself. Time to do this the hard way.">>
+                    
+                    <!-- KEYPAD STATE: ACTIVE -->
+                    <<else>>
+                        <div style="margin-bottom:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-blue);">
+                            <b style="color:var(--accent-blue);">⚙️ HOW DO YOU PROCEED?</b><br><br>
+
+                            <!-- SECRET LORE CHECK: HIDDEN PATH KEPT -->
+                            <<if visited("Prologue_Phone")>>
+                                <button>
+                                    <<link "📱 Enter the code you saw on your phone (8445)">>
+                                        <<set $room408_opened to true>>
+                                        <<goto "Unit_408">>
+                                    <</link>>
+                                    <span class="btn-sub">1 Minute | You saw a text from him earlier. You didn't know what it was for at the time. Now you do.</span>
+                                </button>
+                            <</if>>
+
+                            <!-- FAILED ATTEMPT WARNING -->
+                            <<if $failed_408_attempts > 0>>
+                                <div style="padding:8px; background:rgba(138,28,28,0.2); border:1px solid #8a1c1c; color:#ff9999; margin-bottom:10px;">
+                                    ⚠️ <b>WRONG CODE.</b> Attempts remaining: <<print 3 - $failed_408_attempts>>. Three failures trigger the lockout permanently.
+                                </div>
+                            <</if>>
+
+                            <!-- MANUAL ENTRY -->
+                            <div style="margin-bottom: 10px;">
+                                <<textbox "$player_code_attempt" "" autofocus>>
+                            </div>
+                            <button>
+                                <<link "🔢 Enter a code manually">>
+                                    <<if $player_code_attempt == "8445">>
+                                        <<set $room408_opened to true>>
+                                        <<goto "Unit_408">>
+                                    <<else>>
+                                        <<addTime 1>>
+                                        <<set $failed_408_attempts += 1>>
+                                        <<if $failed_408_attempts >= 3>>
+                                            <<set $room408_locked_out to true>>
+                                        <</if>>
+                                        <<goto "Unit_408">>
+                                    <</if>>
+                                <</link>>
+                                <span class="btn-sub">1 Minute | Four digits. Think carefully — you only get three attempts before the failsafe triggers.</span>
+                            </button>
+                        </div>
                     <</if>>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <!-- HARDWARE BYPASS GRID (Always available) -->
+                    <div style="margin-top:10px; padding:15px; background:rgba(80,0,0,0.2); border-left:3px solid var(--accent-gold);">
+                        <b style="color:var(--accent-gold);">⚠️ HARDWARE BYPASS</b><br><br>
 
-                        <!-- 1. PLAYER JOB: BURGLAR -->
-                        <<if $job == "Burglar">>
-                            <button style="height: 100%;">
-                                <<link "Override the electronic latch">>
-                                    <<addTime 2>><<exert _halfCost>><<set $room408_opened to true>><<goto "Unit_408">>
-                                <</link>>
-                                <span class="btn-sub"><b style="color:var(--accent-gold);">[BURGLAR]</b> Cost: <<print _halfCost>> STAMINA. You've cracked tougher systems than this apartment lock.</span>
-                            </button>
-                        <<else>>
-                            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                                <span style="text-decoration: line-through;">Override the electronic latch</span><br>
-                                <span class="btn-sub" style="color: #666;">[REQUIRES BURGLAR] You lack the specialized knowledge to trick the mechanism.</span>
-                            </button>
+                        <!-- FAILED BRUTE FORCE WARNING MESSAGE -->
+                        <<if $room408_bruteforce_fail>>
+                            <div style="padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin-bottom:15px; text-align:center;">
+                                ❌ <b>BRUTE FORCE FAILED.</b> You battered the housing, but the internal deadbolt didn't budge. Your hands are bleeding, and you just wasted precious energy. 
+                            </div>
+                            <<unset $room408_bruteforce_fail>>
                         <</if>>
 
-                        <!-- 2. PLAYER TRAIT: LOCKSMITH -->
-                        <<if hasTrait("LOCKSMITH")>>
-                            <button style="height: 100%;">
-                                <<link "Exploit the mechanical failsafe">>
-                                    <<addTime 3>><<exert _halfCost>><<set $room408_opened to true>><<goto "Unit_408">>
-                                <</link>>
-                                <span class="btn-sub"><b style="color:var(--accent-gold);">[LOCKSMITH]</b> Cost: <<print _halfCost>> STAMINA. Every electronic lock has a physical override pin. You find it.</span>
-                            </button>
-                        <<else>>
-                            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                                <span style="text-decoration: line-through;">Exploit the failsafe</span><br>
-                                <span class="btn-sub" style="color: #666;">[REQUIRES LOCKSMITH] You don't know where the physical override pin is located.</span>
-                            </button>
-                        <</if>>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
 
-                        <!-- 3. PLAYER SKILL: TECH 2 -->
-                        <<if $skills.tech >= 2>>
-                            <button style="height: 100%;">
-                                <<link "Bypass the keypad circuit">>
-                                    <<addTime 4>><<exert _halfCost>><<set $room408_opened to true>><<goto "Unit_408">>
-                                <</link>>
-                                <span class="btn-sub"><b style="color:var(--accent-gold);">[TECH 2]</b> Cost: <<print _halfCost>> STAMINA. You pull the panel and bridge the latch relay wire.</span>
-                            </button>
-                        <<else>>
-                            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                                <span style="text-decoration: line-through;">Bypass the keypad circuit</span><br>
-                                <span class="btn-sub" style="color: #666;">[REQUIRES TECH 2] You lack the knowledge to safely hotwire the board.</span>
-                            </button>
-                        <</if>>
+                            <!-- 1. PLAYER JOB: BURGLAR -->
+                            <<if $job == "Burglar">>
+                                <button style="height: 100%;">
+                                    <<link "Override the electronic latch">>
+                                        <<addTime 2>><<exert _halfCost>><<set $room408_opened to true>><<goto "Unit_408">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[BURGLAR]</b> Cost: <<print _halfCost>> STAMINA. You've cracked tougher systems than this apartment lock.</span>
+                                </button>
+                            <<else>>
+                                <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                    <span style="text-decoration: line-through;">Override the electronic latch</span><br>
+                                    <span class="btn-sub" style="color: #666;">[REQUIRES BURGLAR] You lack the specialized knowledge to trick the mechanism.</span>
+                                </button>
+                            <</if>>
 
-                        <!-- 4. PLAYER ITEM: MULTI-TOOL -->
-                        <<if $inventory.find(i => i.id === "Multi-Tool")>>
-                            <button style="height: 100%;">
-                                <<link "Disassemble the housing">>
-                                    <<addTime 3>><<exert _halfCost>><<set $room408_opened to true>><<goto "Unit_408">>
-                                <</link>>
-                                <span class="btn-sub"><b style="color:var(--accent-gold);">[MULTI-TOOL]</b> Cost: <<print _halfCost>> STAMINA. You unscrew the faceplate and retract the deadbolt.</span>
-                            </button>
-                        <<else>>
-                            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                                <span style="text-decoration: line-through;">Disassemble the housing</span><br>
-                                <span class="btn-sub" style="color: #666;">[REQUIRES MULTI-TOOL] You don't have tools to take the faceplate off.</span>
-                            </button>
-                        <</if>>
+                            <!-- 2. PLAYER TRAIT: LOCKSMITH -->
+                            <<if hasTrait("LOCKSMITH")>>
+                                <button style="height: 100%;">
+                                    <<link "Exploit the mechanical failsafe">>
+                                        <<addTime 3>><<exert _halfCost>><<set $room408_opened to true>><<goto "Unit_408">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[LOCKSMITH]</b> Cost: <<print _halfCost>> STAMINA. Every electronic lock has a physical override pin. You find it.</span>
+                                </button>
+                            <<else>>
+                                <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                    <span style="text-decoration: line-through;">Exploit the failsafe</span><br>
+                                    <span class="btn-sub" style="color: #666;">[REQUIRES LOCKSMITH] You don't know where the physical override pin is located.</span>
+                                </button>
+                            <</if>>
 
-                        <!-- 5. PLAYER ATTRIBUTE: PERCEPTION 6 -->
-                        <<if $per >= 6 and not $room408_locked_out>>
-                            <button style="height: 100%;">
-                                <<link "Read the finger smudges">>
-                                    <<exert 0>><<set $room408_opened to true>><<goto "Unit_408">>
-                                <</link>>
-                                <span class="btn-sub"><b style="color:var(--accent-gold);">[PER 6]</b> Cost: 0 STAMINA. The 8, 4, and 5 keys have heavy smudges. You guess the sequence.</span>
-                            </button>
-                        <<else>>
-                            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                                <span style="text-decoration: line-through;">Read the finger smudges</span><br>
-                                <span class="btn-sub" style="color: #666;">[REQUIRES PER 6] Your eyes aren't sharp enough to pick up wear patterns.</span>
-                            </button>
-                        <</if>>
+                            <!-- 3. PLAYER SKILL: TECH 2 -->
+                            <<if $skills.tech >= 2>>
+                                <button style="height: 100%;">
+                                    <<link "Bypass the keypad circuit">>
+                                        <<addTime 4>><<exert _halfCost>><<set $room408_opened to true>><<goto "Unit_408">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[TECH 2]</b> Cost: <<print _halfCost>> STAMINA. You pull the panel and bridge the latch relay wire.</span>
+                                </button>
+                            <<else>>
+                                <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                    <span style="text-decoration: line-through;">Bypass the keypad circuit</span><br>
+                                    <span class="btn-sub" style="color: #666;">[REQUIRES TECH 2] You lack the knowledge to safely hotwire the board.</span>
+                                </button>
+                            <</if>>
 
-                        <!-- 6. LAST RESORT: BRUTE FORCE (RNG) -->
-                        <button style="grid-column: span 2; border-left-color: var(--accent-red) !important;">
-                            <<link "Smash the keypad housing [BRUTE FORCE]">>
-                                <<addTime 3>>
-                                <<exert _baseCost>>
-                                <<if $str >= 6>>
-                                    <<set $room408_opened to true>>
-                                <<else>>
-                                    <<if random(1, 100) <= 70>>
-                                        <<set $room408_opened to true>>
-                                    <<else>>
-                                        <<set $room408_bruteforce_fail to true>>
-                                    <</if>>
-                                <</if>>
-                                <<goto "Unit_408">>
-                            <</link>>
-                            <span class="btn-sub">
-                                <<if $str >= 6>>
-                                    <b style="color:var(--accent-red);">[LAST RESORT: 100% SUCCESS]</b> Cost: <<print _baseCost>> STAMINA. Your high STR guarantees entry.
-                                <<else>>
-                                    <b style="color:var(--accent-red);">[LAST RESORT: 70% CHANCE]</b> Cost: <<print _baseCost>> STAMINA. You batter the housing, hoping it breaks free.
-                                <</if>>
-                            </span>
-                        </button>
+                            <!-- 4. PLAYER ITEM: MULTI-TOOL -->
+                            <<if $inventory.find(i => i.id === "Multi-Tool")>>
+                                <button style="height: 100%;">
+                                    <<link "Disassemble the housing">>
+                                        <<addTime 3>><<exert _halfCost>><<set $room408_opened to true>><<goto "Unit_408">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[MULTI-TOOL]</b> Cost: <<print _halfCost>> STAMINA. You unscrew the faceplate and retract the deadbolt.</span>
+                                </button>
+                            <<else>>
+                                <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                    <span style="text-decoration: line-through;">Disassemble the housing</span><br>
+                                    <span class="btn-sub" style="color: #666;">[REQUIRES MULTI-TOOL] You don't have tools to take the faceplate off.</span>
+                                </button>
+                            <</if>>
 
+                            <!-- 5. PLAYER ATTRIBUTE: PERCEPTION 6 -->
+                            <<if $per >= 6 and not $room408_locked_out>>
+                                <button style="height: 100%;">
+                                    <<link "Read the finger smudges">>
+                                        <<exert 0>><<set $room408_opened to true>><<goto "Unit_408">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[PER 6]</b> Cost: 0 STAMINA. The 8, 4, and 5 keys have heavy smudges. You guess the sequence.</span>
+                                </button>
+                            <<else>>
+                                <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                    <span style="text-decoration: line-through;">Read the finger smudges</span><br>
+                                    <span class="btn-sub" style="color: #666;">[REQUIRES PER 6] Your eyes aren't sharp enough to pick up wear patterns.</span>
+                                </button>
+                            <</if>>
+
+                            <!-- 6. LAST RESORT: BRUTE FORCE (MINIGAME SCALING) -->
+                            <<if $str >= 6>>
+                                <button style="grid-column: span 2; border-left-color: var(--accent-gold) !important;">
+                                    <<link "Smash the keypad housing [STR 6/6]">>
+                                        <<addTime 3>><<exert _baseCost>><<set $room408_opened to true>><<goto "Unit_408">>
+                                    <</link>>
+                                    <span class="btn-sub">
+                                        <b style="color:var(--accent-gold);">[STR <<print $str>>/6]</b> Cost: <<print _baseCost>> STAMINA. Your high Strength guarantees you can shatter the housing easily without triggering the alarm.
+                                    </span>
+                                </button>
+                            <<else>>
+                                <button style="grid-column: span 2; border-left-color: var(--accent-red) !important;">
+                                    <<link "Smash the keypad housing [MINIGAME]">>
+                                        <<run $("#room408-interactions").hide(); $("#qte-wrapper-408").fadeIn(300);>>
+                                    <</link>>
+                                    <span class="btn-sub">
+                                        <b style="color:var(--accent-red);">[STR <<print $str>>/6]</b> You aren't strong enough to just rip it off. You'll have to time your strikes perfectly to hit the weak point.
+                                    </span>
+                                </button>
+                            <</if>>
+
+                        </div>
                     </div>
+
+                    <hr style="border-color: #333; margin: 20px 0;">
+                    <button style="background: rgba(255,255,255,0.05) !important; border-color: #555 !important;">
+                        <<link "🚪 Give up and return to the hallway">>
+                            <<unset $room408_bruteforce_fail>>
+                            <<run setup.sound.fade("ticking_clock", 1000)>>
+                            <<set $hallwaySection to 1>>
+                            <<goto "Hallway">>
+                        <</link>>
+                    </button>
+                </div> <!-- END OF ROOM 408 INTERACTIONS -->
+
+                <!-- PEMANGGILAN WIDGET MINIGAME UNTUK 408 (STRENGTH) -->
+                <div id="qte-wrapper-408" style="display: none; padding-top: 15px;">
+                    
+                    <!-- Kalkulasi Dinamis Berdasarkan Kekuatan (Target STR = 6) -->
+                    <<set _statDiff to (6 - $str)>>
+                    <!-- Kecepatan dasar 2.0. Setiap kekurangan 1 STR menambah kecepatan 0.8 -->
+                    <<set _qteSpeed to 2.0 + (_statDiff * 0.8)>>
+                    <!-- Lebar dasar 30%. Setiap kekurangan 1 STR mengurangi lebar 5% -->
+                    <<set _qteWidth to 30 - (_statDiff * 5)>>
+
+                    <!-- Panggil Widget dengan hasil kalkulasi -->
+                    <<Minigame_QTE _qteSpeed _qteWidth>>
+                    
+                    <span style="display:none;">
+                        <span id="qte-win-trigger">
+                            <<link "WIN">>
+                                <<addTime 3>><<exert _baseCost>><<set $room408_opened to true>><<goto "Unit_408">>
+                            <</link>>
+                        </span>
+                        <span id="qte-lose-trigger">
+                            <<link "LOSE">>
+                                <<addTime 3>><<exert _baseCost>><<set $room408_bruteforce_fail to true>><<goto "Unit_408">>
+                            <</link>>
+                        </span>
+                    </span>
                 </div>
 
-                <hr style="border-color: #333; margin: 20px 0;">
-                <button style="background: rgba(255,255,255,0.05) !important; border-color: #555 !important;">
-                    <<link "🚪 Give up and return to the hallway">>
-                        <<unset $room408_bruteforce_fail>>
-                        <<run setup.sound.fade("ticking_clock", 1000)>>
-                        <<set $hallwaySection to 1>>
-                        <<goto "Hallway">>
-                    <</link>>
-                </button>
             </div>
 
         <!-- ======================================================= -->

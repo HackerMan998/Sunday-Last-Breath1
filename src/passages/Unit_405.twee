@@ -1,414 +1,274 @@
-:: Unit_405 {"position":"100,625","size":"100,100"}
+:: Unit_405 {"position":"0,750","size":"100,100"}
+<!-- ======================================================= -->
+<!-- INITIALIZATION & SETUP                                  -->
+<!-- ======================================================= -->
 <<nobr>>
-/* =================================================================
-   1. INITIALIZATION & SETUP
-   ================================================================= */
+    /* AUDIO: Low ambient tension */
+    <<run setup.sound.play("tension_drone", "audio/bgm/tension.mp3", true, 0.3)>>
 
-/* AUDIO: Oppressive Dark Room Tone */
-<<run setup.sound.play("dark_room", "audio/bgm/dark_room_tone.mp3", true, 0.4)>>
+    <<set $currentLocation to "405">>
+    
+    /* Variable Defaults */
+    <<if not $room405_opened>><<set $room405_opened to false>><</if>>
+    <<if not $room405_trap_triggered>><<set $room405_trap_triggered to false>><</if>>
+    <<if not $read_marcus_log>><<set $read_marcus_log to false>><</if>>
+    <<if not $looted_405_bench>><<set $looted_405_bench to false>><</if>>
+    <<if not $looted_405_safe>><<set $looted_405_safe to false>><</if>>
 
-/* Track Player Location */
-<<set $currentLocation to "405">>
-
-/* Initialize Phase and Loot Variables if they don't exist */
-<<if ndef $f405_phase>><<set $f405_phase to 0>><</if>>
-<<if ndef $read_marcus_phone>><<set $read_marcus_phone to false>><</if>>
-<<if not $room405_opened>><<set $room405_opened to false>><</if>>
-<<if not $looted_405_shotgun>><<set $looted_405_shotgun to false>><</if>>
-<<if not $looted_405_knife>><<set $looted_405_knife to false>><</if>>
-<<if not $looted_405_food>><<set $looted_405_food to false>><</if>>
-<<if not $looted_405_medkit>><<set $looted_405_medkit to false>><</if>>
-<<if not $looted_405_ammocrate>><<set $looted_405_ammocrate to false>><</if>>
-<<if not $read_405_journal>><<set $read_405_journal to false>><</if>>
-
-/* Setup Base Cost for Last Resort Brute Force */
-<<set _baseCost to 25>>
+    /* Setup Action Costs */
+    <<set _trapCost to 20>>
+    <<set _halfTrapCost to Math.round(_trapCost / 2)>>
 <</nobr>>
 
+<<nobr>>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
 
-/* =================================================================
-   2. OUTSIDE THE DOOR (LOCKED STATE)
-   ================================================================= */
-<<if not $room405_opened>>
-<h2>UNIT 405 — THE FORTRESS</h2>
+        <!-- ======================================================= -->
+        <!-- PHASE 1: EXTERIOR (THE BOOBY TRAP)                      -->
+        <!-- ======================================================= -->
+        <<if not $room405_opened>>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                UNIT 405 - THE BOOBY TRAP
+            </div>
 
-The door to Unit 405 is not like the others.
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                This is Marcus's place. The guy was a fanatic. An ex-military survivalist who spent his weekends hunting in the mountains and his weeknights reinforcing his walls. 
+                <br><br>
+                The door is heavy solid core steel, but strangely, it's unlocked. It sits ajar by a fraction of an inch. The sharp, acidic smell of cordite and gun oil leaks into the hallway.
+                <br><br>
+                You push the door gently. It stops with a faint metallic <i>*clink*</i>. 
+                <br><br>
+                You shine your light down. A near-invisible monofilament fishing line is tied from the doorknob to the pin of a flashbang grenade and a makeshift 12-gauge blank shell rigged to the doorframe. If you open this door normally, it will blow your eardrums out and alert every infected within a three-mile radius.
 
-It's solid steel, reinforced with a heavy deadbolt and a crossbar bracket you can see through the gap at the bottom. The kind of door you install when you've already decided the world is heading wrong and you want to be ready when it finally does.
+                <br><br>
+                <<chat "You" "image/avatars/player.gif" "left" "Paranoid bastard. He left a welcome present.">>
+            </div>
 
-Marcus Webb. The hunter from 405. You'd seen him in the parking garage loading camouflage bags and rifle cases into a truck that sat two feet higher off the ground than anything had a right to. He always nodded at you. Never smiled. The kind of man who communicated entirely in nods.
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                <div style="margin-bottom:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-gold);">
+                    <b style="color:var(--accent-gold);">⚙️ DISARM THE TRAP</b><br><br>
 
-The door has no keypad. No intercom. Just a brass peephole that watches you like an unblinking eye.
+                    <!-- WARNING IF TRAP ALREADY TRIGGERED PREVIOUSLY -->
+                    <<if $room405_trap_triggered>>
+                        <div style="padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin-bottom:15px; text-align:center;">
+                            ❌ <b>TRAP TRIGGERED.</b> Your ears are ringing. The blank shell detonated, and the noise echoed down the entire building. The wire is gone now.
+                        </div>
+                    <</if>>
 
-You knock. The sound dies immediately, absorbed by the steel.
+                    <!-- BUTTONS CONTAINER -->
+                    <div id="trap-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
 
-You press your ear to the door. The silence on the other side isn't empty silence — it's the silence of a room that knows you're standing there.
+                        <!-- 1. BURGLAR / LOCKSMITH -->
+                        <<if $job == "Burglar" or hasTrait("LOCKSMITH")>>
+                            <button style="height: 100%;">
+                                <<link "Block the firing pin">>
+                                    <<addTime 2>><<exert _halfTrapCost>><<set $room405_opened to true>><<goto "Unit_405">>
+                                <</link>>
+                                <span class="btn-sub"><b style="color:var(--accent-gold);">[BURGLAR/LOCKSMITH]</b> Cost: <<print _halfTrapCost>> STAMINA. You know tension rigs. You slide a card to jam the striker mechanism safely.</span>
+                            </button>
+                        <<else>>
+                            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                <span style="text-decoration: line-through;">Block the firing pin</span><br>
+                                <span class="btn-sub" style="color: #666;">[REQUIRES BURGLAR/LOCKSMITH] You lack the steady hands to jam the mechanism.</span>
+                            </button>
+                        <</if>>
 
-<div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-gold);">
-    <b style="color:var(--accent-gold);">🔒 THE DOOR WON'T OPEN FROM COURTESY. HOW DO YOU GET THROUGH?</b><br><br>
+                        <!-- 2. TECH 2 -->
+                        <<if $skills.tech >= 2>>
+                            <button style="height: 100%;">
+                                <<link "Release the tension spring">>
+                                    <<addTime 3>><<exert _halfTrapCost>><<set $room405_opened to true>><<goto "Unit_405">>
+                                <</link>>
+                                <span class="btn-sub"><b style="color:var(--accent-gold);">[TECH 2]</b> Cost: <<print _halfTrapCost>> STAMINA. You dismantle the anchor point without pulling the wire.</span>
+                            </button>
+                        <<else>>
+                            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                <span style="text-decoration: line-through;">Release the tension spring</span><br>
+                                <span class="btn-sub" style="color: #666;">[REQUIRES TECH 2] You don't understand how the spring mechanism is anchored.</span>
+                            </button>
+                        <</if>>
 
-    /* --- FAILED BRUTE FORCE WARNING MESSAGE --- */
-    <<if $room405_bruteforce_fail>>
-        <div style="padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin-bottom:15px; text-align:center;">
-            ❌ <b>BRUTE FORCE FAILED.</b> You slammed into the heavy steel door, but it didn't give. You're bruised, exhausted, and the door is still locked.
-        </div>
-        <<unset $room405_bruteforce_fail>>
-    <</if>>
+                        <!-- 3. MULTI-TOOL -->
+                        <<if $inventory.find(i => i.id === "Multi-Tool")>>
+                            <button style="height: 100%;">
+                                <<link "Cut and hold the wire [MULTI-TOOL]">>
+                                    <<addTime 2>><<exert _halfTrapCost>><<set $room405_opened to true>><<goto "Unit_405">>
+                                <</link>>
+                                <span class="btn-sub"><b style="color:var(--accent-gold);">[ITEM]</b> Cost: <<print _halfTrapCost>> STAMINA. You grip the wire with pliers, snip it, and slowly release the tension.</span>
+                            </button>
+                        <<else>>
+                            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                <span style="text-decoration: line-through;">Cut the wire</span><br>
+                                <span class="btn-sub" style="color: #666;">[REQUIRES MULTI-TOOL] You don't have wire cutters to snip it cleanly.</span>
+                            </button>
+                        <</if>>
 
-    /* --- DOOR BREACH OPTIONS GRID --- */
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;" class="choice-menu">
+                        <!-- 4. PERCEPTION 6 (AUTO SUCCESS OR MINIGAME SCALING) -->
+                        <<if $per >= 6>>
+                            <button style="grid-column: span 2; border-left-color: var(--accent-gold) !important;">
+                                <<link "Squeeze through the gap [PER 6/6]">>
+                                    <<addTime 4>><<exert _trapCost>><<set $room405_opened to true>><<goto "Unit_405">>
+                                <</link>>
+                                <span class="btn-sub"><b style="color:var(--accent-gold);">[PER <<print $per>>/6]</b> Cost: <<print _trapCost>> STAMINA. Your sharp eyes map the tripwire perfectly. You contort your body and slide through safely.</span>
+                            </button>
+                        <<else>>
+                            <button style="grid-column: span 2; border-left-color: var(--accent-red) !important;">
+                                <<link "Squeeze through the gap [MINIGAME]">>
+                                    <<run $("#trap-buttons").hide(); $("#qte-wrapper-405").fadeIn(300);>>
+                                <</link>>
+                                <span class="btn-sub"><b style="color:var(--accent-red);">[PER <<print $per>>/6]</b> You can barely see the wire in the dark. It's going to require immense focus and steady nerves to avoid touching it.</span>
+                            </button>
+                        <</if>>
 
-        /* OPTION 1: LOCKPICK CHECK */
-        <<if hasTrait("LOCKSMITH") or hasTrait("GHOST")>>
-            <button style="height: 100%;">
-                <<link "🔓 Pick the deadbolt (10 minutes)">>
-                    <<addTime 9>>
-                    <<set $room405_opened to true>>
-                    <<set $room405_entry_method to "silent">>
-                    <<goto "Unit_405">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-gold);">[LOCKSMITH / GHOST]</b> It's a quality lock. It takes the full ten minutes. But when it opens, nothing on this floor hears it.</span>
-            </button>
-        <<else>>
-            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">🔓 Pick the deadbolt</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES LOCKSMITH OR GHOST] You lack the specialized tools and skills to bypass this high-security deadbolt.</span>
-            </button>
-        <</if>>
+                    </div> <!-- End of trap-buttons grid -->
 
-        /* OPTION 2: GUARANTEED BRUTE FORCE CHECK */
-        <<if $str >= 7 and ($equip.weapon == "Sledgehammer" or hasTrait("BREACHER"))>>
-            <button style="height: 100%;">
-                <<link "💥 Smash through the door (5 minutes)">>
-                    <<addTime 4>>
-                    <<exert 20>>
-                    <<set $room405_opened to true>>
-                    <<set $room405_entry_method to "loud">>
-                    <<goto "Unit_405">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 7 & SLEDGEHAMMER / BREACHER]</b> Base Cost: 20 STAMINA. The door buckles on the third swing.</span>
-            </button>
-        <<else>>
-            <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">💥 Smash through the door</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES STR 7 & HEAVY TOOL OR BREACHER] The steel door is too sturdy. You aren't strong enough or lack the right leverage tool to break it down.</span>
-            </button>
-        <</if>>
+                    <!-- PEMANGGILAN WIDGET MINIGAME -->
+                    <div id="qte-wrapper-405" style="display: none; padding-top: 15px;">
+                        
+                        <!-- Kalkulasi Dinamis Berdasarkan Persepsi (Target PER = 6) -->
+                        <<set _statDiff to (6 - $per)>>
+                        <!-- Kecepatan dasar 2.2. Tambah 0.6 untuk setiap kekurangan 1 PER -->
+                        <<set _qteSpeed to 2.2 + (_statDiff * 0.6)>>
+                        <!-- Lebar dasar 25%. Kurangi 4% untuk setiap kekurangan 1 PER -->
+                        <<set _qteWidth to 25 - (_statDiff * 4)>>
+                        
+                        /* Panggil widget */
+                        <<Minigame_QTE _qteSpeed _qteWidth>>
+                        
+                        /* HIDDEN TRIGGERS: Trik untuk menghubungkan JS ke Makro Twine */
+                        <span style="display:none;">
+                            <span id="qte-win-trigger">
+                                <<link "WIN">>
+                                    <<addTime 4>><<exert _trapCost>><<set $room405_opened to true>><<goto "Unit_405">>
+                                <</link>>
+                            </span>
+                            
+                            <span id="qte-lose-trigger">
+                                <<link "LOSE">>
+                                    <<set $hp -= 15>>
+                                    <<set $room405_opened to true>>
+                                    <<set $room405_trap_triggered to true>>
+                                    <<run setup.sound.play("explosion", "audio/sfx/glass_break.mp3", false, 0.8)>>
+                                    <<goto "Unit_405">>
+                                <</link>>
+                            </span>
+                        </span>
 
-        /* OPTION 3: POLICE BREACH CHECK (Spans both columns) */
-        <<if $job == "Police Officer">>
-            <<if $equip.weapon == "Glock 19" or $equip.weapon == "Makarov" or $equip.weapon == "Taurus">>
-                <<set _ammoType to setup.ammoMap[$equip.weapon]>>
-                <<set _ammoSlot to $inventory.find(i => i.id == _ammoType)>>
-                
-                /* Sub-Check: Has Pistol AND Ammo */
-                <<if _ammoSlot and _ammoSlot.qty >= 3>>
-                    <button style="grid-column: span 2;">
-                        <<link "🔫 Shoot out the hinges (3 minutes)">>
-                            <<addTime 2>>
-                            <<set _ammoSlot.qty -= 3>>
-                            <<if _ammoSlot.qty <= 0>>
-                                <<set _index to $inventory.indexOf(_ammoSlot)>>
-                                <<run $inventory.splice(_index, 1)>>
-                            <</if>>
-                            <<set $room405_opened to true>>
-                            <<set $room405_entry_method to "loud">>
-                            <<goto "Unit_405">>
-                        <</link>>
-                        <span class="btn-sub"><b style="color:var(--accent-gold);">[POLICE OFFICER & EQUIPPED PISTOL]</b> Costs 3x <<print _ammoType>>. Training takes over. Two shots per hinge. The door swings.</span>
-                    </button>
-                <<else>>
-                    /* Sub-Check: Is a Cop with a gun, but OUT OF AMMO */
-                    <button disabled style="grid-column: span 2; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                        <span style="text-decoration: line-through;">🔫 Shoot out the hinges</span><br>
-                        <span class="btn-sub" style="color: #666;">[REQUIRES 3x <<print _ammoType>>] You know how to tactically breach it, but you don't have enough ammo to risk the shots.</span>
-                    </button>
-                <</if>>
-            <<else>>
-                /* Sub-Check: Is a Cop, but NO PISTOL EQUIPPED */
-                <button disabled style="grid-column: span 2; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                    <span style="text-decoration: line-through;">🔫 Shoot out the hinges</span><br>
-                    <span class="btn-sub" style="color: #666;">[REQUIRES EQUIPPED PISTOL & AMMO] You have the tactical training, but you need a sidearm equipped to perform a ballistic breach.</span>
+                    </div>
+
+                </div> <!-- End of Phase 1 choices box -->
+
+                <hr style="border-color: #333; margin: 20px 0;">
+                <button style="background: rgba(255,255,255,0.05) !important; border-color: #555 !important;">
+                    <<link "🚪 Step back and return to the hallway">>
+                        <<run setup.sound.fade("tension_drone", 1000)>>
+                        <<set $hallwaySection to 2>>
+                        <<goto "Hallway">>
+                    <</link>>
                 </button>
-            <</if>>
+            </div>
+
+        <!-- ======================================================= -->
+        <!-- PHASE 2: INSIDE THE HUNTER's ROOM (OPENED)              -->
+        <!-- ======================================================= -->
         <<else>>
-            /* Sub-Check: NOT A COP */
-            <button disabled style="grid-column: span 2; opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">🔫 Shoot out the hinges</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES POLICE OFFICER] You lack the tactical training to safely blow the hinges without risking a ricochet.</span>
-            </button>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                UNIT 405 - THE HUNTER'S SANCTUARY
+            </div>
+
+            <!-- AI GENERATED IMAGE HERE -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/unit405.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                You step into Marcus's apartment. 
+                <br><br>
+                It looks like a staging ground. A heavy wooden table in the center acts as a reloading bench, dusted with gunpowder and brass shavings. In the corner, a massive steel gun safe sits with its door wide open—completely stripped of the rifles you know he owned. 
+                <br><br>
+                He didn't die here. He geared up.
+                <br><br>
+                On the wall above the bench is a topographical map of the state. A thick red marker traces a route avoiding the highways, ending at a circled location labeled <i>'Oakhaven Cabin'</i>. Underneath the map is a HAM radio, turned off, with a notepad resting on the microphone.
+                <br><br>
+                Near the empty safe, a small wooden toy car lies forgotten on the rug. The silence in this room feels entirely different from the Professor's study. This is the silence of someone who chose to fight.
+            </div>
+
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                <div style="margin-bottom:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-blue);">
+                    <b style="color:var(--accent-blue);">🎒 SECURE THE AREA</b><br><br>
+
+                    <!-- ACTION: READ THE RADIO LOG -->
+                    <<if not $read_marcus_log>>
+                        <button>
+                            <<link "📝 Read the notepad by the radio (5 minutes)">>
+                                <<set $read_marcus_log to true>>
+                                <<addTime 4>>
+                                <<run window.addLore("Marcus's Extraction Log", "Sarah and the twin boys made it to Oakhaven Cabin safely. Marcus packed his heavy ordnance and followed them through the backroads to avoid the military blockade. He left the apartment rigged to slow down looters.")>>
+                                <<goto "Unit_405">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-green);">[LORE]</b> <i>"Sarah, received your ping. Thank God you and the boys made it to Oakhaven. Radio silence protocol is now active. I'm taking the heavy ordnance and taking the backroads. I'm coming home."</i></span>
+                        </button>
+                    <<else>>
+                        <div style="padding:8px; background:rgba(255,255,255,0.05); color:#888; font-style:italic; font-size:0.85em; margin-bottom:10px; text-align:center;">
+                            📝 They made it out. Sarah and the twins are at the cabin. Marcus is on his way to them.
+                        </div>
+                    <</if>>
+
+                    <!-- ACTION: LOOT BENCH -->
+                    <<if not $looted_405_bench>>
+                        <button>
+                            <<link "🔍 Sweep the reloading bench (5 minutes)">>
+                                <<set $looted_405_bench to true>>
+                                <<addTime 4>>
+                                <<run setup.addItem("Pistol Ammo", 12)>>
+                                <<run setup.addItem("Scrap Metal", 3)>>
+                                <<goto "Unit_405">>
+                            <</link>>
+                            <span class="btn-sub">Marcus took the big guns, but left the loose items. You can scavenge handfuls of Pistol Ammo (12x) and some Scrap Metal.</span>
+                        </button>
+                    <<else>>
+                        <div style="padding:8px; background:rgba(255,255,255,0.05); color:#888; font-style:italic; font-size:0.85em; margin-bottom:10px; text-align:center;">
+                            🔍 The workbench is cleared. Only brass shavings remain.
+                        </div>
+                    <</if>>
+
+                    <!-- ACTION: LOOT SAFE -->
+                    <<if not $looted_405_safe>>
+                        <button>
+                            <<link "🔪 Check the bottom of the gun safe (3 minutes)">>
+                                <<addTime 2>>
+                                <<set $looted_405_safe to true>>
+                                <<run setup.addItem("Hunting Knife", 1)>>
+                                <<goto "Unit_405">>
+                            <</link>>
+                            <span class="btn-sub">The rifles are gone, but tucked in the corner is a high-carbon Hunting Knife. A reliable weapon.</span>
+                        </button>
+                    <<else>>
+                        <div style="padding:8px; background:rgba(255,255,255,0.05); color:#888; font-style:italic; font-size:0.85em; margin-bottom:10px; text-align:center;">
+                            🔪 The safe is completely empty.
+                        </div>
+                    <</if>>
+                </div>
+
+                <!-- COMPLETION STATE -->
+                <<if $read_marcus_log and $looted_405_bench and $looted_405_safe>>
+                    <div style="padding:15px; background:rgba(0,100,0,0.1); border-left:3px solid var(--accent-green); text-align:center; color:#99cc99; margin-bottom:20px;">
+                        <i>You've armed yourself with what Marcus left behind. Seeing that toy car on the floor gives you a strange sense of relief. At least one family made it out.</i>
+                    </div>
+                <</if>>
+
+                <hr style="border-color: #333; margin: 20px 0;">
+                <button style="background: rgba(255,255,255,0.05) !important; border-color: #555 !important;">
+                    <<link "🚪 Leave the apartment and return to the hallway">>
+                        <<run setup.sound.fade("tension_drone", 1000)>>
+                        <<set $hallwaySection to 2>>
+                        <<goto "Hallway">>
+                    <</link>>
+                </button>
+            </div>
         <</if>>
 
-        /* OPTION 4: LAST RESORT (70% RNG CHANCE - Spans both columns) */
-        <button style="grid-column: span 2; border-left-color: var(--accent-red) !important;">
-            <<link "Throw your entire body weight against it [BRUTE FORCE]">>
-                <<addTime 4>>
-                <<exert _baseCost>>
-                /* 70% RNG LOGIC */
-                <<if random(1, 100) <= 70>>
-                    <<set $room405_opened to true>>
-                    <<set $room405_entry_method to "loud">>
-                <<else>>
-                    <<set $room405_bruteforce_fail to true>>
-                <</if>>
-                <<goto "Unit_405">>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-red);">[LAST RESORT: 70% SUCCESS CHANCE]</b> Cost: <<print _baseCost>> STAMINA. It's solid steel, and you don't have the right tools. You will have to batter it until the frame gives way or your bones do.<br><i style="color:#ff9999;">(If you lack the Stamina, this will drain your HP).</i></span>
-        </button>
-
-    </div> <!-- End of Breach Options Grid -->
-
-    /* --- LEAVE BUTTON --- */
-    <div class="choice-menu" style="margin-top:20px;">
-        <button>
-            <<link "🚪 Walk away — this door isn't worth it">>
-                <<unset $room405_bruteforce_fail>>
-                <<run setup.sound.fade("dark_room", 1000)>>
-                <<set $hallwaySection to 2>>
-                <<goto "Hallway">>
-            <</link>>
-            <span class="btn-sub">Return to the hallway. Section 2.</span>
-        </button>
     </div>
 </div>
-
-
-/* =================================================================
-   3. INSIDE THE APARTMENT (PROGRESSIVE REVEAL)
-   ================================================================= */
-<<else>>
-<h2>UNIT 405 — THE HUNTER'S LODGE</h2>
-
-/* Warning if they made noise opening the door */
-<<if $room405_entry_method == "loud">>
-    <div style="padding:10px; background:rgba(138,28,28,0.2); border-left:3px solid var(--accent-red); margin-bottom:15px; font-style:italic; color:#ff9999;">
-        The echo carries — down the stairwell, through the floor, into the walls. Whatever is moving on this floor heard that. You need to move fast.
-    </div>
-<</if>>
-
-/* ─── PHASE 0: ENTRY DESCRIPTION ─── */
-<<if $f405_phase == 0>>
-
-    The smell hits you the moment the door opens.
-
-    Gunpowder. Old blood. The chemical bite of taxidermy preservatives.
-
-    The apartment is a shrine to killing. Mounted heads line every wall — whitetail deer, a bull elk with a seven-point rack, a wild boar with yellowed tusks. Glass eyes all watching you enter. A bearskin rug sprawls across the hardwood floor, mouth frozen in a silent roar. 
-
-    Along the far wall, a workbench is buried in gun oil, cleaning patches, spent casings, and a half-disassembled scope.
-
-    Marcus Webb is in the leather armchair by the window. He looks like he could be sleeping.
-
-    <br><br>
-    <div class="choice-menu">
-        <button>
-            <<link "Approach the body">>
-                <<set $f405_phase to 1>>
-                <<goto "Unit_405">>
-            <</link>>
-        </button>
-    </div>
-
-/* ─── PHASE 1: DISCOVERING THE BODY ─── */
-<<elseif $f405_phase == 1>>
-
-    He isn't sleeping. 
-
-    He's slumped to one side, head tilted back. A Remington 870 pump-action shotgun rests in his lap, the barrel tucked beneath his chin. His right hand is locked around the grip, fingers completely stiffened by rigor mortis. 
-
-    You look at his left arm. The sleeve is torn at the elbow. Beneath it, dark bruises bloom in a semicircle around a wound that is unmistakably teeth. 
-
-    <br><br>
-    <<chat "You" "image/avatars/player.gif" "left" "Bitten... You went out on your own terms. Rest easy, Marcus.">>
-    <br>
-
-    On the floor beside the chair, a smartphone — screen still on. Text thread still open.
-
-    <br><br>
-    <div class="choice-menu">
-        <button>
-            <<link "Read the phone">>
-                <<set $read_marcus_phone to true>>
-                <<set $f405_phase to 2>>
-                /* ADD TO LORE DATABASE */
-                <<run window.addLore("Text Thread: Marcus & Diane", "Marcus: Got bit at the Safeway. Arm. I'm coming home to get some things. Diane: NO. DO NOT COME HERE. You know what that means. Please. Marcus: I know. Don't worry. I'm ending it clean. Tell the boys I love them. Tell them I went hunting.")>>
-                <<goto "Unit_405">>
-            <</link>>
-        </button>
-        <button>
-            <<link "Ignore the phone, start scavenging">>
-                <<set $f405_phase to 2>>
-                <<goto "Unit_405">>
-            <</link>>
-        </button>
-    </div>
-
-/* ─── PHASE 2: LOOTING & INVESTIGATION ─── */
-<<elseif $f405_phase == 2>>
-
-    /* Phone Text Reveal */
-    <<if $read_marcus_phone>>
-        <div style="padding:10px; background:#000; border:1px solid #333; font-family:sans-serif; font-size:0.85em; color:#ddd; margin-bottom:15px;">
-            <b>FROM: DIANE (WIFE)</b><br>
-            *"Marcus please tell me you're okay. I'm at the shelter with the kids. Please respond."*
-            <br><br>
-            <b>FROM: DIANE (WIFE)</b><br>
-            *"Marcus??? It's been two hours."*
-            <br><br>
-            <b>FROM: MARCUS</b><br>
-            *"Got bit at the Safeway. Arm. I'm coming home to get some things."*
-            <br><br>
-            <b>FROM: DIANE (WIFE)</b><br>
-            *"NO. DO NOT COME HERE. You know what that means. Please."*
-            <br><br>
-            <b>FROM: MARCUS</b><br>
-            *"I know. Don't worry. I'm ending it clean. Tell the boys I love them. Tell them I went hunting."*
-            <br><br>
-            <b>FROM: DIANE (WIFE)</b><br>
-            *"Marcus don't you FUCKING DARE—"*
-        </div>
-
-        The thread ends there. He made the right call. That doesn't make it easier to look at.
-
-        <br><br>
-        <<chat "You" "image/avatars/player.gif" "left" "You kept them safe... I'll make sure your gear doesn't go to waste.">>
-        <br>
-    <</if>>
-
-    /* Looting UI Header */
-    <div style="margin-top:20px; padding:15px; background:rgba(80,0,0,0.2); border-left:3px solid var(--accent-gold);">
-        <b style="color:var(--accent-gold);">🦌 WHAT DO YOU SCAVENGE?</b><br><br>
-
-        <div class="choice-menu">
-
-            /* LOOT 1: THE SHOTGUN */
-            <<if not $looted_405_shotgun>>
-                <button>
-                    <<link "🔫 Pry the Remington 870 from his stiff hands (3 minutes)">>
-                        <<set $looted_405_shotgun to true>>
-                        <<addTime 2>>
-                        <<exert 5>>
-                        <<run setup.addItem("Remington 870", 1)>>
-                        <<run setup.addItem("Shotgun Shells", 8)>>
-                        <<goto "Unit_405">>
-                    <</link>>
-                    <span class="btn-sub">⚠️ DIRTY — will jam under stress. Costs 5 STAMINA. You have to physically break his frozen fingers backward to get the weapon free. It is a horrible, wet sound.</span>
-                </button>
-            <</if>>
-
-            /* LOOT 1.5: CLEANING THE SHOTGUN (Hidden if player doesn't have it) */
-            <<if $inventory.find(i => i.id == "Remington 870") and not $cleaned_remington>>
-                <button>
-                    <<link "🧼 Clean the Remington 870 at the workbench (10 minutes)">>
-                        <<set $cleaned_remington to true>>
-                        <<addTime 9>>
-                        <<goto "Unit_405">>
-                    <</link>>
-                    <span class="btn-sub">The workbench has everything you need — oil, brushes, patches. Ten minutes of work and it's fully reliable.</span>
-                </button>
-            <</if>>
-
-            /* Show success message if cleaned */
-            <<if $cleaned_remington>>
-                <div style="padding:6px; color:var(--accent-green); font-style:italic; font-size:0.9em; margin-bottom:6px;">
-                    ✓ Remington 870 has been cleaned and won't jam.
-                </div>
-            <</if>>
-
-            /* LOOT 2: THE KNIFE */
-            <<if not $looted_405_knife>>
-                <button>
-                    <<link "🔪 Take the hunting knife from his belt (1 minute)">>
-                        <<set $looted_405_knife to true>>
-                        <<run setup.addItem("Hunting Knife", 1)>>
-                        <<goto "Unit_405">>
-                    <</link>>
-                    <span class="btn-sub">Fixed-blade. Quality steel. Still sharp. He kept it maintained the same way he kept everything.</span>
-                </button>
-            <</if>>
-
-            /* LOOT 3: AMMO CRATE */
-            <<if not $looted_405_ammocrate>>
-                <button>
-                    <<link "🗄️ Check the ammo locker under the workbench (3 minutes)">>
-                        <<set $looted_405_ammocrate to true>>
-                        <<addTime 3>>
-                        <<run setup.addItem("Shotgun Shells", 4)>>
-                        <<run setup.addItem(".38 Ammo", 6)>>
-                        <<goto "Unit_405">>
-                    <</link>>
-                    <span class="btn-sub">A metal case — unlocked. Four more shells and six .38 rounds. He stocked for a long siege.</span>
-                </button>
-            <</if>>
-
-            /* LOOT 4: MEDKIT */
-            <<if not $looted_405_medkit>>
-                <button>
-                    <<link "🩹 Check the bathroom for a first aid kit (2 minutes)">>
-                        <<set $looted_405_medkit to true>>
-                        <<addTime 1>>
-                        <<run setup.addItem("Bandage", 2)>>
-                        <<run setup.addItem("Antiseptic", 1)>>
-                        <<goto "Unit_405">>
-                    <</link>>
-                    <span class="btn-sub">Hunters keep proper field kits — cuts and punctures happen out there. Two bandages and a full bottle of antiseptic.</span>
-                </button>
-            <</if>>
-
-            /* LOOT 5: FOOD */
-            <<if not $looted_405_food>>
-                <button>
-                    <<link "🍖 Check the kitchen for food (3 minutes)">>
-                        <<set $looted_405_food to true>>
-                        <<addTime 2>>
-                        <<run setup.addItem("Beef Jerky", 3)>>
-                        <<run setup.addItem("Canned Food", 2)>>
-                        <<goto "Unit_405">>
-                    <</link>>
-                    <span class="btn-sub">He was already stocked for emergencies. Beef jerky, two cans of beans. The pantry of a man who never trusted the grid.</span>
-                </button>
-            <</if>>
-
-            /* LOOT 6: THE JOURNAL */
-            <<if not $read_405_journal>>
-                <button>
-                    <<link "📓 Read Marcus's hunting journal on the workbench (5 minutes)">>
-                        <<set $read_405_journal to true>>
-                        <<set $per += 1>>
-                        <<addTime 4>>
-                        /* ADD TO LORE DATABASE */
-                        <<run window.addLore("Marcus's Journal", "The military will lock down the interstates. Take the old logging road up the northern ridge.")>>
-                        <<goto "Unit_405">>
-                    <</link>>
-                    <span class="btn-sub">PERCEPTION +1. The last entry is a hand-drawn map of the county perimeter. A red line bypasses the main highways completely. You memorize the route.</span>
-                </button>
-            <<else>>
-                <div style="padding:6px; color:#555; font-style:italic; font-size:0.9em; margin-bottom:6px;">
-                    📓 You've read his journal. The logging road escape route out of the city is burned into your memory.
-                </div>
-            <</if>>
-
-        </div> <!-- End of Loot Options Grid -->
-    </div> <!-- End of Loot Background Box -->
-
-    /* Show success message if everything is cleared out */
-    <<if $looted_405_shotgun and $looted_405_knife and $looted_405_ammocrate and $looted_405_medkit and $looted_405_food and $read_405_journal>>
-        <br>
-        <div style="padding:10px; background:rgba(0,100,0,0.2); border:1px solid var(--accent-green); font-style:italic; color:#99cc99;">
-            You've taken everything useful. The glass eyes on the walls watch you leave. He'd probably approve.
-        </div>
-    <</if>>
-
-    /* --- FINAL LEAVE BUTTON --- */
-    <br>
-    <button>
-        <<link "🚪 Leave and return to the hallway">>
-            <<run setup.sound.fade("dark_room", 1000)>>
-            <<set $hallwaySection to 2>>
-            <<goto "Hallway">>
-        <</link>>
-        <span class="btn-sub">Back to the corridor. Section 2.</span>
-    </button>
-
-<</if>> <!-- End of Inside Room Phase checks -->
-<</if>> <!-- End of Main Location (Inside/Outside) check -->
+<</nobr>>
