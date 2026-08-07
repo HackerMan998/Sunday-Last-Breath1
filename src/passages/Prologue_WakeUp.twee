@@ -8,7 +8,7 @@
     <div class="vn-stage">
         <div class="tv-container" style="text-align: center;">
             /* TV starts dim/off to sell the peaceful Saturday night */
-            <img src="image/static.gif" alt="TV Static" class="tv-static-img" id="tv-screen" style="opacity: 0.1; transition: opacity 0.1s;">
+            <img src="image/act1/static.gif" alt="TV Static" class="tv-static-img" id="tv-screen" style="opacity: 0.1; transition: opacity 0.1s;">
             <div class="glitch" id="tv-glitch" style="display:none;">SSSHHHHHKKKKK...</div>
         </div>
     </div>

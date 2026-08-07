@@ -66,13 +66,13 @@ setTimeout(function() {
 
         <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
             <<if $hallwaySection == 1>>
-                <img src="image/hallway/hall_406_407.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
+                <img src="image/act1/hall_406_407.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
             <<elseif $hallwaySection == 2>>
-                <img src="image/hallway/hall_404_405.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
+                <img src="image/act1/hall_404_405.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
             <<elseif $hallwaySection == 3>>
-                <img src="image/hallway/hall_402_403.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
+                <img src="image/act1/hall_402_403.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
             <<elseif $hallwaySection == 4>>
-                <img src="image/hallway/hall_end.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
+                <img src="image/act1/hall_end.gif" style="width: 100%; height: auto; display: block; opacity: 0.85; filter: contrast(1.1) brightness(0.9);">
             <</if>>
         </div>
 

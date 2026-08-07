@@ -132,7 +132,7 @@
                             <<unset $utility_bruteforce_fail>>
                             <<run setup.sound.fade("utility_hum", 1000)>>
                             /* Update hallwaySection target based on your map layout */
-                            <<set $hallwaySection to 5>> 
+                            <<set $hallwaySection to 4>> 
                             <<goto "Hallway">>
                         <</link>>
                     </button>
@@ -174,7 +174,7 @@
 
             <!-- AI GENERATED IMAGE HERE -->
             <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
-                <img src="image/utility_room.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+                <img src="image/act1/utility_room.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
             </div>
 
             <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
@@ -268,8 +268,7 @@
                 <button style="background: rgba(255,255,255,0.05) !important; border-color: #555 !important;">
                     <<link "🚪 Return to the hallway">>
                         <<run setup.sound.fade("utility_hum", 1000)>>
-                        /* Update hallwaySection target based on your map layout */
-                        <<set $hallwaySection to 5>>
+                        <<set $hallwaySection to 4>>
                         <<goto "Hallway">>
                     <</link>>
                 </button>
