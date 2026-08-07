@@ -1,4 +1,4 @@
-:: Stairwell_Entrance {"position":"200,700","size":"100,100"}
+:: Stairwell {"position":"200,700","size":"100,100"}
 <<completeObjective "escape_building">>
 <<purgeCompleted>>
 
@@ -66,7 +66,7 @@
                                         <<run setup.sound.play("flashlight", "audio/sfx/flashlight_click.mp3", false, 0.8)>>
                                         <<set $descentMethod to "flashlight">>
                                         <<addTime 3>>
-                                        <<set $stair_phase to 2>><<goto "Stairwell_Entrance">>
+                                        <<set $stair_phase to 2>><<goto "Stairwell">>
                                     <</link>>
                                     <span class="btn-sub"><b style="color:var(--accent-gold);">[GEAR]</b> Illuminates the path perfectly. Fast and safe.</span>
                                 </button>
@@ -84,7 +84,7 @@
                                         <<run setup.sound.play("lighter", "audio/sfx/lighter_flick.mp3", false, 0.8)>>
                                         <<set $descentMethod to "lighter">>
                                         <<addTime 5>>
-                                        <<set $stair_phase to 2>><<goto "Stairwell_Entrance">>
+                                        <<set $stair_phase to 2>><<goto "Stairwell">>
                                     <</link>>
                                     <span class="btn-sub"><b style="color:var(--accent-gold);">[GEAR]</b> A flickering flame. Better than nothing, but forces you to move somewhat slowly.</span>
                                 </button>
@@ -101,7 +101,7 @@
                                     <<run setup.sound.play("boots_slow", "audio/sfx/boots_slow_concrete.mp3", false, 0.6)>>
                                     <<set $descentMethod to "slow">>
                                     <<addTime 9>>
-                                    <<set $stair_phase to 2>><<goto "Stairwell_Entrance">>
+                                    <<set $stair_phase to 2>><<goto "Stairwell">>
                                 <</link>>
                                 <span class="btn-sub"><b style="color:var(--accent-green);">[SAFE]</b> Take it step by step feeling the walls. Uses much more time, but guarantees you won't fall.</span>
                             </button>
@@ -113,7 +113,7 @@
                                         <<run setup.sound.play("boots_run", "audio/sfx/boots_run_concrete.mp3", false, 0.8)>>
                                         <<set $descentMethod to "quick">>
                                         <<addTime 1>>
-                                        <<set $stair_phase to 2>><<goto "Stairwell_Entrance">>
+                                        <<set $stair_phase to 2>><<goto "Stairwell">>
                                     <</link>>
                                     <span class="btn-sub"><b style="color:var(--accent-gold);">[AGI MET]</b> Get down as fast as possible. Your reflexes are sharp enough to catch yourself if you slip.</span>
                                 </button>
@@ -144,14 +144,14 @@
                                 <<run setup.sound.play("boots_run", "audio/sfx/boots_run_concrete.mp3", false, 0.8)>>
                                 <<set $descentMethod to "quick">>
                                 <<addTime 1>>
-                                <<set $stair_phase to 2>><<goto "Stairwell_Entrance">>
+                                <<set $stair_phase to 2>><<goto "Stairwell">>
                             <</link>>
                         </span>
                         <span id="qte-lose-trigger">
                             <<link "LOSE">>
                                 <<set $descentMethod to "quick_fail">>
                                 <<addTime 1>>
-                                <<set $stair_phase to 2>><<goto "Stairwell_Entrance">>
+                                <<set $stair_phase to 2>><<goto "Stairwell">>
                             <</link>>
                         </span>
                     </span>

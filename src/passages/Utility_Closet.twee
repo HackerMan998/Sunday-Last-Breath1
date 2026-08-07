@@ -1,4 +1,4 @@
-:: Utility_Room {"position":"400,650","size":"100,100"}
+:: Utility_Closet {"position":"400,650","size":"100,100"}
 <!-- ======================================================= -->
 <!-- INITIALIZATION & SETUP                                  -->
 <!-- ======================================================= -->
@@ -65,7 +65,7 @@
                             <<if $job == "Burglar">>
                                 <button style="height: 100%;">
                                     <<link "Pick the manual override cylinder">>
-                                        <<addTime 2>><<exert _halfCost>><<set $utility_opened to true>><<goto "Utility_Room">>
+                                        <<addTime 2>><<exert _halfCost>><<set $utility_opened to true>><<goto "Utility_Closet">>
                                     <</link>>
                                     <span class="btn-sub"><b style="color:var(--accent-gold);">[BURGLAR]</b> Cost: <<print _halfCost>> STAMINA. The card reader has a hidden physical cylinder underneath. You pick it clean.</span>
                                 </button>
@@ -80,7 +80,7 @@
                             <<if $skills.tech >= 2>>
                                 <button style="height: 100%;">
                                     <<link "Hotwire the magnetic reader">>
-                                        <<addTime 3>><<exert _halfCost>><<set $utility_opened to true>><<goto "Utility_Room">>
+                                        <<addTime 3>><<exert _halfCost>><<set $utility_opened to true>><<goto "Utility_Closet">>
                                     <</link>>
                                     <span class="btn-sub"><b style="color:var(--accent-gold);">[TECH 2]</b> Cost: <<print _halfCost>> STAMINA. You pop the faceplate off the reader and short the mag-lock circuit.</span>
                                 </button>
@@ -95,7 +95,7 @@
                             <<if $equip.weapon == "Crowbar" or $equip.weapon == "Tire Iron">>
                                 <button style="height: 100%; grid-column: span 2;">
                                     <<link "Pry the steel door with <<print $equip.weapon>>">>
-                                        <<addTime 2>><<exert _halfCost>><<set $utility_opened to true>><<goto "Utility_Room">>
+                                        <<addTime 2>><<exert _halfCost>><<set $utility_opened to true>><<goto "Utility_Closet">>
                                     <</link>>
                                     <span class="btn-sub"><b style="color:var(--accent-gold);">[ITEM: <<print $equip.weapon>>]</b> Cost: <<print _halfCost>> STAMINA. You wedge the heavy steel tool into the gap and use raw leverage to break the magnet's hold.</span>
                                 </button>
@@ -110,7 +110,7 @@
                             <<if $str >= 7>>
                                 <button style="grid-column: span 2; border-left-color: var(--accent-gold) !important;">
                                     <<link "Shoulder ram the steel door [STR 7/7]">>
-                                        <<addTime 1>><<exert _baseCost>><<set $utility_opened to true>><<goto "Utility_Room">>
+                                        <<addTime 1>><<exert _baseCost>><<set $utility_opened to true>><<goto "Utility_Closet">>
                                     <</link>>
                                     <span class="btn-sub"><b style="color:var(--accent-gold);">[STR <<print $str>>/7]</b> Cost: <<print _baseCost>> STAMINA. Your immense strength is enough to violently break the magnetic seal.</span>
                                 </button>
@@ -150,13 +150,13 @@
                     <span style="display:none;">
                         <span id="qte-win-trigger">
                             <<link "WIN">>
-                                <<addTime 3>><<exert _baseCost>><<set $utility_opened to true>><<goto "Utility_Room">>
+                                <<addTime 3>><<exert _baseCost>><<set $utility_opened to true>><<goto "Utility_Closet">>
                             <</link>>
                         </span>
                         <span id="qte-lose-trigger">
                             <<link "LOSE">>
                                 <<set $hp -= 10>>
-                                <<addTime 3>><<exert _baseCost>><<set $utility_bruteforce_fail to true>><<goto "Utility_Room">>
+                                <<addTime 3>><<exert _baseCost>><<set $utility_bruteforce_fail to true>><<goto "Utility_Closet">>
                             <</link>>
                         </span>
                     </span>
@@ -201,7 +201,7 @@
                                 <<set $per += 1>>
                                 <<addTime 2>>
                                 <<run window.addLore("Maintenance Log - 4th Floor", "The final entry is rushed and erratic. 'Tenants in 402 complaining about a chemical smell again. Told them I'm not a maid. Feeling feverish today. My joints are burning. Taking some aspirin from the kit and locking myself in here to sleep it off until shift ends.'")>>
-                                <<goto "Utility_Room">>
+                                <<goto "Utility_Closet">>
                             <</link>>
                             <span class="btn-sub"><b style="color:var(--accent-green);">[PER +1]</b> The last entry is disturbing. He locked himself in here because he was feeling feverish. He never clocked out.</span>
                         </button>
@@ -220,7 +220,7 @@
                                 <<addTime 2>>
                                 <<run setup.addItem("Bleach", 1)>>
                                 <<run setup.addItem("Rubber Gloves", 1)>>
-                                <<goto "Utility_Room">>
+                                <<goto "Utility_Closet">>
                             <</link>>
                             <span class="btn-sub">The cart is a mess, but you manage to salvage an unopened jug of industrial Bleach and a pair of thick Rubber Gloves.</span>
                         </button>
@@ -235,7 +235,7 @@
                                 <<addTime 3>>
                                 <<run setup.addItem("Duct Tape", 1)>>
                                 <<run setup.addItem("Rope", 1)>>
-                                <<goto "Utility_Room">>
+                                <<goto "Utility_Closet">>
                             <</link>>
                             <span class="btn-sub">You clear out the useful hardware. A heavy roll of Duct Tape and a bundle of strong nylon Rope. Essential survival gear.</span>
                         </button>
@@ -250,7 +250,7 @@
                                 <<addTime 2>>
                                 <<run setup.addItem("Flashlight", 1)>>
                                 <<run setup.addItem("Batteries", 2)>>
-                                <<goto "Utility_Room">>
+                                <<goto "Utility_Closet">>
                             <</link>>
                             <span class="btn-sub">Tucked beneath a pile of blueprints, you find a heavy-duty Flashlight and two spare Batteries.</span>
                         </button>
