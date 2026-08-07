@@ -146,7 +146,7 @@ setTimeout(function() {
                         <<set $isInHallway to false>>
                         <<run window.HallwayAmbience.stop()>>
                         <<purgeCompleted>>
-                        <<goto "Stairwell_Entrance">>
+                        <<goto "Stairwell">>
                     <</link>>
                     <span class="btn-sub" style="color:#ff9999;">Point of no return. Push through the bloody fire doors and head down.</span>
                 </button>

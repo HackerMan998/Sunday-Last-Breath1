@@ -1,0 +1,311 @@
+:: Stairwell_Entrance {"position":"200,700","size":"100,100"}
+<<completeObjective "escape_building">>
+<<purgeCompleted>>
+
+<!-- ======================================================= -->
+<!-- INITIALIZATION & SETUP                                  -->
+<!-- ======================================================= -->
+<<nobr>>
+    <<if ndef $stair_phase>>
+        <<set $stair_phase to 1>>
+        <<set $made_noise to false>> /* Default state: Silent */
+    <</if>>
+
+    <<set $activeMap to "Stairwell 4F">>
+    <<set $currentLocation to "F4 Entrance">>
+<</nobr>>
+
+<<if $stair_phase == 1>>
+    <<script>>
+        if (setup.sound.tracks["atmosphere"]) setup.sound.fade("atmosphere", 2000);
+        setup.sound.play("firedoor_slam", "audio/sfx/firedoor_slam.mp3", false, 0.8);
+        setup.sound.play("generator_hum", "audio/sfx/generator_hum.mp3", true, 0.4);
+    <</script>>
+<</if>>
+
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
+        
+        <!-- ======================================================= -->
+        <!-- PHASE 1: THE DESCENT CHOICE                             -->
+        <!-- ======================================================= -->
+        <<if $stair_phase == 1>>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                4TH FLOOR - STAIRWELL DESCENT
+            </div>
+
+            <!-- AI GENERATED IMAGE HERE -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/stairwell_entrance.jpg" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                The heavy fire door slams shut behind you, sealing off the 4th floor with a final, echoing <i>*BOOM*</i>.
+                <br><br>
+                The stairwell is bathed in the pulsing, dim red glow of emergency backup lights. It’s hard to see the bottom of the steps. The silence here is heavy, broken only by the distant, vibrating hum of a generator struggling to keep the grid alive.
+                <br><br>
+                You need to get down to the ground floor. 
+            </div>
+
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                <div id="stairwell-interactions">
+                    <div style="margin-bottom:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-blue);">
+                        <b style="color:var(--accent-blue);">⚙️ HOW DO YOU DESCEND?</b><br><br>
+
+                        <<nobr>>
+                            <<set _hasFlashlight to $inventory.find(i => i.id === "Flashlight")>>
+                            <<set _hasLighter to $inventory.find(i => i.id === "Lighter")>>
+                        <</nobr>>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            
+                            <!-- OPTION 1: FLASHLIGHT DESCENT -->
+                            <<if _hasFlashlight>>
+                                <button style="height: 100%;">
+                                    <<link "Use your Flashlight (4 minutes)">>
+                                        <<run setup.sound.play("flashlight", "audio/sfx/flashlight_click.mp3", false, 0.8)>>
+                                        <<set $descentMethod to "flashlight">>
+                                        <<addTime 3>>
+                                        <<set $stair_phase to 2>><<goto "Stairwell_Entrance">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[GEAR]</b> Illuminates the path perfectly. Fast and safe.</span>
+                                </button>
+                            <<else>>
+                                <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                    <span style="text-decoration: line-through;">Use your Flashlight</span><br>
+                                    <span class="btn-sub" style="color: #666;">[REQUIRES FLASHLIGHT] You don't have a strong light source.</span>
+                                </button>
+                            <</if>>
+
+                            <!-- OPTION 2: LIGHTER DESCENT -->
+                            <<if _hasLighter>>
+                                <button style="height: 100%;">
+                                    <<link "Use your Lighter (6 minutes)">>
+                                        <<run setup.sound.play("lighter", "audio/sfx/lighter_flick.mp3", false, 0.8)>>
+                                        <<set $descentMethod to "lighter">>
+                                        <<addTime 5>>
+                                        <<set $stair_phase to 2>><<goto "Stairwell_Entrance">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[GEAR]</b> A flickering flame. Better than nothing, but forces you to move somewhat slowly.</span>
+                                </button>
+                            <<else>>
+                                <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                    <span style="text-decoration: line-through;">Use your Lighter</span><br>
+                                    <span class="btn-sub" style="color: #666;">[REQUIRES LIGHTER] You have nothing to spark a flame.</span>
+                                </button>
+                            <</if>>
+
+                            <!-- OPTION 3: SLOW DESCENT -->
+                            <button style="grid-column: span 2; border-left-color: var(--accent-green) !important;">
+                                <<link "Move Slowly and Carefully in the dark (10 minutes)">>
+                                    <<run setup.sound.play("boots_slow", "audio/sfx/boots_slow_concrete.mp3", false, 0.6)>>
+                                    <<set $descentMethod to "slow">>
+                                    <<addTime 9>>
+                                    <<set $stair_phase to 2>><<goto "Stairwell_Entrance">>
+                                <</link>>
+                                <span class="btn-sub"><b style="color:var(--accent-green);">[SAFE]</b> Take it step by step feeling the walls. Uses much more time, but guarantees you won't fall.</span>
+                            </button>
+
+                            <!-- OPTION 4: QUICK DESCENT (AGI SCALING) -->
+                            <<if $agi >= 5>>
+                                <button style="grid-column: span 2; border-left-color: var(--accent-gold) !important;">
+                                    <<link "Move Quickly down the steps [AGI <<print $agi>>/5]">>
+                                        <<run setup.sound.play("boots_run", "audio/sfx/boots_run_concrete.mp3", false, 0.8)>>
+                                        <<set $descentMethod to "quick">>
+                                        <<addTime 1>>
+                                        <<set $stair_phase to 2>><<goto "Stairwell_Entrance">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[AGI MET]</b> Get down as fast as possible. Your reflexes are sharp enough to catch yourself if you slip.</span>
+                                </button>
+                            <<else>>
+                                <button style="grid-column: span 2; border-left-color: var(--accent-red) !important;">
+                                    <<link "Sprint blindly down the steps [MINIGAME]">>
+                                        <<run $("#stairwell-interactions").hide(); $("#qte-wrapper-stairs").fadeIn(300);>>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-red);">[AGI <<print $agi>>/5]</b> Get down as fast as possible. You lack agility, so you must time your footing perfectly to avoid a catastrophic fall.</span>
+                                </button>
+                            <</if>>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MINIGAME WIDGET -->
+                <div id="qte-wrapper-stairs" style="display: none; padding-top: 15px;">
+                    <<set _statDiff to (5 - $agi)>>
+                    <<set _qteSpeed to 2.5 + (_statDiff * 0.7)>>
+                    <<set _qteWidth to 25 - (_statDiff * 4)>>
+
+                    <<Minigame_QTE _qteSpeed _qteWidth>>
+                    
+                    <span style="display:none;">
+                        <span id="qte-win-trigger">
+                            <<link "WIN">>
+                                <<run setup.sound.play("boots_run", "audio/sfx/boots_run_concrete.mp3", false, 0.8)>>
+                                <<set $descentMethod to "quick">>
+                                <<addTime 1>>
+                                <<set $stair_phase to 2>><<goto "Stairwell_Entrance">>
+                            <</link>>
+                        </span>
+                        <span id="qte-lose-trigger">
+                            <<link "LOSE">>
+                                <<set $descentMethod to "quick_fail">>
+                                <<addTime 1>>
+                                <<set $stair_phase to 2>><<goto "Stairwell_Entrance">>
+                            <</link>>
+                        </span>
+                    </span>
+                </div>
+
+            </div>
+
+        <!-- ======================================================= -->
+        <!-- PHASE 2: DESCENT RESOLUTION & THE BARRICADE             -->
+        <!-- ======================================================= -->
+        <<elseif $stair_phase == 2>>
+            <<set $activeMap to "Stairwell 2F">>
+            <<set $currentLocation to "F2 Entrance">>
+            <<set _sawHorrors to (visited("Unit_401") or $room402_opened or $room405_opened or $room406_opened)>>
+
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                STAIRWELL - THE DESCENT
+            </div>
+
+            <!-- NARRATIVE: DESCENT RESULT -->
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                <<if $descentMethod == "quick">>
+                    You take the stairs two at a time, desperate to put distance between yourself and the 4th floor. Your footsteps echo sharply against the concrete walls. 
+                    <br><br>
+                    <span style="color:var(--accent-green); font-weight:bold;">[AGILITY SUCCESS]</span> 
+                    <br><br>
+                    In the flickering strobe light, your boot hovers over a slick, dark patch on the stairs. Your reflexes take over. With a surge of adrenaline, you blindly grab the heavy iron handrail, wrenching your shoulder but stopping your fall. You vault over the slick step, landing heavily on the landing below.
+
+                <<elseif $descentMethod == "quick_fail">>
+                    <<if not $tumble_played>>
+                        <<run setup.sound.play("tumble", "audio/sfx/stairs_tumble.mp3", false, 1.0)>>
+                        <<set $hp -= 15>>
+                        <<exert 20>>
+                        <<run window.animateStatBar('.bar-fill.hp', $hp, $hp_max)>>
+                        <<run window.shakeScreen(30)>>
+                        <<set $made_noise to true>> /* FIRST NOISE TRIGGER */
+                        <<set $tumble_played to true>>
+                    <</if>>
+                    
+                    You take the stairs two at a time, desperate to put distance between yourself and the 4th floor. Your footsteps echo sharply. 
+                    <br><br>
+                    <span style="color:var(--accent-red); font-weight:bold;">[AGILITY FAILED - LOUD NOISE GENERATED]</span> 
+                    <br><br>
+                    In the strobe-lit darkness, you never see the wet, slick patch coating the steps. Your heel slides out from under you. The world tilts sickeningly. You violently tumble forward, concrete biting into your ribs and knees. You slam into the metal railing with a heavy, echoing <i>CLANG</i> and skid to a halt on the landing below, your lungs burning.
+                    <br><br>
+                    <span style="color:var(--accent-red); font-weight:bold;">-15 HP | -20 STAMINA</span>
+
+                <<elseif $descentMethod == "slow">>
+                    You grip the cold iron handrail, taking it one agonizing step at a time. The emergency strobes paint the stairwell in flashes of harsh crimson and pitch black. 
+                    <br><br>
+                    As the light flares, the concrete step below you glistens. Something thick and wet is pooling there, dripping slowly over the edge. You press your back against the wall and carefully step wide, avoiding the slick patch entirely.
+
+                <<elseif $descentMethod == "flashlight">>
+                    You flick on your flashlight. Its stark white beam cuts through the oppressive, pulsing red of the emergency lights. 
+                    <br><br>
+                    The beam sweeps down the concrete stairs and catches a dark reflection. A thick, wet puddle coats the middle of the flight, trailing down the edges like dark syrup. Keeping the beam steady, you safely navigate around the mess.
+
+                <<elseif $descentMethod == "lighter">>
+                    You flick your lighter. The small, trembling orange flame fights against the oppressive, pulsing red of the emergency strobes, casting wild, dancing shadows against the concrete walls.
+                    <br><br>
+                    Holding the flame low, you catch the glint of something wet. A thick puddle coats the middle of the flight, trailing down the steps. It's hard to see the edges in the flickering light, but you manage to carefully step around the worst of it.
+                <</if>>
+            </div>
+
+            <!-- NARRATIVE: THE BLOOD REACTION -->
+            <<if $descentMethod != "quick_fail">>
+                <<if not $blood_played>>
+                    <<run setup.sound.play("blood_drip", "audio/sfx/blood_drip.mp3", true, 0.6)>>
+                    <<set $blood_played to true>>
+                <</if>>
+
+                <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                    You reach the landing and look back up at what you almost stepped in. 
+                    <br><br>
+                    It's blood. Arterial, dark, and fresh enough to still be shining.
+                    <br><br>
+                    
+                    <<if _sawHorrors>>
+                        After the carnage you left behind in the apartments upstairs, the sight barely registers. The shock has already burned out of your system. You just wipe a stray drop from your shoe and keep moving.
+                        <br><br>
+                        <<chat "You" "image/avatars/player.gif" "left" "Just more blood. Nothing I haven't seen already today.">>
+                    <<else>>
+                        Your stomach drops. Until now, the nightmare was just a voice on the radio and a text message. But this is real. You feel a sudden, cold spike of dread in your chest.
+                        <br><br>
+                        <<chat "You" "image/avatars/player.gif" "left" "Someone was dragged down these stairs. Recently.">>
+                        <br>
+                        <<if not $hum_deducted>>
+                            <<set $hum -= 5>>
+                            <<run window.animateStatBar('.bar-fill.humanity', $hum, 100)>>
+                            <<set $hum_deducted to true>>
+                        <</if>>
+                        <span style="color:var(--accent-red); font-size:0.85em; font-weight:bold;">-5 HUMANITY</span>
+                    <</if>>
+                </div>
+            <</if>>
+
+            <!-- NARRATIVE: THE BARRICADE -->
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                THE BARRICADE
+            </div>
+
+            <!-- AI GENERATED IMAGE HERE -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/stairwell_barricade.jpg" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                <<set $currentLocation to "F1 Landing">>
+                You continue your descent, hoping to push straight through to the ground floor lobby. But halfway between the 2nd and 1st floors, the stairs simply end.
+                <br><br>
+                <b style="color:var(--accent-gold);">The way down is completely blocked.</b>
+                <br><br>
+                Someone dragged heavy oak desks, folding chairs, and a massive glass-front vending machine into the stairwell, wedging them together into an impassable wall of junk. 
+                <br><br>
+                There are no bodies here. No blood. Just a desperate, silent testament to whatever the residents were trying to keep from coming up the stairs. And by the look of the dented, buckling metal on the front of the vending machine... whatever was trying to get up was incredibly strong.
+            </div>
+
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                
+                <!-- OPTION: FORCE BARRICADE (NOISE TRIGGER 2) -->
+                <button style="border-left-color: var(--accent-red) !important;">
+                    <<link "Try to push the barricade out of the way">>
+                        <<set $made_noise to true>>
+                        <<if setup.sound.tracks["blood_drip"]>> <<run setup.sound.stop("blood_drip")>> <</if>>
+                        <<if setup.sound.tracks["generator_hum"]>> <<run setup.sound.fade("generator_hum", 2000)>> <</if>>
+                        /* Play loud shifting metal noise */
+                        <<run setup.sound.play("barricade_shove", "audio/sfx/metal_shelf_crash.mp3", false, 0.8)>>
+                        <<run setup.sound.play("firedoor_click", "audio/sfx/firedoor_click.mp3", false, 0.7)>>
+                        
+                        <<addObjective "detour_2f" "Cross the 2nd Floor to find the East Wing stairs">>
+                        <<addTime 3>>
+                        <<set $floorLevel to 2>>
+                        <<goto "Floor2_Hallway">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: NOISE]</b> The barricade is wedged too tight. Shoving it only causes the metal frame of the vending machine to shriek against the concrete wall, echoing loudly. You give up and decide to detour through the 2nd Floor door.</span>
+                </button>
+
+                <!-- OPTION: ACCEPT DETOUR QUIETLY -->
+                <button style="border-left-color: var(--accent-green) !important;">
+                    <<link "Accept it's impassable and quietly open the 2nd Floor door">>
+                        <<if setup.sound.tracks["blood_drip"]>> <<run setup.sound.stop("blood_drip")>> <</if>>
+                        <<if setup.sound.tracks["generator_hum"]>> <<run setup.sound.fade("generator_hum", 2000)>> <</if>>
+                        <<run setup.sound.play("firedoor_click", "audio/sfx/firedoor_click.mp3", false, 0.7)>>
+                        
+                        <<addObjective "detour_2f" "Cross the 2nd Floor to find the East Wing stairs">>
+                        <<addTime 2>>
+                        <<set $floorLevel to 2>>
+                        <<goto "Floor2_Hallway">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-green);">[SAFE]</b> You realize you can't move this without making a massive racket. You'll have to detour through the 2nd Floor corridor and find another staircase.</span>
+                </button>
+
+            </div>
+        <</if>>
+
+    </div>
+</div>

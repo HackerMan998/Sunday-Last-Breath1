@@ -54,7 +54,7 @@
                         <!-- FAILED BRUTE FORCE WARNING MESSAGE -->
                         <<if $utility_bruteforce_fail>>
                             <div style="padding:10px; background:rgba(138,28,28,0.3); border:1px solid var(--accent-red); color:#ff6b6b; margin-bottom:15px; text-align:center;">
-                                ❌ <b>BRUTE FORCE FAILED.</b> You threw your weight against the heavy steel, but the magnetic lock didn't flinch. Your shoulder is bruised, and you made a lot of noise.
+                                ❌ <b>BRUTE FORCE FAILED.</b> You threw your weight against the heavy steel, but the magnetic lock didn't flinch. Your shoulder is bruised.
                             </div>
                             <<unset $utility_bruteforce_fail>>
                         <</if>>
