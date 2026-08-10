@@ -163,6 +163,8 @@
         <!-- PHASE 2: DESCENT RESOLUTION & THE BLOOD REACTION        -->
         <!-- ======================================================= -->
         <<elseif $stair_phase == 2>>
+            <<set $activeMap to "Stairwell 2F">>
+            <<set $currentLocation to "F2 Entrance">>
             <<set _sawHorrors to (visited("Unit_401") or $room402_opened or $room405_opened or $room406_opened)>>
 
             <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
@@ -172,26 +174,34 @@
             <!-- LOGIKA GAMBAR DINAMIS -->
             <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
                 <<if $descentMethod == "quick_fail">>
-                    <!-- GAMBAR 2: JATUH -->
                     <img src="image/act1/stairwell_tumble.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
                 <<elseif $descentMethod == "flashlight" or $descentMethod == "lighter">>
-                    <!-- GAMBAR 3: SENTER/KOREK -->
                     <img src="image/act1/stairwell_flashlight.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
                 <<else>>
-                    <!-- GAMBAR 1 (DEFAULT): AMAN TAPI GELAP -->
                     <img src="image/act1/stairwell4F.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
                 <</if>>
             </div>
 
-            <!-- NARRATIVE: DESCENT RESULT -->
+            <!-- NARRATIVE: DESCENT RESULT & BLOOD REACTION -->
             <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <!-- 1. JIKA PEMAIN CEPAT DAN BERHASIL (GELAP) -->
                 <<if $descentMethod == "quick">>
-                    You take the stairs two at a time, desperate to put distance between yourself and the 4th floor. Your footsteps echo sharply against the concrete walls. 
+                    You take the stairs two at a time, desperate to put distance between yourself and the 4th floor. 
                     <br><br>
                     <span style="color:var(--accent-green); font-weight:bold;">[AGILITY SUCCESS]</span> 
                     <br><br>
-                    In the flickering strobe light, your boot hovers over a slick, dark patch on the stairs. Your reflexes take over. With a surge of adrenaline, you blindly grab the heavy iron handrail, wrenching your shoulder but stopping your fall. You vault over the slick step, landing heavily on the landing below.
+                    In the flickering strobe light, your boot hovers over a slick, dark patch on the stairs. Your reflexes take over. With a surge of adrenaline, you blindly grab the heavy iron handrail, vaulting over the mess and landing heavily on the landing below. 
+                    <br><br>
+                    Under the harsh red emergency lights, whatever you almost stepped in just looks like a dark puddle of dirty water. You decide not to look too closely and keep moving. Ignorance is bliss.
 
+                <!-- 2. JIKA PEMAIN PELAN (GELAP) -->
+                <<elseif $descentMethod == "slow">>
+                    You grip the cold iron handrail, taking it one agonizing step at a time. The emergency strobes paint the stairwell in flashes of harsh crimson and pitch black. 
+                    <br><br>
+                    As the light flares, the concrete step below you glistens. Something thick and wet is pooling there. Under the red light, it just looks like a black shadow. You press your back against the wall and carefully step wide, avoiding the slick patch entirely. You don't know what it is, and you don't want to know.
+
+                <!-- 3. JIKA PEMAIN GAGAL QTE (JATUH KE DALAM DARAH) -->
                 <<elseif $descentMethod == "quick_fail">>
                     <<if not $tumble_played>>
                         <<run setup.sound.play("tumble", "audio/sfx/stairs_tumble.mp3", false, 1.0)>>
@@ -199,56 +209,24 @@
                         <<exert 20>>
                         <<run window.animateStatBar('.bar-fill.hp', $hp, $hp_max)>>
                         <<run window.shakeScreen(30)>>
-                        <<set $made_noise to true>> /* FIRST NOISE TRIGGER */
+                        <<set $made_noise to true>>
                         <<set $tumble_played to true>>
                     <</if>>
                     
-                    You take the stairs two at a time, desperate to put distance between yourself and the 4th floor. Your footsteps echo sharply. 
+                    You take the stairs two at a time, desperate to put distance between yourself and the 4th floor. 
                     <br><br>
                     <span style="color:var(--accent-red); font-weight:bold;">[AGILITY FAILED - LOUD NOISE GENERATED]</span> 
                     <br><br>
-                    In the strobe-lit darkness, you never see the wet, slick patch coating the steps. Your heel slides out from under you. The world tilts sickeningly. You violently tumble forward, concrete biting into your ribs and knees. You slam into the metal railing with a heavy, echoing <i>CLANG</i> and skid to a halt on the landing below, your lungs burning.
+                    In the strobe-lit darkness, you never see the wet, slick patch coating the steps. Your heel slides out from under you. You violently tumble forward, concrete biting into your ribs. You slam into the metal railing with a heavy, echoing <i>CLANG</i> and skid to a halt on the landing below.
                     <br><br>
                     <span style="color:var(--accent-red); font-weight:bold;">-15 HP | -20 STAMINA</span>
-
-                <<elseif $descentMethod == "slow">>
-                    You grip the cold iron handrail, taking it one agonizing step at a time. The emergency strobes paint the stairwell in flashes of harsh crimson and pitch black. 
                     <br><br>
-                    As the light flares, the concrete step below you glistens. Something thick and wet is pooling there, dripping slowly over the edge. You press your back against the wall and carefully step wide, avoiding the slick patch entirely.
-
-                <<elseif $descentMethod == "flashlight">>
-                    You flick on your flashlight. Its stark white beam cuts through the oppressive, pulsing red of the emergency lights. 
+                    You push yourself up, your hands slick with whatever you just slipped in. You lift your palms to the dim red light. It's thick, sticky, and smells strongly of rust. Blood. Arterial and fresh.
                     <br><br>
-                    The beam sweeps down the concrete stairs and catches a dark reflection. A thick, wet puddle coats the middle of the flight, trailing down the edges like dark syrup. Keeping the beam steady, you safely navigate around the mess.
-
-                <<elseif $descentMethod == "lighter">>
-                    You flick your lighter. The small, trembling orange flame fights against the oppressive, pulsing red of the emergency strobes, casting wild, dancing shadows against the concrete walls.
-                    <br><br>
-                    Holding the flame low, you catch the glint of something wet. A thick puddle coats the middle of the flight, trailing down the steps. It's hard to see the edges in the flickering light, but you manage to carefully step around the worst of it.
-                <</if>>
-            </div>
-
-            <!-- NARRATIVE: THE BLOOD REACTION -->
-            <<if $descentMethod != "quick_fail">>
-                <<if not $blood_played>>
-                    <<run setup.sound.play("blood_drip", "audio/sfx/blood_drip.mp3", true, 0.6)>>
-                    <<set $blood_played to true>>
-                <</if>>
-
-                <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
-                    You reach the landing and look back up at what you almost stepped in. 
-                    <br><br>
-                    It's blood. Arterial, dark, and fresh enough to still be shining.
-                    <br><br>
-                    
                     <<if _sawHorrors>>
-                        After the carnage you left behind in the apartments upstairs, the sight barely registers. The shock has already burned out of your system. You just wipe a stray drop from your shoe and keep moving.
-                        <br><br>
-                        <<chat "You" "image/avatars/player.gif" "left" "Just more blood. Nothing I haven't seen already today.">>
+                        After the carnage upstairs, you just wipe it off your jacket and keep moving.
                     <<else>>
-                        Your stomach drops. Until now, the nightmare was just a voice on the radio and a text message. But this is real. You feel a sudden, cold spike of dread in your chest.
-                        <br><br>
-                        <<chat "You" "image/avatars/player.gif" "left" "Someone was dragged down these stairs. Recently.">>
+                        Your stomach drops. Someone was dragged down these stairs. Recently.
                         <br>
                         <<if not $hum_deducted>>
                             <<set $hum -= 5>>
@@ -257,8 +235,37 @@
                         <</if>>
                         <span style="color:var(--accent-red); font-size:0.85em; font-weight:bold;">-5 HUMANITY</span>
                     <</if>>
-                </div>
-            <</if>>
+
+                <!-- 4. JIKA PEMAIN MEMAKAI CAHAYA (MELIHAT SEMUANYA) -->
+                <<elseif $descentMethod == "flashlight" or $descentMethod == "lighter">>
+                    <<if $descentMethod == "flashlight">>
+                        You flick on your flashlight. Its stark white beam cuts through the oppressive, pulsing red of the emergency lights. 
+                    <<else>>
+                        You flick your lighter. The small, trembling orange flame fights against the oppressive red strobes.
+                    <</if>>
+                    <br><br>
+                    The light sweeps down the concrete stairs and catches a dark reflection. A thick puddle coats the middle of the flight, trailing down the edges like syrup. Keeping the light steady, you safely navigate around the mess.
+                    <br><br>
+                    <<if not $blood_played>>
+                        <<run setup.sound.play("blood_drip", "audio/sfx/blood_drip.mp3", true, 0.6)>>
+                        <<set $blood_played to true>>
+                    <</if>>
+                    You reach the landing and shine your light back up. The red emergency bulbs couldn't hide it from your light source. It's blood. Arterial, dark, and fresh.
+                    <br><br>
+                    <<if _sawHorrors>>
+                        After the carnage you left behind upstairs, the sight barely registers. You wipe a stray drop from your shoe and keep moving.
+                    <<else>>
+                        Your stomach drops. Until now, the nightmare was just a voice on the radio. But this is real. Someone was dragged down these stairs.
+                        <br>
+                        <<if not $hum_deducted>>
+                            <<set $hum -= 5>>
+                            <<run window.animateStatBar('.bar-fill.humanity', $hum, 100)>>
+                            <<set $hum_deducted to true>>
+                        <</if>>
+                        <span style="color:var(--accent-red); font-size:0.85em; font-weight:bold;">-5 HUMANITY</span>
+                    <</if>>
+                <</if>>
+            </div>
             
             <!-- TOMBOL UNTUK LANJUT KE PHASE 3 -->
             <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
@@ -300,27 +307,38 @@
 
             <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
                 
-                <!-- OPTION: FORCE BARRICADE (NOISE TRIGGER 2) -->
-                <button style="border-left-color: var(--accent-red) !important;">
-                    <<link "Try to push the barricade out of the way">>
-                        <<set $made_noise to true>>
-                        <<if setup.sound.tracks["blood_drip"]>> <<run setup.sound.stop("blood_drip")>> <</if>>
-                        <<if setup.sound.tracks["generator_hum"]>> <<run setup.sound.fade("generator_hum", 2000)>> <</if>>
-                        /* Play loud shifting metal noise */
-                        <<run setup.sound.play("barricade_shove", "audio/sfx/metal_shelf_crash.mp3", false, 0.8)>>
-                        <<run setup.sound.play("firedoor_click", "audio/sfx/firedoor_click.mp3", false, 0.7)>>
-                        
-                        <<addObjective "detour_2f" "Cross the 2nd Floor to find the East Wing stairs">>
-                        <<addTime 3>>
-                        <<set $floorLevel to 2>>
-                        <<goto "Floor2_Hallway">>
-                    <</link>>
-                    <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: NOISE]</b> The barricade is wedged too tight. Shoving it only causes the metal frame of the vending machine to shriek against the concrete wall, echoing loudly. You give up and decide to detour through the 2nd Floor door.</span>
-                </button>
+                <<if not $barricade_pushed>>
+                    <!-- OPTION: FORCE BARRICADE (NOISE TRIGGER 2) -->
+                    <button style="border-left-color: var(--accent-red) !important;">
+                        <<link "Try to push the barricade out of the way">>
+                            <<set $made_noise to true>>
+                            <<set $barricade_pushed to true>>
+                            <<run setup.sound.play("barricade_shove", "audio/sfx/metal_shelf_crash.mp3", false, 0.8)>>
+                            <<addTime 1>>
+                            <<goto "Stairwell">>
+                        <</link>>
+                        <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: NOISE]</b> Attempt to force your way through the wreckage.</span>
+                    </button>
+                <<else>>
+                    <!-- FAILED PUSH NARRATIVE -->
+                    <div style="padding:15px; background:rgba(138,28,28,0.2); border-left:3px solid var(--accent-red); margin-bottom:15px; text-align:left; color:#ccc;">
+                        <b style="color:var(--accent-red);">[FAILED]</b> You throw your shoulder against the heavy glass-front vending machine and push with everything you have. 
+                        <br><br>
+                        <i>*SCREEEEECH.*</i>
+                        <br><br>
+                        The metal frame shrieks violently against the concrete wall, echoing up and down the stairwell like a gunshot. The barricade doesn't budge an inch. It's wedged perfectly tight. But that sound... that sound definitely woke something up. 
+                    </div>
+
+                    <!-- DISABLED PUSH BUTTON -->
+                    <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                        <span style="text-decoration: line-through;">Try to push the barricade out of the way</span><br>
+                        <span class="btn-sub" style="color: #ff6b6b;">[IMPASSABLE] It's completely stuck. You cannot get through this way.</span>
+                    </button>
+                <</if>>
 
                 <!-- OPTION: ACCEPT DETOUR QUIETLY -->
                 <button style="border-left-color: var(--accent-green) !important;">
-                    <<link "Accept it's impassable and quietly open the 2nd Floor door">>
+                    <<link "Open the fire door to the 2nd Floor">>
                         <<if setup.sound.tracks["blood_drip"]>> <<run setup.sound.stop("blood_drip")>> <</if>>
                         <<if setup.sound.tracks["generator_hum"]>> <<run setup.sound.fade("generator_hum", 2000)>> <</if>>
                         <<run setup.sound.play("firedoor_click", "audio/sfx/firedoor_click.mp3", false, 0.7)>>
@@ -330,7 +348,7 @@
                         <<set $floorLevel to 2>>
                         <<goto "Floor2_Hallway">>
                     <</link>>
-                    <span class="btn-sub"><b style="color:var(--accent-green);">[SAFE]</b> You realize you can't move this without making a massive racket. You'll have to detour through the 2nd Floor corridor and find another staircase.</span>
+                    <span class="btn-sub"><b style="color:var(--accent-green);">[DETOUR]</b> The only other way out of this stairwell is through the 2nd Floor.</span>
                 </button>
 
             </div>

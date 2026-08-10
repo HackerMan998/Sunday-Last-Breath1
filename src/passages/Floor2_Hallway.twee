@@ -1,20 +1,25 @@
 :: Floor2_Hallway {"position":"300,800","size":"100,100"}
 <<set $activeMap to "2F Hallway">>
 
+<!-- ======================================================= -->
+<!-- 0. INITIALIZATION & SETUP                               -->
+<!-- ======================================================= -->
 <<nobr>>
-    /* ======================================================= */
-    /* 0. INITIALIZATION & SETUP                               */
-    /* ======================================================= */
     /* Only runs the very first time you enter */
     <<if ndef $f2_phase>>
-        <<set $f2_phase to 1>>
+        /* CEK KONSEKUENSI NOISE DARI TANGGA */
+        <<if $made_noise>>
+            <<set $f2_phase to "aggro_start">>
+        <<else>>
+            <<set $f2_phase to 1>>
+        <</if>>
         <<set $f2_square to 1>>
         <<set $horde to[{name: "Twitching Stranger", hp: 50, acc: 40, ev: 10}]>>
     <</if>>
 
     /* Update Map Pin position */
     <<set $currentLocation to "f2_hall_" + $f2_square>>
-        <<if $f2_square == 1>>
+    <<if $f2_square == 1>>
         <<set $locationName to "East Wing">>
     <<elseif $f2_square == 2>>
         <<set $locationName to "Mid-Hallway">>
@@ -23,481 +28,552 @@
     <<elseif $f2_square == 4>>
         <<set $locationName to "Stairwell">>
     <</if>>
-    <</nobr>>
+<</nobr>>
 
-/* ======================================================= */
-/* PHASE 1 — EAST WING ARRIVAL                             */
-/* ======================================================= */
-<<if $f2_phase == 1>>
-	<h2>2ND FLOOR — EAST WING</h2>
+<<nobr>>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
 
-    <!-- 🔊 AUDIO SETUP (Wrapped to prevent double-play) -->
-    <<if not $f2_audio_started>>
-        <<run setup.sound.play("firedoor", "audio/sfx/firedoor_click.mp3", false, 0.8)>>
-        <<run setup.sound.play("buzz", "audio/sfx/fluorescent_buzz.mp3", true, 0.3)>>
-        
-        <<timed 1s>>
-            <<run setup.sound.play("thump", "audio/sfx/head_thump_wet.mp3", true, 0.6)>>
-        <</timed>>
-        
-        /* Lock the flag so this block never runs a second time */
-        <<set $f2_audio_started to true>>
-    <</if>>
-    
-    <!-- 🖼️ SCENE VISUAL -->
-    <div style="margin-bottom: 15px; text-align: center;">
-        <img src="C:\Users\Neal Sage\Documents\Twine\image\f2\F2.1.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
-    </div>
+        <!-- ======================================================= -->
+        <!-- PHASE 1: SILENT ARRIVAL (THE CREEPY THUMPING)           -->
+        <!-- ======================================================= -->
+        <<if $f2_phase == 1>>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                2ND FLOOR - EAST WING
+            </div>
 
-    <!-- 💬 NARRATIVE & DIALOGUE -->
-	The heavy fire door clicks shut behind you, sealing you in the 2nd-floor hallway. The emergency backup lights here have failed, leaving only a single, dying fluorescent tube flickering erratically at the far end of the corridor. 
-    <br><br>
-    You try to steady your breathing. 
-    <br><br>
-    <<chat "You" "image/avatars/player.gif" "left" "It's just a riot, Mass hysteria.">>
-    <<chat "You" "image/avatars/player.gif" "left" "People just panicking over the news. I just need to get out of this building and find my way outside the city.">>
-	<br>
-    About twenty feet ahead, standing dead center in the middle of the hall, is a figure. A man in a tattered business suit. He is hunched over, his forehead pressed against the wall. Rhythmic, wet *thumps* echo through the silence as he repeatedly taps his head against the plaster.
-    <br>
-    <<chat "You" "image/avatars/player.gif" "left" "Drugs? Shock? Mental illness? Who knows... but that noise is really unsettling.">>
-	<br>
-    You wonder. You aren't sure if he's even aware of you yet. Maybe he's just a guy having a breakdown. Maybe he needs help. But maybe... maybe he's something else entirely.
-    <br>
-
-    <!-- 🔀 PLAYER CHOICES -->
-	<div class="choice-menu">
-		<button>
-            <<link "Walk toward the figure">>
-                <<addTime 1>>
-                <<set $f2_square to 2>>
-                <<set $f2_phase to 2>>
-                <<goto "Floor2_Hallway">>
-            <</link>>
-            <span class="btn-sub">Close the distance to see if he needs help.</span>
-		</button>
-	</div>
-
-
-/* ======================================================= */
-/* PHASE 2 — MID-HALLWAY (THE APPROACH)                    */
-/* ======================================================= */
-<<elseif $f2_phase == 2>>
-	<h2>2ND FLOOR — MID-HALLWAY</h2>
-
-    <!-- 🔊 AUDIO: JUMP SCARE SEQUENCE -->
-    <<if not $f2_scare_played>>
-        <<run setup.sound.play("creak", "audio/sfx/floorboard_groan.mp3", false, 0.7)>>
-        <<run setup.sound.stop("thump")>>
-
-        <<timed 1.2s>>
-            <<run setup.sound.play("rattle", "audio/sfx/zombie_rattle.mp3", false, 0.8)>>
-        <</timed>>
-        
-        <<timed 3s>>
-            <<run setup.sound.play("crack", "audio/sfx/bone_crack.mp3", false, 1.0)>>
-        <</timed>>
-        <<set $f2_scare_played to true>>
-    <</if>>
-
-    <!-- 💬 NARRATIVE: THE APPROACH -->
-	You take a slow step forward. The floorboards groan under your weight, but the man doesn't react. You approach cautiously, your grip tightening on your gear.
-	<br><br>
-    <<chat "You" "image/avatars/player.gif" "left" "Hey... Buddy?">>
-	<br>
-    Your voice comes out as a shaky whisper. You clear your throat.
-    <br>
-    <<chat "You" "image/avatars/player.gif" "left" "Buddy? Are you okay? The building isn't safe, we need to—">>
-    <br>
-    The tapping stops.
-    <br><br>
-
-    <!-- 🖼️ SCENE VISUAL: REVEAL -->
-    <div style="margin-bottom: 15px; text-align: center;">
-        <img src="C:\Users\Neal Sage\Documents\Twine\image\f2\F2.2.gif" style="max-width: 100%; border: 1px solid var(--accent-red); box-shadow: 0 0 15px rgba(138,28,28,0.4);">
-    </div>
-
-    <!-- 💬 NARRATIVE: THE REVEAL & ATTACK -->
-    A low, wet rattle builds in the man's throat. He spins around with a sickening *crack* of his neck. Your brain completely short-circuits, struggling to process what you are looking at. 
-    <br><br>
-    His eyes are clouded, milky white. The bottom half of his jaw is entirely torn away, leaving his tongue lolling grotesquely against his ruined, bloody throat. 
-    <br><br>
-    'What is this? Is this a sick prank? A mask?' Your mind screams for an explanation, but there is none. The man is staring right at you, his gaze completely vacant. The only thing that registers is the primal, animalistic rage radiating off of him in waves.
-    <br><br>
-    Before the thought can even finish formulating, the man lets out a gurgling shriek and launches himself at you!
-    <br><br>
-    
-    <!-- 🔀 PLAYER CHOICES: EVASION CHECKS -->
-    <div class="choice-menu">
-        <!-- STR 4 CHECK (Updated from 40) -->
-        <<if $str >= 4>>
-            <button>
-                <<link "Brace and Shove">>
-                    <<set $f2_phase to "2_brace">>
-                    <<goto "Floor2_Hallway">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 4]</b> Plant your feet and catch him by the shoulders.</span>
-            </button>
-        <<else>>
-            <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">Brace and Shove</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES STR 4] You aren't strong enough to stop his momentum head-on.</span>
-            </button>
-        <</if>>
-
-        <!-- AGI 5 CHECK (Updated from 50) -->
-        <<if $agi >= 5>>
-            <button>
-                <<link "Dive Aside">>
-                    <<set $f2_phase to "2_dive">>
-                    <<goto "Floor2_Hallway">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-gold);">[AGI 5]</b> Drop low and pivot out of the way of his lunge.</span>
-            </button>
-        <<else>>
-            <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">Dive Aside</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES AGI 5] You aren't fast enough to dodge a leaping attack in this narrow space.</span>
-            </button>
-        <</if>>
-
-        <!-- FALLBACK IF BOTH FAIL (Updated logic) -->
-        <<if $str < 4 and $agi < 5>>
-            <button>
-                <<link "Try to fight it off">>
-                    <<set $f2_phase to "2_tackled">>
-                    <<goto "Floor2_Hallway">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: INJURY]</b> You are neither strong enough nor fast enough to avoid this cleanly. Prepare for impact.</span>
-            </button>
-        <</if>>
-    </div>
-
-
-/* ------------------------------------------------------- */
-/* PHASE 2.1 — SUCCESSFUL DODGE (BRACE OR DIVE)            */
-/* ------------------------------------------------------- */
-<<elseif $f2_phase == "2_brace" or $f2_phase == "2_dive">>
-	<h2>2ND FLOOR — MID-HALLWAY</h2>
-
-    <!-- 🖼️ SCENE VISUAL -->
-    <div style="margin-bottom: 15px; text-align: center;">
-        <img src="C:\Users\Neal Sage\Documents\Twine\image\f2\F2.2.gif" style="max-width: 100%; border: 1px solid var(--accent-red); box-shadow: 0 4px 15px rgba(138,28,28,0.4);">
-    </div>
-
-    <<run setup.sound.play("lunge", "audio/sfx/zombie_lunge.mp3", false, 0.9)>>
-
-    <!-- 💬 NARRATIVE: RESOLUTION -->
-    <<if $f2_phase == "2_brace">>
-        <span style="color:var(--accent-green); font-weight:bold;">[STRENGTH SUCCESS]</span>
-        <br><br>
-        Pure fight-or-flight takes over. You plant your feet and catch him by the shoulders. His skin feels ice-cold and unnaturally greasy. "Get the hell off me!" you yell, shoving him back. He stumbles into the wall, giving you precious seconds to ready your weapon!
-    <<else>>
-        <span style="color:var(--accent-green); font-weight:bold;">[AGILITY SUCCESS]</span>
-        <br><br>
-        Pure instinct takes over. You drop low, pivoting on your heel. His snapping teeth miss your face by an inch, his momentum carrying him past you. You spring back up, putting distance between you and whatever the hell is wrong with this guy!
-    <</if>>
-    <br><br>
-    
-    <!-- 🔀 PLAYER CHOICES -->
-    <div class="choice-menu">
-        <button>
-            <<link "READY WEAPON">>
-                <<addTime 1>>
-                <<set $f2_phase to 4>>
-                <<goto "Floor2_Hallway">>
-            <</link>>
-        </button>
-    </div>
-
-
-/* ------------------------------------------------------- */
-/* PHASE 2.2 — TACKLED (FAILED INITIAL DODGE)              */
-/* ------------------------------------------------------- */
-<<elseif $f2_phase == "2_tackled">>
-	<h2>2ND FLOOR — MID-HALLWAY</h2>
-
-    <!-- 🖼️ SCENE VISUAL -->
-    <div style="margin-bottom: 15px; text-align: center;">
-        <img src="C:\Users\Neal Sage\Documents\Twine\image\f2\F2.3.gif" style="max-width: 100%; border: 2px solid red; box-shadow: 0 0 20px rgba(255,0,0,0.5);">
-    </div>
-
-    <!-- 💥 DAMAGE & EFFECTS -->
-    <<if not $f2_tackle_done>>
-        <<run setup.sound.play("tackle", "audio/sfx/body_tackle.mp3", false, 0.9)>>
-        <<run setup.sound.play("pinned_snarl", "audio/sfx/zombie_snapping.mp3", true, 1.0)>>
-        <<set $hp -= 15>>
-        <<run window.shakeScreen(30)>>
-        <<set $f2_tackle_done to true>>
-    <</if>>
-    <<run window.animateStatBar('.bar-fill.hp', $hp, $hp_max)>>
-    
-    <!-- 💬 NARRATIVE -->
-    <span style="color:var(--accent-red); font-weight:bold;">[ATTACKED]</span>
-    <br><br>
-    You try to brace yourself, but he hits you like a freight train! The sheer, unhinged force knocks the wind out of you as you crash onto the hard floor. This isn't a prank. 'He's trying to kill you.'
-    <br><br>
-    <span style="color:var(--accent-red); font-weight:bold;">-15 HP (Tackled)</span>
-    <br><br>
-    Hot, putrid breath washes over your face. The guy is thrashing wildly on top of you, snapping his jagged upper teeth at your throat. Black blood drips from his ruined jaw onto your clothes. His dead weight is crushing the air out of your lungs. You have to get him off!
-    <br><br>
-    
-    <!-- 🔀 PLAYER CHOICES: STRUGGLE CHECKS -->
-    <div class="choice-menu">
-        <!-- SECOND CHECK (Updated from 30) -->
-        <<if $str >= 3 or $agi >= 3>>
-            <button>
-                <<link "Kick him away!">>
-                    <<set $f2_phase to "2_kick">>
-                    <<goto "Floor2_Hallway">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 3 / AGI 3]</b> Wedge your knee against his chest and throw him off.</span>
-            </button>
-        <<else>>
-            <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">Kick him away!</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES STR 3 OR AGI 3] His dead weight is too heavy to throw off.</span>
-            </button>
+            <<if not $f2_audio_started>>
+                <<run setup.sound.play("firedoor", "audio/sfx/firedoor_click.mp3", false, 0.8)>>
+                <<run setup.sound.play("buzz", "audio/sfx/fluorescent_buzz.mp3", true, 0.3)>>
+                <<run setTimeout(function(){ setup.sound.play("thump", "audio/sfx/head_thump_wet.mp3", true, 0.6); }, 1000)>>
+                <<set $f2_audio_started to true>>
+            <</if>>
             
-            <!-- FINAL FALLBACK -->
-            <button>
-                <<link "Desperately struggle">>
-                    <<set $f2_phase to "2_struggle">>
-                    <<goto "Floor2_Hallway">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: INJURY]</b> You don't have the leverage to get him off cleanly. He's going to bite.</span>
-            </button>
-        <</if>>
-    </div>
+            <!-- IMAGE: ZOMBIE THUMPING HEAD (FAR) -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/act1/F2_1_thump.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
 
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                The heavy fire door clicks shut behind you, sealing you in the 2nd-floor hallway. The emergency backup lights here have failed, leaving only a single, dying fluorescent tube flickering erratically at the far end of the corridor. 
+                <br><br>
+                You try to steady your breathing. 
+                <br><br>
+                <<chat "You" "image/avatars/player.gif" "left" "It's just a riot. Mass hysteria. People just panicking over the news. I just need to get out of this building.">>
+                <br>
+                About twenty feet ahead, standing dead center in the middle of the hall, is a figure. A man in a tattered business suit. He is hunched over, his forehead pressed against the wall. 
+                <br><br>
+                Rhythmic, wet <i>*thumps*</i> echo through the silence as he repeatedly taps his head against the plaster.
+                <br><br>
+                <<chat "You" "image/avatars/player.gif" "left" "Drugs? Shock? Mental illness? Who knows... but that noise is really unsettling.">>
+                <br>
+                You wonder. You aren't sure if he's even aware of you yet. Maybe he's just a guy having a breakdown. Maybe he needs help. But maybe... maybe he's something else entirely.
+            </div>
 
-/* ------------------------------------------------------- */
-/* PHASE 2.3 — GROUND STRUGGLE RESOLUTIONS                 */
-/* ------------------------------------------------------- */
-<<elseif $f2_phase == "2_kick" or $f2_phase == "2_struggle">>
-	<h2>2ND FLOOR — MID-HALLWAY</h2>
-
-    <!-- 🖼️ SCENE VISUAL -->
-    <div style="margin-bottom: 15px; text-align: center;">
-        <img src="C:\Users\Neal Sage\Documents\Twine\image\f2\F2.3.gif" style="max-width: 100%; border: 2px solid red; box-shadow: 0 0 20px rgba(255,0,0,0.5);">
-    </div>
-    <<run setup.sound.stop("pinned_snarl")>>
-
-    <!-- 🎲 STRUGGLE RESOLUTION LOGIC -->
-    <<if $f2_phase == "2_kick">>
-        <span style="color:var(--accent-green); font-weight:bold;">[SUCCESS]</span>
-        <br><br>
-        You wedge your knee against his chest and deliver a desperate, powerful kick. He goes sliding backward across the linoleum, leaving a streak of dark gore. You scramble to your feet!
-    <<else>>
-        <<if not $f2_bite_done>>
-            <<set $hp -= 10>>
-            <<run window.shakeScreen(30)>>
-            <<set $f2_bite_done to true>>
-        <</if>>
-        <<run window.animateStatBar('.bar-fill.hp', $hp, $hp_max)>>
-        
-        <span style="color:var(--accent-red); font-weight:bold;">[FAILED]</span>
-        <br><br>
-        You struggle, but he's too heavy! His teeth scrape painfully against your collarbone, tearing flesh! The sudden, blinding pain sends a jolt of pure adrenaline straight into your heart. With a primal scream, you violently heave his body off of you and scramble back to your feet!
-        <br><br>
-        <span style="color:var(--accent-red); font-weight:bold;">-10 HP (Bitten/Scratched)</span>
-    <</if>>
-    <br><br>
-
-    <!-- 🔀 PLAYER CHOICES -->
-    <div class="choice-menu">
-        <button>
-            <<link "READY WEAPON">>
-                <<addTime 1>>
-                <<set $f2_phase to 4>>
-                <<goto "Floor2_Hallway">>
-            <</link>>
-        </button>
-    </div>
-
-
-/* ======================================================= */
-/* PHASE 4 — COMBAT LOOP & RESOLUTION                      */
-/* ======================================================= */
-<<elseif $f2_phase == 4>>
-	<h2>2ND FLOOR — MID-HALLWAY</h2>
-	
-    <!-- ⚔️ ACTIVE COMBAT UI -->
-	<<if $horde.length > 0>>
-		<div style="text-align:center; margin-bottom: 20px; background: rgba(80,0,0,0.2); border: 1px solid #8a1c1c; padding: 15px;">
-            
-            <!-- ENEMY SPRITE DISPLAY -->
-			<div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;">
-				<<for _z range $horde>>
-                    <img src="C:\Users\Neal Sage\Documents\Twine\image\f2\Zombie1.png" style="height: 180px; filter: drop-shadow(0px 0px 8px rgba(255,0,0,0.6));">
-                <</for>>
-			</div>
-            
-			<h3 style="color:var(--accent-red); margin-top:0;">ENEMIES REMAINING: <<print $horde.length>></h3>
-			
-			<div style="border:1px solid #333; background:#000; padding:10px; max-width:300px; margin:0 auto; text-align:left;">
-				<<for _i, _z range $horde>>
-					<div style="border-bottom:1px dashed #333; padding:5px; font-family: monospace;">
-						TARGET: <span style="color:#aaa">_z.name</span> (Evasion: _z.ev%)
-					</div>
-				<</for>>
-			</div>
-		</div>
-
-		<div style="text-align:center; padding: 15px; border: 1px solid #444; background-color: #050404;">
-			<b>EQUIPPED:</b> 
-			<<if $equip.weapon is "none">>
-				<span style="color:var(--accent-red)">UNARMED (Fists)</span>
-			<<else>>
-				<span style="color:var(--accent-blue)">$equip.weapon</span>
-			<</if>>
-			<br><br>
-
-			<div class="choice-menu">
-				<button>
-                    <<link "ATTACK TARGET">>
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                <button>
+                    <<link "Walk toward the figure">>
                         <<addTime 1>>
-                        <<run window.combatTurn(0)>>
-                    <</link>>
-				</button>
-			</div>
-		</div>
-
-    <!-- 🏆 POST-COMBAT (TARGET ELIMINATED) -->
-    <<else>>
-        <!-- 🔊 AUDIO: Post-Combat Body Drop -->
-        <<run setup.sound.play("body_drop", "audio/sfx/body_fall_wet.mp3", false, 0.9)>>
-        
-        <!-- 🔊 AUDIO: Fade the buzzing as adrenaline crashes -->
-        <<run setup.sound.fade("buzz", 2000)>> 
-
-		<div style="text-align:center; margin-bottom: 20px;">
-			<div style="font-size:3em;">💀</div>
-			<h2 style="color:var(--accent-green)">TARGET ELIMINATED</h2>
-            <br>
-            <span style="color:var(--accent-gold); font-size: 1.2em; font-weight: bold;">[+25 XP]</span>
-            <<set $f2_enemy_defeated to true>>
-            <<if not $f2_combat_xp>>
-                <<run window.gainXP(25)>>
-                <<set $f2_combat_xp to true>>
-            <</if>>
-		</div>
-
-        <!-- 🖼️ SCENE VISUAL: Dead zombie on the floor -->
-        <div style="margin-bottom: 15px; text-align: center;">
-            <img src="C:\Users\Neal Sage\Documents\Twine\image\f2\F2.4.gif" style="max-width: 100%; border: 1px solid #333; filter: grayscale(30%);">
-        </div>
-		
-        <!-- 💬 NARRATIVE & DIALOGUE -->
-		The man hits the floor and doesn't get back up. 
-        <br><br>
-        You stand over the body, your chest heaving, adrenaline burning like battery acid in your veins. Your hands are shaking uncontrollably. Black, thick blood pools rapidly on the linoleum, soaking into the frayed carpet. 
-        <br><br>
-        <<chat "You" "image/avatars/player.gif" "left" "What just happened? Did I just... did I just kill someone?">>
-        <br><br>
-        You stare down at the ruined face, the milky eyes.
-        <br><br>
-        <<chat "You" "image/avatars/player.gif" "left" "No... that wasn't a person anymore. It couldn't be.">>
-        <br><br>
-        You don't know what the hell is actually going on outside, but the hallway stretches on, dark and silent. You can't stay here.
-		<br><br>
-
-        <!-- 🔀 PLAYER CHOICES -->
-		<div class="choice-menu">
-			<button>
-                <<link "Move toward the West Fire Stairs">>
-                    <<addTime 1>>
-                    <<set $f2_square to 3>>
-                    <<set $f2_phase to 5>>
-                    <<goto "Floor2_Hallway">> 
-                <</link>>
-			</button>
-		</div>
-	<</if>>
-
-
-/* ======================================================= */
-/* PHASE 5 — WEST WING EXIT                                */
-/* ======================================================= */
-<<elseif $f2_phase == 5>>
-	<h2>2ND FLOOR — WEST WING EXIT</h2>
-
-    <!-- 🔊 AUDIO: Muffled chaos from the lobby -->
-    <<run setup.sound.play("lobby_muffled", "audio/bgm/muffled_lobby_chaos.mp3", true, 0.4)>>
-
-    <!-- 🖼️ SCENE VISUAL: West Hallway -->
-    <div style="margin-bottom: 15px; text-align: center;">
-        <img src="C:\Users\Neal Sage\Documents\Twine\image\f2\F2.5.gif" style="max-width: 100%; border: 1px solid #333;">
-    </div>
-
-    <!-- 💬 NARRATIVE -->
-	You reach the far end of the hallway. The air here is colder, carried by a draft from the stairwell ahead. A green "EXIT" sign flickers above the heavy steel door of the West Fire Stairs.
-	<br><br>
-	Beyond that door lies the Lobby. You can hear faint, muffled sounds echoing up from below—shouting, heavy thuds, and the rhythmic *pop-pop-pop* of distant gunfire. 
-    <br><br>
-    <<chat "You" "image/avatars/player.gif" "left" "Gunfire... The police must be down there. They have to be holding it together. If I can just get to them, I'll be safe.">>
-    <br><br>
-
-    <<if $found_f2_loot>>
-        <div style="padding:10px; background:rgba(0,100,0,0.2); border:1px solid var(--accent-green); color:#99cc99; font-style:italic; margin-bottom:15px;">
-            You've scavenged everything you could find here. Time to move.
-        </div>
-    <</if>>
-
-    <!-- 🔍 LOOTING & EXIT CHOICES -->
-	<div class="choice-menu">
-		
-        <!-- PERCEPTION CHECK (Updated to 5) -->
-        <<if not $found_f2_loot>>
-            <<if $per >= 5>>
-                <button>
-                    <<link "Search the Janitor's Cart">>
-                        <<addTime 2>>
-                        <<set $found_f2_loot to true>>
-                        <<run setup.addItem("Bandage", 1)>>
-                        <<run setup.addItem("Flashlight", 1)>>
-                        <<set $per += 2>>
-                        <<goto "Floor2_Hallway">> 
-                    <</link>>
-                    <span class="btn-sub"><b style="color:var(--accent-gold);">[PER 5]</b> You notice medical supplies hidden under a pile of rags.</span>
-                </button>
-            <<else>>
-                <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                    <span style="text-decoration: line-through;">Search the Janitor's Cart</span><br>
-                    <span class="btn-sub" style="color: #666;">[REQUIRES PER 5] It's too dark to spot anything useful in the mess.</span>
-                </button>
-            <</if>>
-            
-            <!-- SCAVENGING CHECK -->
-            <<if $skills.scavenging >= 1 or hasTrait("SCAVENGER")>>
-                <button>
-                    <<link "Scour the discarded luggage">>
-                        <<addTime 3>>
-                        <<set $found_f2_loot to true>>
-                        <<run setup.addItem("Energy Bar", 1)>>
+                        <<set $f2_square to 2>>
+                        <<set $f2_phase to 2>>
                         <<goto "Floor2_Hallway">>
                     <</link>>
-                    <span class="btn-sub"><b style="color:var(--accent-gold);">[SCAVENGING 1 / SCAVENGER]</b> You know exactly which bags are worth checking.</span>
+                    <span class="btn-sub">Close the distance to see if he needs help.</span>
                 </button>
-            <<else>>
-                <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                    <span style="text-decoration: line-through;">Scour the discarded luggage</span><br>
-                    <span class="btn-sub" style="color: #666;">[REQUIRES SCAVENGING 1 OR SCAVENGER] There are too many bags. You don't know what to look for and don't have the time.</span>
-                </button>
+            </div>
+
+        <!-- ======================================================= -->
+        <!-- PHASE 1-B: AGGRO START (CONSEQUENCE FOR MAKING NOISE)   -->
+        <!-- ======================================================= -->
+        <<elseif $f2_phase == "aggro_start">>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                2ND FLOOR - EAST WING
+            </div>
+
+            <<if not $f2_audio_started>>
+                <<run setup.sound.play("firedoor", "audio/sfx/firedoor_click.mp3", false, 0.8)>>
+                <<run setup.sound.play("buzz", "audio/sfx/fluorescent_buzz.mp3", true, 0.3)>>
+                <<run setup.sound.play("rattle", "audio/sfx/zombie_rattle.mp3", false, 0.8)>>
+                <<set $f2_audio_started to true>>
             <</if>>
+
+            <!-- IMAGE: ZOMBIE SPRINTING (FAR) -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid var(--accent-red); overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(138, 28, 28, 0.8);">
+                <img src="image/act1/F2_1_aggro.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                <b style="color:var(--accent-red);">[CONSEQUENCE: NOISE DETECTED]</b>
+                <br><br>
+                You burst through the fire door. The loud, echoing noise of your struggle in the stairwell has preceded you. You don't get a second to catch your breath.
+                <br><br>
+                About twenty feet ahead, bathed in flickering fluorescent light, a man in a tattered business suit is standing in the middle of the hallway. He isn't facing away from you. He is staring <i>directly</i> at the door.
+                <br><br>
+                His eyes are clouded and milky. The bottom half of his jaw is entirely torn away, blood dripping down his ruined collar. 
+                <br><br>
+                Before your brain can even process the horror of what you're looking at, he lets out a wet, gurgling shriek and launches himself into a full sprint straight at you!
+            </div>
+
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <<if $str >= 4>>
+                        <button style="height: 100%;">
+                            <<link "Brace and Shove [STR 4]">>
+                                <<set $f2_phase to "2_brace">>
+                                <<goto "Floor2_Hallway">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 4]</b> Plant your feet and catch him by the shoulders.</span>
+                        </button>
+                    <<else>>
+                        <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                            <span style="text-decoration: line-through;">Brace and Shove</span><br>
+                            <span class="btn-sub" style="color: #666;">[REQUIRES STR 4] You aren't strong enough to stop his momentum.</span>
+                        </button>
+                    <</if>>
+
+                    <<if $agi >= 5>>
+                        <button style="height: 100%;">
+                            <<link "Dive Aside [AGI 5]">>
+                                <<set $f2_phase to "2_dive">>
+                                <<goto "Floor2_Hallway">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[AGI 5]</b> Drop low and pivot out of the way.</span>
+                        </button>
+                    <<else>>
+                        <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                            <span style="text-decoration: line-through;">Dive Aside</span><br>
+                            <span class="btn-sub" style="color: #666;">[REQUIRES AGI 5] You aren't fast enough to dodge in this narrow space.</span>
+                        </button>
+                    <</if>>
+
+                    <<if $str < 4 and $agi < 5>>
+                        <button style="grid-column: span 2; border-left-color: var(--accent-red) !important;">
+                            <<link "Try to fight it off [BRUTE FORCE]">>
+                                <<set $f2_phase to "2_tackled">>
+                                <<goto "Floor2_Hallway">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: INJURY]</b> You are neither strong nor fast enough. Prepare for impact.</span>
+                        </button>
+                    <</if>>
+                </div>
+            </div>
+
+        <!-- ======================================================= -->
+        <!-- PHASE 2: MID-HALLWAY (SILENT APPROACH REVEAL)           -->
+        <!-- ======================================================= -->
+        <<elseif $f2_phase == 2>>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                2ND FLOOR - MID-HALLWAY
+            </div>
+
+            <!-- AUDIO: JUMP SCARE SEQUENCE -->
+            <<if not $f2_scare_played>>
+                <<run setup.sound.play("creak", "audio/sfx/floorboard_groan.mp3", false, 0.7)>>
+                <<run setup.sound.stop("thump")>>
+                <<run setTimeout(function(){ setup.sound.play("rattle", "audio/sfx/zombie_rattle.mp3", false, 0.8); }, 1200)>>
+                <<run setTimeout(function(){ setup.sound.play("crack", "audio/sfx/bone_crack.mp3", false, 1.0); }, 3000)>>
+                <<set $f2_scare_played to true>>
+            <</if>>
+
+            <!-- IMAGE: ZOMBIE LUNGE (CLOSE) -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid var(--accent-red); overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(138, 28, 28, 0.8);">
+                <img src="image/act1/F2_2_lunge.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                You take a slow step forward. The floorboards groan under your weight, but the man doesn't react. You approach cautiously.
+                <br><br>
+                <<chat "You" "image/avatars/player.gif" "left" "Hey... Buddy? Are you okay? The building isn't safe, we need to—">>
+                <br>
+                The tapping stops.
+                <br><br>
+                A low, wet rattle builds in the man's throat. He spins around with a sickening <i>*crack*</i> of his neck. Your brain completely short-circuits. 
+                <br><br>
+                His eyes are clouded, milky white. The bottom half of his jaw is entirely torn away, leaving his tongue lolling grotesquely against his ruined, bloody throat. 
+                <br><br>
+                <i>'What is this? Is this a sick prank? A mask?'</i> Your mind screams for an explanation, but there is none. The only thing that registers is the primal, animalistic rage radiating off of him in waves.
+                <br><br>
+                Before the thought can even finish formulating, the man lets out a gurgling shriek and launches himself at you!
+            </div>
+
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <<if $str >= 4>>
+                        <button style="height: 100%;">
+                            <<link "Brace and Shove [STR 4]">>
+                                <<set $f2_phase to "2_brace">>
+                                <<goto "Floor2_Hallway">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 4]</b> Plant your feet and catch him by the shoulders.</span>
+                        </button>
+                    <<else>>
+                        <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                            <span style="text-decoration: line-through;">Brace and Shove</span><br>
+                            <span class="btn-sub" style="color: #666;">[REQUIRES STR 4] You aren't strong enough.</span>
+                        </button>
+                    <</if>>
+
+                    <<if $agi >= 5>>
+                        <button style="height: 100%;">
+                            <<link "Dive Aside [AGI 5]">>
+                                <<set $f2_phase to "2_dive">>
+                                <<goto "Floor2_Hallway">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[AGI 5]</b> Drop low and pivot out of the way.</span>
+                        </button>
+                    <<else>>
+                        <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                            <span style="text-decoration: line-through;">Dive Aside</span><br>
+                            <span class="btn-sub" style="color: #666;">[REQUIRES AGI 5] You aren't fast enough.</span>
+                        </button>
+                    <</if>>
+
+                    <<if $str < 4 and $agi < 5>>
+                        <button style="grid-column: span 2; border-left-color: var(--accent-red) !important;">
+                            <<link "Try to fight it off [BRUTE FORCE]">>
+                                <<set $f2_phase to "2_tackled">>
+                                <<goto "Floor2_Hallway">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: INJURY]</b> You are neither strong nor fast enough. Prepare for impact.</span>
+                        </button>
+                    <</if>>
+                </div>
+            </div>
+
+        <!-- ======================================================= -->
+        <!-- PHASE 2.1: SUCCESSFUL DODGE                             -->
+        <!-- ======================================================= -->
+        <<elseif $f2_phase == "2_brace" or $f2_phase == "2_dive">>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                2ND FLOOR - MID-HALLWAY
+            </div>
+
+            <!-- IMAGE: ZOMBIE LUNGE (AGAIN, STILL CLOSE) -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid var(--accent-red); overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(138, 28, 28, 0.8);">
+                <img src="image/act1/F2_2_lunge.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
+            <<if not $f2_lunge_played>>
+                <<run setup.sound.play("lunge", "audio/sfx/zombie_lunge.mp3", false, 0.9)>>
+                <<set $f2_lunge_played to true>>
+            <</if>>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-green); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                <<if $f2_phase == "2_brace">>
+                    <b style="color:var(--accent-green);">[STRENGTH SUCCESS]</b>
+                    <br><br>
+                    Pure fight-or-flight takes over. You plant your feet and catch him by the shoulders. His skin feels ice-cold and unnaturally greasy. 
+                    <br><br>
+                    <<chat "You" "image/avatars/player.gif" "left" "Get the hell off me!">>
+                    <br>
+                    You shove him back with everything you have. He stumbles into the wall, giving you precious seconds to draw your weapon!
+                <<else>>
+                    <b style="color:var(--accent-green);">[AGILITY SUCCESS]</b>
+                    <br><br>
+                    Pure instinct takes over. You drop low, pivoting on your heel. His snapping teeth miss your face by an inch, his momentum carrying him past you. You spring back up, putting distance between you and whatever the hell is wrong with this guy!
+                <</if>>
+            </div>
+            
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                <button style="border-left-color: var(--accent-red) !important; background: rgba(80,0,0,0.2);">
+                    <<link "READY WEAPON">>
+                        <<addTime 1>>
+                        <<set $f2_phase to 4>>
+                        <<goto "Floor2_Hallway">>
+                    <</link>>
+                    <span class="btn-sub">Prepare for combat.</span>
+                </button>
+            </div>
+
+        <!-- ======================================================= -->
+        <!-- PHASE 2.2: TACKLED (FAILED DODGE)                       -->
+        <!-- ======================================================= -->
+        <<elseif $f2_phase == "2_tackled">>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                2ND FLOOR - MID-HALLWAY
+            </div>
+
+            <<if not $f2_tackle_done>>
+                <<run setup.sound.play("tackle", "audio/sfx/body_tackle.mp3", false, 0.9)>>
+                <<run setup.sound.play("pinned_snarl", "audio/sfx/zombie_snapping.mp3", true, 1.0)>>
+                <<set $hp -= 15>>
+                <<run window.shakeScreen(30)>>
+                <<set $f2_tackle_done to true>>
+            <</if>>
+            <<run window.animateStatBar('.bar-fill.hp', $hp, $hp_max)>>
+
+            <!-- IMAGE: TACKLED ON THE FLOOR -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid var(--accent-red); overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(138, 28, 28, 0.8);">
+                <img src="image/act1/F2_3_tackle.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9) hue-rotate(330deg);">
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                <b style="color:var(--accent-red);">[ATTACKED]</b>
+                <br><br>
+                You try to brace yourself, but he hits you like a freight train! The sheer, unhinged force knocks the wind out of you as you crash onto the hard floor. This isn't a prank. <i>He's trying to kill you.</i>
+                <br><br>
+                <b style="color:var(--accent-red);">-15 HP (Tackled)</b>
+                <br><br>
+                Hot, putrid breath washes over your face. The guy is thrashing wildly on top of you, snapping his jagged upper teeth at your throat. Black blood drips from his ruined jaw onto your clothes. His dead weight is crushing the air out of your lungs. You have to get him off!
+            </div>
+
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                <<if $str >= 3 or $agi >= 3>>
+                    <button>
+                        <<link "Kick him away! [STR 3 / AGI 3]">>
+                            <<set $f2_phase to "2_kick">>
+                            <<goto "Floor2_Hallway">>
+                        <</link>>
+                        <span class="btn-sub"><b style="color:var(--accent-gold);">[STR/AGI MET]</b> Wedge your knee against his chest and throw him off.</span>
+                    </button>
+                <<else>>
+                    <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                        <span style="text-decoration: line-through;">Kick him away!</span><br>
+                        <span class="btn-sub" style="color: #666;">[REQUIRES STR 3 OR AGI 3] His dead weight is too heavy to throw off cleanly.</span>
+                    </button>
+                    
+                    <button style="border-left-color: var(--accent-red) !important;">
+                        <<link "Desperately struggle [BRUTE FORCE]">>
+                            <<set $f2_phase to "2_struggle">>
+                            <<goto "Floor2_Hallway">>
+                        <</link>>
+                        <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: INJURY]</b> You don't have the leverage. He's going to bite.</span>
+                    </button>
+                <</if>>
+            </div>
+
+        <!-- ======================================================= -->
+        <!-- PHASE 2.3: GROUND STRUGGLE RESOLUTION                   -->
+        <!-- ======================================================= -->
+        <<elseif $f2_phase == "2_kick" or $f2_phase == "2_struggle">>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                2ND FLOOR - MID-HALLWAY
+            </div>
+
+            <!-- IMAGE: TACKLED ON THE FLOOR -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid var(--accent-red); overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(138, 28, 28, 0.8);">
+                <img src="image/act1/F2_3_tackle.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9) hue-rotate(330deg);">
+            </div>
+
+            <<run setup.sound.stop("pinned_snarl")>>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                <<if $f2_phase == "2_kick">>
+                    <b style="color:var(--accent-green);">[SUCCESS]</b>
+                    <br><br>
+                    You wedge your knee against his chest and deliver a desperate, powerful kick. He goes sliding backward across the linoleum, leaving a streak of dark gore. You scramble to your feet!
+                <<else>>
+                    <<if not $f2_bite_done>>
+                        <<set $hp -= 10>>
+                        <<run window.shakeScreen(30)>>
+                        <<set $f2_bite_done to true>>
+                    <</if>>
+                    <<run window.animateStatBar('.bar-fill.hp', $hp, $hp_max)>>
+                    
+                    <b style="color:var(--accent-red);">[FAILED]</b>
+                    <br><br>
+                    You struggle, but he's too heavy! His teeth scrape painfully against your collarbone, tearing flesh! The sudden, blinding pain sends a jolt of pure adrenaline straight into your heart. With a primal scream, you violently heave his body off of you and scramble back to your feet!
+                    <br><br>
+                    <b style="color:var(--accent-red);">-10 HP (Scratched)</b>
+                <</if>>
+            </div>
+
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                <button style="border-left-color: var(--accent-red) !important; background: rgba(80,0,0,0.2);">
+                    <<link "READY WEAPON">>
+                        <<addTime 1>>
+                        <<set $f2_phase to 4>>
+                        <<goto "Floor2_Hallway">>
+                    <</link>>
+                    <span class="btn-sub">Prepare for combat.</span>
+                </button>
+            </div>
+
+        <!-- ======================================================= -->
+        <!-- PHASE 4: COMBAT LOOP & RESOLUTION                       -->
+        <!-- ======================================================= -->
+        <<elseif $f2_phase == 4>>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                2ND FLOOR - COMBAT
+            </div>
+            
+            <<if $horde.length > 0>>
+                <div style="text-align:center; margin-bottom: 20px; background: rgba(80,0,0,0.2); border: 1px solid #8a1c1c; padding: 15px; max-width: 700px; margin: 0 auto 20px auto;">
+                    
+                    <!-- IMAGE: ZOMBIE LUNGE IN COMBAT -->
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;">
+                        <img src="image/act1/F2_2_lunge.gif" style="height: 180px; filter: drop-shadow(0px 0px 8px rgba(255,0,0,0.6)); border: 1px solid #8a1c1c;">
+                    </div>
+                    
+                    <h3 style="color:var(--accent-red); margin-top:0;">ENEMIES REMAINING: <<print $horde.length>></h3>
+                    
+                    <div style="border:1px solid #333; background:#000; padding:10px; max-width:300px; margin:0 auto; text-align:left;">
+                        <<for _i, _z range $horde>>
+                            <div style="border-bottom:1px dashed #333; padding:5px; font-family: monospace;">
+                                TARGET: <span style="color:#aaa">_z.name</span> (Evasion: _z.ev%)
+                            </div>
+                        <</for>>
+                    </div>
+                </div>
+
+                <div style="text-align:center; padding: 15px; border: 1px solid #444; background-color: #050404; max-width: 700px; margin: 0 auto;">
+                    <b>EQUIPPED:</b> 
+                    <<if $equip.weapon is "none">>
+                        <span style="color:var(--accent-red)">UNARMED (Fists)</span>
+                    <<else>>
+                        <span style="color:var(--accent-blue)">$equip.weapon</span>
+                    <</if>>
+                    <br><br>
+                    <div id="combat-log" style="min-height:20px; margin-bottom:15px; color:#ccc; font-family:monospace;"></div>
+
+                    <div class="choice-menu">
+                        <button style="border-left-color: var(--accent-red) !important;">
+                            <<link "ATTACK TARGET">>
+                                <<addTime 1>>
+                                <<run window.combatTurn(0)>>
+                            <</link>>
+                        </button>
+                    </div>
+                </div>
+
+            <!-- POST-COMBAT -->
+            <<else>>
+                <<if not $f2_dead_played>>
+                    <<run setup.sound.play("body_drop", "audio/sfx/body_fall_wet.mp3", false, 0.9)>>
+                    <<run setup.sound.fade("buzz", 2000)>> 
+                    <<set $f2_dead_played to true>>
+                <</if>>
+
+                <div style="text-align:center; margin-bottom: 20px;">
+                    <div style="font-size:3em;">💀</div>
+                    <h2 style="color:var(--accent-green)">TARGET ELIMINATED</h2>
+                    <br>
+                    <<if not $f2_combat_xp>>
+                        <span style="color:var(--accent-gold); font-size: 1.2em; font-weight: bold;">[+25 XP]</span>
+                        <<run window.gainXP(25)>>
+                        <<set $f2_combat_xp to true>>
+                    <</if>>
+                </div>
+
+                <!-- IMAGE: DEAD ZOMBIE -->
+                <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                    <img src="image/act1/F2_4_dead.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+                </div>
+
+                <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                    The man hits the floor and doesn't get back up. 
+                    <br><br>
+                    You stand over the body, your chest heaving, adrenaline burning like battery acid in your veins. Your hands are shaking uncontrollably. Black, thick blood pools rapidly on the linoleum, soaking into the frayed carpet. 
+                    <br><br>
+                    <<chat "You" "image/avatars/player.gif" "left" "What just happened? Did I just... did I just kill someone?">>
+                    <br>
+                    You stare down at the ruined face, the milky eyes.
+                    <br><br>
+                    <<chat "You" "image/avatars/player.gif" "left" "No... that wasn't a person anymore. It couldn't be.">>
+                    <br>
+                    You don't know what the hell is actually going on outside, but the hallway stretches on, dark and silent. You can't stay here.
+                </div>
+
+                <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                    <button>
+                        <<link "Move toward the West Fire Stairs">>
+                            <<addTime 1>>
+                            <<set $f2_square to 3>>
+                            <<set $f2_phase to 5>>
+                            <<goto "Floor2_Hallway">> 
+                        <</link>>
+                        <span class="btn-sub">Leave the body behind.</span>
+                    </button>
+                </div>
+            <</if>>
+
+        <!-- ======================================================= -->
+        <!-- PHASE 5: WEST WING EXIT & LOOT                          -->
+        <!-- ======================================================= -->
+        <<elseif $f2_phase == 5>>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                2ND FLOOR - WEST WING EXIT
+            </div>
+
+            <<if not $f2_exit_audio>>
+                <<run setup.sound.play("lobby_muffled", "audio/bgm/muffled_lobby_chaos.mp3", true, 0.4)>>
+                <<set $f2_exit_audio to true>>
+            <</if>>
+
+            <!-- IMAGE: EXIT DOOR -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/act1/F2_5_exit.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                You reach the far end of the hallway. The air here is colder, carried by a draft from the stairwell ahead. A green "EXIT" sign flickers above the heavy steel door of the West Fire Stairs.
+                <br><br>
+                Beyond that door lies the Lobby. You can hear faint, muffled sounds echoing up from below—shouting, heavy thuds, and the rhythmic <i>*pop-pop-pop*</i> of distant gunfire. 
+                <br><br>
+                <<chat "You" "image/avatars/player.gif" "left" "Gunfire... The police must be down there. They have to be holding it together. If I can just get to them, I'll be safe.">>
+            </div>
+
+            <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
+                
+                <<if not $found_f2_loot>>
+                    <!-- PERCEPTION 5 CHECK -->
+                    <<if $per >= 5>>
+                        <button>
+                            <<link "Search the Janitor's Cart [PER 5]">>
+                                <<addTime 2>>
+                                <<set $found_f2_loot to true>>
+                                <<run setup.addItem("Bandage", 1)>>
+                                <<run setup.addItem("Flashlight", 1)>>
+                                <<set $per += 2>>
+                                <<goto "Floor2_Hallway">> 
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[PER 5]</b> You notice medical supplies hidden under a pile of rags.</span>
+                        </button>
+                    <<else>>
+                        <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                            <span style="text-decoration: line-through;">Search the Janitor's Cart</span><br>
+                            <span class="btn-sub" style="color: #666;">[REQUIRES PER 5] It's too dark to spot anything useful in the mess.</span>
+                        </button>
+                    <</if>>
+                    
+                    <!-- SCAVENGING 1 CHECK -->
+                    <<if $skills.scavenging >= 1 or hasTrait("SCAVENGER")>>
+                        <button>
+                            <<link "Scour the discarded luggage [SCAVENGING]">>
+                                <<addTime 3>>
+                                <<set $found_f2_loot to true>>
+                                <<run setup.addItem("Energy Bar", 1)>>
+                                <<goto "Floor2_Hallway">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[SCAVENGING]</b> You know exactly which bags are worth checking.</span>
+                        </button>
+                    <<else>>
+                        <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                            <span style="text-decoration: line-through;">Scour the discarded luggage</span><br>
+                            <span class="btn-sub" style="color: #666;">[REQUIRES SCAVENGING 1] There are too many bags. You don't have the time.</span>
+                        </button>
+                    <</if>>
+                <<else>>
+                    <div style="padding:10px; background:rgba(0,100,0,0.2); border:1px solid var(--accent-green); color:#99cc99; font-style:italic; margin-bottom:15px; text-align:center;">
+                        You've scavenged everything you could find here. Time to move.
+                    </div>
+                <</if>>
+
+                <!-- EXIT TO LOBBY (ALWAYS AVAILABLE) -->
+                <button style="border-left-color: var(--accent-red) !important; margin-top: 10px;">
+                    <<link "Open the door and descend to the LOBBY">>
+                        <<completeObjective "detour_2f">>
+                        <<addObjective "escape_lobby" "Find a way out of the overrun lobby">>
+                        <<purgeCompleted>>
+                        <<run setup.sound.stop("lobby_muffled")>>
+                        <<addTime 5>>
+                        <<goto "Lobby_Entrance">>
+                    <</link>>
+                    <span class="btn-sub">Head down into the gunfire.</span>
+                </button>
+            </div>
         <</if>>
 
-        <!-- EXIT TO LOBBY (ALWAYS AVAILABLE) -->
-		<button>
-            <<link "Open the door and descend to the LOBBY">>
-                /* Stop the muffled audio before going into the actual lobby */
-                    <<completeObjective "detour_2f">>
-    <<addObjective "escape_lobby" "Find a way out of the overrun lobby">>
-    <<purgeCompleted>>
-                <<run setup.sound.stop("lobby_muffled")>>
-                <<addTime 5>>
-                <<goto "Lobby_Entrance">>
-            <</link>>
-            <span class="btn-sub">Back to the corridor. Section 4.</span>
-		</button>
-	</div>
-<</if>>
+    </div>
+</div>
+<</nobr>>
