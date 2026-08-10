@@ -1,152 +1,247 @@
 :: Act2_TheRoad {"position":"400,1000","size":"100,100"}
+/* =======================================================================
+   SYSTEM INITIALIZATION
+======================================================================= */
+/* Clear the map when leaving the building */
+<<set $activeMap to undefined>>
+
 <<nobr>>
-<div id="road-sequence">
-
-    /* =================================================================
-       SECTION 1: SCENE AUDIO
-    ================================================================= */
-    <<run setup.sound.play("inside_car", "audio/bgm/insidecar.mp3", true, 0.4)>>
-    <<if $vane_status == "joined">>
-        <<run setup.sound.play("vane_breathing", "audio/sfx/vanebreathing.mp3", true, 0.5)>>
-    <</if>>
-
-    /* =================================================================
-       SECTION 2: ENVIRONMENT VISUALS & HEADER
-    ================================================================= */
-    <h2>THE ESCAPE</h2>
+<<script>>
+    /* 1. CLEAR PREVIOUS AUDIO & START THE RIOT */
+    if (typeof window.HallwayAmbience !== 'undefined') window.HallwayAmbience.stop();
+    setup.sound.stopAll(); 
     
-    <div style="margin-bottom: 15px; text-align: center;">
-        <img src="image/Act2Street/burning_city_mirror.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
-    </div>
+    /* Play inside car ambiance */
+    setup.sound.play("inside_car", "audio/bgm/insidecar.mp3", true, 0.4);
+<</script>>
 
-    /* =================================================================
-       SECTION 3: PLAYER CONDITION 
-    ================================================================= */
-    <<if $hp < $hp_max>> 
-        Your chest heaves against the seatbelt. Your knuckles are white on the steering wheel, and there is dark, drying blood on your jacket that you are trying very hard not to look at. But the doors are locked, the engine is running, and the horrors of the Ascott Residency are shrinking in the rearview mirror.
-    <<else>>
-        You let out a long, shuddering breath as the doors lock with a mechanical *thunk*. Your hands are shaking—not from pain, but from the sheer, overwhelming realization that you actually made it out. The horrors of the Ascott Residency are shrinking in the rearview mirror.
-    <</if>>
-    <br><br>
-    
-    The city is a nightmare in the glass. Plumes of thick black smoke rise from the downtown grid. Sirens echo endlessly in the distance, overlapping into a chaotic, directionless wail. 
-    <br><br>
-    Inside the car, it is jarringly quiet. The dashboard clock glows a faint, digital blue. 
-    <br><br>
+<<if $vane_status == "joined">>
+    <<run setup.sound.play("vane_breathing", "audio/sfx/vanebreathing.mp3", true, 0.5)>>
+<</if>>
+<</nobr>>
 
-    /* =================================================================
-       SECTION 4: COMPANION STATUS 
-    ================================================================= */
-    <<if $vane_status == "joined">>
-        <div style="margin-bottom: 15px; text-align: center;">
-            <img src="image/Act2Street/vane_passenger.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
-        </div>
-        
-        <span style="color:var(--accent-blue);">Vane</span> is in the passenger seat. The adrenaline that carried him through the lobby and the parking lot is finally crashing. He rests his forehead against the cool glass of the window, his eyes closed. 
-        <br><br>
-        <<chat "Vane" "image/avatars/vane.gif" "right" "I didn't think we were getting out of that lobby. I really didn't.">>
-        <br>
-        He takes a slow breath, then turns to look at you. The fear is still there, but now there's a desperate need for direction. 
-        <br><br>
-        <<chat "Vane" "image/avatars/vane.gif" "right" "I don't have anywhere to go. My family... they aren't around anymore. I was just running to run.">>
-        
-    <<else>>
-        <div style="margin-bottom: 15px; text-align: center;">
-            <img src="image/Act2Street/empty_passenger_seat.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
-        </div>
-        
-        The silence in the car is heavy. The empty passenger seat feels like a glaring reminder of everyone who didn't make it out of the lobby. 
-        <br><br>
-        Survivor's guilt is a cold thing. It starts in your stomach and creeps up your throat. The sheer scale of the collapse is setting in. The military has barricaded the bridges. The hospitals are gone. The world you knew yesterday is dead. 
-        <br><br>
-        To keep your hands from shaking, you force your mind to focus on a single point. You need a destination. You need a reason to keep the car on the road.
-    <</if>>
-    <br><br>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
 
-/* =================================================================
-       SECTION 5: THE ANCHOR CHOICE MENU
-    ================================================================= */
-    <div style="padding:10px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-gold);">
-        <b style="color:var(--accent-gold);">WHO IS WAITING FOR YOU OUTSIDE THE CITY?</b>
-    </div>
-    <br>
-    
-    <div id="anchor-menu">
-        <div class="choice-menu">
+        <!-- BUNGKUSAN UTAMA UNTUK REPLACE KESELURUHAN SCENE -->
+        <span id="vn-scene-road" style="width: 100%;">
             
-            /* WIFE / GIRLFRIEND */
-            <<button "My Wife / Girlfriend">>
-                <<set $anchor to "partner_f">><<set $anchor_rel to "wife">>
-                <<replace "#anchor-menu">>
-                    <div style="margin-bottom:10px; color:#aaa;">What is her name?</div>
-                    <<textbox "$anchor_name" "Sarah" autofocus>>
-                    <div style="margin:10px 0; font-size:0.85em; color:#777;">
-                        Presets: 
-                        <<link "Sarah">><<set $anchor_name to "Sarah">><<goto "Act2_TheRoad_Resolution">><</link>> | 
-                        <<link "Chloe">><<set $anchor_name to "Chloe">><<goto "Act2_TheRoad_Resolution">><</link>> | 
-                        <<link "Elena">><<set $anchor_name to "Elena">><<goto "Act2_TheRoad_Resolution">><</link>>
-                    </div>
-                    <br>
-                    <<button "Confirm Name">>
-                        <<if $anchor_name.trim() is "">> <<run alert("Please enter her name.")>>
-                        <<else>> <<goto "Act2_TheRoad_Resolution">> <</if>>
-                    <</button>>
-                <</replace>>
-            <</button>>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                THE ESCAPE
+            </div>
+            
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/Act2Street/burning_city_mirror.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
 
-            /* HUSBAND / BOYFRIEND */
-            <<button "My Husband / Boyfriend">>
-                <<set $anchor to "partner_m">><<set $anchor_rel to "husband">>
-                <<replace "#anchor-menu">>
-                    <div style="margin-bottom:10px; color:#aaa;">What is his name?</div>
-                    <<textbox "$anchor_name" "David" autofocus>>
-                    <div style="margin:10px 0; font-size:0.85em; color:#777;">
-                        Presets: 
-                        <<link "David">><<set $anchor_name to "David">><<goto "Act2_TheRoad_Resolution">><</link>> | 
-                        <<link "Marcus">><<set $anchor_name to "Marcus">><<goto "Act2_TheRoad_Resolution">><</link>> | 
-                        <<link "Elias">><<set $anchor_name to "Elias">><<goto "Act2_TheRoad_Resolution">><</link>>
-                    </div>
-                    <br>
-                    <<button "Confirm Name">>
-                        <<if $anchor_name.trim() is "">> <<run alert("Please enter his name.")>>
-                        <<else>> <<goto "Act2_TheRoad_Resolution">> <</if>>
-                    <</button>>
-                <</replace>>
-            <</button>>
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <<if $hp < $hp_max>> 
+                    Your chest heaves against the seatbelt. Your knuckles are white on the steering wheel, and there is dark, drying blood on your jacket that you are trying very hard not to look at. 
+                <<else>>
+                    You let out a long, shuddering breath as the doors lock with a mechanical <i>*thunk*</i>. Your hands are shaking—not from pain, but from the sheer, overwhelming realization that you actually made it out. 
+                <</if>>
+                <br><br>
+                The locked doors and the running engine are the only things separating you from the nightmare outside. The horrors of the Ascott Residency are shrinking in the rearview mirror.
+                <br><br>
+                The city is a nightmare in the glass. Plumes of thick black smoke rise from the downtown grid. Sirens echo endlessly in the distance, overlapping into a chaotic, directionless wail. 
+                <br><br>
+                Inside the car, it is jarringly quiet. The dashboard clock glows a faint, digital blue. 
+                
+                <div class="choice-menu" style="margin-top:20px;">
+                    <button style="border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);">
+                        <<link "Next ▼">>
+                            <<replace "#vn-scene-road">>
+                                
+                                <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                                    THE ESCAPE
+                                </div>
 
-            /* NON-BINARY PARTNER */
-            <<button "My Partner (Non-Binary)">>
-                <<set $anchor to "partner_nb">><<set $anchor_rel to "partner">>
-                <<replace "#anchor-menu">>
-                    <div style="margin-bottom:10px; color:#aaa;">What is their name?</div>
-                    <<textbox "$anchor_name" "Alex" autofocus>>
-                    <div style="margin:10px 0; font-size:0.85em; color:#777;">
-                        Presets: 
-                        <<link "Alex">><<set $anchor_name to "Alex">><<goto "Act2_TheRoad_Resolution">><</link>> | 
-                        <<link "Jordan">><<set $anchor_name to "Jordan">><<goto "Act2_TheRoad_Resolution">><</link>> | 
-                        <<link "Taylor">><<set $anchor_name to "Taylor">><<goto "Act2_TheRoad_Resolution">><</link>>
-                    </div>
-                    <br>
-                    <<button "Confirm Name">>
-                        <<if $anchor_name.trim() is "">> <<run alert("Please enter their name.")>>
-                        <<else>> <<goto "Act2_TheRoad_Resolution">> <</if>>
-                    <</button>>
-                <</replace>>
-            <</button>>
+                                /* =================================================================
+                                   COMPANION: VANE IS PRESENT
+                                ================================================================= */
+                                <<if $vane_status == "joined">>
+                                    <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                                        <img src="image/Act2Street/vane_passenger.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+                                    </div>
+                                    
+                                    <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                                        <span id="vn-text-vane">
+                                            <span style="color:var(--accent-blue);">Vane</span> is in the passenger seat. The adrenaline that carried him through the lobby and the parking lot is finally crashing. He rests his forehead against the cool glass of the window, his eyes closed. 
+                                            <br><br>
+                                            <<chat "Vane" "image/avatars/vane.gif" "right" "I didn't think we were getting out of that lobby. I really didn't.">>
+                                            <br>
+                                            He opens his eyes, staring blankly at the passing, burning ruins of the city. He lets out a dry, humorless laugh.
+                                            <br><br>
+                                            <<chat "Vane" "image/avatars/vane.gif" "right" "My entire life was sponsorships, unboxing videos, aesthetic lighting... None of that prepared me for bludgeoning someone's skull in with a Pelican camera case.">>
+                                            
+                                            <div class="choice-menu" style="margin-top:20px;">
+                                                <button style="border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);">
+                                                    <<link "Next ▼">>
+                                                        <<replace "#vn-text-vane">>
+                                                            He takes a slow, shuddering breath, then turns to look at you. The fear is still there, but now there's a desperate need for direction. 
+                                                            <br><br>
+                                                            <<chat "Vane" "image/avatars/vane.gif" "right" "I don't have anywhere to go. My family and I... we haven't spoken since I moved to the city to do my own thing.">>
+                                                            <br>
+                                                            He traces the frayed edge of his ruined designer jacket. 
+                                                            <br><br>
+                                                            <<chat "Vane" "image/avatars/vane.gif" "right" "My entire world was on a screen, and the internet is dead. I was just running to run. Where are we going?">>
+                                                            <br><br>
+                                                            To keep your hands from shaking, you force your mind to focus on a single point. You need a destination. You need a reason to keep the car on the road.
+                                                            
+                                                            <<run $("#anchor-wrapper").fadeIn(800)>>
+                                                        <</replace>>
+                                                    <</link>>
+                                                </button>
+                                            </div>
+                                        </span>
+                                    </div>
 
-            /* PARENTS (Bypasses Name Entry) */
-            <<button "My Parents">>
-                <<set $anchor to "parents">><<set $anchor_name to "my folks">><<set $anchor_rel to "parents">>
-                <<goto "Act2_TheRoad_Resolution">>
-            <</button>>
+                                /* =================================================================
+                                   COMPANION: PLAYER IS ALONE
+                                ================================================================= */
+                                <<else>>
+                                    <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                                        <img src="image/Act2Street/empty_passenger_seat.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+                                    </div>
+                                    
+                                    <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                                        <span id="vn-text-alone">
+                                            The silence in the car is heavy. The empty passenger seat feels like a glaring reminder of everyone who didn't make it out of the lobby. 
+                                            <br><br>
+                                            Survivor's guilt is a cold thing. It starts in your stomach and creeps up your throat. The sheer scale of the collapse is setting in. The military has barricaded the bridges. The hospitals are gone. The world you knew yesterday is dead. 
+                                            
+                                            <div class="choice-menu" style="margin-top:20px;">
+                                                <button style="border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);">
+                                                    <<link "Next ▼">>
+                                                        <<replace "#vn-text-alone">>
+                                                            To keep your hands from shaking, you force your mind to focus on a single point. You need a destination. You need a reason to keep the car on the road.
+                                                            
+                                                            <<run $("#anchor-wrapper").fadeIn(800)>>
+                                                        <</replace>>
+                                                    <</link>>
+                                                </button>
+                                            </div>
+                                        </span>
+                                    </div>
+                                <</if>>
 
-            /* LONE WOLF (Bypasses Name Entry) */
-            <<button "No one. I'm surviving for me.">>
-                <<set $anchor to "none">><<set $anchor_name to "myself">><<set $anchor_rel to "none">>
-                <<goto "Act2_TheRoad_Resolution">>
-            <</button>>
+                            <</replace>>
+                        <</link>>
+                    </button>
+                </div>
 
+            </div>
+        </span>
+
+        <!-- =================================================================
+           SECTION 5: THE ANCHOR CHOICE MENU (HIDDEN UNTIL CALLED)
+        ================================================================= -->
+        <div id="anchor-wrapper" style="display:none; width: 100%; max-width: 700px; margin: 0 auto;">
+            <div style="padding:10px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-gold); margin-bottom: 15px;">
+                <b style="color:var(--accent-gold);">WHO IS WAITING FOR YOU OUTSIDE THE CITY?</b>
+            </div>
+            
+            <div id="anchor-menu">
+                <div class="choice-menu">
+                    
+                    /* WIFE / GIRLFRIEND */
+                    <button>
+                        <<link "My Wife / Girlfriend">>
+                            <<set $anchor to "partner_f">><<set $anchor_rel to "wife">>
+                            <<replace "#anchor-menu">>
+                                <div style="margin-bottom:10px; color:#aaa; font-family: monospace;">What is her name?</div>
+                                <<textbox "$anchor_name" "Sarah" autofocus>>
+                                <div style="margin:10px 0; font-size:0.85em; color:#777; font-family: monospace;">
+                                    Presets: 
+                                    <<link "Sarah">><<set $anchor_name to "Sarah">><<goto "Act2_TheRoad_Resolution">><</link>> | 
+                                    <<link "Chloe">><<set $anchor_name to "Chloe">><<goto "Act2_TheRoad_Resolution">><</link>> | 
+                                    <<link "Elena">><<set $anchor_name to "Elena">><<goto "Act2_TheRoad_Resolution">><</link>>
+                                </div>
+                                <br>
+                                <div class="choice-menu">
+                                    <button style="border-left-color: var(--accent-gold) !important;">
+                                        <<link "Confirm Name">>
+                                            <<if $anchor_name.trim() is "">> <<run alert("Please enter her name.")>>
+                                            <<else>> <<goto "Act2_TheRoad_Resolution">> <</if>>
+                                        <</link>>
+                                    </button>
+                                </div>
+                            <</replace>>
+                        <</link>>
+                    </button>
+
+                    /* HUSBAND / BOYFRIEND */
+                    <button>
+                        <<link "My Husband / Boyfriend">>
+                            <<set $anchor to "partner_m">><<set $anchor_rel to "husband">>
+                            <<replace "#anchor-menu">>
+                                <div style="margin-bottom:10px; color:#aaa; font-family: monospace;">What is his name?</div>
+                                <<textbox "$anchor_name" "David" autofocus>>
+                                <div style="margin:10px 0; font-size:0.85em; color:#777; font-family: monospace;">
+                                    Presets: 
+                                    <<link "David">><<set $anchor_name to "David">><<goto "Act2_TheRoad_Resolution">><</link>> | 
+                                    <<link "Marcus">><<set $anchor_name to "Marcus">><<goto "Act2_TheRoad_Resolution">><</link>> | 
+                                    <<link "Elias">><<set $anchor_name to "Elias">><<goto "Act2_TheRoad_Resolution">><</link>>
+                                </div>
+                                <br>
+                                <div class="choice-menu">
+                                    <button style="border-left-color: var(--accent-gold) !important;">
+                                        <<link "Confirm Name">>
+                                            <<if $anchor_name.trim() is "">> <<run alert("Please enter his name.")>>
+                                            <<else>> <<goto "Act2_TheRoad_Resolution">> <</if>>
+                                        <</link>>
+                                    </button>
+                                </div>
+                            <</replace>>
+                        <</link>>
+                    </button>
+
+                    /* NON-BINARY PARTNER */
+                    <button>
+                        <<link "My Partner (Non-Binary)">>
+                            <<set $anchor to "partner_nb">><<set $anchor_rel to "partner">>
+                            <<replace "#anchor-menu">>
+                                <div style="margin-bottom:10px; color:#aaa; font-family: monospace;">What is their name?</div>
+                                <<textbox "$anchor_name" "Alex" autofocus>>
+                                <div style="margin:10px 0; font-size:0.85em; color:#777; font-family: monospace;">
+                                    Presets: 
+                                    <<link "Alex">><<set $anchor_name to "Alex">><<goto "Act2_TheRoad_Resolution">><</link>> | 
+                                    <<link "Jordan">><<set $anchor_name to "Jordan">><<goto "Act2_TheRoad_Resolution">><</link>> | 
+                                    <<link "Taylor">><<set $anchor_name to "Taylor">><<goto "Act2_TheRoad_Resolution">><</link>>
+                                </div>
+                                <br>
+                                <div class="choice-menu">
+                                    <button style="border-left-color: var(--accent-gold) !important;">
+                                        <<link "Confirm Name">>
+                                            <<if $anchor_name.trim() is "">> <<run alert("Please enter their name.")>>
+                                            <<else>> <<goto "Act2_TheRoad_Resolution">> <</if>>
+                                        <</link>>
+                                    </button>
+                                </div>
+                            <</replace>>
+                        <</link>>
+                    </button>
+
+                    /* PARENTS (Bypasses Name Entry) */
+                    <button>
+                        <<link "My Parents">>
+                            <<set $anchor to "parents">><<set $anchor_name to "my folks">><<set $anchor_rel to "parents">>
+                            <<goto "Act2_TheRoad_Resolution">>
+                        <</link>>
+                    </button>
+
+                    /* LONE WOLF (Bypasses Name Entry) */
+                    <button>
+                        <<link "No one. I'm surviving for me.">>
+                            <<set $anchor to "none">><<set $anchor_name to "myself">><<set $anchor_rel to "none">>
+                            <<goto "Act2_TheRoad_Resolution">>
+                        <</link>>
+                    </button>
+
+                </div>
+            </div>
         </div>
+
     </div>
 </div>
-<</nobr>>
