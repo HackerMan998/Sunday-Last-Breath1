@@ -76,1106 +76,1312 @@
 
 <</nobr>>
 
+<<nobr>>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
 
-/* ══════════════════════════════════════════════════════════════════════════
-   PHASE 1 — LOBBY HUB (ARRIVAL)
-   The player first sees the lobby and is presented with 4 simultaneous crises.
-   ══════════════════════════════════════════════════════════════════════════ */
-<<if $lobby_phase == 1>>
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           PHASE 1 — LOBBY HUB (ARRIVAL)
+           The player first sees the lobby and is presented with 4 simultaneous crises.
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<if $lobby_phase == 1>>
 
-    <h2>THE ASCOTT LOBBY — GROUND FLOOR</h2>
-
-    <div style="margin-bottom:15px; text-align:center;">
-        <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Lobby_Main.gif" style="max-width:100%; border:1px solid #333;">
-    </div>
-
-    The stairwell door punches open and you stumble through it into the lobby.
-    <br><br>
-    The Ascott Grand's lobby was designed to make you feel small — fifty feet of vaulted ceiling, polished marble floors the color of old bone, chandeliers that cost more than most people earn in a decade. It was built for first impressions. Right now it is delivering one.
-    <br><br>
-    The smell hits first. Blood and gunpowder and something underneath both — something animal and wrong, the smell of a body that is still moving but should not be. Then the sound: screaming layered over screaming, the wet skid of shoe leather on marble, glass shattering somewhere above, and underneath all of it a low and continuous sound from things that should not still be making sounds. The lobby's grandeur is completely unequal to the situation. The chandeliers are still lit. That might be the most disturbing thing — all those warm amber bulbs still burning like nothing happened, throwing gold light across everything happening below.
-    <br><br>
-    You press your back against the stairwell door and take one full second to see it all clearly. One second. That is all you can afford.
-    <br><br>
-    Three crises. Right now. Unfolding simultaneously. And you are one person.
-    
-    <!-- GRID CONTAINER FOR CRISIS CARDS -->
-    <div class="crisis-grid">
-
-        <!-- CRISIS 1: VANE / ELEVATORS -->
-        <<if not $vane_done>>
-            <div class="crisis-card">
-                <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Femboy_in_need.gif">
-                <div class="crisis-text">
-                    <b style="color:var(--accent-blue);">By the elevator banks</b> — an <span style="color:var(--accent-blue);">androgynous young man</span> is making his last stand against an infected with nothing but a heavy metal briefcase. He is losing ground with every step.
-                </div>
-                <div class="choice-menu">
-                    <button>
-                        <<link "Sprint to Elevators">>
-                            <<set $didMove to true>>
-                            <<set $currentLocation to "e_room">>
-                            <<set $locationName to "Elevator Banks">>
-                            <<set $lobby_phase to "crossing_to_vane">>
-                            <<goto "Lobby_Entrance">>
-                        <</link>>
-                        <span class="btn-sub">Rush to help the young man.</span>
-                    </button>
-                </div>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                THE ASCOTT LOBBY — GROUND FLOOR
             </div>
-        <</if>>
 
-        <!-- CRISIS 2: MAYA / RECEPTION -->
-        <<if not $maya_done>>
-            <div class="crisis-card">
-                <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Brown_woman_in_need.gif">
-                <div class="crisis-text">
-                    <b style="color:var(--accent-blue);">At the reception desk</b> — a <span style="color:var(--accent-blue);">brown woman and her young daughter</span> are trapped in a shrinking circle behind the counter. The infected is pressing them back against the wall. She is out of space.
-                </div>
-                <div class="choice-menu">
-                    <button>
-                        <<link "Sprint to Reception">>
-                            <<set $didMove to true>>
-                            <<set $currentLocation to "ne_room">>
-                            <<set $locationName to "Reception Desk">>
-                            <<set $lobby_phase to "crossing_to_maya">>
-                            <<goto "Lobby_Entrance">>
-                        <</link>>
-                        <span class="btn-sub">Rush to help the mother and child.</span>
-                    </button>
-                </div>
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/act1/Lobby_Main.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
             </div>
-        <</if>>
 
-        <!-- CRISIS 3: DEAD MAN / LOOT -->
-        <<if not $loot_done>>
-            <div class="crisis-card">
-                <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Lobby_Dead_Man.gif">
-                <div class="crisis-text">
-                    <b style="color:var(--accent-gold);">At your feet</b> — a dead man wearing a <span style="color:var(--accent-gold);">military-grade backpack</span> that looks completely untouched. Whatever killed him moved on fast.
-                </div>
-                <div class="choice-menu">
-                    <button>
-                        <<link "Loot the Backpack">>
-                            <<set $didMove to true>>
-                                <<set $currentLocation to "n_room">>
-                                <<set $locationName to "North Lobby">>
-                            <<set $lobby_phase to "crossing_to_loot">>
-                            <<goto "Lobby_Entrance">>
-                        <</link>>
-                        <span class="btn-sub">Prioritize the supplies. Every second counts.</span>
-                    </button>
-                </div>
-            </div>
-        <</if>>
-
-        <!-- CRISIS 4: POLICE BARRICADE / FRONT DOORS -->
-        <div class="crisis-card">
-            <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Police_barricade.gif">
-            <div class="crisis-text">
-                <b style="color:var(--accent-gold);">At the glass front doors</b> — two police officers have constructed a barricade. Rifles up. They are twenty feet from people dying and they have not moved once.
-            </div>
-            <div class="choice-menu">
-                <button>
-                    <<link "Head to Front Doors">>
-                        <<set $didMove to true>>
-                        <<set $currentLocation to "lobby_exit">>
-                        <<set $locationName to "Front Barricade">>
-                        <<set $lobby_phase to "crossing_to_exit">>
-                        <<goto "Lobby_Entrance">>
-                    <</link>>
-                    <span class="btn-sub">Ignore the chaos and head straight for the exit.</span>
-                </button>
-            </div>
-        </div>
-
-    </div>
-
-
-/* ══════════════════════════════════════════════════════════════════════════
-   TRANSIT — CROSSING TO VANE
-   Narrative filler before the Vane combat sequence.
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "crossing_to_vane">>
-
-    <h2>LOBBY — CROSSING TO THE ELEVATORS</h2>
-
-    You break left and run.
-    <br><br>
-    The marble is treacherous — your first step skids half an inch and your stomach drops, but you find your footing fast and open into a full sprint. The lobby feels enormous when you are trying to cross it in a hurry. Your footfalls crack loud against the stone. Things in the room turn toward the sound. You do not stop.
-    <br><br>
-    Fifteen feet. Ten. You can hear him now — ragged, panicked breathing, the metallic clang of the briefcase connecting with something, and underneath all of it that low vocalization of the infected: not a scream, not a growl, something in between that your brain keeps trying to categorize and cannot. A wet and continuous sound, like something that has forgotten what a mouth is for.
-    <br><br>
-    Five feet. You see his face properly for the first time. Young. Dyed hair plastered to his forehead with sweat. Eyes wide and very dark and still fighting even though every rational part of him has clearly given up on the outcome. He catches sight of you closing the distance and something shifts in his expression — not relief yet. Just a held breath. A very small, desperate adjustment from <i>this is it</i> to <i>maybe not yet</i>.
-    <br><br>
-    The infected does not see you. Its entire world has narrowed to the man in front of it.
-    <br><br>
-    
-    <div class="choice-menu">
-        <button>
-            <<link "Move in">>
-                <<set $didMove to true>>
-                <<set $lobby_phase to "rescue_vane">>
-                <<goto "Lobby_Entrance">>
-            <</link>>
-            <span class="btn-sub">Engage the infected.</span>
-        </button>
-    </div>
-
-
-/* ══════════════════════════════════════════════════════════════════════════
-   RESCUE VANE — ELEVATOR (COMBAT RESOLUTION)
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "rescue_vane">>
-
-    <h2>LOBBY — ELEVATOR RESCUE</h2>
-
-    The young man's back connects with the elevator doors with a hollow metallic thud. He is out of room. The briefcase is too heavy to keep swinging one-handed and his arms are shaking at the joints. The creature is right there — jaws open, hands clawing, close enough that you can see the damage already done to it from here: half its face is wrong, the skin sitting wrong, the eyes filming over to white. It does not feel pain. That is the only advantage it has. It is enough.
-    <br><br>
-
-    <!-- ==== COMBAT SUCCESS BLOCK ==== -->
-    <<if _combat_success>>
-        
-        <span style="color:var(--accent-green);">[COMBAT — SUCCESS]</span> <span style="color:var(--accent-gold);">[+25 XP]</span>
-        <<if not $lobby_vane_xp>>
-            <<run window.gainXP(25)>>
-            <<set $lobby_vane_xp to true>>
-        <</if>>
-        <br><br>
-
-        <<if _isGun>>
-            You come in from the creature's left, angling hard for the shot that does not put him behind the exit point. Your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> is up before you have fully closed the distance. One round into the marble ceiling directly above its head — not to hurt it, to stop it. The crack of the shot in the enclosed space is enormous, a flat percussive slap that bounces off every hard surface in the lobby simultaneously. The creature flinches. Just a half-second of recoil, the ruined brain still responding to sudden overwhelming sound. You use that half-second completely. You close the remaining distance, press the barrel hard to its temple, and squeeze. The report is muffled by the contact. The creature drops straight down, taking his briefcase with it — the handle is caught in its hands on the way to the floor — and he stumbles forward, palms catching the elevator door frame, barely staying upright.
-            <br><br>
-            He stares at the thing on the floor. He stares at his own hands. He stares at you.
-
-        <<elseif _isBlade>>
-            You close the gap without slowing, coming in low and angled from the side where the creature has no peripheral vision left. Your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> finds the back of its neck before it registers you are there. It seizes — a full-body spasm, no vocalization, just that awful shuddering lock-up as the signals stop — and its legs buckle. It takes the blade down with it as it falls, weight and gravity pulling the handle out of your grip. You put your boot flat on its shoulder, brace, and wrench the weapon free with both hands. The marble goes dark around it in a spreading circle. He is pressed flat against the elevator doors, not breathing, both hands still raised in the defensive posture that no longer has anything to defend against.
-            <br><br>
-            For a moment, neither of you move.
-
-        <<elseif _isBlunt>>
-            You do not break stride. Your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> is back over your shoulder before you reach it — a full hitter's grip, both hands, full rotation. The impact when it connects is dense and terrible, a sound you feel traveling up through your hands and into your arms before you actually process hearing it, and the creature staggers sideways into the elevator door frame with enough force to dent the brushed metal. It is still moving. You bring it down again, harder, a shorter arc with more weight behind it. Then once more. Then it is not moving anymore and the lobby feels very quiet and your forearms are humming from the vibration.
-            <br><br>
-            You breathe. He is staring at you.
-
-        <<else>>
-            You hit it at a dead sprint — full body weight, both arms, everything — wrapping yourself around its midsection and driving it off from him and sideways into the wall. The impact is brutal on everyone's part. You hit the marble hard, the creature on top of you for one sickening second, its jaws snapping at air two inches from your face. You get your hands up on its throat before it can redirect and roll, take the top, pin it with your knees. It thrashes. It does not stop thrashing. You bring your elbow down on its skull — once, twice, three times, four — until your arm goes numb from the impacts and it finally stops moving and he is somewhere above you saying your name or something like your name, but the blood is loud in your ears and you cannot parse words yet.
-            <br><br>
-            You sit back on your heels. You look at your hands.
-        <</if>>
-
-        <<set $vane_status to "saved">>
-        <<set $hum += 10>>
-        <br><br>
-        
-        He slides slowly down the elevator doors until he is sitting on the floor. He does not say anything for a long moment. He is looking at the thing beside him. Then he looks at his own hands, still shaking at the wrists. Then he looks at you — really looks at you, the way people look at someone when they are updating an entire model of how the world works.
-        <br><br>
-        A long, controlled breath goes out of him — the deliberate kind, the kind you breathe when you are choosing to be calm rather than the alternative.
-        <br><br>
-        <span style="color:var(--accent-blue);">"I'm Vane,"</span> he says. His voice is steadier than his hands. <span style="color:var(--accent-blue);">"I know this is a genuinely terrible time for introductions. I just want to say that out loud. Also —"</span> He gestures vaguely at the creature on the floor. <span style="color:var(--accent-blue);">"— thank you. I was not winning that. At all. I want to be honest about that."</span> A tired, faintly embarrassed almost-smile. <span style="color:var(--accent-blue);">"Turns out briefcases are not great weapons. I had suspicions but now I know for certain."</span>
-        <br><br>
-        He looks up at you. Waiting.
-        <br><br>
-
-        <div class="choice-menu">
-            <button>
-                <<link "'Stick close to me. We move together.'">>
-                    <<addTime 1>>
-                    <<set $vane_status to "joined">>
-                    <<if not $companions.includes("Vane")>><<run $companions.push("Vane")>><</if>>
-                    <<set $vane_done to true>>
-                    <<set $currentLocation to "c_room">>
-                    <<set $locationName to "Center Lobby">>
-                    <<set $lobby_phase to "post_action">>
-                    <<goto "Lobby_Entrance">>
-                <</link>>
-                <span class="btn-sub">Take him with you.</span>
-            </button>
-            <button>
-                <<link "'Stay low and out of sight. I've got more to do here.'">>
-                    <<addTime 1>>
-                    <<set $vane_done to true>>
-                    <<set $currentLocation to "c_room">>
-                    <<set $locationName to "Center Lobby">>
-                    <<set $lobby_phase to "post_action">>
-                    <<goto "Lobby_Entrance">>
-                <</link>>
-                <span class="btn-sub">Leave him here to hide.</span>
-            </button>
-            <button>
-                <<link "'You're on your own from here.'">>
-                    <<addTime 1>>
-                    <<set $vane_status to "abandoned">>
-                    <<set $vane_done to true>>
-                    <<set $hum -= 5>>
-                    <<set $currentLocation to "c_room">>
-                    <<set $locationName to "Center Lobby">>
-                    <<set $lobby_phase to "post_action">>
-                    <<goto "Lobby_Entrance">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-red);">[HUMANITY -5]</b> Abandon him.</span>
-            </button>
-        </div>
-
-    <!-- ==== COMBAT FAILURE BLOCK ==== -->
-    <<else>>
-        <<addTime 2>>
-
-        <span style="color:var(--accent-red);">[COMBAT — FAILED]</span>
-        <br><br>
-
-        <<if _isGun>>
-            You raise your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> and the geometry is immediately wrong — he is directly behind the creature, pinned against the elevator doors, zero separation between them. Every angle runs through both bodies. You sidestep, searching for the shot, looking for the gap. The half-second you spend repositioning is the half-second that decides it. By the time you find a clean line, there is nothing left on the other side of the creature that you need to protect. You lower the weapon. You look away.
-
-        <<elseif _isBlade>>
-            You lunge with your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> and the creature twists at exactly the wrong moment — not intentionally, just the random motion of a body in frenzy — and your blade finds air, then the elevator door behind it with a shriek of metal. The creature does not even register you. Its entire focus is in front of it. You have not made yourself real to it yet. By the time you recover for a second attempt, the moment has closed.
-
-        <<elseif _isBlunt>>
-            You swing your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> hard and wide and the creature lurches forward into him at exactly the same moment — and your weapon swings through empty space where its head just was, clanging off the elevator door with enough force to send a shockwave up both your arms. Your grip slips. One precious second spent recovering your hold. When you look up, the angle of his body has changed.
-
-        <<else>>
-            You throw yourself at it, get your arms around its torso, try to haul it backward. It does not care. It is stronger than it has any right to be and it shrugs you off without breaking its focus on him, the way a large animal shrugs off something minor and irritating. You hit the marble floor. By the time you are back on your feet, the sound from the elevator bank has stopped, and the silence is worse than the screaming was.
-        <</if>>
-
-        <br><br>
-        You cannot stop it. You pull back from the elevator bank. You do not look at what is on the floor.
-        <br><br>
-        The briefcase is still sitting on the marble. It is just sitting there.
-
-        <<set $vane_status to "dead">>
-        <<set $vane_done to true>>
-        <<set $hum -= 10>>
-
-        <<exert 10>>
-        <<run window.animateStatBar('.bar-fill.stamina', $stamina, $stamina_max)>>
-        <<run window.animateStatBar('.bar-fill.hp', $hp, $hp_max)>>
-        <span style="color:var(--accent-red); font-weight:bold;">-STAMINA (Struggle)</span>
-        <br><br>
-
-        <div class="choice-menu">
-            <button>
-                <<link "Pull back">>
-                    <<addTime 1>>
-                    <<set $didMove to true>>
-                    <<set $currentLocation to "c_room">>
-                    <<set $locationName to "Center Lobby">>
-                    <<set $lobby_phase to "post_action">>
-                    <<goto "Lobby_Entrance">>
-                <</link>>
-                <span class="btn-sub">Retreat before it notices you.</span>
-            </button>
-        </div>
-
-    <</if>>
-
-
-/* ══════════════════════════════════════════════════════════════════════════
-   TRANSIT — CROSSING TO MAYA
-   Narrative filler before the Maya combat sequence.
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "crossing_to_maya">>
-
-    <h2>LOBBY — CROSSING TO RECEPTION</h2>
-
-    You break right, angling across the wide open floor.
-    <br><br>
-    The screaming is louder here. A woman's voice and a child's voice braided together, one trying to talk over the other — the mother calling out to her daughter, trying to keep the girl's attention on her face and not on what is closing in. The child is not responding anymore. She has gone somewhere else in her head. That is what children do when the thing in front of them exceeds what they can hold.
-    <br><br>
-    The infected that cornered them vaulted the reception desk like it was not there. It is on their side of the counter now, between you and them, its back to you. The mother has her daughter pressed against the wall behind her and her arm out, palm extended, like sheer determination might hold it back. It will not. She is out of desk. Out of room. Out of options.
-    <br><br>
-    She sees you coming across the lobby. You watch it happen on her face — the whole arc of it, from past despair to something fragile and new, some recalculation happening too fast to be comfortable. Her arm stays out but her eyes have changed.
-    <br><br>
-    The infected has its back to you. Its entire world is the two people against the wall.
-    <br><br>
-    That is the opening.
-    <br><br>
-
-    <div class="choice-menu">
-        <button>
-            <<link "Move in">>
-                <<addTime 1>>
-                <<set $didMove to true>>
-                <<set $lobby_phase to "rescue_maya">>
-                <<goto "Lobby_Entrance">>
-            <</link>>
-            <span class="btn-sub">Engage the infected.</span>
-        </button>
-    </div>
-
-
-/* ══════════════════════════════════════════════════════════════════════════
-   RESCUE MAYA — RECEPTION (COMBAT RESOLUTION)
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "rescue_maya">>
-
-    <h2>LOBBY — RECEPTION RESCUE</h2>
-
-    You do not have much time. You do not waste any of it.
-    <br><br>
-
-    <!-- ==== COMBAT SUCCESS BLOCK ==== -->
-    <<if _combat_success>>
-        
-        <<addTime 1>>
-        <span style="color:var(--accent-green);">[COMBAT — SUCCESS]</span> <span style="color:var(--accent-gold);">[+25 XP]</span>
-        <<if not $lobby_maya_xp>>
-            <<run window.gainXP(25)>>
-            <<set $lobby_maya_xp to true>>
-        <</if>>
-        <br><br>
-
-        <<if _isGun>>
-            One round into the marble ceiling directly above the creature's head — the crack is enormous in the hard-surfaced space, a flat concussive wave that bounces off every surface, and the creature stops. Completely. Its dead brain still processes sudden overwhelming sound as a threat. One second. Maybe less. You vault the reception counter in that second — one hand on the surface, feet clearing — and come down behind it pressing your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> to the back of its skull. Your hand is steady. You pull the trigger once. It drops across the counter like its strings were cut, folding across the surface with a sound like wet concrete hitting a hard floor. The little girl makes no sound at all. She has gone somewhere far away behind her eyes.
-
-        <<elseif _isBlade>>
-            You clear the counter in one motion — one hand on the surface, feet swinging over without breaking pace — and your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> finds the creature's back before it registers your presence. The blade goes in clean. It wheels on you immediately, all its attention redirected, jaws snapping — which is exactly what you needed, because now it is facing you and not them. You pull the blade free as it turns and step backward, drawing it out toward the open space behind the desk, buying the woman three feet of separation. Then you drive the blade home a second time at the base of the skull and hold it there until the thrashing stops. The counter is ruined. Neither of them are hurt.
-
-        <<elseif _isBlunt>>
-            You come around the side of the desk rather than over it and catch the creature mid-turn with your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> swung fully into the back of its skull. The crack is the loudest sound in the lobby for one full second and the echo off the marble ceiling takes a while to settle. The creature folds across the desk and stays there. Your arms ring from the impact. On the other side of the counter, the woman pulls her daughter against her and does not let go.
-
-        <<else>>
-            You come over the counter and get your arms around the creature from behind — one forearm across its throat, your other hand forcing its jaw shut so the teeth cannot reach anything. You haul it backward, away from the woman, toward the center of the desk. Your feet scramble for purchase on the polished surface behind the counter. It fights you every inch of the way. When you have enough separation you drive it face-first into the edge of the marble counter with everything you have. It does not get back up. You stand over it, breathing hard, and look across at the woman.
-        <</if>>
-
-        <<set $maya_status to "saved">>
-        <<set $hum += 10>>
-        <br><br>
-
-        The woman drops to her knees on the other side of the counter and puts both arms completely around her daughter. A long moment of just breathing — the girl pressing her face into her mother's shoulder, the mother pressing her face into the top of the girl's head, both of them holding on like the hold itself is the only solid thing left in the building.
-        <br><br>
-        Thirty seconds go by. Then she looks up at you over her daughter's shoulder. Her eyes are dry. She then looked at the creature on the floor. Then back at you. Then the creature again. Then back at you.
-        <br><br>
-
-        <div style="margin-bottom:15px; text-align:center;">
-            <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Brown_woman_relieved.gif" style="max-width:100%; border:1px solid #333;">
-        </div>
-
-        <span style="color:var(--accent-gold);">"I'm Maya,"</span> she says quietly. <span style="color:var(--accent-gold);">"And this is Lily."</span> She puts a slow hand over Lily's ear, gently, like she is blocking sounds the child has already heard. <span style="color:var(--accent-gold);">"Lily, say hello."</span> Lily does not say hello. She presses her face harder into Maya's shoulder. Maya exhales through her nose — something that almost wants to be a laugh and doesn't quite get there. <span style="color:var(--accent-gold);">"She usually has better manners. It's been a day."</span> She pauses. Looks at you directly. <span style="color:var(--accent-gold);">"Thank you. I don't — thank you."</span>
-        <br><br>
-
-        <div class="choice-menu">
-            <button>
-                <<link "'Come with me. It's not safe to stay here.'">>
-                    <<addTime 1>>
-                    <<set $maya_done to true>>
-                    <<set $lobby_phase to "maya_declines">>
-                    <<goto "Lobby_Entrance">>
-                <</link>>
-                <span class="btn-sub">Convince her to come with you.</span>
-            </button>
-            <button>
-                <<link "'Stay low. Keep her quiet. I've got more to do.'">>
-                    <<addTime 1>>
-                    <<set $maya_done to true>>
-                    <<set $currentLocation to "c_room">>
-                    <<set $locationName to "Center Lobby">>
-                    <<set $lobby_phase to "post_action">>
-                    <<goto "Lobby_Entrance">>
-                <</link>>
-                <span class="btn-sub">Leave her here to hide.</span>
-            </button>
-        </div>
-
-    <!-- ==== COMBAT FAILURE BLOCK ==== -->
-    <<else>>
-        <<addTime 2>>
-
-        <span style="color:var(--accent-red);">[COMBAT — FAILED]</span>
-        <br><br>
-
-        <<if _isGun>>
-            You raise your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> and the geometry is immediately wrong — the woman and her daughter are directly behind the creature, backs against the wall, no separation at all. Every angle goes through the wrong bodies. You reposition. You look for the shot. You spend seconds you do not have trying to find something that does not exist. By the time you accept it does not exist, what is happening at the wall has already happened.
-
-        <<elseif _isBlade>>
-            You slash at the creature as it rounds the edge of the desk and your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> catches its forearm — a real cut, real damage — but it does not register the damage. It does not slow. It is already moving and cuts mean nothing to something that does not feel them, and you can see what is going to happen and you make yourself watch because looking away would be worse.
-
-        <<elseif _isBlunt>>
-            You swing your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> in the hardest arc you can manage and the creature ducks under it by pure animal instinct — not intelligence, just the flinch response of a body in motion — and your weapon catches the edge of the reception desk instead. The impact rattles from your wrists to your jaw. When you recover your footing, there is nothing useful left to do.
-
-        <<else>>
-            You throw yourself over the counter after it and try to get a grip from behind, try to get your arms around it, try to make yourself an obstacle. It shrugs you off without looking. Your grip peels away. You hit the surface of the desk and go over the far edge onto the floor. By the time you are standing again, there is a sound from the wall that you will not be able to unhear, and then silence.
-        <</if>>
-
-        <br><br>
-        The woman's scream cuts across the whole lobby — sharp and particular and desperate, a sound that silences everything else for one terrible second. And then it stops.
-        <br><br>
-        You cannot help them. You fall back from the desk.
-
-        <<set $maya_status to "dead">>
-        <<set $maya_done to true>>
-        <<set $hum -= 10>>
-
-        <<exert 10>>
-        <<run window.animateStatBar('.bar-fill.stamina', $stamina, $stamina_max)>>
-        <<run window.animateStatBar('.bar-fill.hp', $hp, $hp_max)>>
-        <span style="color:var(--accent-red); font-weight:bold;">-STAMINA (Struggle)</span>
-        <br><br>
-
-        <div class="choice-menu">
-            <button>
-                <<link "Fall back">>
-                    <<addTime 1>>
-                    <<set $didMove to true>>
-                    <<set $currentLocation to "c_room">>
-                    <<set $locationName to "Center Lobby">>
-                    <<set $lobby_phase to "post_action">>
-                    <<goto "Lobby_Entrance">>
-                <</link>>
-                <span class="btn-sub">Retreat before it notices you.</span>
-            </button>
-        </div>
-
-    <</if>>
-
-
-/* ══════════════════════════════════════════════════════════════════════════
-   MAYA DECLINES — Narrative branch if the player tries to recruit her
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "maya_declines">>
-
-    <h2>LOBBY — RECEPTION</h2>
-
-    Maya looks past you. Her gaze goes across the open lobby floor to the police barricade at the front doors, and she holds it there for a moment like she is doing math. When she looks back at you there is already a decision behind her eyes.
-    <br><br>
-    <span style="color:var(--accent-gold);">"No."</span> She says it carefully, with the considered weight of someone who has already run the argument in her head. <span style="color:var(--accent-gold);">"I'm sorry. Those officers have guns and something solid in front of them. Right now that is what Lily needs — walls. Something she can put her back against and stop moving."</span> She glances briefly at the chaos still unfolding across the lobby floor. <span style="color:var(--accent-gold);">"If I drag her back out through that—"</span> She shakes her head. <span style="color:var(--accent-gold);">"No. I can't do that to her. Not right now."</span> She puts a hand briefly on your forearm — quick, deliberate, a real touch. <span style="color:var(--accent-gold);">"You go. You clearly know what you are doing. More than I do."</span> She almost smiles. It does not quite get there.
-
-    <div style="margin-bottom:15px; text-align:center;">
-        <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Brown_woman_Police.gif" style="max-width:100%; border:1px solid #333;">
-    </div>
-
-    Maya begins picking her way carefully across the lobby toward the barricade, avoiding the marble in the worst places. Lily peeks back at you once, as she is led by her mother. Big dark eyes, fully present again now that she is moving, watching you across the distance of the lobby. She holds your gaze for a long moment. Then she turns away.
-
-    <<set $maya_status to "at_police">>
-    <br><br>
-
-    <div class="choice-menu">
-        <button>
-            <<link "Let her go">>
-                <<addTime 1>>
-                <<set $currentLocation to "c_room">>
-                <<set $locationName to "Center Lobby">>
-                <<set $lobby_phase to "post_action">>
-                <<goto "Lobby_Entrance">>
-            <</link>>
-            <span class="btn-sub">Watch them head for the barricade.</span>
-        </button>
-    </div>
-
-
-/* ══════════════════════════════════════════════════════════════════════════
-   TRANSIT — CROSSING TO LOOT
-   Narrative filler before checking the backpack.
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "crossing_to_loot">>
-
-    <h2>LOBBY — THE DEAD MAN</h2>
-
-    You do not have to go far. He is almost at your feet.
-    <br><br>
-    You cover the distance in a few quick steps and crouch over the body. Up close, the man is worse than he looked from across the lobby — the damage to his face is extensive and recent, the kind that happens fast when the infected are in a frenzy and there is nothing stopping them. He is wearing civilian clothes under the pack. Nice shoes. A good watch on his left wrist, face cracked but still running. He did not come here expecting this.
-    <br><br>
-    The backpack is completely untouched. Military-grade webbing, properly tensioned, MOLLE loops loaded the way someone who actually knows gear would load them. The main zipper pull tab is right in front of you. Whoever packed this knew what they were doing.
-    <br><br>
-    There is a sound somewhere behind you — wet, directionless, getting less directionless. One of the infected has noticed you crouching over something and is slowly recalibrating toward your position. You have maybe ten or fifteen seconds before that becomes an immediate problem.
-    <br><br>
-
-    <div class="choice-menu">
-        <button>
-            <<link "Grab what you can — fast">>
-                <<addTime 1>>
-                <<set $didMove to true>>
-                <<set $lobby_phase to "loot_only">>
-                <<goto "Lobby_Entrance">>
-            <</link>>
-            <span class="btn-sub">Loot quickly and get out.</span>
-        </button>
-    </div>
-
-
-/* ══════════════════════════════════════════════════════════════════════════
-   LOOT BACKPACK
-   Grants items, brief scare, leads back to hub
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "loot_only">>
-
-    <h2>LOBBY — LOOTING THE DEAD</h2>
-    <<addTime 1>>
-
-    You drop to your knees and work the zipper fast. Both hands. No time to be careful about it. You go by touch — pull what your hands find, move fast, keep your head up between grabs.
-
-    <<run setup.addItem("First Aid Kit", 1)>>
-    <<run setup.addItem("9mm Ammo", 12)>>
-    <<set $backpack_looted to true>>
-    <<set $loot_done to true>>
-
-    <br><br>
-    <span style="color:var(--accent-green);">Found: 1× First Aid Kit, 12× 9mm Ammo.</span>
-    <br><br>
-    You are pulling the shoulder straps free when you feel it.
-    <br><br>
-    Fingers. Around your wrist.
-    <br><br>
-    Cold. Very strong. Grip like something that has forgotten what letting go means.
-    <br><br>
-    You look down.
-    <br><br>
-    The dead man is looking up at you. His eyes are filmed over white and they are absolutely, unambiguously focused on your face. There is a sound coming from somewhere deep inside his chest — a low, wet, resonant gurgling, like something trying to remember what lungs are for. His mouth opens. His grip on your wrist does not loosen. It tightens.
-    <br><br>
-    <i>CRACK.</i>
-    <br><br>
-    A shot from the direction of the police barricade. The grip releases. You feel the spray before you understand what happened — warm, fine, across the side of your face and the back of your hand. Somewhere behind you, a second shot — the infected that had been closing in drops without ceremony. You did not even hear it coming. You do not move for one full second. Then you wipe your face with the back of your wrist. You stand up slowly.
-    <br><br>
-    <span style="color:var(--accent-red);">"<b>STAY BACK FROM THE BODIES!</b>"</span> An officer's voice, cracking at the high end. <span style="color:var(--accent-red);">"I said stay the hell back from the bodies — what is wrong with you!"</span>
-    <br><br>
-    You look across the lobby at him. He is still aiming in your direction, muzzle tracking you as you rise, hands not steady. You meet his eyes. He does not lower the gun. You hold his gaze for one flat second, then pick up the pack and sling it over your shoulder.
-    <br><br>
-
-    <div class="choice-menu">
-        <button>
-            <<link "Get up and assess">>
-                <<addTime 1>>
-                <<set $currentLocation to "c_room">>
-                <<set $locationName to "Center Lobby">>
-                <<set $lobby_phase to "post_action">>
-                <<goto "Lobby_Entrance">>
-            <</link>>
-            <span class="btn-sub">Check your surroundings.</span>
-        </button>
-    </div>
-
-
-/* ══════════════════════════════════════════════════════════════════════════
-   POST-ACTION — THE HUB RETURN
-   Checks if there are still crises left on the board. If you are fast enough (AGI >= 5),
-   you get to pick another. Otherwise, you are forced to exit.
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "post_action">>
-
-    /* Check if Vane, Maya, or the Backpack are still un-resolved */
-    <<set _anything_left to (not $vane_done or not $maya_done or not $loot_done)>>
-
-    /* ==== OPTION A: PLAYER CAN TAKE ANOTHER ACTION ==== */
-    <<if _anything_left and $agi >= 5>>
-
-        <h2>LOBBY — CENTER</h2>
-
-        You pull back to the middle of the lobby, lungs working hard. Your pulse is loud in your temples. The marble underfoot is slick in ways you have been actively not thinking about.
-        <br><br>
-        You stop for two seconds — just two, no more — and take a full read of the room. The chaos is evolving. The lobby is in slow, terrible motion around a still point, and you are the still point. Your eyes move automatically: location, distance, threat, status. Old reflex. Useful one.
-        <br><br>
-
-        <<if $vane_status == "joined">>
-            Vane keeps pace just off your right shoulder. He has adjusted his grip on the briefcase — holding it by the body now, flat, like a shield rather than a weapon. He does not say anything. He tracks where your eyes go. He is learning.
-            <br><br>
-        <</if>>
-
-        <span style="color:var(--accent-green);">[AGILITY — You're fast enough. There's still time for one more move.]</span>
-        <br><br>
-        You know what is left and where it is.
-        <br><br>
-
-        <!-- RE-RENDER THE CRISIS GRID -->
-        <div class="crisis-grid">
-
-            <!-- 1. VANE / ELEVATORS -->
-            <<if not $vane_done>>
-                <div class="crisis-card">
-                    <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Femboy_in_need.gif">
-                    <div class="crisis-text">
-                        <b style="color:var(--accent-blue);">By the elevator banks</b> — an <span style="color:var(--accent-blue);">androgynous young man</span> is making his last stand against an infected with nothing but a heavy metal briefcase. He is losing ground with every step.
-                    </div>
-                    <div class="choice-menu">
-                        <button>
-                            <<link "Sprint to Elevators">>
-
-                                <<set $didMove to true>>
-                                <<set $currentLocation to "e_room">>
-                                <<set $locationName to "Elevator Banks">>
-                                <<set $lobby_phase to "crossing_to_vane">>
-                                <<goto "Lobby_Entrance">>
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-lobby">
+                    The stairwell door punches open and you stumble through it into the lobby.
+                    <br><br>
+                    The Ascott Grand's lobby was designed to make you feel small — fifty feet of vaulted ceiling, polished marble floors the color of old bone, chandeliers that cost more than most people earn in a decade. It was built for first impressions. Right now it is delivering one.
+                    <br><br>
+                    The smell hits first. Blood and gunpowder and something underneath both — something animal and wrong.
+                    
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);">
+                            <<link "Next ▼">>
+                                <<replace "#vn-text-lobby">>
+                                    Then the sound: screaming layered over screaming, the wet skid of shoe leather on marble, glass shattering somewhere above. The chandeliers are still lit. All those warm amber bulbs still burning like nothing happened, throwing gold light across everything happening below.
+                                    <br><br>
+                                    You press your back against the stairwell door and take one full second to see it all clearly. One second. That is all you can afford.
+                                    <br><br>
+                                    <b style="color:var(--accent-red);">Three crises. Right now. Unfolding simultaneously. And you are one person.</b>
+                                    
+                                    <!-- GRID CONTAINER FOR CRISIS CARDS -->
+                                    <div class="crisis-grid" style="margin-top:20px;">
+
+                                        <!-- CRISIS 1: VANE / ELEVATORS -->
+                                        <<if not $vane_done>>
+                                            <div class="crisis-card">
+                                                <img src="image/act1/Femboy_in_need.gif">
+                                                <div class="crisis-text">
+                                                    <b style="color:var(--accent-blue);">By the elevator banks</b> — an <span style="color:var(--accent-blue);">androgynous young man</span> in designer clothes is making his last stand against an infected with nothing but a heavy hard-shell camera case. He is losing ground with every step.
+                                                </div>
+                                                <div class="choice-menu">
+                                                    <button>
+                                                        <<link "Sprint to Elevators">>
+                                                            <<set $didMove to true>>
+                                                            <<set $currentLocation to "e_room">>
+                                                            <<set $locationName to "Elevator Banks">>
+                                                            <<set $lobby_phase to "crossing_to_vane">>
+                                                            <<goto "Lobby_Entrance">>
+                                                        <</link>>
+                                                        <span class="btn-sub">Rush to help the young man.</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        <</if>>
+
+                                        <!-- CRISIS 2: MAYA / RECEPTION -->
+                                        <<if not $maya_done>>
+                                            <div class="crisis-card">
+                                                <img src="image/act1/Brown_woman_in_need.gif">
+                                                <div class="crisis-text">
+                                                    <b style="color:var(--accent-blue);">At the reception desk</b> — a <span style="color:var(--accent-blue);">brown woman and her young niece</span> are trapped in a shrinking circle behind the counter. The infected is pressing them back against the wall. She is out of space.
+                                                </div>
+                                                <div class="choice-menu">
+                                                    <button>
+                                                        <<link "Sprint to Reception">>
+                                                            <<set $didMove to true>>
+                                                            <<set $currentLocation to "ne_room">>
+                                                            <<set $locationName to "Reception Desk">>
+                                                            <<set $lobby_phase to "crossing_to_maya">>
+                                                            <<goto "Lobby_Entrance">>
+                                                        <</link>>
+                                                        <span class="btn-sub">Rush to help the woman and child.</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        <</if>>
+
+                                        <!-- CRISIS 3: DEAD MAN / LOOT -->
+                                        <<if not $loot_done>>
+                                            <div class="crisis-card">
+                                                <img src="image/act1/Lobby_Dead_Man.gif">
+                                                <div class="crisis-text">
+                                                    <b style="color:var(--accent-gold);">At your feet</b> — a dead man wearing a <span style="color:var(--accent-gold);">military-grade backpack</span> that looks completely untouched. Whatever killed him moved on fast.
+                                                </div>
+                                                <div class="choice-menu">
+                                                    <button>
+                                                        <<link "Loot the Backpack">>
+                                                            <<set $didMove to true>>
+                                                                <<set $currentLocation to "n_room">>
+                                                                <<set $locationName to "North Lobby">>
+                                                            <<set $lobby_phase to "crossing_to_loot">>
+                                                            <<goto "Lobby_Entrance">>
+                                                        <</link>>
+                                                        <span class="btn-sub">Prioritize the supplies. Every second counts.</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        <</if>>
+
+                                        <!-- CRISIS 4: POLICE BARRICADE / FRONT DOORS -->
+                                        <div class="crisis-card">
+                                            <img src="image/act1/Police_barricade.gif">
+                                            <div class="crisis-text">
+                                                <b style="color:var(--accent-gold);">At the glass front doors</b> — two police officers have constructed a barricade. Rifles up. They are twenty feet from people dying and they have not moved once.
+                                            </div>
+                                            <div class="choice-menu">
+                                                <button>
+                                                    <<link "Head to Front Doors">>
+                                                        <<set $didMove to true>>
+                                                        <<set $currentLocation to "lobby_exit">>
+                                                        <<set $locationName to "Front Barricade">>
+                                                        <<set $lobby_phase to "crossing_to_exit">>
+                                                        <<goto "Lobby_Entrance">>
+                                                    <</link>>
+                                                    <span class="btn-sub">Ignore the chaos and head straight for the exit.</span>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                <</replace>>
                             <</link>>
-                            <span class="btn-sub">Rush to help the young man.</span>
                         </button>
                     </div>
-                </div>
-            <</if>>
-
-            <!-- 2. MAYA / RECEPTION -->
-            <<if not $maya_done>>
-                <div class="crisis-card">
-                    <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Brown_woman_in_need.gif">
-                    <div class="crisis-text">
-                        <b style="color:var(--accent-blue);">At the reception desk</b> — a <span style="color:var(--accent-blue);">brown woman and her young daughter</span> are trapped in a shrinking circle behind the counter. The infected is pressing them back against the wall. She is out of space.
-                    </div>
-                    <div class="choice-menu">
-                        <button>
-                            <<link "Sprint to Reception">>
-
-                                <<set $didMove to true>>
-                                <<set $currentLocation to "ne_room">>
-                                <<set $locationName to "Reception Desk">>
-                                <<set $lobby_phase to "crossing_to_maya">>
-                                <<goto "Lobby_Entrance">>
-                            <</link>>
-                            <span class="btn-sub">Rush to help the mother and child.</span>
-                        </button>
-                    </div>
-                </div>
-            <</if>>
-
-            <!-- 3. DEAD MAN / LOOT -->
-            <<if not $loot_done>>
-                <div class="crisis-card">
-                    <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Lobby_Dead_Man.gif">
-                    <div class="crisis-text">
-                        <b style="color:var(--accent-gold);">Across the floor</b> — a dead man wearing a <span style="color:var(--accent-gold);">military-grade backpack</span> that looks completely untouched. Whatever killed him moved on fast.
-                    </div>
-                    <div class="choice-menu">
-                        <button>
-                            <<link "Loot the Backpack">>
-
-                                <<set $didMove to true>>
-                                <<set $currentLocation to "n_room">>
-                                <<set $locationName to "North Lobby">>
-                                <<set $lobby_phase to "crossing_to_loot">>
-                                <<goto "Lobby_Entrance">>
-                            <</link>>
-                            <span class="btn-sub">Prioritize the supplies. Every second counts.</span>
-                        </button>
-                    </div>
-                </div>
-            <</if>>
-
-            <!-- 4. POLICE BARRICADE / FRONT DOORS -->
-            <div class="crisis-card">
-                <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Police_barricade.gif">
-                <div class="crisis-text">
-                    <b style="color:var(--accent-gold);">At the glass front doors</b> — two police officers have constructed a barricade. Rifles up. They are twenty feet from people dying and they have not moved once.
-                </div>
-                <div class="choice-menu">
-                    <button>
-                        <<link "Head to Front Doors">>
-                            <<addTime 1>>
-                            <<set $didMove to true>>
-                        <<set $currentLocation to "lobby_exit">>
-                        <<set $locationName to "Front Barricade">>
-                            <<set $lobby_phase to "crossing_to_exit">>
-                            <<goto "Lobby_Entrance">>
-                        <</link>>
-                        <span class="btn-sub">Ignore the chaos and head straight for the exit.</span>
-                    </button>
-                </div>
+                </span>
             </div>
 
-        </div>
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           TRANSIT — CROSSING TO VANE
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "crossing_to_vane">>
 
-    /* ==== OPTION B: OUT OF TIME / OUT OF AGILITY ==== */
-    <<else>>
-        /* Auto-force to exit if nothing remains, or Agility too low */
-        <<set $didMove to true>>
-                        <<set $currentLocation to "lobby_exit">>
-                        <<set $locationName to "Front Barricade">>
-        <<set $lobby_phase to "crossing_to_exit">>
-        <<goto "Lobby_Entrance">>
-    <</if>>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                LOBBY — CROSSING TO THE ELEVATORS
+            </div>
 
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/act1/Femboy_in_need.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
 
-/* ══════════════════════════════════════════════════════════════════════════
-   TRANSIT — CROSSING TO THE EXIT
-   Narrative filler before confronting the police officers.
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "crossing_to_exit">>
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-vane1">
+                    You break left and run.
+                    <br><br>
+                    The marble is treacherous — your first step skids half an inch and your stomach drops, but you find your footing fast and open into a full sprint. The lobby feels enormous when you are trying to cross it in a hurry. Your footfalls crack loud against the stone.
+                    
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);">
+                            <<link "Next ▼">>
+                                <<replace "#vn-text-vane1">>
+                                    Fifteen feet. Ten. You can hear him now — ragged, panicked breathing, the heavy <i>thwack</i> of a hard-shell Pelican camera case connecting with something. Five feet. You see his face properly. Young. Dyed hair plastered to his forehead with sweat, wearing clothes far too stylish for an apocalypse. Eyes wide and very dark, still fighting even though every rational part of him has clearly given up. 
+                                    <br><br>
+                                    He catches sight of you closing the distance and something shifts in his expression — not relief yet. Just a held breath. A very small, desperate adjustment from <i>this is it</i> to <i>maybe not yet</i>.
+                                    <br><br>
+                                    The infected does not see you. Its entire world has narrowed to the man in front of it.
+                                    
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button style="border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);">
+                                            <<link "Move in">>
+                                                <<set $didMove to true>>
+                                                <<set $lobby_phase to "rescue_vane">>
+                                                <<goto "Lobby_Entrance">>
+                                            <</link>>
+                                            <span class="btn-sub">Engage the infected.</span>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                        </button>
+                    </div>
+                </span>
 
-    <h2>LOBBY — CROSSING TO THE FRONT DOORS</h2>
+            </div>
 
-    <div style="margin-bottom:15px; text-align:center;">
-        <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Police_barricade.gif" style="max-width:100%; border:1px solid #333;">
-    </div>
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           RESCUE VANE — ELEVATOR (COMBAT RESOLUTION)
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "rescue_vane">>
 
-    <<if $vane_status == "joined">>
-        You put your hand out — flat, backward, a single clear gesture — and Vane reads it without needing it explained. He falls in close behind your right shoulder and matches your pace. He is getting better at this. Better than he was two minutes ago, anyway.
-        <br><br>
-    <</if>>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                LOBBY — ELEVATOR RESCUE
+            </div>
 
-    You cross the lobby toward the glass front doors. You are careful about it — picking lines through the chaos, skirting the edge of the open floor where you can, staying low and quiet when quiet matters. The marble is a problem the whole way and you move anyway.
-    <br><br>
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid <<if _combat_success>>var(--accent-green)<<else>>var(--accent-red)<</if>>; font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-vane2">
+                    The young man's back connects with the elevator doors with a hollow metallic thud. He is out of room. The heavy camera case is too cumbersome to keep swinging one-handed and his arms are shaking. The creature is right there — jaws open, hands clawing, close enough that you can see half its face is ruined.
+                    <br><br>
 
-    <<if $vane_status == "dead" or $maya_status == "dead">>
-        You pass close to where it happened. You do not look. Looking would not change anything and you need your eyes forward. But your feet know the distance and your body slows for half a step anyway, something in you registering the weight of it even when your mind has already moved on. You keep walking.
-        <br><br>
-    <</if>>
+                    <!-- ==== COMBAT SUCCESS BLOCK ==== -->
+                    <<if _combat_success>>
+                        <span style="color:var(--accent-green);">[COMBAT — SUCCESS]</span> <span style="color:var(--accent-gold);">[+25 XP]</span>
+                        <<if not $lobby_vane_xp>>
+                            <<run window.gainXP(25)>>
+                            <<set $lobby_vane_xp to true>>
+                        <</if>>
+                        <br><br>
 
-    <<if $vane_done == false or $maya_done == false>>
-        Somewhere behind you, someone is still screaming. You hear it the whole way across the floor. You do not stop. The decision was made the moment you chose the doors over them, and second-guessing it now costs you both. You keep your eyes on the glass. You keep walking.
-        <br><br>
-    <</if>>
+                        <<if _isGun>>
+                            You come in from the creature's left. Your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> is up. One round into the marble ceiling directly above its head — the crack of the shot in the enclosed space is enormous. The creature flinches. You use that half-second completely. You close the remaining distance, press the barrel hard to its temple, and squeeze. The creature drops straight down.
+                        <<elseif _isBlade>>
+                            You close the gap without slowing. Your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> finds the back of its neck before it registers you are there. It seizes — a full-body spasm — and its legs buckle. It takes the blade down with it. You put your boot flat on its shoulder, brace, and wrench the weapon free.
+                        <<elseif _isBlunt>>
+                            You do not break stride. Your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> is back over your shoulder before you reach it. The impact when it connects is dense and terrible, and the creature staggers sideways into the elevator door frame. You bring it down again, harder. Then it is not moving anymore.
+                        <<else>>
+                            You hit it at a dead sprint — wrapping yourself around its midsection and driving it off from him and sideways into the wall. You hit the marble hard. You get your hands up on its throat, take the top, pin it with your knees. You bring your elbow down on its skull until your arm goes numb and it finally stops moving.
+                        <</if>>
 
-    The chandeliers are still lit. Warm amber. Gold on everything. The lobby is technically still beautiful. That has not gotten less strange.
-    <br><br>
-    The front doors grow as you approach. Through the glass you can see the street beyond — lit, distant chaos, smoke rising somewhere upwind, but outside. Open air. Exits that are not this building. The doors are locked from the inside. The officers at the barricade have the key.
-    <br><br>
-    Ten feet out, you stop. You look at them clearly for the first time at close range.
-    <br><br>
+                        <<set $vane_status to "saved">>
+                        <<set $hum += 10>>
+                        
+                        <div class="choice-menu" style="margin-top:20px;">
+                            <button style="border-left-color: var(--accent-green) !important; background: rgba(0,100,0,0.2);">
+                                <<link "Next ▼">>
+                                    <<replace "#vn-text-vane2">>
+                                        He slides slowly down the elevator doors until he is sitting on the floor. He does not say anything for a long moment. He stares at the thing beside him, then at his own hands, still shaking at the wrists. Then he looks at you — really looks at you, the way people look at someone when they are updating an entire model of how the world works.
+                                        <br><br>
+                                        A long, controlled breath goes out of him.
+                                        <br><br>
+                                        <<chat "Vane" "image/avatars/vane.gif" "right" "I hauled a three-thousand-dollar Pelican camera case down four flights of stairs in the dark... Turns out it's actually fantastic for bludgeoning dead people. Good to know.">>
+                                        <br>
+                                        He manages a tired, faintly embarrassed almost-smile.
+                                        <br><br>
+                                        <<chat "Vane" "image/avatars/vane.gif" "right" "I'm Vane. I'd tell you to follow my channel, but I'm pretty sure the internet just died. Thank you. Seriously. I was absolutely not winning that.">>
+                                        <br>
+                                        He looks up at you. Waiting.
+                                        
+                                        <div class="choice-menu" style="margin-top:20px;">
+                                            <button>
+                                                <<link "'Stick close to me. We move together.'">>
+                                                    <<addTime 1>>
+                                                    <<set $vane_status to "joined">>
+                                                    <<if not $companions.includes("Vane")>><<run $companions.push("Vane")>><</if>>
+                                                    <<set $vane_done to true>>
+                                                    <<set $currentLocation to "c_room">>
+                                                    <<set $locationName to "Center Lobby">>
+                                                    <<set $lobby_phase to "post_action">>
+                                                    <<goto "Lobby_Entrance">>
+                                                <</link>>
+                                                <span class="btn-sub">Take him with you.</span>
+                                            </button>
+                                            <button>
+                                                <<link "'Stay low and out of sight. I've got more to do here.'">>
+                                                    <<addTime 1>>
+                                                    <<set $vane_done to true>>
+                                                    <<set $currentLocation to "c_room">>
+                                                    <<set $locationName to "Center Lobby">>
+                                                    <<set $lobby_phase to "post_action">>
+                                                    <<goto "Lobby_Entrance">>
+                                                <</link>>
+                                                <span class="btn-sub">Leave him here to hide.</span>
+                                            </button>
+                                            <button style="border-left-color: var(--accent-red) !important;">
+                                                <<link "'You're on your own from here.'">>
+                                                    <<addTime 1>>
+                                                    <<set $vane_status to "abandoned">>
+                                                    <<set $vane_done to true>>
+                                                    <<set $hum -= 5>>
+                                                    <<set $currentLocation to "c_room">>
+                                                    <<set $locationName to "Center Lobby">>
+                                                    <<set $lobby_phase to "post_action">>
+                                                    <<goto "Lobby_Entrance">>
+                                                <</link>>
+                                                <span class="btn-sub"><b style="color:var(--accent-red);">[HUMANITY -5]</b> Abandon him.</span>
+                                            </button>
+                                        </div>
+                                    <</replace>>
+                                <</link>>
+                            </button>
+                        </div>
 
-    <div class="choice-menu">
-        <button>
-            <<link "Approach the officers">>
-                <<addTime 1>>
-                <<set $didMove to true>>
-                <<set $lobby_phase to "police_line">>
-                <<goto "Lobby_Entrance">>
-            <</link>>
-            <span class="btn-sub">Walk up to the barricade.</span>
-        </button>
-    </div>
+                    <!-- ==== COMBAT FAILURE BLOCK ==== -->
+                    <<else>>
+                        <<addTime 2>>
+                        <span style="color:var(--accent-red);">[COMBAT — FAILED]</span>
+                        <br><br>
 
+                        <<if _isGun>>
+                            You raise your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> and the geometry is immediately wrong — he is directly behind the creature, pinned against the elevator doors. You sidestep, searching for the shot. The half-second you spend repositioning is the half-second that decides it. By the time you find a clean line, there is nothing left on the other side of the creature that you need to protect.
 
-/* ══════════════════════════════════════════════════════════════════════════
-   POLICE LINE — CONFRONTATION
-   The final hurdle to leaving the building. 
-   Player choices here dictate how they exit.
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "police_line">>
+                        <<elseif _isBlade>>
+                            You lunge with your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> and the creature twists at exactly the wrong moment. Your blade finds air, then the elevator door behind it with a shriek of metal. By the time you recover for a second attempt, the moment has closed.
 
-    <h2>LOBBY — THE FRONT DOORS</h2>
+                        <<elseif _isBlunt>>
+                            You swing your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> hard and wide and the creature lurches forward into him at exactly the same moment — and your weapon swings through empty space, clanging off the elevator door. When you look up, the angle of his body has changed.
 
-    Up close, the officers look worse than they did from across the room.
-    <br><br>
-    The taller one is maybe forty. Military posture, the kind that gets trained in and never fully leaves. His face is performing authority the way an actor performs authority — technically correct, deeply unconvincing if you look at the eyes. The younger one is mid-twenties at most. His face has given up on performing anything. He is just scared, clearly, holding a rifle with hands that have not stopped moving since he picked it up. Both muzzles are roughly aimed at your chest. Neither barrel is steady.
-    <br><br>
-    Behind the barricade: the glass front doors, and the city beyond them. Still lit. Still out there. The locks are on this side. These two men have the keys.
-    <br><br>
+                        <<else>>
+                            You throw yourself at it, trying to haul it backward. It is stronger than it has any right to be and it shrugs you off without breaking its focus on him. You hit the marble floor. By the time you are back on your feet, the sound from the elevator bank has stopped, and the silence is worse than the screaming was.
+                        <</if>>
 
-    <<if $vane_status == "joined">>
-        Vane is close at your right shoulder, briefcase held at his side, willing every muscle in his face to look like this is fine. He is not fine. He is doing a credible impression of fine. That is the best any of you can do right now.
-        <br><br>
-    <</if>>
+                        <<set $vane_status to "dead">>
+                        <<set $vane_done to true>>
+                        <<set $hum -= 10>>
 
-    <<if $maya_status == "at_police">>
-        Maya and Lily are already behind the barricade, sitting against a luggage cart with Lily folded into her mother's lap. Maya looks up when she sees you coming. Her face does something complicated — relief and guilt and gratitude all occupying the same expression at once. She does not say anything. Lily does not look up.
-        <br><br>
-    <</if>>
-
-    <<if $vane_status == "dead" or $maya_status == "dead">>
-        Somewhere in the lobby behind you there is a place you are not going to look at again. These two officers watched what happened there from twenty feet away with loaded weapons and clear sight lines. They know that you know that. The younger one is not meeting your eyes.
-        <br><br>
-    <</if>>
-
-    <span style="color:var(--accent-red);">"<b>Hold it right there.</b>"</span> The taller officer's voice has the flattened quality of someone reciting protocol. Muscle memory doing the work while the brain tries to catch up. <span style="color:var(--accent-red);">"Building is on full lockdown. Nobody in, nobody out. Quarantine protocol. Step back from the doors."</span>
-    <br><br>
-    <span style="color:var(--accent-green);">"You're sealing us in here with those things,"</span> you say. Not an argument. Just a fact, stated at normal volume, because it is simply true.
-    <br><br>
-    <span style="color:var(--accent-red);">"Those are our <i>orders.</i>"</span> The younger officer's grip on his rifle shifts — not a threat, more like he does not know where to put his hands. <span style="color:var(--accent-red);">"<i>Please</i> stand down and step away from the door."</span> He means the <i>please.</i> That is almost worse.
-    <br><br>
-    Behind you, somewhere in the lobby, something crashes. Glass breaks. Something screams and then does not. The younger officer's eyes snap toward the sound and then back to you, fast, like if he looks away long enough you will do something.
-    <br><br>
-    <i>There is a way through this. There is always a way through.</i>
-    <br><br>
-
-    <div class="choice-menu">
-
-        <!-- CHECK 1: STR / MELEE (INTIMIDATE) -->
-        <<if $str >= 6 or $skills.melee >= 2>>
-            <button>
-                <<link "Step into the barrel and stare him down">>
-                    <<addTime 1>>
-                    <<set $lobby_phase to "police_intimidate">>
-                    <<goto "Lobby_Entrance">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 6 / MELEE 2]</b> You have the size or the combat experience to make him back down.</span>
-            </button>
-        <<else>>
-            <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">Step into the barrel and stare him down</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES STR 6 OR MELEE 2] You don't have the physical presence or combat experience to successfully intimidate a man with a gun.</span>
-            </button>
-        <</if>>
-
-        <!-- CHECK 2: CHARISMA (Always available to click, checks success later) -->
-        <button>
-            <<link "Talk your way through">>
-                <<addTime 2>>
-                <<set $lobby_phase to "police_persuade">>
-                <<goto "Lobby_Entrance">>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-gold);">[CHARISMA CHECK]</b> Attempt to reason with them calmly.</span>
-        </button>
-
-        <!-- CHECK 3: POLICE OFFICER (AUTHORITY) -->
-        <<if $job == "Police Officer">>
-            <button>
-                <<link "Pull rank on them">>
-                    <<addTime 1>>
-                    <<set $lobby_phase to "police_authority">>
-                    <<goto "Lobby_Entrance">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-gold);">[POLICE OFFICER]</b> Use your badge to take control of the situation.</span>
-            </button>
-        <<else>>
-            <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                <span style="text-decoration: line-through;">Pull rank on them</span><br>
-                <span class="btn-sub" style="color: #666;">[REQUIRES POLICE OFFICER] You are a civilian. You have no authority here.</span>
-            </button>
-        <</if>>
-
-        <!-- CHECK 4: BRUTE FORCE (SHOVE - ALWAYS AVAILABLE) -->
-        <button>
-            <<link "Shove through — you're not asking permission">>
-                <<addTime 1>>
-                <<exert 5>>
-                <<set $didMove to true>>
-                <<set $lobby_phase to "police_shove">>
-                <<goto "Lobby_Entrance">>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: CONFRONTATION]</b> Force your way past the barricade. Costs 5 STAMINA.</span>
-        </button>
-
-    </div>
-
-
-/* ══════════════════════════════════════════════════════════════════════════
-   POLICE RESOLUTION — INTIMIDATE
-   Player successfully stares down the cops based on high STR or Melee
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "police_intimidate">>
-
-    <h2>LOBBY — THE FRONT DOORS</h2>
-
-    You walk straight into the rifle barrel.
-    <br><br>
-    You do not rush it. You just walk, steady pace, until the muzzle contacts your chest and stops you. The officer flinches. You do not. His finger is on the trigger and his brain is not, and you can see the gap between those two things clearly on his face. People who are actually going to shoot you do not advertise it like this. His whole face is an advertisement.
-    <br><br>
-    You let the silence breathe for two full seconds. Long enough that he registers it is intentional.
-    <br><br>
-    <span style="color:var(--accent-green);">"You stood there,"</span> you say. Quiet. Completely even. <span style="color:var(--accent-green);">"You watched them die. You had a loaded weapon and a clear position and you followed your procedure and watched people die twenty feet away from you."</span> You hold his eyes. <span style="color:var(--accent-green);">"You are not going to shoot me. We both know that. Open the door."</span>
-    <br><br>
-    A long, still silence. The younger officer takes a very small step backward without seeming to decide to. The taller one's jaw works. Something in his posture — the part that has been performing authority for the last ten minutes — deflates, just slightly, like a slow leak finding its exit point.
-    <br><br>
-    <span style="color:var(--accent-red);">"...Fine."</span> The rifle lowers. It goes down slowly, like he is hoping no one notices the movement. <span style="color:var(--accent-red);">"Get out. You're on your own out there. I'm not opening this door again."</span>
-
-    <div style="margin-bottom:15px; text-align:center;">
-        <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Lobby_exit.gif" style="max-width:100%; border:1px solid #333;">
-    </div>
-
-    <span style="color:var(--accent-green);">"Good,"</span> you say.
-
-                            <<set $currentLocation to "lobby_exit">>
-                        <<set $locationName to "Front Barricade">>
-    <br><br>
-
-    <div class="choice-menu">
-        <button>
-            <<link "Walk out">>
-                <<addTime 1>>
-                <<set $didMove to true>>
-                <<run setup.sound.fade("lobby_slaughter", 2000)>>
-                <<goto "Act2_TheStreet">>
-            <</link>>
-            <span class="btn-sub">Exit the Ascott Residency.</span>
-        </button>
-    </div>
+                        <<exert 10>>
+                        <<run window.animateStatBar('.bar-fill.stamina', $stamina, $stamina_max)>>
+                        <<run window.animateStatBar('.bar-fill.hp', $hp, $hp_max)>>
+                        
+                        <div class="choice-menu" style="margin-top:20px;">
+                            <button style="border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);">
+                                <<link "Next ▼">>
+                                    <<replace "#vn-text-vane2">>
+                                        <b style="color:var(--accent-red);">-STAMINA (Struggle)</b>
+                                        <br><br>
+                                        You cannot stop it. You pull back from the elevator bank. You do not look at what is on the floor.
+                                        <br><br>
+                                        The camera case is still sitting on the marble. It is just sitting there.
+                                        
+                                        <div class="choice-menu" style="margin-top:20px;">
+                                            <button>
+                                                <<link "Pull back">>
+                                                    <<addTime 1>>
+                                                    <<set $didMove to true>>
+                                                    <<set $currentLocation to "c_room">>
+                                                    <<set $locationName to "Center Lobby">>
+                                                    <<set $lobby_phase to "post_action">>
+                                                    <<goto "Lobby_Entrance">>
+                                                <</link>>
+                                                <span class="btn-sub">Retreat before it notices you.</span>
+                                            </button>
+                                        </div>
+                                    <</replace>>
+                                <</link>>
+                            </button>
+                        </div>
+                    <</if>>
+                </span>
+            </div>
 
 
-/* ══════════════════════════════════════════════════════════════════════════
-   POLICE RESOLUTION — PERSUADE
-   Checks Charisma. If it fails, loops back to the choice menu.
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "police_persuade">>
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           TRANSIT — CROSSING TO MAYA
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "crossing_to_maya">>
 
-    <h2>LOBBY — THE FRONT DOORS</h2>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                LOBBY — CROSSING TO RECEPTION
+            </div>
 
-    <!-- ==== PERSUADE SUCCESS BLOCK ==== -->
-    <<if $cha >= 5 or hasTrait("DEBATER")>>
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/act1/Brown_woman_in_need.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
 
-        You put both hands up slowly. Clear. Non-threatening.
-        <br><br>
-        <span style="color:var(--accent-green);">"Here is the problem with what you are doing right now."</span> Your voice stays even, conversational. Not loud. Not urgent. Just talking, like this is a reasonable discussion between reasonable people. <span style="color:var(--accent-green);">"Your perimeter is already breached. You are two people. Every extra civilian in this building is someone else you are responsible for keeping alive tonight, and you have already seen how that math is working out."</span> You pause. Let that sit. <span style="color:var(--accent-green);">"I walk out that door and you have one less problem. One less body to account for. Your job gets easier by exactly the amount of me. That is all I am asking for. Let me go."</span>
-        <br><br>
-        The two officers look at each other. It is a long look, and a lot passes through it. The logic is simple enough to be hard to argue with, and they are tired and scared and not operating anywhere near their best. The younger one's rifle is already dropping before the older one finishes the nod.
-        <br><br>
-        <span style="color:var(--accent-red);">"Fine,"</span> the younger one mutters. He shoves a luggage cart aside with his boot and produces a key ring from his vest. His hands are still not steady but he gets the lock on the second try. <span style="color:var(--accent-red);">"Go. Fast. I'm locking it the second you're through."</span>
-        <br><br>
-        <span style="color:var(--accent-green);">[CHARISMA — SUCCESS]</span>
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-maya1">
+                    You break right, angling across the wide open floor.
+                    <br><br>
+                    The screaming is louder here. A woman's voice and a child's voice braided together. The woman calling out to the girl, trying to keep the girl's attention on her face. The child is not responding anymore. She has gone somewhere else in her head.
+                    
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);">
+                            <<link "Next ▼">>
+                                <<replace "#vn-text-maya1">>
+                                    The infected that cornered them vaulted the reception desk like it was not there. It is on their side of the counter now, between you and them, its back to you. The woman has her niece pressed against the wall behind her and her arm out, palm extended, like sheer determination might hold it back. It will not. She is out of room.
+                                    <br><br>
+                                    She sees you coming across the lobby. You watch it happen on her face — the whole arc of it, from past despair to something fragile and new. Her arm stays out but her eyes have changed.
+                                    <br><br>
+                                    The infected has its back to you. Its entire world is the two people against the wall. That is the opening.
+                                    
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button style="border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);">
+                                            <<link "Move in">>
+                                                <<addTime 1>>
+                                                <<set $didMove to true>>
+                                                <<set $lobby_phase to "rescue_maya">>
+                                                <<goto "Lobby_Entrance">>
+                                            <</link>>
+                                            <span class="btn-sub">Engage the infected.</span>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                        </button>
+                    </div>
+                </span>
+            </div>
 
-        <div style="margin-bottom:15px; text-align:center;">
-            <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Lobby_exit.gif" style="max-width:100%; border:1px solid #333;">
-        </div>
 
-                                <<set $currentLocation to "lobby_exit">>
-                        <<set $locationName to "Front Barricade">>
-        <br><br>
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           RESCUE MAYA — RECEPTION (COMBAT RESOLUTION)
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "rescue_maya">>
 
-        <div class="choice-menu">
-            <button>
-                <<link "Step out">>
-                    <<addTime 1>>
-                    <<set $didMove to true>>
-                    <<run setup.sound.fade("lobby_slaughter", 2000)>>
-                    <<goto "Act2_TheStreet">>
-                <</link>>
-                <span class="btn-sub">Exit the Ascott Residency.</span>
-            </button>
-        </div>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                LOBBY — RECEPTION RESCUE
+            </div>
 
-    <!-- ==== PERSUADE FAILURE BLOCK ==== -->
-    <<else>>
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid <<if _combat_success>>var(--accent-green)<<else>>var(--accent-red)<</if>>; font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-maya2">
+                    You do not have much time. You do not waste any of it.
+                    <br><br>
 
-        You start talking. You lay out the logic clearly — the perimeter, the math, what you are actually asking for, every angle you can find. You make good points. They are genuinely good points.
-        <br><br>
-        The older officer shakes his head and talks straight over you.
-        <br><br>
-        <span style="color:var(--accent-red);">"I don't care."</span> Flat. Final. <span style="color:var(--accent-red);">"Nobody leaves. Those are the orders. I don't write them, I follow them."</span> He steps forward, shortening the space between you, making himself larger in the way that trained officers make themselves larger when they want someone to stop talking. <span style="color:var(--accent-red);">"Back away from the door. Last warning."</span>
-        <br><br>
-        Your words are not landing. He has put something up behind his eyes and locked it and he is not letting anything in. You can hear yourself still talking and you already know it is not working.
-        <br><br>
-        <span style="color:var(--accent-red);">[CHARISMA — FAILED]</span>
-        <br><br>
-        <i>Different approach, then.</i>
-        <br><br>
-
-        <div class="choice-menu">
-
-            <!-- STR / MELEE CHECK -->
-            <<if $str >= 6 or $skills.melee >= 2>>
-                <button>
-                    <<link "Enough talking. Stare him down.">>
+                    <!-- ==== COMBAT SUCCESS BLOCK ==== -->
+                    <<if _combat_success>>
                         <<addTime 1>>
-                        <<set $lobby_phase to "police_intimidate">>
-                        <<goto "Lobby_Entrance">>
-                    <</link>>
-                    <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 6 / MELEE 2]</b> Use your physical presence to force his hand.</span>
-                </button>
-            <<else>>
-                <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                    <span style="text-decoration: line-through;">Enough talking. Stare him down.</span><br>
-                    <span class="btn-sub" style="color: #666;">[REQUIRES STR 6 OR MELEE 2] You lack the physical intimidation factor to make him back down.</span>
-                </button>
-            <</if>>
+                        <span style="color:var(--accent-green);">[COMBAT — SUCCESS]</span> <span style="color:var(--accent-gold);">[+25 XP]</span>
+                        <<if not $lobby_maya_xp>>
+                            <<run window.gainXP(25)>>
+                            <<set $lobby_maya_xp to true>>
+                        <</if>>
+                        <br><br>
 
-            <!-- POLICE OFFICER CHECK -->
-            <<if $job == "Police Officer">>
-                <button>
-                    <<link "Pull rank">>
-                        <<addTime 1>>
-                        <<set $lobby_phase to "police_authority">>
-                        <<goto "Lobby_Entrance">>
-                    <</link>>
-                    <span class="btn-sub"><b style="color:var(--accent-gold);">[POLICE OFFICER]</b> Use your badge to bypass the argument.</span>
-                </button>
-            <<else>>
-                <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                    <span style="text-decoration: line-through;">Pull rank</span><br>
-                    <span class="btn-sub" style="color: #666;">[REQUIRES POLICE OFFICER] You have no authority to pull rank.</span>
-                </button>
-            <</if>>
+                        <<if _isGun>>
+                            One round into the marble ceiling directly above the creature's head. The creature stops. Completely. You vault the reception counter in that second and come down behind it pressing your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> to the back of its skull. You pull the trigger once. It drops across the counter like its strings were cut.
+                        <<elseif _isBlade>>
+                            You clear the counter in one motion, and your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> finds the creature's back before it registers your presence. It wheels on you immediately, jaws snapping — exactly what you needed. You draw it out toward the open space, buying the woman separation, then drive the blade home a second time at the base of the skull.
+                        <<elseif _isBlunt>>
+                            You come around the side of the desk rather than over it and catch the creature mid-turn with your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> swung fully into the back of its skull. The crack is the loudest sound in the lobby. The creature folds across the desk and stays there.
+                        <<else>>
+                            You come over the counter and get your arms around the creature from behind. You haul it backward, away from the woman. When you have enough separation you drive it face-first into the edge of the marble counter with everything you have. It does not get back up.
+                        <</if>>
 
-            <!-- ALWAYS AVAILABLE -->
-            <button>
-                <<link "Shove through — done with this">>
+                        <<set $maya_status to "saved">>
+                        <<set $hum += 10>>
+                        
+                        <div class="choice-menu" style="margin-top:20px;">
+                            <button style="border-left-color: var(--accent-green) !important; background: rgba(0,100,0,0.2);">
+                                <<link "Next ▼">>
+                                    <<replace "#vn-text-maya2">>
+                                        The woman drops to her knees on the other side of the counter and puts both arms completely around the little girl. A long moment of just breathing — both of them holding on like the hold itself is the only solid thing left in the building.
+                                        <br><br>
+                                        Thirty seconds go by. Then she looks up at you over the girl's shoulder. Her eyes are dry.
+                                        
+                                        <div style="margin: 15px 0; text-align:center;">
+                                            <img src="image/act1/Brown_woman_relieved.gif" style="max-width:100%; border:1px solid #333;">
+                                        </div>
+
+                                        <<chat "Maya" "image/avatars/maya.gif" "right" "I'm Maya. And this is Lily... my niece.">>
+                                        <br>
+                                        Maya puts a slow hand over Lily's ear, gently, like she is blocking sounds the child has already heard.
+                                        <br><br>
+                                        <<chat "Maya" "image/avatars/maya.gif" "right" "My sister didn't make it out of our floor. She made me promise to get Lily out. It's just been a day. Thank you... I didn't think we were going to make it.">>
+                                        
+                                        <div class="choice-menu" style="margin-top:20px;">
+                                            <button>
+                                                <<link "'Come with me. It's not safe to stay here.'">>
+                                                    <<addTime 1>>
+                                                    <<set $maya_done to true>>
+                                                    <<set $lobby_phase to "maya_declines">>
+                                                    <<goto "Lobby_Entrance">>
+                                                <</link>>
+                                                <span class="btn-sub">Convince her to come with you.</span>
+                                            </button>
+                                            <button>
+                                                <<link "'Stay low. Keep her quiet. I've got more to do.'">>
+                                                    <<addTime 1>>
+                                                    <<set $maya_done to true>>
+                                                    <<set $currentLocation to "c_room">>
+                                                    <<set $locationName to "Center Lobby">>
+                                                    <<set $lobby_phase to "post_action">>
+                                                    <<goto "Lobby_Entrance">>
+                                                <</link>>
+                                                <span class="btn-sub">Leave her here to hide.</span>
+                                            </button>
+                                        </div>
+                                    <</replace>>
+                                <</link>>
+                            </button>
+                        </div>
+
+                    <!-- ==== COMBAT FAILURE BLOCK ==== -->
+                    <<else>>
+                        <<addTime 2>>
+                        <span style="color:var(--accent-red);">[COMBAT — FAILED]</span>
+                        <br><br>
+
+                        <<if _isGun>>
+                            You raise your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> and the geometry is immediately wrong — the woman and her niece are directly behind the creature. Every angle goes through the wrong bodies. You look for the shot. By the time you accept it does not exist, what is happening at the wall has already happened.
+                        <<elseif _isBlade>>
+                            You slash at the creature as it rounds the edge of the desk and your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> catches its forearm — a real cut — but it does not slow. It is already moving and cuts mean nothing to something that does not feel them.
+                        <<elseif _isBlunt>>
+                            You swing your <span style="color:var(--accent-blue);"><<print $equip.weapon>></span> in the hardest arc you can manage and the creature ducks under it by pure animal instinct. Your weapon catches the edge of the reception desk instead. The impact rattles from your wrists to your jaw.
+                        <<else>>
+                            You throw yourself over the counter after it and try to get a grip from behind. It shrugs you off without looking. Your grip peels away. You hit the surface of the desk and go over the far edge onto the floor.
+                        <</if>>
+
+                        <<set $maya_status to "dead">>
+                        <<set $maya_done to true>>
+                        <<set $hum -= 10>>
+                        <<exert 10>>
+                        <<run window.animateStatBar('.bar-fill.stamina', $stamina, $stamina_max)>>
+                        <<run window.animateStatBar('.bar-fill.hp', $hp, $hp_max)>>
+
+                        <div class="choice-menu" style="margin-top:20px;">
+                            <button style="border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);">
+                                <<link "Next ▼">>
+                                    <<replace "#vn-text-maya2">>
+                                        The woman's scream cuts across the whole lobby — sharp and particular and desperate, a sound that silences everything else for one terrible second. And then it stops.
+                                        <br><br>
+                                        You cannot help them. You fall back from the desk.
+                                        <br><br>
+                                        <b style="color:var(--accent-red);">-STAMINA (Struggle)</b>
+                                        
+                                        <div class="choice-menu" style="margin-top:20px;">
+                                            <button>
+                                                <<link "Fall back">>
+                                                    <<addTime 1>>
+                                                    <<set $didMove to true>>
+                                                    <<set $currentLocation to "c_room">>
+                                                    <<set $locationName to "Center Lobby">>
+                                                    <<set $lobby_phase to "post_action">>
+                                                    <<goto "Lobby_Entrance">>
+                                                <</link>>
+                                                <span class="btn-sub">Retreat before it notices you.</span>
+                                            </button>
+                                        </div>
+                                    <</replace>>
+                                <</link>>
+                            </button>
+                        </div>
+                    <</if>>
+                </span>
+            </div>
+
+
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           MAYA DECLINES 
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "maya_declines">>
+
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                LOBBY — RECEPTION
+            </div>
+
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/act1/Brown_woman_Police.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-maya-no">
+                    Maya looks past you. Her gaze goes across the open lobby floor to the police barricade at the front doors, and she holds it there for a moment like she is doing math. When she looks back at you there is already a decision behind her eyes.
+                    
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-gold) !important; background: rgba(255,255,255,0.05);">
+                            <<link "Next ▼">>
+                                <<replace "#vn-text-maya-no">>
+                                    <<chat "Maya" "image/avatars/maya.gif" "right" "No. I'm sorry. I promised her mother I would keep her safe.">>
+                                    <br>
+                                    She says it carefully, with the considered weight of someone who has already run the argument in her head.
+                                    <br><br>
+                                    <<chat "Maya" "image/avatars/maya.gif" "right" "Those officers have guns and something solid in front of them. Right now that is what Lily needs — walls. I can't drag her back out into the open streets. Not right now.">>
+                                    <br>
+                                    She glances briefly at the chaos still unfolding across the lobby floor, then puts a hand briefly on your forearm — quick, deliberate, a real touch. 
+                                    <br><br>
+                                    <<chat "Maya" "image/avatars/maya.gif" "right" "You go. You clearly know what you are doing. More than I do.">>
+                                    <br>
+                                    Maya begins picking her way carefully across the lobby toward the barricade, avoiding the marble in the worst places. Lily peeks back at you once. Big dark eyes, fully present again now that she is moving. She holds your gaze for a long moment. Then she turns away.
+                                    
+                                    <<set $maya_status to "at_police">>
+                                    
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button>
+                                            <<link "Let her go">>
+                                                <<addTime 1>>
+                                                <<set $currentLocation to "c_room">>
+                                                <<set $locationName to "Center Lobby">>
+                                                <<set $lobby_phase to "post_action">>
+                                                <<goto "Lobby_Entrance">>
+                                            <</link>>
+                                            <span class="btn-sub">Watch them head for the barricade.</span>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                        </button>
+                    </div>
+                </span>
+            </div>
+
+
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           TRANSIT — CROSSING TO LOOT
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "crossing_to_loot">>
+
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                LOBBY — THE DEAD MAN
+            </div>
+
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/act1/Lobby_Dead_Man.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-loot1">
+                    You do not have to go far. He is almost at your feet.
+                    <br><br>
+                    You cover the distance in a few quick steps and crouch over the body. Up close, the man is worse than he looked from across the lobby — the damage to his face is extensive and recent, the kind that happens fast when the infected are in a frenzy.
+                    
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-gold) !important; background: rgba(255,255,255,0.05);">
+                            <<link "Next ▼">>
+                                <<replace "#vn-text-loot1">>
+                                    The backpack is completely untouched. Military-grade webbing, properly tensioned, MOLLE loops loaded the way someone who actually knows gear would load them.
+                                    <br><br>
+                                    There is a sound somewhere behind you — wet, directionless, getting less directionless. One of the infected has noticed you crouching over something and is slowly recalibrating toward your position. You have maybe ten or fifteen seconds before that becomes an immediate problem.
+                                    
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button>
+                                            <<link "Grab what you can — fast">>
+                                                <<addTime 1>>
+                                                <<set $didMove to true>>
+                                                <<set $lobby_phase to "loot_only">>
+                                                <<goto "Lobby_Entrance">>
+                                            <</link>>
+                                            <span class="btn-sub">Loot quickly and get out.</span>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                        </button>
+                    </div>
+                </span>
+            </div>
+
+
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           LOOT BACKPACK
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "loot_only">>
+
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                LOBBY — LOOTING THE DEAD
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-loot2">
                     <<addTime 1>>
-                    <<exert 5>>
-                    <<set $didMove to true>>
-                    <<set $lobby_phase to "police_shove">>
-                    <<goto "Lobby_Entrance">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: CONFRONTATION]</b> Force your way past the barricade. Costs 5 STAMINA.</span>
-            </button>
+                    You drop to your knees and work the zipper fast. Both hands. No time to be careful about it. You go by touch — pull what your hands find, move fast, keep your head up between grabs.
 
-        </div>
-    <</if>>
+                    <<run setup.addItem("First Aid Kit", 1)>>
+                    <<run setup.addItem("9mm Ammo", 12)>>
+                    <<set $backpack_looted to true>>
+                    <<set $loot_done to true>>
+
+                    <br><br>
+                    <span style="color:var(--accent-green);">Found: 1× First Aid Kit, 12× 9mm Ammo.</span>
+                    <br><br>
+                    You are pulling the shoulder straps free when you feel it.
+                    <br><br>
+                    Fingers. Around your wrist.
+                    
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);">
+                            <<link "Look down">>
+                                <<replace "#vn-text-loot2">>
+                                    Cold. Very strong. Grip like something that has forgotten what letting go means.
+                                    <br><br>
+                                    The dead man is looking up at you. His eyes are filmed over white and they are absolutely, unambiguously focused on your face. There is a sound coming from somewhere deep inside his chest — a low, wet, resonant gurgling, like something trying to remember what lungs are for. His mouth opens. His grip on your wrist does not loosen. It tightens.
+                                    <br><br>
+                                    <i>CRACK.</i>
+                                    <br><br>
+                                    A shot from the direction of the police barricade. The grip releases. You feel the spray before you understand what happened — warm, fine, across the side of your face and the back of your hand. 
+                                    <br><br>
+                                    Somewhere behind you, a second shot — the infected that had been closing in drops without ceremony. You did not even hear it coming. You do not move for one full second. Then you wipe your face with the back of your wrist. You stand up slowly.
+                                    <br><br>
+                                    <span style="color:var(--accent-red);">"<b>STAY BACK FROM THE BODIES!</b>"</span> An officer's voice, cracking at the high end. <span style="color:var(--accent-red);">"I said stay the hell back from the bodies — what is wrong with you!"</span>
+                                    <br><br>
+                                    You look across the lobby at him. He is still aiming in your direction, muzzle tracking you as you rise, hands not steady. You meet his eyes. He does not lower the gun. You hold his gaze for one flat second, then pick up the pack and sling it over your shoulder.
+                                    
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button>
+                                            <<link "Get up and assess">>
+                                                <<addTime 1>>
+                                                <<set $currentLocation to "c_room">>
+                                                <<set $locationName to "Center Lobby">>
+                                                <<set $lobby_phase to "post_action">>
+                                                <<goto "Lobby_Entrance">>
+                                            <</link>>
+                                            <span class="btn-sub">Check your surroundings.</span>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                        </button>
+                    </div>
+                </span>
+            </div>
 
 
-/* ══════════════════════════════════════════════════════════════════════════
-   POLICE RESOLUTION — AUTHORITY
-   Player uses their Police Badge to override the guards.
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "police_authority">>
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           POST-ACTION — THE HUB RETURN
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "post_action">>
 
-    <h2>LOBBY — THE FRONT DOORS</h2>
+            /* Check if Vane, Maya, or the Backpack are still un-resolved */
+            <<set _anything_left to (not $vane_done or not $maya_done or not $loot_done)>>
 
-    You flip your badge open and hold it up where they can both read it without squinting.
-    <br><br>
-    The room goes quiet for a beat — not the lobby, the lobby is never quiet, but this small square of it, this ten feet between you and these two men. Both of them are reading the shield. Both of them are updating.
-    <br><br>
-    <span style="color:var(--accent-green);">"I'm on the job,"</span> you say. <span style="color:var(--accent-green);">"And you two are a goddamn embarrassment to the uniform."</span> You do not raise your voice. You do not have to. You let your gaze go briefly to the center of the lobby — to what happened there, to the thing nobody stopped — and then back. <span style="color:var(--accent-green);">"Civilians were dying twenty feet away from your position. Twenty feet. You had weapons, you had cover, and you ran your procedure while people died in front of you."</span> You let that settle. <span style="color:var(--accent-green);">"You want to put that in a report, or do you want to open this lock right now and let this stop being a conversation?"</span>
-    <br><br>
-    The taller officer goes red from the collar upward. It is not anger. It is shame, which is a far more useful emotion in this particular moment. His hands move to the luggage cart before his brain has finished the calculation — muscle memory in the presence of a superior, training overriding panic. He is already moving.
-    <br><br>
-    <span style="color:var(--accent-red);">"Yes, Officer. I'm sorry. We didn't know what to—"</span>
-    <br><br>
-    <span style="color:var(--accent-green);">"Save it,"</span> you say. <span style="color:var(--accent-green);">"Get the lock."</span>
+            /* ==== OPTION A: PLAYER CAN TAKE ANOTHER ACTION ==== */
+            <<if _anything_left and $agi >= 5>>
 
-    <div style="margin-bottom:15px; text-align:center;">
-        <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Lobby_exit.gif" style="max-width:100%; border:1px solid #333;">
-    </div>
+                <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                    LOBBY — CENTER
+                </div>
 
-                            <<set $currentLocation to "lobby_exit">>
-                        <<set $locationName to "Front Barricade">>
-    <br><br>
+                <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-green); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                    You pull back to the middle of the lobby, lungs working hard. Your pulse is loud in your temples. The marble underfoot is slick in ways you have been actively not thinking about.
+                    <br><br>
+                    You stop for two seconds — just two, no more — and take a full read of the room. The chaos is evolving. The lobby is in slow, terrible motion around a still point, and you are the still point. Your eyes move automatically: location, distance, threat, status. Old reflex. Useful one.
+                    <br><br>
 
-    <div class="choice-menu">
-        <button>
-            <<link "Walk out">>
-                <<addTime 1>>
+                    <<if $vane_status == "joined">>
+                        Vane keeps pace just off your right shoulder. He has adjusted his grip on the camera case — holding it by the body now, flat, like a shield rather than a weapon. He does not say anything. He tracks where your eyes go. He is learning.
+                        <br><br>
+                    <</if>>
+
+                    <span style="color:var(--accent-green);">[AGILITY — You're fast enough. There's still time for one more move.]</span>
+                    <br><br>
+                    You know what is left and where it is.
+                </div>
+
+                <!-- RE-RENDER THE CRISIS GRID -->
+                <div class="crisis-grid" style="max-width: 700px; margin: 0 auto;">
+
+                    <!-- 1. VANE / ELEVATORS -->
+                    <<if not $vane_done>>
+                        <div class="crisis-card">
+                            <img src="image/act1/Femboy_in_need.gif">
+                            <div class="crisis-text">
+                                <b style="color:var(--accent-blue);">By the elevator banks</b> — an <span style="color:var(--accent-blue);">androgynous young man</span> in designer clothes is making his last stand against an infected with nothing but a heavy hard-shell camera case. He is losing ground with every step.
+                            </div>
+                            <div class="choice-menu">
+                                <button>
+                                    <<link "Sprint to Elevators">>
+                                        <<set $didMove to true>>
+                                        <<set $currentLocation to "e_room">>
+                                        <<set $locationName to "Elevator Banks">>
+                                        <<set $lobby_phase to "crossing_to_vane">>
+                                        <<goto "Lobby_Entrance">>
+                                    <</link>>
+                                    <span class="btn-sub">Rush to help the young man.</span>
+                                </button>
+                            </div>
+                        </div>
+                    <</if>>
+
+                    <!-- 2. MAYA / RECEPTION -->
+                    <<if not $maya_done>>
+                        <div class="crisis-card">
+                            <img src="image/act1/Brown_woman_in_need.gif">
+                            <div class="crisis-text">
+                                <b style="color:var(--accent-blue);">At the reception desk</b> — a <span style="color:var(--accent-blue);">brown woman and her young niece</span> are trapped in a shrinking circle behind the counter. The infected is pressing them back against the wall. She is out of space.
+                            </div>
+                            <div class="choice-menu">
+                                <button>
+                                    <<link "Sprint to Reception">>
+                                        <<set $didMove to true>>
+                                        <<set $currentLocation to "ne_room">>
+                                        <<set $locationName to "Reception Desk">>
+                                        <<set $lobby_phase to "crossing_to_maya">>
+                                        <<goto "Lobby_Entrance">>
+                                    <</link>>
+                                    <span class="btn-sub">Rush to help the woman and child.</span>
+                                </button>
+                            </div>
+                        </div>
+                    <</if>>
+
+                    <!-- 3. DEAD MAN / LOOT -->
+                    <<if not $loot_done>>
+                        <div class="crisis-card">
+                            <img src="image/act1/Lobby_Dead_Man.gif">
+                            <div class="crisis-text">
+                                <b style="color:var(--accent-gold);">Across the floor</b> — a dead man wearing a <span style="color:var(--accent-gold);">military-grade backpack</span> that looks completely untouched. Whatever killed him moved on fast.
+                            </div>
+                            <div class="choice-menu">
+                                <button>
+                                    <<link "Loot the Backpack">>
+                                        <<set $didMove to true>>
+                                        <<set $currentLocation to "n_room">>
+                                        <<set $locationName to "North Lobby">>
+                                        <<set $lobby_phase to "crossing_to_loot">>
+                                        <<goto "Lobby_Entrance">>
+                                    <</link>>
+                                    <span class="btn-sub">Prioritize the supplies. Every second counts.</span>
+                                </button>
+                            </div>
+                        </div>
+                    <</if>>
+
+                    <!-- 4. POLICE BARRICADE / FRONT DOORS -->
+                    <div class="crisis-card">
+                        <img src="image/act1/Police_barricade.gif">
+                        <div class="crisis-text">
+                            <b style="color:var(--accent-gold);">At the glass front doors</b> — two police officers have constructed a barricade. Rifles up. They are twenty feet from people dying and they have not moved once.
+                        </div>
+                        <div class="choice-menu">
+                            <button>
+                                <<link "Head to Front Doors">>
+                                    <<addTime 1>>
+                                    <<set $didMove to true>>
+                                    <<set $currentLocation to "lobby_exit">>
+                                    <<set $locationName to "Front Barricade">>
+                                    <<set $lobby_phase to "crossing_to_exit">>
+                                    <<goto "Lobby_Entrance">>
+                                <</link>>
+                                <span class="btn-sub">Ignore the chaos and head straight for the exit.</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            /* ==== OPTION B: OUT OF TIME / OUT OF AGILITY ==== */
+            <<else>>
+                /* Auto-force to exit if nothing remains, or Agility too low */
                 <<set $didMove to true>>
-                <<run setup.sound.fade("lobby_slaughter", 2000)>>
-                <<goto "Act2_TheStreet">>
-            <</link>>
-            <span class="btn-sub">Exit the Ascott Residency.</span>
-        </button>
+                <<set $currentLocation to "lobby_exit">>
+                <<set $locationName to "Front Barricade">>
+                <<set $lobby_phase to "crossing_to_exit">>
+                <<goto "Lobby_Entrance">>
+            <</if>>
+
+
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           TRANSIT — CROSSING TO THE EXIT
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "crossing_to_exit">>
+
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                LOBBY — CROSSING TO THE FRONT DOORS
+            </div>
+
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/act1/Police_barricade.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-exit1">
+                    <<if $vane_status == "joined">>
+                        You put your hand out — flat, backward, a single clear gesture — and Vane reads it without needing it explained. He falls in close behind your right shoulder and matches your pace. He is getting better at this. Better than he was two minutes ago, anyway.
+                        <br><br>
+                    <</if>>
+
+                    You cross the lobby toward the glass front doors. You are careful about it — picking lines through the chaos, skirting the edge of the open floor where you can, staying low and quiet when quiet matters. The marble is a problem the whole way and you move anyway.
+                    <br><br>
+
+                    <<if $vane_status == "dead" or $maya_status == "dead">>
+                        You pass close to where it happened. You do not look. Looking would not change anything and you need your eyes forward. But your feet know the distance and your body slows for half a step anyway, something in you registering the weight of it even when your mind has already moved on. You keep walking.
+                        <br><br>
+                    <</if>>
+
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);">
+                            <<link "Next ▼">>
+                                <<replace "#vn-text-exit1">>
+                                    <<if $vane_done == false or $maya_done == false>>
+                                        Somewhere behind you, someone is still screaming. You hear it the whole way across the floor. You do not stop. The decision was made the moment you chose the doors over them, and second-guessing it now costs you both. You keep your eyes on the glass. You keep walking.
+                                        <br><br>
+                                    <</if>>
+
+                                    The chandeliers are still lit. Warm amber. Gold on everything. The lobby is technically still beautiful. That has not gotten less strange.
+                                    <br><br>
+                                    The front doors grow as you approach. Through the glass you can see the street beyond — lit, distant chaos, smoke rising somewhere upwind, but outside. Open air. Exits that are not this building. The doors are locked from the inside. The officers at the barricade have the key.
+                                    <br><br>
+                                    Ten feet out, you stop. You look at them clearly for the first time at close range.
+                                    
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button>
+                                            <<link "Approach the officers">>
+                                                <<addTime 1>>
+                                                <<set $didMove to true>>
+                                                <<set $lobby_phase to "police_line">>
+                                                <<goto "Lobby_Entrance">>
+                                            <</link>>
+                                            <span class="btn-sub">Walk up to the barricade.</span>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                        </button>
+                    </div>
+                </span>
+            </div>
+
+
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           POLICE LINE — CONFRONTATION
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "police_line">>
+
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                LOBBY — THE FRONT DOORS
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-cops">
+                    Up close, the officers look worse than they did from across the room.
+                    <br><br>
+                    The taller one is maybe forty. Military posture, the kind that gets trained in and never fully leaves. His face is performing authority the way an actor performs authority — technically correct, deeply unconvincing if you look at the eyes. The younger one is mid-twenties at most. His face has given up on performing anything. He is just scared, clearly, holding a rifle with hands that have not stopped moving since he picked it up. Both muzzles are roughly aimed at your chest. Neither barrel is steady.
+                    
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-gold) !important; background: rgba(255,255,255,0.05);">
+                            <<link "Next ▼">>
+                                <<replace "#vn-text-cops">>
+                                    Behind the barricade: the glass front doors, and the city beyond them. Still lit. Still out there. The locks are on this side. These two men have the keys.
+                                    <br><br>
+
+                                    <<if $vane_status == "joined">>
+                                        Vane is close at your right shoulder, camera case held at his side, willing every muscle in his face to look like this is fine. He is not fine. He is doing a credible impression of fine.
+                                        <br><br>
+                                    <</if>>
+
+                                    <<if $maya_status == "at_police">>
+                                        Maya and Lily are already behind the barricade, sitting against a luggage cart. Maya looks up when she sees you coming. Her face does something complicated — relief and guilt and gratitude all occupying the same expression at once. She does not say anything. Lily does not look up.
+                                        <br><br>
+                                    <</if>>
+
+                                    <<if $vane_status == "dead" or $maya_status == "dead">>
+                                        Somewhere in the lobby behind you there is a place you are not going to look at again. These two officers watched what happened there from twenty feet away with loaded weapons and clear sight lines. They know that you know that. The younger one is not meeting your eyes.
+                                        <br><br>
+                                    <</if>>
+
+                                    <span style="color:var(--accent-red);">"<b>Hold it right there.</b>"</span> The taller officer's voice has the flattened quality of someone reciting protocol. Muscle memory doing the work while the brain tries to catch up. <span style="color:var(--accent-red);">"Building is on full lockdown. Nobody in, nobody out. Quarantine protocol. Step back from the doors."</span>
+                                    <br><br>
+                                    <span style="color:var(--accent-green);">"You're sealing us in here with those things,"</span> you say. Not an argument. Just a fact, stated at normal volume, because it is simply true.
+                                    <br><br>
+                                    <span style="color:var(--accent-red);">"Those are our <i>orders.</i>"</span> The younger officer's grip on his rifle shifts. <span style="color:var(--accent-red);">"<i>Please</i> stand down and step away from the door."</span> He means the <i>please.</i> That is almost worse.
+                                    <br><br>
+                                    Behind you, somewhere in the lobby, something crashes. Glass breaks. Something screams and then does not. The younger officer's eyes snap toward the sound and then back to you, fast, like if he looks away long enough you will do something.
+                                    <br><br>
+                                    <i>There is a way through this. There is always a way through.</i>
+                                    
+                                    <div class="choice-menu" style="margin-top:20px;">
+
+                                        <!-- CHECK 1: STR / MELEE (INTIMIDATE) -->
+                                        <<if $str >= 6 or $skills.melee >= 2>>
+                                            <button>
+                                                <<link "Step into the barrel and stare him down">>
+                                                    <<addTime 1>>
+                                                    <<set $lobby_phase to "police_intimidate">>
+                                                    <<goto "Lobby_Entrance">>
+                                                <</link>>
+                                                <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 6 / MELEE 2]</b> You have the size or the combat experience to make him back down.</span>
+                                            </button>
+                                        <<else>>
+                                            <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                                <span style="text-decoration: line-through;">Step into the barrel and stare him down</span><br>
+                                                <span class="btn-sub" style="color: #666;">[REQUIRES STR 6 OR MELEE 2] You don't have the physical presence or combat experience to successfully intimidate a man with a gun.</span>
+                                            </button>
+                                        <</if>>
+
+                                        <!-- CHECK 2: CHARISMA -->
+                                        <button>
+                                            <<link "Talk your way through">>
+                                                <<addTime 2>>
+                                                <<set $lobby_phase to "police_persuade">>
+                                                <<goto "Lobby_Entrance">>
+                                            <</link>>
+                                            <span class="btn-sub"><b style="color:var(--accent-gold);">[CHARISMA CHECK]</b> Attempt to reason with them calmly.</span>
+                                        </button>
+
+                                        <!-- CHECK 3: POLICE OFFICER (AUTHORITY) -->
+                                        <<if $job == "Police Officer">>
+                                            <button>
+                                                <<link "Pull rank on them">>
+                                                    <<addTime 1>>
+                                                    <<set $lobby_phase to "police_authority">>
+                                                    <<goto "Lobby_Entrance">>
+                                                <</link>>
+                                                <span class="btn-sub"><b style="color:var(--accent-gold);">[POLICE OFFICER]</b> Use your badge to take control of the situation.</span>
+                                            </button>
+                                        <<else>>
+                                            <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                                <span style="text-decoration: line-through;">Pull rank on them</span><br>
+                                                <span class="btn-sub" style="color: #666;">[REQUIRES POLICE OFFICER] You are a civilian. You have no authority here.</span>
+                                            </button>
+                                        <</if>>
+
+                                        <!-- CHECK 4: BRUTE FORCE (SHOVE - ALWAYS AVAILABLE) -->
+                                        <button style="border-left-color: var(--accent-red) !important;">
+                                            <<link "Shove through — you're not asking permission">>
+                                                <<addTime 1>>
+                                                <<exert 5>>
+                                                <<set $didMove to true>>
+                                                <<set $lobby_phase to "police_shove">>
+                                                <<goto "Lobby_Entrance">>
+                                            <</link>>
+                                            <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: CONFRONTATION]</b> Force your way past the barricade. Costs 5 STAMINA.</span>
+                                        </button>
+
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                        </button>
+                    </div>
+                </span>
+            </div>
+
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           POLICE RESOLUTION — INTIMIDATE
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "police_intimidate">>
+
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                LOBBY — THE FRONT DOORS
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-intimidate">
+                    You walk straight into the rifle barrel.
+                    <br><br>
+                    You do not rush it. You just walk, steady pace, until the muzzle contacts your chest and stops you. The officer flinches. You do not. His finger is on the trigger and his brain is not, and you can see the gap between those two things clearly on his face. People who are actually going to shoot you do not advertise it like this.
+                    
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-gold) !important; background: rgba(255,255,255,0.05);">
+                            <<link "Next ▼">>
+                                <<replace "#vn-text-intimidate">>
+                                    You let the silence breathe for two full seconds. Long enough that he registers it is intentional.
+                                    <br><br>
+                                    <span style="color:var(--accent-green);">"You stood there,"</span> you say. Quiet. Completely even. <span style="color:var(--accent-green);">"You watched them die. You had a loaded weapon and a clear position and you followed your procedure and watched people die twenty feet away from you."</span> You hold his eyes. <span style="color:var(--accent-green);">"You are not going to shoot me. We both know that. Open the door."</span>
+                                    <br><br>
+                                    A long, still silence. The younger officer takes a very small step backward without seeming to decide to. The taller one's jaw works. Something in his posture — the part that has been performing authority for the last ten minutes — deflates, just slightly, like a slow leak finding its exit point.
+                                    <br><br>
+                                    <span style="color:var(--accent-red);">"...Fine."</span> The rifle lowers. It goes down slowly, like he is hoping no one notices the movement. <span style="color:var(--accent-red);">"Get out. You're on your own out there. I'm not opening this door again."</span>
+
+                                    <div style="margin: 15px 0; text-align:center;">
+                                        <img src="image/act1/Lobby_exit.gif" style="max-width:100%; border:1px solid #333;">
+                                    </div>
+
+                                    <span style="color:var(--accent-green);">"Good,"</span> you say.
+
+                                    <<set $currentLocation to "lobby_exit">>
+                                    <<set $locationName to "Front Barricade">>
+
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button>
+                                            <<link "Walk out">>
+                                                <<addTime 1>>
+                                                <<set $didMove to true>>
+                                                <<run setup.sound.fade("lobby_slaughter", 2000)>>
+                                                <<goto "Act2_TheStreet">>
+                                            <</link>>
+                                            <span class="btn-sub">Exit the Ascott Residency.</span>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                        </button>
+                    </div>
+                </span>
+            </div>
+
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           POLICE RESOLUTION — PERSUADE
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "police_persuade">>
+
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                LOBBY — THE FRONT DOORS
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-persuade">
+                    <!-- ==== PERSUADE SUCCESS BLOCK ==== -->
+                    <<if $cha >= 5 or hasTrait("DEBATER")>>
+                        You put both hands up slowly. Clear. Non-threatening.
+                        <br><br>
+                        <span style="color:var(--accent-green);">"Here is the problem with what you are doing right now."</span> Your voice stays even, conversational. Not loud. Not urgent. Just talking, like this is a reasonable discussion between reasonable people. <span style="color:var(--accent-green);">"Your perimeter is already breached. You are two people. Every extra civilian in this building is someone else you are responsible for keeping alive tonight, and you have already seen how that math is working out."</span> 
+                        
+                        <div class="choice-menu" style="margin-top:20px;">
+                            <button style="border-left-color: var(--accent-gold) !important; background: rgba(255,255,255,0.05);">
+                                <<link "Next ▼">>
+                                    <<replace "#vn-text-persuade">>
+                                        You pause. Let that sit. <span style="color:var(--accent-green);">"I walk out that door and you have one less problem. One less body to account for. Your job gets easier by exactly the amount of me. That is all I am asking for. Let me go."</span>
+                                        <br><br>
+                                        The two officers look at each other. It is a long look, and a lot passes through it. The logic is simple enough to be hard to argue with, and they are tired and scared and not operating anywhere near their best. The younger one's rifle is already dropping before the older one finishes the nod.
+                                        <br><br>
+                                        <span style="color:var(--accent-red);">"Fine,"</span> the younger one mutters. He shoves a luggage cart aside with his boot and produces a key ring from his vest. His hands are still not steady but he gets the lock on the second try. <span style="color:var(--accent-red);">"Go. Fast. I'm locking it the second you're through."</span>
+                                        <br><br>
+                                        <span style="color:var(--accent-green);">[CHARISMA — SUCCESS]</span>
+
+                                        <div style="margin: 15px 0; text-align:center;">
+                                            <img src="image/act1/Lobby_exit.gif" style="max-width:100%; border:1px solid #333;">
+                                        </div>
+
+                                        <<set $currentLocation to "lobby_exit">>
+                                        <<set $locationName to "Front Barricade">>
+
+                                        <div class="choice-menu" style="margin-top:20px;">
+                                            <button>
+                                                <<link "Step out">>
+                                                    <<addTime 1>>
+                                                    <<set $didMove to true>>
+                                                    <<run setup.sound.fade("lobby_slaughter", 2000)>>
+                                                    <<goto "Act2_TheStreet">>
+                                                <</link>>
+                                                <span class="btn-sub">Exit the Ascott Residency.</span>
+                                            </button>
+                                        </div>
+                                    <</replace>>
+                                <</link>>
+                            </button>
+                        </div>
+
+                    <!-- ==== PERSUADE FAILURE BLOCK ==== -->
+                    <<else>>
+                        You start talking. You lay out the logic clearly — the perimeter, the math, what you are actually asking for, every angle you can find. You make good points. They are genuinely good points.
+                        <br><br>
+                        The older officer shakes his head and talks straight over you.
+                        
+                        <div class="choice-menu" style="margin-top:20px;">
+                            <button style="border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);">
+                                <<link "Next ▼">>
+                                    <<replace "#vn-text-persuade">>
+                                        <span style="color:var(--accent-red);">"I don't care."</span> Flat. Final. <span style="color:var(--accent-red);">"Nobody leaves. Those are the orders. I don't write them, I follow them."</span> He steps forward, shortening the space between you, making himself larger in the way that trained officers make themselves larger when they want someone to stop talking. <span style="color:var(--accent-red);">"Back away from the door. Last warning."</span>
+                                        <br><br>
+                                        Your words are not landing. He has put something up behind his eyes and locked it and he is not letting anything in. You can hear yourself still talking and you already know it is not working.
+                                        <br><br>
+                                        <span style="color:var(--accent-red);">[CHARISMA — FAILED]</span>
+                                        <br><br>
+                                        <i>Different approach, then.</i>
+                                        
+                                        <div class="choice-menu" style="margin-top:20px;">
+                                            <<if $str >= 6 or $skills.melee >= 2>>
+                                                <button>
+                                                    <<link "Enough talking. Stare him down.">>
+                                                        <<addTime 1>>
+                                                        <<set $lobby_phase to "police_intimidate">>
+                                                        <<goto "Lobby_Entrance">>
+                                                    <</link>>
+                                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 6 / MELEE 2]</b> Use your physical presence to force his hand.</span>
+                                                </button>
+                                            <<else>>
+                                                <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                                    <span style="text-decoration: line-through;">Enough talking. Stare him down.</span><br>
+                                                    <span class="btn-sub" style="color: #666;">[REQUIRES STR 6 OR MELEE 2] You lack the physical intimidation factor to make him back down.</span>
+                                                </button>
+                                            <</if>>
+
+                                            <<if $job == "Police Officer">>
+                                                <button>
+                                                    <<link "Pull rank">>
+                                                        <<addTime 1>>
+                                                        <<set $lobby_phase to "police_authority">>
+                                                        <<goto "Lobby_Entrance">>
+                                                    <</link>>
+                                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[POLICE OFFICER]</b> Use your badge to bypass the argument.</span>
+                                                </button>
+                                            <<else>>
+                                                <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                                    <span style="text-decoration: line-through;">Pull rank</span><br>
+                                                    <span class="btn-sub" style="color: #666;">[REQUIRES POLICE OFFICER] You have no authority to pull rank.</span>
+                                                </button>
+                                            <</if>>
+
+                                            <button style="border-left-color: var(--accent-red) !important;">
+                                                <<link "Shove through — done with this">>
+                                                    <<addTime 1>>
+                                                    <<exert 5>>
+                                                    <<set $didMove to true>>
+                                                    <<set $lobby_phase to "police_shove">>
+                                                    <<goto "Lobby_Entrance">>
+                                                <</link>>
+                                                <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: CONFRONTATION]</b> Force your way past the barricade. Costs 5 STAMINA.</span>
+                                            </button>
+                                        </div>
+                                    <</replace>>
+                                <</link>>
+                            </button>
+                        </div>
+                    <</if>>
+                </span>
+            </div>
+
+
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           POLICE RESOLUTION — AUTHORITY
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "police_authority">>
+
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                LOBBY — THE FRONT DOORS
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-auth">
+                    You flip your badge open and hold it up where they can both read it without squinting.
+                    <br><br>
+                    The room goes quiet for a beat — not the lobby, the lobby is never quiet, but this small square of it, this ten feet between you and these two men. Both of them are reading the shield. Both of them are updating.
+                    
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-gold) !important; background: rgba(255,255,255,0.05);">
+                            <<link "Next ▼">>
+                                <<replace "#vn-text-auth">>
+                                    <span style="color:var(--accent-green);">"I'm on the job,"</span> you say. <span style="color:var(--accent-green);">"And you two are a goddamn embarrassment to the uniform."</span> You do not raise your voice. You do not have to. You let your gaze go briefly to the center of the lobby — to what happened there, to the thing nobody stopped — and then back. 
+                                    <br><br>
+                                    <span style="color:var(--accent-green);">"Civilians were dying twenty feet away from your position. Twenty feet. You had weapons, you had cover, and you ran your procedure while people died in front of you."</span> You let that settle. <span style="color:var(--accent-green);">"You want to put that in a report, or do you want to open this lock right now and let this stop being a conversation?"</span>
+                                    <br><br>
+                                    The taller officer goes red from the collar upward. It is not anger. It is shame, which is a far more useful emotion in this particular moment. His hands move to the luggage cart before his brain has finished the calculation — muscle memory in the presence of a superior, training overriding panic. He is already moving.
+                                    <br><br>
+                                    <span style="color:var(--accent-red);">"Yes, Officer. I'm sorry. We didn't know what to—"</span>
+                                    <br><br>
+                                    <span style="color:var(--accent-green);">"Save it,"</span> you say. <span style="color:var(--accent-green);">"Get the lock."</span>
+
+                                    <div style="margin: 15px 0; text-align:center;">
+                                        <img src="image/act1/Lobby_exit.gif" style="max-width:100%; border:1px solid #333;">
+                                    </div>
+
+                                    <<set $currentLocation to "lobby_exit">>
+                                    <<set $locationName to "Front Barricade">>
+
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button>
+                                            <<link "Walk out">>
+                                                <<addTime 1>>
+                                                <<set $didMove to true>>
+                                                <<run setup.sound.fade("lobby_slaughter", 2000)>>
+                                                <<goto "Act2_TheStreet">>
+                                            <</link>>
+                                            <span class="btn-sub">Exit the Ascott Residency.</span>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                        </button>
+                    </div>
+                </span>
+            </div>
+
+
+        <!-- ══════════════════════════════════════════════════════════════════════════
+           POLICE RESOLUTION — SHOVE
+           ══════════════════════════════════════════════════════════════════════════ -->
+        <<elseif $lobby_phase == "police_shove">>
+
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                LOBBY — THE FRONT DOORS
+            </div>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-shove">
+                    You are done talking. There is nothing left to say that you have not already considered and discarded. You just walk.
+                    <br><br>
+                    <span style="color:var(--accent-red);">"I <i>said</i> hold—"</span>
+                    <br><br>
+                    You reach out and take hold of the rifle barrel with one hand — not snatching, just a steady deliberate grip — and push it firmly and completely to the side. 
+                    
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);">
+                            <<link "Next ▼">>
+                                <<replace "#vn-text-shove">>
+                                    The officer stumbles back a half-step, genuinely surprised, the kind of surprise that goes deeper than the physical. For one full, completely frozen second, his finger is still on the trigger and the muzzle is swinging in an arc that passes the younger officer's head, and everyone in that particular three feet of space is holding something very still.
+                                    <br><br>
+                                    He does not pull it. His brain catches up with his body in time, by a narrow margin. The muzzle completes its arc and keeps going down. He is staring at you with an expression that does not have a common name.
+                                    <br><br>
+                                    You already knew he would not pull it. You knew that before you reached for the barrel.
+
+                                    <div style="margin: 15px 0; text-align:center;">
+                                        <img src="image/act1/Lobby_exit.gif" style="max-width:100%; border:1px solid #333;">
+                                    </div>
+
+                                    You put your shoulder into the glass door. The lock is engaged but the door is old and the frame is not as solid as it looks, and under steady pressure it yields. The door swings outward and cold air hits your face immediately.
+                                    <br><br>
+                                    You step through. The lobby noise drops away behind you like a switch being thrown.
+
+                                    <<set $currentLocation to "lobby_exit">>
+                                    <<set $locationName to "Front Barricade">>
+
+                                    <<if $vane_status == "joined">>
+                                        <br><br>
+                                        Vane comes through the door a half-second behind you and stops beside you on the sidewalk, blinking in the open air. He looks at the door. He looks at you. He breathes out, very slowly, through his nose. <span style="color:var(--accent-blue);">"Right,"</span> he says. <span style="color:var(--accent-blue);">"Okay. Still alive."</span> He adjusts his grip on his camera case. <span style="color:var(--accent-blue);">"What now."</span>
+                                    <</if>>
+
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button>
+                                            <<link "Keep moving">>
+                                                <<completeObjective "escape_lobby">>
+                                                <<addObjective "survive_streets" "Survive the chaotic city streets">>
+                                                <<purgeCompleted>>
+                                                <<addTime 1>>
+                                                <<set $didMove to true>>
+                                                <<run setup.sound.fade("lobby_slaughter", 2000)>>
+                                                <<goto "Act2_TheStreet">>
+                                            <</link>>
+                                            <span class="btn-sub">Don't look back.</span>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                        </button>
+                    </div>
+                </span>
+            </div>
+
+        <</if>>
+
     </div>
-
-
-/* ══════════════════════════════════════════════════════════════════════════
-   POLICE RESOLUTION — SHOVE
-   Player forces their way out of the building.
-   ══════════════════════════════════════════════════════════════════════════ */
-<<elseif $lobby_phase == "police_shove">>
-
-    <h2>LOBBY — THE FRONT DOORS</h2>
-
-    You are done talking. There is nothing left to say that you have not already considered and discarded. You just walk.
-    <br><br>
-    <span style="color:var(--accent-red);">"I <i>said</i> hold—"</span>
-    <br><br>
-    You reach out and take hold of the rifle barrel with one hand — not snatching, just a steady deliberate grip — and push it firmly and completely to the side. The officer stumbles back a half-step, genuinely surprised, the kind of surprise that goes deeper than the physical. For one full, completely frozen second, his finger is still on the trigger and the muzzle is swinging in an arc that passes the younger officer's head, and everyone in that particular three feet of space is holding something very still.
-    <br><br>
-    He does not pull it. His brain catches up with his body in time, by a narrow margin. The muzzle completes its arc and keeps going down. He is staring at you with an expression that does not have a common name.
-    <br><br>
-    You already knew he would not pull it. You knew that before you reached for the barrel.
-
-    <div style="margin-bottom:15px; text-align:center;">
-        <img src="C:\Users\Neal Sage\Documents\Twine\image\lobby\Lobby_exit.gif" style="max-width:100%; border:1px solid #333;">
-    </div>
-
-    You put your shoulder into the glass door. The lock is engaged but the door is old and the frame is not as solid as it looks, and under steady pressure it yields. The door swings outward and cold air hits your face immediately — real outside air, carrying smoke from somewhere upwind and something that might be rain coming.
-    <br><br>
-    You step through.
-    <br><br>
-    The lobby noise drops away behind you like a switch being thrown. Through the glass you can see the two officers still standing there, the older one watching you go, the younger one already looking back at the lobby interior. The city is loud in a different way — distant, spread out, not enclosed. You breathe.
-
-                        <<set $currentLocation to "lobby_exit">>
-                        <<set $locationName to "Front Barricade">>
-
-    <<if $vane_status == "joined">>
-        <br><br>
-        Vane comes through the door a half-second behind you and stops beside you on the sidewalk, blinking in the open air. He looks at the door. He looks at you. He breathes out, very slowly, through his nose. <span style="color:var(--accent-blue);">"Right,"</span> he says. <span style="color:var(--accent-blue);">"Okay. Still alive."</span> He adjusts his grip on the briefcase. <span style="color:var(--accent-blue);">"What now."</span>
-    <</if>>
-
-    <br><br>
-
-    <div class="choice-menu">
-        <button>
-            <<link "Keep moving">>
-                <<completeObjective "escape_lobby">>
-    <<addObjective "survive_streets" "Survive the chaotic city streets">>
-    <<purgeCompleted>>
-                <<addTime 1>>
-                <<set $didMove to true>>
-                <<run setup.sound.fade("lobby_slaughter", 2000)>>
-                <<goto "Act2_TheStreet">>
-            <</link>>
-            <span class="btn-sub">Don't look back.</span>
-        </button>
-    </div>
-
-<</if>>
+</div>
+<</nobr>>
