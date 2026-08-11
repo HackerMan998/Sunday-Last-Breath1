@@ -51,6 +51,9 @@
                 <div class="choice-menu" style="margin-top:20px;">
                     <button style="border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);">
                         <<link "Next ▼">>
+                            <!-- AGAR LAYAR KEMBALI KE ATAS SAAT BERGANTI -->
+                            <<run $(".vn-dialogue-box").scrollTop(0)>>
+                            
                             <<replace "#vn-scene-road">>
                                 
                                 <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
@@ -78,6 +81,9 @@
                                             <div class="choice-menu" style="margin-top:20px;">
                                                 <button style="border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);">
                                                     <<link "Next ▼">>
+                                                        <!-- AGAR LAYAR KEMBALI KE ATAS SAAT BERGANTI -->
+                                                        <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                                        
                                                         <<replace "#vn-text-vane">>
                                                             He takes a slow, shuddering breath, then turns to look at you. The fear is still there, but now there's a desperate need for direction. 
                                                             <br><br>
@@ -114,6 +120,9 @@
                                             <div class="choice-menu" style="margin-top:20px;">
                                                 <button style="border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);">
                                                     <<link "Next ▼">>
+                                                        <!-- AGAR LAYAR KEMBALI KE ATAS SAAT BERGANTI -->
+                                                        <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                                        
                                                         <<replace "#vn-text-alone">>
                                                             To keep your hands from shaking, you force your mind to focus on a single point. You need a destination. You need a reason to keep the car on the road.
                                                             
