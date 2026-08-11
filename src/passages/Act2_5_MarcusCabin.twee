@@ -4,7 +4,7 @@
    INITIALIZATION & STATE SETUP
    ==================================================================== */
 <<if ndef $cabin_phase>>
-	<<set $cabin_phase to 1>>
+    <<set $cabin_phase to 1>>
     
     /* AUDIO: Crunching gravel, rain, and a tense atmospheric drone */
     <<run setup.sound.play("gravel_drive", "audio/sfx/tires_gravel.mp3", false, 0.8)>>
@@ -12,321 +12,430 @@
 <</if>>
 <</nobr>>
 
-/* ════════════════════════════════════════════════════════════════════
-   PHASE 1 — THE STANDOFF
-   ════════════════════════════════════════════════════════════════════ */
-<<if $cabin_phase == 1>>
-	<h2>THE NORTHERN RIDGE — MARCUS'S CABIN</h2>
+<<nobr>>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
 
-    /* --- 1. VISUALS --- */
-    <div style="margin-bottom: 15px; text-align: center;">
-        <img src="image/Act2_5/Cabin_Standoff.gif" style="max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
-    </div>
+        <!-- ════════════════════════════════════════════════════════════════════
+           PHASE 1 — THE STANDOFF
+           ════════════════════════════════════════════════════════════════════ -->
+        <<if $cabin_phase == 1>>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                THE NORTHERN RIDGE — OAKHAVEN CABIN
+            </div>
 
-    /* --- 2. NARRATIVE --- */
-    The dirt road is treacherous, washing out in the heavy rain, but the sedan powers through. Two miles up the ridge, the trees break, revealing a fortified log cabin. Thin, gray smoke curls from the stone chimney. 
-    <br><br>
-    You put the car in park and step out into the freezing rain. 
-    <br><br>
-    
-    /* THE FIX: Stop audio stuttering on re-renders */
-    <<if not $rifle_cocked>>
-        <<run setup.sound.play("rifle_bolt", "audio/sfx/bolt_action.mp3", false, 0.9)>>
-        <<set $rifle_cocked to true>>
-    <</if>>
-    
-    <i>*SNICK-CLACK.*</i>
-    <br><br>
-    The heavy, metallic sound of a bolt-action rifle chambering a round echoes from the pitch-black shadows of the porch. 
-    <br><br>
-    <span style="color:var(--accent-gold);">"Stop right there,"</span> a woman's voice calls out. It is trembling, but the kind of trembling that comes from adrenaline, not hesitation. <span style="color:var(--accent-gold);">"Keep your hands away from your gear."</span>
-    <br><br>
+            /* --- 1. VISUALS --- */
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/Act2_5/Cabin_Standoff.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
 
-    <<if $vane_status == "joined">>
-        Vane steps out of the passenger side, his hands immediately shooting up into the air. 
-        <br>
-        <<chat "Vane" "image/avatars/vane.gif" "right" "Whoa! Hey, we're not infected! We're just people!">>
-        <br>
-        <span style="color:var(--accent-gold);">"I don't care what you are,"</span> she snaps back. <span style="color:var(--accent-gold);">"Where is Marcus? He's the only one who knows about this place. Who are you?"</span>
-    <<else>>
-        You slowly raise your empty hands. Through the gloom, you can barely make out the silhouette of the woman holding a long-barreled hunting rifle. Behind her, through the cabin window, two small faces are peering through the curtains. 
-        <br><br>
-        <span style="color:var(--accent-gold);">"I said, who are you? Where is Marcus?"</span> she demands.
-    <</if>>
-    <br><br>
-
-    /* --- 3. DYNAMIC HUMANITY MONOLOGUE --- */
-    <<if $hum >= 70>>
-        <i>Your chest aches for her. She's standing out in the freezing rain, holding onto a hope you are about to completely shatter.</i><br>
-        <<chat "You" "image/avatars/player.gif" "left" "Diane? Please, lower the rifle. I have terrible news, and I am so, so sorry.">>
-    <<elseif $hum >= 31>>
-        <i>She's scared, but a scared person with a gun is a dead person's problem. You keep your hands highly visible.</i><br>
-        <<chat "You" "image/avatars/player.gif" "left" "My name is <<print $firstName>>. Marcus isn't with me. We need to talk.">>
-    <<else>>
-        <i>Her finger is twitching on the trigger. You could rush her, but it's easier to just break her spirit.</i><br>
-        <<chat "You" "image/avatars/player.gif" "left" "Marcus blew his own head off in your apartment. Put the gun down before you hurt yourself.">>
-    <</if>>
-    <br>
-
-    /* --- 4. PLAYER CHOICES (THE TRUTH) --- */
-    <div class="choice-menu">
-        
-        <!-- OPTION 1: THE JOURNAL (Always available since it's how you got here) -->
-        <button>
-            <<link "Hand over Marcus's Journal">>
-                <<set $hum = Math.min(100, $hum + 10)>>
-                <<set $diane_state to "truth">>
-                <<set $cabin_phase to 2>>
-                <<goto "Act2_5_MarcusCabin">>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-green);">[+10 HUMANITY]</b> Let her read his final words herself. It's the most humane way.</span>
-        </button>
-
-        <!-- OPTION 2: THE SHOTGUN (Requires looting it in Act 1) -->
-        <<if $inventory.find(i => i.id === "Remington 870") or $equip.weapon === "Remington 870">>
-            <button>
-                <<link "Hand over Marcus's Remington 870">>
-                    <<set $hum = Math.min(100, $hum + 15)>>
-                    <<set $diane_state to "respect">>
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-standoff">
+                    /* --- 2. NARRATIVE --- */
+                    The dirt road is treacherous, washing out in the heavy rain, but the sedan powers through. Two miles up the ridge, the trees break, revealing a fortified log cabin. Thin, gray smoke curls from the stone chimney. 
+                    <br><br>
+                    You put the car in park and step out into the freezing rain. 
                     
-                    /* THE FIX: Remove the gun and unequip it */
-                    <<if $equip.weapon === "Remington 870">>
-                        <<set $equip.weapon to "none">>
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);">
+                            <<link "Next ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<replace "#vn-text-standoff">>
+                                    /* THE FIX: Stop audio stuttering on re-renders */
+                                    <<if not $rifle_cocked>>
+                                        <<run setup.sound.play("rifle_bolt", "audio/sfx/bolt_action.mp3", false, 0.9)>>
+                                        <<set $rifle_cocked to true>>
+                                    <</if>>
+                                    
+                                    <i>*SNICK-CLACK.*</i>
+                                    <br><br>
+                                    The heavy, metallic sound of a bolt-action rifle chambering a round echoes from the pitch-black shadows of the porch. 
+                                    <br><br>
+                                    <span style="color:var(--accent-gold);">"Stop right there,"</span> a woman's voice calls out. It is trembling, but the kind of trembling that comes from adrenaline, not hesitation. <span style="color:var(--accent-gold);">"Keep your hands away from your gear."</span>
+                                    <br><br>
+
+                                    <<if $vane_status == "joined">>
+                                        Vane steps out of the passenger side, his hands immediately shooting up into the air. 
+                                        <br><br>
+                                        <<chat "Vane" "image/avatars/vane.gif" "right" "Whoa! Hey, we're not infected! We're just people!">>
+                                        <br>
+                                        <span style="color:var(--accent-gold);">"I don't care what you are,"</span> she snaps back. <span style="color:var(--accent-gold);">"Where is Marcus? He's the only one who knows about this place. Who are you?"</span>
+                                    <<else>>
+                                        You slowly raise your empty hands. Through the gloom, you can barely make out the silhouette of the woman holding a long-barreled hunting rifle. Behind her, through the cabin window, two small faces are peering through the curtains. 
+                                        <br><br>
+                                        <span style="color:var(--accent-gold);">"I said, who are you? Where is Marcus?"</span> she demands.
+                                    <</if>>
+
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button style="border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);">
+                                            <<link "Next ▼">>
+                                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                                <<replace "#vn-text-standoff">>
+                                                    /* --- 3. DYNAMIC HUMANITY MONOLOGUE --- */
+                                                    <<if $hum >= 70>>
+                                                        <i>Your chest aches for her. She's standing out in the freezing rain, holding onto a hope you are about to completely shatter.</i><br>
+                                                        <<chat "You" "image/avatars/player.gif" "left" "Diane? Please, lower the rifle. I have terrible news, and I am so, so sorry.">>
+                                                    <<elseif $hum >= 31>>
+                                                        <i>She's scared, but a scared person with a gun is a dead person's problem. You keep your hands highly visible.</i><br>
+                                                        <<chat "You" "image/avatars/player.gif" "left" "My name is <<print $firstName>>. Marcus isn't with me. We need to talk.">>
+                                                    <<else>>
+                                                        <i>Her finger is twitching on the trigger. You could rush her, but it's easier to just break her spirit.</i><br>
+                                                        <<chat "You" "image/avatars/player.gif" "left" "Marcus didn't make it. Put the gun down before you hurt yourself.">>
+                                                    <</if>>
+
+                                                    <div class="choice-menu" style="margin-top:20px;">
+                                                        
+                                                        <!-- OPTION 1: THE JOURNAL (If read in Room 405) -->
+                                                        <<if $read_marcus_log>>
+                                                            <button>
+                                                                <<link "Hand over Marcus's Journal">>
+                                                                    <<set $hum = Math.min(100, $hum + 10)>>
+                                                                    <<set $diane_state to "truth">>
+                                                                    <<set $cabin_phase to 2>>
+                                                                    <<goto "Act2_5_MarcusCabin">>
+                                                                <</link>>
+                                                                <span class="btn-sub"><b style="color:var(--accent-green);">[+10 HUMANITY]</b> Let her read his final words herself. It's the most humane way.</span>
+                                                            </button>
+                                                        <</if>>
+
+                                                        <!-- OPTION 2: THE SHOTGUN (Requires looting it in Act 1) -->
+                                                        <<if $inventory.find(i => i.id === "Remington 870") or $equip.weapon === "Remington 870">>
+                                                            <button>
+                                                                <<link "Hand over Marcus's Remington 870">>
+                                                                    <<set $hum = Math.min(100, $hum + 15)>>
+                                                                    <<set $diane_state to "respect">>
+                                                                    
+                                                                    /* THE FIX: Remove the gun and unequip it */
+                                                                    <<if $equip.weapon === "Remington 870">>
+                                                                        <<set $equip.weapon to "none">>
+                                                                    <</if>>
+                                                                    <<run setup.removeItem("Remington 870", 1)>>
+                                                                    
+                                                                    <<set $cabin_phase to 2>>
+                                                                    <<goto "Act2_5_MarcusCabin">>
+                                                                <</link>>
+                                                                <span class="btn-sub"><b style="color:var(--accent-green);">[+15 HUMANITY]</b> She'll recognize his prized home-defense shotgun. Surrendering it proves you aren't a threat.</span>
+                                                            </button>
+                                                        <</if>>
+                                                        
+                                                        <!-- OPTION 3: THE TRUTH (If they explored 405 but didn't read the log) -->
+                                                        <<if not $read_marcus_log>>
+                                                            <button>
+                                                                <<link "Tell her the Truth: His safe was empty">>
+                                                                    <<set $diane_state to "truth_guess">>
+                                                                    <<set $cabin_phase to 2>>
+                                                                    <<goto "Act2_5_MarcusCabin">>
+                                                                <</link>>
+                                                                <span class="btn-sub">Explain that you were in his apartment, and his guns were gone. He never made it out of the building.</span>
+                                                            </button>
+                                                        <</if>>
+
+                                                        <!-- OPTION 4: THE LIE -->
+                                                        <button style="border-left-color: var(--accent-red) !important;">
+                                                            <<link "Lie: 'He's still at the quarantine zone.'">>
+                                                                <<set $hum = Math.max(0, $hum - 10)>>
+                                                                <<set $diane_state to "lie">>
+                                                                <<set $cabin_phase to 2>>
+                                                                <<goto "Act2_5_MarcusCabin">>
+                                                            <</link>>
+                                                            <span class="btn-sub"><b style="color:var(--accent-red);">[-10 HUMANITY]</b> Tell her he was trapped behind military lines but is fighting his way out. Give her false hope.</span>
+                                                        </button>
+
+                                                        <!-- OPTION 5: COLD TRUTH (If Humanity is already low) -->
+                                                        <<if $hum <= 40>>
+                                                            <button style="border-left-color: var(--accent-red) !important;">
+                                                                <<link "Cold Truth: 'He was bitten. He's dead.'">>
+                                                                    <<set $hum = Math.max(0, $hum - 15)>>
+                                                                    <<set $diane_state to "cold">>
+                                                                    <<set $cabin_phase to 2>>
+                                                                    <<goto "Act2_5_MarcusCabin">>
+                                                                <</link>>
+                                                                <span class="btn-sub"><b style="color:var(--accent-red);">[-15 HUMANITY]</b> Give her the brutal facts with zero padding.</span>
+                                                            </button>
+                                                        <</if>>
+
+                                                    </div>
+                                                <</replace>>
+                                            <</link>>
+                                        </button>
+                                    </div>
+
+                                <</replace>>
+                            <</link>>
+                        </button>
+                    </div>
+
+                </span>
+            </div>
+
+
+        <!-- ════════════════════════════════════════════════════════════════════
+           PHASE 2 — INSIDE THE CABIN (TRAIT CHECKS)
+           ════════════════════════════════════════════════════════════════════ -->
+        <<elseif $cabin_phase == 2>>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                THE CABIN — INTERIOR
+            </div>
+
+            <!-- GAMBAR INTERIOR KABIN YANG SEBELUMNYA HILANG -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/Act2_5/Cabin_Interior.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
+            /* THE FIX: Prevent audio overlapping on re-renders */
+            <<if not $cabin_audio_played>>
+                <<run setup.sound.fade("tension_drone", 1000)>>
+                <<run setup.sound.play("fireplace", "audio/sfx/fireplace_crackle.mp3", true, 0.6)>>
+                <<set $cabin_audio_played to true>>
+            <</if>>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-interior">
+                    <<if $diane_state == "truth" or $diane_state == "respect">>
+                        You hold out the <<if $diane_state == "respect">>Remington 870 shotgun<<else>>blood-stained journal<</if>>. 
+                        <br><br>
+                        Diane steps out of the shadows. The moment she sees it, the fight drains completely out of her. The hunting rifle drops to her side. She reads his final words. She doesn't scream. She just falls to her knees on the porch, clutching the item to her chest as the rain washes over her. He died protecting them.
+                        <br><br>
+                        You gently help her inside. 
+
+                    <<elseif $diane_state == "truth_guess">>
+                        <<chat "You" "image/avatars/player.gif" "left" "I was in his apartment. His gun safe was empty. He geared up... but I didn't see him on the road. I'm so sorry.">>
+                        <br>
+                        Her grip on the rifle falters. She stares at you, processing the information. The reality of it crashes over her in a wave. If he had his gear and he isn't here yet, he isn't coming. 
+                        <br><br>
+                        She lowers the weapon and motions you to come inside out of the rain.
+
+                    <<elseif $diane_state == "lie">>
+                        You tell her the lie. Smooth and practiced. You tell her Marcus saved your life, that he got caught behind a military barricade, but he told you to come here and tell her to wait for him.
+                        <br><br>
+                        She lowers the rifle, a desperate, shuddering breath escaping her lips. <span style="color:var(--accent-gold);">"He's coming... okay. Okay. Come inside out of the rain."</span>
+
+                    <<elseif $diane_state == "cold">>
+                        <<chat "You" "image/avatars/player.gif" "left" "He didn't make it out. He's dead.">>
+                        <br>
+                        You drop the harsh truth on her like an anvil. She stares at you, horrified, her hands trembling so violently on the hunting rifle you think she might accidentally pull the trigger. 
+                        
+                        <<if $vane_status == "joined">>
+                            <br><br>
+                            Vane immediately steps between you. <span style="color:var(--accent-blue);">"What is wrong with you?!"</span> he hisses at you, before turning to Diane with his hands raised. <span style="color:var(--accent-blue);">"Ma'am, I am so sorry. He... he went out on his own terms to protect you."</span> 
+                            <br><br>
+                            Diane lets out a broken sob and backs into the cabin, leaving the door open for Vane. You follow.
+                        <<else>>
+                            <br><br>
+                            She looks at you with pure disgust, but the fight leaves her. She lowers the gun, numb, and walks into the cabin without a word.
+                        <</if>>
                     <</if>>
-                    <<run setup.removeItem("Remington 870", 1)>>
+
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);">
+                            <<link "Next ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<replace "#vn-text-interior">>
+                                    <hr style="border-color:#333; margin: 20px 0;">
+
+                                    The inside of the cabin is warm. A fire roars in the hearth. Two young boys, maybe seven and nine, are huddled on a rug. They look terrified.
+                                    
+                                    <<if $vane_status == "joined">>
+                                        <br><br>
+                                        Vane kneels down near the fire, a respectful distance from the kids. He pulls a quarter from his pocket. 
+                                        <br><br>
+                                        <<chat "Vane" "image/avatars/vane.gif" "right" "Hey guys. You want to see a magic trick?">>
+                                        <br>
+                                        Within minutes, he has them distracted, pulling the coin from behind their ears, giving Diane the quiet space she desperately needs to process the end of her world.
+                                    <</if>>
+                                    <br><br>
+                                    You have a few hours to rest before morning. What do you do?
+
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        
+                                        <!-- TRAIT: CHEF -->
+                                        <<if hasTrait("COOK") or $skills.scavenging >= 2>>
+                                            <button>
+                                                <<link "Cook a hot meal for the family [CHEF]">>
+                                                    <<set $hum = Math.min(100, $hum + 15)>>
+                                                    <<set $stamina = $stamina_max>>
+                                                    <<set $diane_trust to true>>
+                                                    <<set $cabin_phase to 3>>
+                                                    <<goto "Act2_5_MarcusCabin">>
+                                                <</link>>
+                                                <span class="btn-sub"><b style="color:var(--accent-green);">[+15 HUMANITY] [MAX STAMINA]</b> You take over the kitchen. Using your scavenged supplies, you make a rich, warm stew. The boys smile for the first time in days.</span>
+                                            </button>
+                                        <</if>>
+
+                                        <!-- TRAIT: DOCTOR / MEDICINE -->
+                                        <<if hasTrait("FIELD MEDIC") or $skills.medicine >= 2>>
+                                            <<if $inventory.find(i => i.id === "Antibiotics")>>
+                                                <button>
+                                                    <<link "Treat the youngest boy's fever [MEDICINE + ANTIBIOTICS]">>
+                                                        <<set $hum = Math.min(100, $hum + 20)>>
+                                                        <<run setup.removeItem("Antibiotics", 1)>>
+                                                        <<set $diane_trust to true>>
+                                                        <<set $cabin_phase to 3>>
+                                                        <<goto "Act2_5_MarcusCabin">>
+                                                    <</link>>
+                                                    <span class="btn-sub"><b style="color:var(--accent-green);">[+20 HUMANITY]</b> You notice the youngest boy has a nasty chest infection. You use your Antibiotics to break his fever. Diane looks at you with absolute gratitude.</span>
+                                                </button>
+                                            <</if>>
+                                        <</if>>
+
+                                        <!-- TRAIT: ARROGANT -->
+                                        <<if hasTrait("KNOW-IT-ALL")>>
+                                            <button style="border-left-color: var(--accent-red) !important;">
+                                                <<link "Lecture Diane on her lack of preparation [ARROGANT]">>
+                                                    <<set $hum = Math.max(0, $hum - 15)>>
+                                                    <<set $cabin_phase to 3>>
+                                                    <<goto "Act2_5_MarcusCabin">>
+                                                <</link>>
+                                                <span class="btn-sub"><b style="color:var(--accent-red);">[-15 HUMANITY]</b> Point out that staying in this cabin without a secondary bug-out vehicle is a death trap. She will hate you, but she'll know you're right.</span>
+                                            </button>
+                                        <</if>>
+
+                                        <!-- DEFAULT REST -->
+                                        <button style="border-left-color: var(--accent-blue) !important;">
+                                            <<link "Rest quietly by the fire">>
+                                                <<set $stamina = Math.min($stamina_max, $stamina + 50)>>
+                                                <<set $cabin_phase to 3>>
+                                                <<goto "Act2_5_MarcusCabin">>
+                                            <</link>>
+                                            <span class="btn-sub"><b style="color:var(--accent-blue);">[+50 STAMINA]</b> Keep to yourself. Conserve your energy for tomorrow.</span>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                        </button>
+                    </div>
+
+                </span>
+            </div>
+
+        <!-- ════════════════════════════════════════════════════════════════════
+           PHASE 3 — THE MORNING & LORE DUMP
+           ════════════════════════════════════════════════════════════════════ -->
+        <<elseif $cabin_phase == 3>>
+            <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+                THE CABIN — MORNING
+            </div>
+
+            /* THE FIX: Stop infinite time skipping and lore farming */
+            <<if not $morning_processed>>
+                <<addTime 479>> /* 8 hours of sleep */
+                <<run window.animateStatBar('.bar-fill.stamina', $stamina, $stamina_max)>>
+                
+                /* LORE UPDATE: Based on the new timeline */
+                <<run window.addLore("The Fall of Interstate 5", "Diane witnessed the military panic at the highway checkpoints. Soldiers opened fire on uninfected civilians rushing their barricades for safety, triggering a massive stampede that doomed the evacuation routes.")>>
+                <<set $morning_processed to true>>
+            <</if>>
+
+            <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+                
+                <span id="vn-text-morning">
+                    The morning light is gray and cold. The rain has stopped, but the fog rolling off the mountains is thick. Diane is sitting at the kitchen table, a mug of black coffee in her hands. 
+                    <br><br>
+                    You sit across from her. 
                     
-                    <<set $cabin_phase to 2>>
-                    <<goto "Act2_5_MarcusCabin">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-green);">[+15 HUMANITY]</b> She's holding the Remington 700 hunting rifle, but she'll recognize his prized home-defense shotgun. Surrendering it proves you aren't a threat.</span>
-            </button>
-        <</if>>
-        
-        <!-- OPTION 3: THE LIE -->
-        <button>
-            <<link "Lie: 'He's still at the quarantine zone.'">>
-                <<set $hum = Math.max(0, $hum - 10)>>
-                <<set $diane_state to "lie">>
-                <<set $cabin_phase to 2>>
-                <<goto "Act2_5_MarcusCabin">>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-red);">[-10 HUMANITY]</b> Tell her he was trapped behind military lines but is fighting his way out. Give her false hope.</span>
-        </button>
+                    <div class="choice-menu" style="margin-top:20px;">
+                        <button style="border-left-color: var(--accent-gold) !important; background: rgba(255,255,255,0.05);">
+                            <<link "Next ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<replace "#vn-text-morning">>
+                                    <span style="color:var(--accent-gold);">"We were out by the edge of the city when the sirens started,"</span> she says quietly, staring into her mug. <span style="color:var(--accent-gold);">"Marcus told me to take the kids and get out while he drove back to the Ascott to grab his gear. I tried to take the highway out of town."</span>
+                                    <br><br>
+                                    She looks up at you, her eyes hollow. <span style="color:var(--accent-gold);">"It was a bloodbath. People were running toward the military checkpoints for help. But the soldiers couldn't tell who was infected and who was just terrified. They opened fire into the crowd. That's what caused the stampede. I grabbed my boys, turned the truck around, and drove off-grid up here."</span>
+                                    <br><br>
+                                    <i><span style="color:var(--accent-gold);">[LORE ADDED: The Fall of Interstate 5]</span></i>
+                                    <br><br>
+                                    She takes a deep breath and looks out the window at her mud-splattered pickup truck. 
+                                    <br><br>
+                                    <span style="color:var(--accent-gold);">"Marcus isn't coming. I know that now. And staying here alone... it's just a matter of time before those things wander up this road."</span>
+                                    <br><br>
+                                    You stand up to pack your gear. It's time to move.
 
-        <!-- OPTION 4: COLD TRUTH (If Humanity is already low) -->
-        <<if $hum <= 40>>
-            <button>
-                <<link "Cold Truth: 'He was bitten. He's dead.'">>
-                    <<set $hum = Math.max(0, $hum - 15)>>
-                    <<set $diane_state to "cold">>
-                    <<set $cabin_phase to 2>>
-                    <<goto "Act2_5_MarcusCabin">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-red);">[-15 HUMANITY]</b> Give her the brutal facts with zero padding.</span>
-            </button>
-        <</if>>
-    </div>
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        
+                                        <!-- RECRUITMENT CHECK: DEPENDS ON PREVIOUS CHOICES -->
+                                        <<if $diane_state == "lie">>
+                                            <div style="padding:10px; background:rgba(138,28,28,0.2); border-left:3px solid var(--accent-red); margin-bottom:15px;">
+                                                You look at Diane. You know you should tell her to come with you, but you can't. You lied to her. She is going to wait here for a husband who is never coming home. 
+                                            </div>
+                                            <button style="border-left-color: var(--accent-red) !important;">
+                                                <<link "Leave them behind">>
+                                                    <<completeObjective "reach_cabin">>
+                                                    <<addObjective "reach_timberline" "Find the town outskirts of Timberline">>
+                                                    <<purgeCompleted>>
+                                                    <<run setup.addItem("9mm Ammo", 10)>>
+                                                    <<goto "Act3_Arrival">>
+                                                <</link>>
+                                                <span class="btn-sub">She gives you a box of 9mm Ammo for your journey. You drive away, leaving them to their fate.</span>
+                                            </button>
+                                        
+                                        <<elseif $diane_state == "cold">>
+                                            <div style="padding:10px; background:rgba(138,28,28,0.2); border-left:3px solid var(--accent-red); margin-bottom:15px;">
+                                                Diane refuses to even look at you this morning. She wants you out of her house. 
+                                            </div>
+                                            <button style="border-left-color: var(--accent-red) !important;">
+                                                <<link "Leave them behind">>
+                                                    <<completeObjective "reach_cabin">>
+                                                    <<addObjective "reach_timberline" "Find the town outskirts of Timberline">>
+                                                    <<purgeCompleted>>
+                                                    <<goto "Act3_Arrival">>
+                                                <</link>>
+                                                <span class="btn-sub">You pack your gear and leave. You don't belong here anyway.</span>
+                                            </button>
+                                        
+                                        <<else>>
+                                            <!-- PLAYER WAS HONEST AND HELPFUL -->
+                                            <div style="padding:10px; background:rgba(0,100,0,0.2); border-left:3px solid var(--accent-green); margin-bottom:15px;">
+                                                You look at Diane. She is strong, but she can't survive out here alone with two kids forever. Not with what's coming.
+                                            </div>
+                                            
+                                            <!-- FIXED CHARISMA MATH CHECK -->
+                                            <<if $diane_trust or $cha >= 5>>
+                                                <button style="border-left-color: var(--accent-green) !important;">
+                                                    <<link "Convince Diane to join your caravan">>
+                                                        <<completeObjective "reach_cabin">>
+                                                        <<addObjective "reach_timberline" "Find the town outskirts of Timberline">>
+                                                        <<purgeCompleted>>
+                                                        <<if not $companions.includes("Diane")>>
+                                                            <<run $companions.push("Diane", "The Boys")>>
+                                                        <</if>>
+                                                        <<if not $marcus_cabin_xp>>
+                                                            <<run window.gainXP(50)>>
+                                                            <<set $marcus_cabin_xp to true>>
+                                                        <</if>>
+                                                        <<goto "Act3_Arrival">>
+                                                    <</link>>
+                                                    <span class="btn-sub"><b style="color:var(--accent-green);">[TRUST / CHA 5]</b> You promise to protect them. She packs her truck and follows your sedan down the mountain. <b>[+50 XP]</b></span>
+                                                </button>
+                                            <<else>>
+                                                <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                                                    <span style="text-decoration: line-through;">Convince Diane to join you</span><br>
+                                                    <span class="btn-sub" style="color: #666;">[REQUIRES CHA 5 OR TRUST] You didn't bond with them enough last night to convince her to leave her sanctuary.</span>
+                                                </button>
+                                            <</if>>
 
-/* ════════════════════════════════════════════════════════════════════
-   PHASE 2 — INSIDE THE CABIN (TRAIT CHECKS)
-   ════════════════════════════════════════════════════════════════════ */
-<<elseif $cabin_phase == 2>>
-	<h2>THE CABIN — INTERIOR</h2>
+                                            <button>
+                                                <<link "Say your goodbyes and leave alone">>
+                                                    <<completeObjective "reach_cabin">>
+                                                    <<addObjective "reach_timberline" "Find the town outskirts of Timberline">>
+                                                    <<purgeCompleted>>
+                                                    <<run setup.addItem("Canned Food", 3)>>
+                                                    <<goto "Act3_Arrival">>
+                                                <</link>>
+                                                <span class="btn-sub">She thanks you for the closure and gives you some Canned Food for the road. You drive away.</span>
+                                            </button>
+                                        <</if>>
 
-    /* THE FIX: Prevent audio overlapping on re-renders */
-    <<if not $cabin_audio_played>>
-        <<run setup.sound.fade("tension_drone", 1000)>>
-        <<run setup.sound.play("fireplace", "audio/sfx/fireplace_crackle.mp3", true, 0.6)>>
-        <<set $cabin_audio_played to true>>
-    <</if>>
-
-    <<if $diane_state == "truth" or $diane_state == "respect">>
-        You hold out the <<if $diane_state == "respect">>Remington 870 shotgun<<else>>blood-stained journal<</if>>. Diane steps out of the shadows. The moment she sees it, the fight drains completely out of her. The Remington 700 drops to her side. She falls to her knees on the porch, clutching the item to her chest as the rain washes over her.
-        <br><br>
-        You help her inside. 
-    <<elseif $diane_state == "lie">>
-        You tell her the lie. Smooth and practiced. You tell her Marcus saved your life, that he got caught behind a military barricade, but he told you to come here and tell her to wait for him.
-        <br><br>
-        She lowers the rifle, a desperate, shuddering breath escaping her lips. <span style="color:var(--accent-gold);">"He's coming... okay. Okay. Come inside out of the rain."</span>
-    <<elseif $diane_state == "cold">>
-        You drop the harsh truth on her like an anvil. She stares at you, horrified, her hands trembling so violently on the hunting rifle you think she might accidentally pull the trigger. 
-        <<if $vane_status == "joined">>
-            Vane immediately steps between you. <span style="color:var(--accent-blue);">"What is wrong with you?!"</span> he hisses at you, before turning to Diane with his hands raised. <span style="color:var(--accent-blue);">"Ma'am, I am so sorry. He didn't turn. He went out on his own terms to protect you."</span> 
-            <br><br>
-            Diane lets out a broken sob and backs into the cabin, leaving the door open for Vane. You follow.
-        <<else>>
-            She looks at you with pure disgust, but the fight leaves her. She lowers the gun, numb, and walks into the cabin without a word.
-        <</if>>
-    <</if>>
-
-    <hr style="border-color:#333; margin: 20px 0;">
-
-    The inside of the cabin is warm. A fire roars in the hearth. Two young boys, maybe seven and nine, are huddled on a rug. They look terrified.
-    <br><br>
-
-    <<if $vane_status == "joined">>
-        Vane kneels down near the fire, a respectful distance from the kids. He pulls a quarter from his pocket. <span style="color:var(--accent-blue);">"Hey guys,"</span> he says softly. <span style="color:var(--accent-blue);">"You want to see a magic trick?"</span> Within minutes, he has them distracted, giving Diane space to process.
-        <br><br>
-    <</if>>
-
-    You have a few hours to rest before morning. What do you do?
-
-    <div class="choice-menu">
-        
-        <!-- TRAIT: CHEF -->
-        <<if hasTrait("COOK") or $skills.scavenging >= 2>>
-            <button>
-                <<link "Cook a hot meal for the family [CHEF]">>
-                    <<set $hum = Math.min(100, $hum + 15)>>
-                    <<set $stamina = $stamina_max>>
-                    <<set $diane_trust to true>>
-                    <<set $cabin_phase to 3>>
-                    <<goto "Act2_5_MarcusCabin">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-green);">[+15 HUMANITY] [MAX STAMINA]</b> You take over the kitchen. Using your scavenged supplies, you make a rich, warm stew. The boys smile for the first time in days.</span>
-            </button>
-        <</if>>
-
-        <!-- TRAIT: DOCTOR / MEDICINE -->
-        <<if hasTrait("FIELD MEDIC") or $skills.medicine >= 2>>
-            <<if $inventory.find(i => i.id === "Antibiotics")>>
-                <button>
-                    <<link "Treat the youngest boy's fever [MEDICINE + ANTIBIOTICS]">>
-                        <<set $hum = Math.min(100, $hum + 20)>>
-                        <<run setup.removeItem("Antibiotics", 1)>>
-                        <<set $diane_trust to true>>
-                        <<set $cabin_phase to 3>>
-                        <<goto "Act2_5_MarcusCabin">>
-                    <</link>>
-                    <span class="btn-sub"><b style="color:var(--accent-green);">[+20 HUMANITY]</b> You notice the youngest boy has a nasty chest infection. You use your Antibiotics to break his fever. Diane looks at you with absolute gratitude.</span>
-                </button>
-            <</if>>
-        <</if>>
-
-        <!-- TRAIT: ARROGANT -->
-        <<if hasTrait("KNOW-IT-ALL")>>
-            <button>
-                <<link "Lecture Diane on her lack of preparation [ARROGANT]">>
-                    <<set $hum = Math.max(0, $hum - 15)>>
-                    <<set $cabin_phase to 3>>
-                    <<goto "Act2_5_MarcusCabin">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-red);">[-15 HUMANITY]</b> Point out that staying in this cabin without a secondary bug-out vehicle is a death trap. She will hate you, but she'll know you're right.</span>
-            </button>
-        <</if>>
-
-        <!-- DEFAULT REST -->
-        <button>
-            <<link "Rest quietly by the fire">>
-                <<set $stamina = Math.min($stamina_max, $stamina + 50)>>
-                <<set $cabin_phase to 3>>
-                <<goto "Act2_5_MarcusCabin">>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-blue);">[+50 STAMINA]</b> Keep to yourself. Conserve your energy for tomorrow.</span>
-        </button>
-    </div>
-
-/* ════════════════════════════════════════════════════════════════════
-   PHASE 3 — THE MORNING & LORE DUMP
-   ════════════════════════════════════════════════════════════════════ */
-<<elseif $cabin_phase == 3>>
-	<h2>THE CABIN — MORNING</h2>
-
-    /* THE FIX: Stop infinite time skipping and lore farming */
-    <<if not $morning_processed>>
-        <<addTime 479>> /* 8 hours of sleep */
-        <<run window.animateStatBar('.bar-fill.stamina', $stamina, $stamina_max)>>
-        <<run window.addLore("The Ascott Barricades", "Diane witnessed the military panic. Soldiers opened fire on uninfected civilians rushing their barricades for safety, triggering a massive stampede that doomed the quarantine zone.")>>
-        <<set $morning_processed to true>>
-    <</if>>
-
-    The morning light is gray and cold. The rain has stopped, but the fog rolling off the mountains is thick. Diane is sitting at the kitchen table, a mug of black coffee in her hands. 
-    <br><br>
-    You sit across from her. 
-    <br><br>
-    <span style="color:var(--accent-gold);">"I was parked outside the Ascott,"</span> she says quietly, staring into her mug. <span style="color:var(--accent-gold);">"When the sirens started. The military... they didn't just fail. They panicked."</span>
-    <br><br>
-    She looks up at you, her eyes hollow. <span style="color:var(--accent-gold);">"People were running toward the military barricades for help. But the soldiers couldn't tell who was infected and who was just terrified. They opened fire into the crowd. That's what caused the stampede. I grabbed my boys and drove off-grid before the roads choked."</span>
-    <br><br>
-    <i><span style="color:var(--accent-gold);">[LORE ADDED: The Fall of the Ascott Barricades]</span></i>
-    <br><br>
-
-    You stand up to pack your gear. It's time to move.
-
-    <div class="choice-menu">
-        
-        <!-- RECRUITMENT CHECK: DEPENDS ON PREVIOUS CHOICES -->
-        <<if $diane_state == "lie">>
-            <div style="padding:10px; background:rgba(138,28,28,0.2); border-left:3px solid var(--accent-red); margin-bottom:15px;">
-                You look at Diane. You know you should tell her to come with you, but you can't. You lied to her. She is going to wait here for a husband who is never coming home. 
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                        </button>
+                    </div>
+                </span>
             </div>
-            <button>
-                <<link "Leave them behind">>
-                      <<completeObjective "reach_cabin">>
-                      <<addObjective "reach_timberline" "Find the town outskirts of Timberline">>
-                      <<purgeCompleted>>
-                    <<run setup.addItem("9mm Ammo", 10)>>
-                    <<goto "Act3_Arrival">>
-                <</link>>
-                <span class="btn-sub">She gives you a box of 9mm Ammo for your journey. You drive away, leaving them to their fate.</span>
-            </button>
-        
-        <<elseif $diane_state == "cold">>
-            <div style="padding:10px; background:rgba(138,28,28,0.2); border-left:3px solid var(--accent-red); margin-bottom:15px;">
-                Diane refuses to even look at you this morning. She wants you out of her house. 
-            </div>
-            <button>
-                <<link "Leave them behind">>
-                      <<completeObjective "reach_cabin">>
-                      <<addObjective "reach_timberline" "Find the town outskirts of Timberline">>
-                      <<purgeCompleted>>
-                    <<goto "Act3_Arrival">>
-                <</link>>
-                <span class="btn-sub">You pack your gear and leave. You don't belong here anyway.</span>
-            </button>
-        
-        <<else>>
-            <!-- PLAYER WAS HONEST AND HELPFUL -->
-            <div style="padding:10px; background:rgba(0,100,0,0.2); border-left:3px solid var(--accent-green); margin-bottom:15px;">
-                You look at Diane. She is strong, but she can't survive out here alone with two kids forever. Not with what's coming.
-            </div>
-            
-            <!-- FIXED CHARISMA MATH CHECK -->
-            <<if $diane_trust or $cha >= 5>>
-                <button>
-                    <<link "Convince Diane to join your caravan">>
-                      <<completeObjective "reach_cabin">>
-                      <<addObjective "reach_timberline" "Find the town outskirts of Timberline">>
-                      <<purgeCompleted>>
-                        <<if not $companions.includes("Diane")>>
-                            <<run $companions.push("Diane", "The Boys")>>
-                        <</if>>
-                        <<if not $marcus_cabin_xp>>
-                            <<run window.gainXP(50)>>
-                            <<set $marcus_cabin_xp to true>>
-                        <</if>>
-                        <<goto "Act3_Arrival">>
-                    <</link>>
-                    <span class="btn-sub"><b style="color:var(--accent-green);">[TRUST / CHA 5]</b> You promise to protect them. She packs her truck and follows your sedan down the mountain. <b>[+50 XP]</b></span>
-                </button>
-            <<else>>
-                <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
-                    <span style="text-decoration: line-through;">Convince Diane to join you</span><br>
-                    <span class="btn-sub" style="color: #666;">[REQUIRES CHA 5 OR TRUST] You didn't bond with them enough last night to convince her to leave her sanctuary.</span>
-                </button>
-            <</if>>
-
-            <button>
-                <<link "Say your goodbyes and leave alone">>
-                      <<completeObjective "reach_cabin">>
-                      <<addObjective "reach_timberline" "Find the town outskirts of Timberline">>
-                      <<purgeCompleted>>
-                    <<run setup.addItem("Canned Food", 3)>>
-                    <<goto "Act3_Arrival">>
-                <</link>>
-                <span class="btn-sub">She thanks you for the closure and gives you some Canned Food for the road. You drive away.</span>
-            </button>
         <</if>>
-    </div>
 
-<</if>>
+    </div>
+</div>
+<</nobr>>

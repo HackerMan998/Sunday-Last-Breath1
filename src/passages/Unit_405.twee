@@ -47,7 +47,8 @@
 
             <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
                 <div style="margin-bottom:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-gold);">
-                    <b style="color:var(--accent-gold);">⚙️ DISARM THE TRAP</b><br><br>
+                    <b style="color:var(--accent-gold); display:block; text-align:center;">⚙️ DISARM THE TRAP</b>
+                    <hr style="border-color:#333; margin: 10px 0;">
 
                     <!-- WARNING IF TRAP ALREADY TRIGGERED PREVIOUSLY -->
                     <<if $room405_trap_triggered>>
@@ -159,7 +160,6 @@
 
                 </div> <!-- End of Phase 1 choices box -->
 
-                <hr style="border-color: #333; margin: 20px 0;">
                 <button style="background: rgba(255,255,255,0.05) !important; border-color: #555 !important;">
                     <<link "🚪 Step back and return to the hallway">>
                         <<run setup.sound.fade("tension_drone", 1000)>>
@@ -196,22 +196,23 @@
 
             <div class="choice-menu" style="max-width: 700px; width: 100%; margin: 0 auto;">
                 <div style="margin-bottom:20px; padding:15px; background:rgba(0,0,0,0.3); border-left:3px solid var(--accent-blue);">
-                    <b style="color:var(--accent-blue);">🎒 SECURE THE AREA</b><br><br>
+                    <b style="color:var(--accent-blue); display:block; text-align:center;">🎒 SECURE THE AREA</b>
+                    <hr style="border-color:#333; margin: 10px 0;">
 
-                    <!-- ACTION: READ THE RADIO LOG -->
+                    <!-- ACTION: READ THE RADIO LOG (UPDATED FOR TRAGIC LORE) -->
                     <<if not $read_marcus_log>>
                         <button>
                             <<link "📝 Read the notepad by the radio (5 minutes)">>
                                 <<set $read_marcus_log to true>>
                                 <<addTime 4>>
-                                <<run window.addLore("Marcus's Extraction Log", "Sarah and the twin boys made it to Oakhaven Cabin safely. Marcus packed his heavy ordnance and followed them through the backroads to avoid the military blockade. He left the apartment rigged to slow down looters.")>>
+                                <<run window.addLore("Marcus's Final Log", "Marcus emptied his safe and rigged the door to stop looters. However, he was bitten on the stairwell before he could leave. Refusing to bring the infection to his family at Oakhaven Cabin, he chose to wander into the city to die alone.")>>
                                 <<goto "Unit_405">>
                             <</link>>
-                            <span class="btn-sub"><b style="color:var(--accent-green);">[LORE]</b> <i>"Sarah, received your ping. Thank God you and the boys made it to Oakhaven. Radio silence protocol is now active. I'm taking the heavy ordnance and taking the backroads. I'm coming home."</i></span>
+                            <span class="btn-sub"><b style="color:var(--accent-red);">[LORE]</b> <i>"Diane... I emptied the safe. I rigged the door for looters. But on the stairs... one of them bit my arm. It burns. I'm not coming to Oakhaven. I won't bring this to you and the boys. I'm going to end it outside. I love you."</i></span>
                         </button>
                     <<else>>
                         <div style="padding:8px; background:rgba(255,255,255,0.05); color:#888; font-style:italic; font-size:0.85em; margin-bottom:10px; text-align:center;">
-                            📝 They made it out. Sarah and the twins are at the cabin. Marcus is on his way to them.
+                            📝 Diane and the boys are at Oakhaven Cabin. Marcus was bitten and chose to die alone to protect them.
                         </div>
                     <</if>>
 
@@ -251,14 +252,13 @@
                     <</if>>
                 </div>
 
-                <!-- COMPLETION STATE -->
+                <!-- COMPLETION STATE (UPDATED TEXT) -->
                 <<if $read_marcus_log and $looted_405_bench and $looted_405_safe>>
-                    <div style="padding:15px; background:rgba(0,100,0,0.1); border-left:3px solid var(--accent-green); text-align:center; color:#99cc99; margin-bottom:20px;">
-                        <i>You've armed yourself with what Marcus left behind. Seeing that toy car on the floor gives you a strange sense of relief. At least one family made it out.</i>
+                    <div style="padding:15px; background:rgba(138,28,28,0.1); border-left:3px solid var(--accent-red); text-align:center; color:#ff9999; margin-bottom:20px;">
+                        <i>You've armed yourself with what Marcus left behind. Seeing that toy car on the floor feels different now. His family is waiting for someone who is never coming home.</i>
                     </div>
                 <</if>>
 
-                <hr style="border-color: #333; margin: 20px 0;">
                 <button style="background: rgba(255,255,255,0.05) !important; border-color: #555 !important;">
                     <<link "🚪 Leave the apartment and return to the hallway">>
                         <<run setup.sound.fade("tension_drone", 1000)>>
