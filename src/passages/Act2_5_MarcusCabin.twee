@@ -10,9 +10,7 @@
     <<run setup.sound.play("gravel_drive", "audio/sfx/tires_gravel.mp3", false, 0.8)>>
     <<run setup.sound.play("tension_drone", "audio/bgm/tension_drone.mp3", true, 0.5)>>
 <</if>>
-<</nobr>>
 
-<<nobr>>
 <div class="vn-container">
     <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
 
@@ -24,9 +22,10 @@
                 THE NORTHERN RIDGE — OAKHAVEN CABIN
             </div>
 
-            /* --- 1. VISUALS --- */
+            /* --- 1. VISUALS (GAMBAR KEDATANGAN AWAL) --- */
             <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
-                <img src="image/Act2_5/Cabin_Standoff.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+                <!-- ID ditambahkan di sini agar bisa di-swap oleh tombol Next -->
+                <img id="cabin-scene-img" src="image/Act2_5/Cabin_Arrival.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
             </div>
 
             <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
@@ -41,6 +40,10 @@
                         <button style="border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);">
                             <<link "Next ▼">>
                                 <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                
+                                <!-- IMAGE SWAP TO STANDOFF -->
+                                <<run $("#cabin-scene-img").attr("src", "image/Act2_5/Cabin_Standoff.gif")>>
+                                
                                 <<replace "#vn-text-standoff">>
                                     /* THE FIX: Stop audio stuttering on re-renders */
                                     <<if not $rifle_cocked>>
@@ -74,14 +77,16 @@
                                                 <<replace "#vn-text-standoff">>
                                                     /* --- 3. DYNAMIC HUMANITY MONOLOGUE --- */
                                                     <<if $hum >= 70>>
-                                                        <i>Your chest aches for her. She's standing out in the freezing rain, holding onto a hope you are about to completely shatter.</i><br>
-                                                        <<chat "You" "image/avatars/player.gif" "left" "Diane? Please, lower the rifle. I have terrible news, and I am so, so sorry.">>
+                                                        <i>She's standing out in the freezing rain, gripping that rifle like a lifeline. You know exactly who she is waiting for, and the realization makes your chest ache.</i><br>
+                                                        <<chat "You" "image/avatars/player.gif" "left" "Diane, please. Lower the gun," you say, keeping your voice as calm and gentle as possible. "I came from the Ascott. I have news about Marcus.">>
+                                                    
                                                     <<elseif $hum >= 31>>
-                                                        <i>She's scared, but a scared person with a gun is a dead person's problem. You keep your hands highly visible.</i><br>
-                                                        <<chat "You" "image/avatars/player.gif" "left" "My name is <<print $firstName>>. Marcus isn't with me. We need to talk.">>
+                                                        <i>Her hands are shaking, but the barrel of the rifle is dead steady. You slowly raise your hands higher, making sure you don't make any sudden movements.</i><br>
+                                                        <<chat "You" "image/avatars/player.gif" "left" "Easy. My name is <<print $firstName>>," you say slowly over the sound of the rain. "I'm not infected. Marcus isn't with me... but I was in his apartment. We need to talk.">>
+                                                    
                                                     <<else>>
-                                                        <i>Her finger is twitching on the trigger. You could rush her, but it's easier to just break her spirit.</i><br>
-                                                        <<chat "You" "image/avatars/player.gif" "left" "Marcus didn't make it. Put the gun down before you hurt yourself.">>
+                                                        <i>Her finger is twitching on the trigger. You are freezing, exhausted, and completely out of patience to sugarcoat things while staring down the barrel of a gun.</i><br>
+                                                        <<chat "You" "image/avatars/player.gif" "left" "Look, if you're going to shoot me, just do it," you snap, squinting through the rain. "Otherwise, put the gun down. Marcus isn't coming.">>
                                                     <</if>>
 
                                                     <div class="choice-menu" style="margin-top:20px;">
@@ -99,23 +104,23 @@
                                                             </button>
                                                         <</if>>
 
-                                                        <!-- OPTION 2: THE SHOTGUN (Requires looting it in Act 1) -->
-                                                        <<if $inventory.find(i => i.id === "Remington 870") or $equip.weapon === "Remington 870">>
+                                                        <!-- OPTION 2: THE HUNTING KNIFE (Requires looting the safe in 405) -->
+                                                        <<if $inventory.find(i => i.id === "Hunting Knife") or $equip.weapon === "Hunting Knife">>
                                                             <button>
-                                                                <<link "Hand over Marcus's Remington 870">>
+                                                                <<link "Hand over Marcus's Hunting Knife">>
                                                                     <<set $hum = Math.min(100, $hum + 15)>>
                                                                     <<set $diane_state to "respect">>
                                                                     
-                                                                    /* THE FIX: Remove the gun and unequip it */
-                                                                    <<if $equip.weapon === "Remington 870">>
+                                                                    /* THE FIX: Remove the knife and unequip it if equipped */
+                                                                    <<if $equip.weapon === "Hunting Knife">>
                                                                         <<set $equip.weapon to "none">>
                                                                     <</if>>
-                                                                    <<run setup.removeItem("Remington 870", 1)>>
+                                                                    <<run setup.removeItem("Hunting Knife", 1)>>
                                                                     
                                                                     <<set $cabin_phase to 2>>
                                                                     <<goto "Act2_5_MarcusCabin">>
                                                                 <</link>>
-                                                                <span class="btn-sub"><b style="color:var(--accent-green);">[+15 HUMANITY]</b> She'll recognize his prized home-defense shotgun. Surrendering it proves you aren't a threat.</span>
+                                                                <span class="btn-sub"><b style="color:var(--accent-green);">[+15 HUMANITY]</b> She'll recognize his custom hunting knife from the apartment safe. Surrendering your weapon proves you aren't a threat.</span>
                                                             </button>
                                                         <</if>>
                                                         
@@ -171,70 +176,75 @@
 
 
         <!-- ════════════════════════════════════════════════════════════════════
-           PHASE 2 — INSIDE THE CABIN (TRAIT CHECKS)
+           PHASE 2 — THE REACTION (PORCH) & CABIN INTERIOR
            ════════════════════════════════════════════════════════════════════ -->
         <<elseif $cabin_phase == 2>>
             <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
-                THE CABIN — INTERIOR
+                <span id="cabin-header-text">THE CABIN — THE PORCH</span>
             </div>
 
-            <!-- GAMBAR INTERIOR KABIN YANG SEBELUMNYA HILANG -->
+            <!-- GAMBAR DIANE HANCUR DI TERAS -->
             <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
-                <img src="image/Act2_5/Cabin_Interior.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+                <img id="cabin-scene-img" src="image/Act2_5/Diane_Grief.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
             </div>
-
-            /* THE FIX: Prevent audio overlapping on re-renders */
-            <<if not $cabin_audio_played>>
-                <<run setup.sound.fade("tension_drone", 1000)>>
-                <<run setup.sound.play("fireplace", "audio/sfx/fireplace_crackle.mp3", true, 0.6)>>
-                <<set $cabin_audio_played to true>>
-            <</if>>
 
             <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
                 
                 <span id="vn-text-interior">
                     <<if $diane_state == "truth" or $diane_state == "respect">>
-                        You hold out the <<if $diane_state == "respect">>Remington 870 shotgun<<else>>blood-stained journal<</if>>. 
+                        You reach into your gear and slowly pull out the <<if $diane_state == "respect">>high-carbon hunting knife<<else>>blood-stained notepad<</if>>. You hold it out in the rain, offering it to her. 
                         <br><br>
-                        Diane steps out of the shadows. The moment she sees it, the fight drains completely out of her. The hunting rifle drops to her side. She reads his final words. She doesn't scream. She just falls to her knees on the porch, clutching the item to her chest as the rain washes over her. He died protecting them.
+                        Diane steps out of the shadows of the porch. The moment her eyes lock onto it, the fight drains completely out of her. The hunting rifle slips from her grip, clattering against the wooden floorboards. 
                         <br><br>
-                        You gently help her inside. 
+                        She knows what this means. She doesn't scream. She doesn't wail. She just falls to her knees on the hard wood, clutching the item to her chest as the freezing rain washes over her. He died protecting them.
 
                     <<elseif $diane_state == "truth_guess">>
-                        <<chat "You" "image/avatars/player.gif" "left" "I was in his apartment. His gun safe was empty. He geared up... but I didn't see him on the road. I'm so sorry.">>
+                        <<chat "You" "image/avatars/player.gif" "left" "I was in his apartment. His gun safe was empty. He geared up to come here... but he never made it out of the building. I'm so sorry.">>
                         <br>
                         Her grip on the rifle falters. She stares at you, processing the information. The reality of it crashes over her in a wave. If he had his gear and he isn't here yet, he isn't coming. 
                         <br><br>
-                        She lowers the weapon and motions you to come inside out of the rain.
+                        The weapon slips from her hands, clattering onto the wooden floorboards. She falls to her knees, completely broken.
 
                     <<elseif $diane_state == "lie">>
-                        You tell her the lie. Smooth and practiced. You tell her Marcus saved your life, that he got caught behind a military barricade, but he told you to come here and tell her to wait for him.
-                        <br><br>
-                        She lowers the rifle, a desperate, shuddering breath escaping her lips. <span style="color:var(--accent-gold);">"He's coming... okay. Okay. Come inside out of the rain."</span>
+                        <<chat "You" "image/avatars/player.gif" "left" "He's alive," you lie, your voice smooth and steady. "He got caught behind a military barricade trying to get out of the city. He told me to come here. He told me to tell you to wait for him.">>
+                        <br>
+                        She lowers the rifle, a desperate, shuddering breath escaping her lips. <span style="color:var(--accent-gold);">"He's coming... okay. Okay."</span> She leans against the porch pillar, letting the rain hide her tears of relief.
 
                     <<elseif $diane_state == "cold">>
-                        <<chat "You" "image/avatars/player.gif" "left" "He didn't make it out. He's dead.">>
+                        <<chat "You" "image/avatars/player.gif" "left" "I was in his apartment. He was bitten before he could even leave. He's dead.">>
                         <br>
-                        You drop the harsh truth on her like an anvil. She stares at you, horrified, her hands trembling so violently on the hunting rifle you think she might accidentally pull the trigger. 
+                        You drop the harsh truth on her like an anvil. She stares at you, horrified. The hunting rifle slips from her trembling fingers and hits the floorboards. She collapses against the porch railing, hyperventilating. 
                         
                         <<if $vane_status == "joined">>
                             <br><br>
-                            Vane immediately steps between you. <span style="color:var(--accent-blue);">"What is wrong with you?!"</span> he hisses at you, before turning to Diane with his hands raised. <span style="color:var(--accent-blue);">"Ma'am, I am so sorry. He... he went out on his own terms to protect you."</span> 
+                            Vane immediately steps forward. <span style="color:var(--accent-blue);">"What the hell is wrong with you?!"</span> he hisses at you, before turning to Diane with his hands raised gently. <span style="color:var(--accent-blue);">"Ma'am, I am so sorry. He didn't turn. He went out on his own terms to protect you."</span> 
                             <br><br>
-                            Diane lets out a broken sob and backs into the cabin, leaving the door open for Vane. You follow.
+                            Diane lets out a broken sob, covering her face.
                         <<else>>
                             <br><br>
-                            She looks at you with pure disgust, but the fight leaves her. She lowers the gun, numb, and walks into the cabin without a word.
+                            She looks at you with pure disgust, the fight completely gone.
                         <</if>>
                     <</if>>
 
                     <div class="choice-menu" style="margin-top:20px;">
                         <button style="border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);">
-                            <<link "Next ▼">>
+                            <<link "Help her inside the cabin">>
                                 <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                
+                                /* IMAGE & HEADER SWAP MAGIC */
+                                <<run $("#cabin-scene-img").attr("src", "image/Act2_5/Cabin_Interior.gif")>>
+                                <<replace "#cabin-header-text">>THE CABIN — INTERIOR<</replace>>
+                                
                                 <<replace "#vn-text-interior">>
-                                    <hr style="border-color:#333; margin: 20px 0;">
-
+                                    /* AUDIO TRIGGER INTERIOR */
+                                    <<if not $cabin_audio_played>>
+                                        <<run setup.sound.fade("tension_drone", 1000)>>
+                                        <<run setup.sound.play("fireplace", "audio/sfx/fireplace_crackle.mp3", true, 0.6)>>
+                                        <<set $cabin_audio_played to true>>
+                                    <</if>>
+                                
+                                    You gently help her inside out of the rain. 
+                                    <br><br>
                                     The inside of the cabin is warm. A fire roars in the hearth. Two young boys, maybe seven and nine, are huddled on a rug. They look terrified.
                                     
                                     <<if $vane_status == "joined">>
@@ -318,6 +328,11 @@
                 THE CABIN — MORNING
             </div>
 
+            <!-- GAMBAR PAGI HARI -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/Act2_5/Cabin_Morning.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
             /* THE FIX: Stop infinite time skipping and lore farming */
             <<if not $morning_processed>>
                 <<addTime 479>> /* 8 hours of sleep */
@@ -390,16 +405,17 @@
                                                 You look at Diane. She is strong, but she can't survive out here alone with two kids forever. Not with what's coming.
                                             </div>
                                             
-                                            <!-- FIXED CHARISMA MATH CHECK -->
+                                            <!-- FIXED COMPANION SYSTEM -->
                                             <<if $diane_trust or $cha >= 5>>
                                                 <button style="border-left-color: var(--accent-green) !important;">
                                                     <<link "Convince Diane to join your caravan">>
                                                         <<completeObjective "reach_cabin">>
                                                         <<addObjective "reach_timberline" "Find the town outskirts of Timberline">>
                                                         <<purgeCompleted>>
-                                                        <<if not $companions.includes("Diane")>>
-                                                            <<run $companions.push("Diane", "The Boys")>>
-                                                        <</if>>
+                                                        
+                                                        /* SET STATUS DIANE SEBAGAI JOINED */
+                                                        <<set $diane_status to "joined">>
+                                                        
                                                         <<if not $marcus_cabin_xp>>
                                                             <<run window.gainXP(50)>>
                                                             <<set $marcus_cabin_xp to true>>
