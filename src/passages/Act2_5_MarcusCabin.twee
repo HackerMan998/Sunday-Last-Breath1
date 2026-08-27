@@ -406,9 +406,10 @@
                                             </div>
                                             
                                             <!-- FIXED COMPANION SYSTEM -->
+                                            <!-- FIXED COMPANION SYSTEM -->
                                             <<if $diane_trust or $cha >= 5>>
                                                 <button style="border-left-color: var(--accent-green) !important;">
-                                                    <<link "Convince Diane to join your caravan">>
+                                                    <<link "Convince Diane to join your group">>
                                                         <<completeObjective "reach_cabin">>
                                                         <<addObjective "reach_timberline" "Find the town outskirts of Timberline">>
                                                         <<purgeCompleted>>

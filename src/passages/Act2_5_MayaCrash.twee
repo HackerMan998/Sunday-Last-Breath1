@@ -59,27 +59,26 @@
                                                     <br><br>
                                                     From the back seat, you hear terrified, frantic screaming. 
                                                     <br><br>
-                                                    It's Maya and Lily. The irony is brutal. The cop tried to do a good deed by escorting them out, but he was already bitten. Now they are trapped in the back of a police cruiser with a monster in the front seat.
+                                                    It's Maya and Lily. The irony is brutal. The cop tried to do a good deed by escorting them out, but he was already infected. Now they are trapped in the back of a police cruiser with a blood-crazed psychopath in the front seat.
 
                                                     <div class="choice-menu" style="margin-top:20px;">
                                                         <button style="border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);">
                                                             <<link "Next ▼">>
                                                                 <<run $(".vn-dialogue-box").scrollTop(0)>>
                                                                 <<replace "#vn-text-crash">>
-                                                                    /* --- 3. DYNAMIC HUMANITY MONOLOGUE --- */
-                                                                    <<if $hum >= 70>>
-                                                                        <i>Maya. Lily. The faces from the lobby flash in your mind. You don't hesitate. You can't leave a child to die in the dark.</i><br>
-                                                                        <<chat "You" "image/avatars/player.gif" "left" "Maya! Hang on, I'm getting you out of there!">>
-                                                                    <<elseif $hum >= 31>>
-                                                                        <i>You remember them from the barricade. It's a bad situation. The horn is going to draw everything in the woods right to you, but you can't just leave them.</i><br>
-                                                                        <<chat "You" "image/avatars/player.gif" "left" "Hey! Cover your faces, I'm going to break the glass!">>
-                                                                    <<else>>
-                                                                        <i>You warned her. She trusted the badge, and the badge drove them into a tree and tried to eat her. You have leverage now.</i><br>
-                                                                        <<chat "You" "image/avatars/player.gif" "left" "Should've come with me, Maya! How's that police protection working out?!">>
-                                                                    <</if>>
+                                                                    /* --- 3. DYNAMIC HUMANITY MONOLOGUE (INTERNAL THOUGHTS ONLY) --- */
+                                                                    <div style="padding:15px; background:rgba(255,255,255,0.05); border-left:3px solid var(--accent-gold); font-style:italic; margin-bottom:20px;">
+                                                                        <<if $hum >= 70>>
+                                                                            Maya. Lily. The faces from the lobby flash in your mind. The horn is blaring, drawing God-knows-what from the woods right to your position. Every survival instinct tells you to run, but you know you can't leave a child to die in the dark.
+                                                                        <<elseif $hum >= 31>>
+                                                                            You remember them from the barricade. It's a bad situation. That horn is a dinner bell for every infected lunatic out there. Getting involved means risking your own life, but standing here watching them get torn apart feels wrong.
+                                                                        <<else>>
+                                                                            You warned her. She trusted the badge, and the badge drove them into a tree and tried to eat her. You have leverage now. It's a cruel new world, and doing charity work will only get you killed.
+                                                                        <</if>>
+                                                                    </div>
 
                                                                     /* --- 4. PLAYER CHOICES (THE RESCUE) --- */
-                                                                    <div class="choice-menu" style="margin-top:20px;">
+                                                                    <div class="choice-menu">
                                                                         
                                                                         <!-- OPTION 1: HEROIC RESCUE -->
                                                                         <button>
@@ -89,7 +88,7 @@
                                                                                 <<set $crash_phase to 2>>
                                                                                 <<goto "Act2_5_MayaCrash">>
                                                                             <</link>>
-                                                                            <span class="btn-sub"><b style="color:var(--accent-green);">[+10 HUMANITY]</b> Engage the wreckage and get them out before the noise draws a horde.</span>
+                                                                            <span class="btn-sub"><b style="color:var(--accent-green);">[+10 HUMANITY]</b> Engage the wreckage and get them out before the noise draws a swarm of them.</span>
                                                                         </button>
 
                                                                         <!-- OPTION 2: EXTORTION -->
@@ -145,7 +144,9 @@
             <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
                 
                 <<if $maya_state == "extorted">>
-                    You tap the barrel of your weapon against the rear window. Maya looks at you, eyes wide with terror, pleading. You shake your head, pointing at her bag, making a 'hand it over' gesture.
+                    <<chat "You" "image/avatars/player.gif" "left" "Pass the bag through the crack first. Then I'll get you out.">>
+                    <br>
+                    You tap the barrel of your weapon against the rear window. Maya looks at you, eyes wide with terror, pleading. You shake your head, pointing at her bag, making a firm 'hand it over' gesture.
                     <br><br>
                     Her expression shifts from terror to absolute disgust. But she is trapped. She unzips her bag, shoving a handful of supplies through the cracked rear window. 
                     <br><br>
@@ -160,7 +161,9 @@
                     <br><br>
                     You pocket the supplies. Now you have to get them out.
                 <<else>>
-                    The blaring car horn is deafening. Every second you spend out here is a beacon to anything infected within a two-mile radius. You have to work fast.
+                    <<chat "You" "image/avatars/player.gif" "left" "Maya! Cover your faces, I'm going to break the glass!">>
+                    <br>
+                    The blaring car horn is deafening. Every second you spend out here is a beacon to anything hiding in the trees. You have to work fast.
                 <</if>>
                 <br><br>
 
@@ -208,7 +211,7 @@
                                 <<set $crash_phase to 3>>
                                 <<goto "Act2_5_MayaCrash">>
                             <</link>>
-                            <span class="btn-sub"><b style="color:var(--accent-blue);">[VANE]</b> Vane bangs on the driver's side window, drawing the cop's frenzy completely. You safely shatter the rear window and pull them out.</span>
+                            <span class="btn-sub"><b style="color:var(--accent-blue);">[VANE]</b> Vane bangs on the driver's side window, drawing the crazed cop's frenzy completely. You safely shatter the rear window and pull them out.</span>
                         </button>
                     <<else>>
                         <button disabled style="height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;">
@@ -236,6 +239,11 @@
         <<elseif $crash_phase == 3>>
             <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
                 THE CRASH — AFTERMATH
+            </div>
+
+            <!-- GAMBAR MAYA BERHASIL DISELAMATKAN (EXT. GIF) -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+                <img src="image/Act2_5/Maya_Rescued.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
             </div>
 
             /* THE FIX: Stop sound stuttering */
@@ -278,7 +286,7 @@
 
                                     <br><br>
                                     <div style="padding:10px; background:rgba(0,100,0,0.2); border-left:3px solid var(--accent-green); margin-bottom:15px; text-align:center;">
-                                        <b>[CARAVAN UPDATED]</b> Maya and Lily have joined your group. 
+                                        <b>[GROUP UPDATED]</b> Maya and Lily are now traveling with you. 
                                         
                                         /* THE FIX: Stop infinite party clones & use standard status system */
                                         <<if not $maya_recruited>>
@@ -336,6 +344,11 @@
                 RURAL ROUTE 11 — DRIVING AWAY
             </div>
 
+            <!-- GAMBAR SPION: MENINGGALKAN MOBIL HANCUR -->
+            <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid var(--accent-red); overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(138, 28, 28, 0.6);">
+                <img src="image/Act2_5/Driving_Away.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            </div>
+
             <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
                 
                 <<if $vane_status == "joined">>
@@ -345,7 +358,7 @@
                     <br><br>
                     <<chat "You" "image/avatars/player.gif" "left" "It's too risky. The cop is infected. If we open that door, we could all die.">>
                     <br>
-                    Vane stares at you, horrified. He looks at the crashed cruiser, hearing the screams, then looks back to your cold, set jaw. He realizes you aren't going to budge. The car rolls forward.
+                    Vane stares at you, horrified. He looks at the crashed cruiser in the rearview mirror, hearing the muffled screams, then looks back to your cold, set jaw. He realizes you aren't going to budge. The car rolls forward.
                     <br><br>
                     He shrinks back into the passenger seat, pulling his jacket tight. He looks at you like <i>you</i> are the monster. The trust between you is permanently broken. He knows now that if he becomes a liability, you will leave him too.
                     

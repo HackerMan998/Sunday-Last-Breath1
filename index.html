@@ -4488,9 +4488,10 @@ window.preloadAssets = function(assetList) {
                                             &lt;/div&gt;
                                             
                                             &lt;!-- FIXED COMPANION SYSTEM --&gt;
+                                            &lt;!-- FIXED COMPANION SYSTEM --&gt;
                                             &lt;&lt;if $diane_trust or $cha &gt;= 5&gt;&gt;
                                                 &lt;button style=&quot;border-left-color: var(--accent-green) !important;&quot;&gt;
-                                                    &lt;&lt;link &quot;Convince Diane to join your caravan&quot;&gt;&gt;
+                                                    &lt;&lt;link &quot;Convince Diane to join your group&quot;&gt;&gt;
                                                         &lt;&lt;completeObjective &quot;reach_cabin&quot;&gt;&gt;
                                                         &lt;&lt;addObjective &quot;reach_timberline&quot; &quot;Find the town outskirts of Timberline&quot;&gt;&gt;
                                                         &lt;&lt;purgeCompleted&gt;&gt;
@@ -4596,27 +4597,26 @@ window.preloadAssets = function(assetList) {
                                                     &lt;br&gt;&lt;br&gt;
                                                     From the back seat, you hear terrified, frantic screaming. 
                                                     &lt;br&gt;&lt;br&gt;
-                                                    It&#39;s Maya and Lily. The irony is brutal. The cop tried to do a good deed by escorting them out, but he was already bitten. Now they are trapped in the back of a police cruiser with a monster in the front seat.
+                                                    It&#39;s Maya and Lily. The irony is brutal. The cop tried to do a good deed by escorting them out, but he was already infected. Now they are trapped in the back of a police cruiser with a blood-crazed psychopath in the front seat.
 
                                                     &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
                                                         &lt;button style=&quot;border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);&quot;&gt;
                                                             &lt;&lt;link &quot;Next ▼&quot;&gt;&gt;
                                                                 &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                                                                 &lt;&lt;replace &quot;#vn-text-crash&quot;&gt;&gt;
-                                                                    /* --- 3. DYNAMIC HUMANITY MONOLOGUE --- */
-                                                                    &lt;&lt;if $hum &gt;= 70&gt;&gt;
-                                                                        &lt;i&gt;Maya. Lily. The faces from the lobby flash in your mind. You don&#39;t hesitate. You can&#39;t leave a child to die in the dark.&lt;/i&gt;&lt;br&gt;
-                                                                        &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Maya! Hang on, I&#39;m getting you out of there!&quot;&gt;&gt;
-                                                                    &lt;&lt;elseif $hum &gt;= 31&gt;&gt;
-                                                                        &lt;i&gt;You remember them from the barricade. It&#39;s a bad situation. The horn is going to draw everything in the woods right to you, but you can&#39;t just leave them.&lt;/i&gt;&lt;br&gt;
-                                                                        &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Hey! Cover your faces, I&#39;m going to break the glass!&quot;&gt;&gt;
-                                                                    &lt;&lt;else&gt;&gt;
-                                                                        &lt;i&gt;You warned her. She trusted the badge, and the badge drove them into a tree and tried to eat her. You have leverage now.&lt;/i&gt;&lt;br&gt;
-                                                                        &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Should&#39;ve come with me, Maya! How&#39;s that police protection working out?!&quot;&gt;&gt;
-                                                                    &lt;&lt;/if&gt;&gt;
+                                                                    /* --- 3. DYNAMIC HUMANITY MONOLOGUE (INTERNAL THOUGHTS ONLY) --- */
+                                                                    &lt;div style=&quot;padding:15px; background:rgba(255,255,255,0.05); border-left:3px solid var(--accent-gold); font-style:italic; margin-bottom:20px;&quot;&gt;
+                                                                        &lt;&lt;if $hum &gt;= 70&gt;&gt;
+                                                                            Maya. Lily. The faces from the lobby flash in your mind. The horn is blaring, drawing God-knows-what from the woods right to your position. Every survival instinct tells you to run, but you know you can&#39;t leave a child to die in the dark.
+                                                                        &lt;&lt;elseif $hum &gt;= 31&gt;&gt;
+                                                                            You remember them from the barricade. It&#39;s a bad situation. That horn is a dinner bell for every infected lunatic out there. Getting involved means risking your own life, but standing here watching them get torn apart feels wrong.
+                                                                        &lt;&lt;else&gt;&gt;
+                                                                            You warned her. She trusted the badge, and the badge drove them into a tree and tried to eat her. You have leverage now. It&#39;s a cruel new world, and doing charity work will only get you killed.
+                                                                        &lt;&lt;/if&gt;&gt;
+                                                                    &lt;/div&gt;
 
                                                                     /* --- 4. PLAYER CHOICES (THE RESCUE) --- */
-                                                                    &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                                                                    &lt;div class=&quot;choice-menu&quot;&gt;
                                                                         
                                                                         &lt;!-- OPTION 1: HEROIC RESCUE --&gt;
                                                                         &lt;button&gt;
@@ -4626,7 +4626,7 @@ window.preloadAssets = function(assetList) {
                                                                                 &lt;&lt;set $crash_phase to 2&gt;&gt;
                                                                                 &lt;&lt;goto &quot;Act2_5_MayaCrash&quot;&gt;&gt;
                                                                             &lt;&lt;/link&gt;&gt;
-                                                                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[+10 HUMANITY]&lt;/b&gt; Engage the wreckage and get them out before the noise draws a horde.&lt;/span&gt;
+                                                                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[+10 HUMANITY]&lt;/b&gt; Engage the wreckage and get them out before the noise draws a swarm of them.&lt;/span&gt;
                                                                         &lt;/button&gt;
 
                                                                         &lt;!-- OPTION 2: EXTORTION --&gt;
@@ -4682,7 +4682,9 @@ window.preloadAssets = function(assetList) {
             &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
                 
                 &lt;&lt;if $maya_state == &quot;extorted&quot;&gt;&gt;
-                    You tap the barrel of your weapon against the rear window. Maya looks at you, eyes wide with terror, pleading. You shake your head, pointing at her bag, making a &#39;hand it over&#39; gesture.
+                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Pass the bag through the crack first. Then I&#39;ll get you out.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    You tap the barrel of your weapon against the rear window. Maya looks at you, eyes wide with terror, pleading. You shake your head, pointing at her bag, making a firm &#39;hand it over&#39; gesture.
                     &lt;br&gt;&lt;br&gt;
                     Her expression shifts from terror to absolute disgust. But she is trapped. She unzips her bag, shoving a handful of supplies through the cracked rear window. 
                     &lt;br&gt;&lt;br&gt;
@@ -4697,7 +4699,9 @@ window.preloadAssets = function(assetList) {
                     &lt;br&gt;&lt;br&gt;
                     You pocket the supplies. Now you have to get them out.
                 &lt;&lt;else&gt;&gt;
-                    The blaring car horn is deafening. Every second you spend out here is a beacon to anything infected within a two-mile radius. You have to work fast.
+                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Maya! Cover your faces, I&#39;m going to break the glass!&quot;&gt;&gt;
+                    &lt;br&gt;
+                    The blaring car horn is deafening. Every second you spend out here is a beacon to anything hiding in the trees. You have to work fast.
                 &lt;&lt;/if&gt;&gt;
                 &lt;br&gt;&lt;br&gt;
 
@@ -4745,7 +4749,7 @@ window.preloadAssets = function(assetList) {
                                 &lt;&lt;set $crash_phase to 3&gt;&gt;
                                 &lt;&lt;goto &quot;Act2_5_MayaCrash&quot;&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
-                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-blue);&quot;&gt;[VANE]&lt;/b&gt; Vane bangs on the driver&#39;s side window, drawing the cop&#39;s frenzy completely. You safely shatter the rear window and pull them out.&lt;/span&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-blue);&quot;&gt;[VANE]&lt;/b&gt; Vane bangs on the driver&#39;s side window, drawing the crazed cop&#39;s frenzy completely. You safely shatter the rear window and pull them out.&lt;/span&gt;
                         &lt;/button&gt;
                     &lt;&lt;else&gt;&gt;
                         &lt;button disabled style=&quot;height: 100%; opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
@@ -4773,6 +4777,11 @@ window.preloadAssets = function(assetList) {
         &lt;&lt;elseif $crash_phase == 3&gt;&gt;
             &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
                 THE CRASH — AFTERMATH
+            &lt;/div&gt;
+
+            &lt;!-- GAMBAR MAYA BERHASIL DISELAMATKAN (EXT. GIF) --&gt;
+            &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+                &lt;img src=&quot;image/Act2_5/Maya_Rescued.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
             &lt;/div&gt;
 
             /* THE FIX: Stop sound stuttering */
@@ -4815,7 +4824,7 @@ window.preloadAssets = function(assetList) {
 
                                     &lt;br&gt;&lt;br&gt;
                                     &lt;div style=&quot;padding:10px; background:rgba(0,100,0,0.2); border-left:3px solid var(--accent-green); margin-bottom:15px; text-align:center;&quot;&gt;
-                                        &lt;b&gt;[CARAVAN UPDATED]&lt;/b&gt; Maya and Lily have joined your group. 
+                                        &lt;b&gt;[GROUP UPDATED]&lt;/b&gt; Maya and Lily are now traveling with you. 
                                         
                                         /* THE FIX: Stop infinite party clones &amp; use standard status system */
                                         &lt;&lt;if not $maya_recruited&gt;&gt;
@@ -4873,6 +4882,11 @@ window.preloadAssets = function(assetList) {
                 RURAL ROUTE 11 — DRIVING AWAY
             &lt;/div&gt;
 
+            &lt;!-- GAMBAR SPION: MENINGGALKAN MOBIL HANCUR --&gt;
+            &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid var(--accent-red); overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(138, 28, 28, 0.6);&quot;&gt;
+                &lt;img src=&quot;image/Act2_5/Driving_Away.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;/div&gt;
+
             &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
                 
                 &lt;&lt;if $vane_status == &quot;joined&quot;&gt;&gt;
@@ -4882,7 +4896,7 @@ window.preloadAssets = function(assetList) {
                     &lt;br&gt;&lt;br&gt;
                     &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;It&#39;s too risky. The cop is infected. If we open that door, we could all die.&quot;&gt;&gt;
                     &lt;br&gt;
-                    Vane stares at you, horrified. He looks at the crashed cruiser, hearing the screams, then looks back to your cold, set jaw. He realizes you aren&#39;t going to budge. The car rolls forward.
+                    Vane stares at you, horrified. He looks at the crashed cruiser in the rearview mirror, hearing the muffled screams, then looks back to your cold, set jaw. He realizes you aren&#39;t going to budge. The car rolls forward.
                     &lt;br&gt;&lt;br&gt;
                     He shrinks back into the passenger seat, pulling his jacket tight. He looks at you like &lt;i&gt;you&lt;/i&gt; are the monster. The trust between you is permanently broken. He knows now that if he becomes a liability, you will leave him too.
                     
