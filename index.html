@@ -4081,7 +4081,7 @@ window.preloadAssets = function(assetList) {
             }
         }
     });
-};</script><tw-tag name="Initialize" color="red"></tw-tag><tw-tag name="PassageReady" color="green"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-passagedata pid="1" name="Act2_5_MarcusCabin" tags="" position="450,1300" size="100,100">&lt;&lt;nobr&gt;&gt;
+};</script><tw-tag name="PassageReady" color="green"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-tag name="Initialize" color="red"></tw-tag><tw-passagedata pid="1" name="Act2_5_MarcusCabin" tags="" position="450,1300" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* ====================================================================
    INITIALIZATION &amp; STATE SETUP
    ==================================================================== */
@@ -4498,6 +4498,8 @@ window.preloadAssets = function(assetList) {
                                                         
                                                         /* SET STATUS DIANE SEBAGAI JOINED */
                                                         &lt;&lt;set $diane_status to &quot;joined&quot;&gt;&gt;
+                                                        &lt;&lt;set $diane_recruited to true&gt;&gt;
+
                                                         
                                                         &lt;&lt;if not $marcus_cabin_xp&gt;&gt;
                                                             &lt;&lt;run window.gainXP(50)&gt;&gt;
@@ -7203,7 +7205,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
 &lt;&lt;addObjective &quot;find_intel&quot; &quot;Search the outskirts for intel on the sanctuary&quot;&gt;&gt;
 &lt;&lt;purgeCompleted&gt;&gt;
 
-/* Act 3 one-time state init — same pattern as $sheriff_phase */
+/* Act 3 one-time state init */
 &lt;&lt;if ndef $made_noise&gt;&gt;      &lt;&lt;set $made_noise to false&gt;&gt;&lt;&lt;/if&gt;&gt;
 &lt;&lt;if ndef $stranger_trust&gt;&gt;  &lt;&lt;set $stranger_trust to &quot;none&quot;&gt;&gt;&lt;&lt;/if&gt;&gt;
 &lt;&lt;if ndef $companion_reyes&gt;&gt; &lt;&lt;set $companion_reyes to false&gt;&gt;&lt;&lt;/if&gt;&gt;
@@ -7226,265 +7228,141 @@ Miller turns to you, placing a heavy hand on your shoulder.
 
 /* 3. MODULAR DIALOGUE PRE-PROCESSING */
 &lt;&lt;set _hasVane to ($vane_status == &quot;joined&quot;)&gt;&gt;
-&lt;&lt;set _hasMaya to ($maya_status == &quot;joined&quot; or (def $companions and $companions.includes(&quot;Maya&quot;)))&gt;&gt;
-&lt;&lt;set _hasDiane to (def $companions and $companions.includes(&quot;Diane&quot;))&gt;&gt;
+&lt;&lt;set _hasMaya to ($maya_status == &quot;joined&quot;)&gt;&gt;
+&lt;&lt;set _hasDiane to ($diane_status == &quot;joined&quot;)&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;ACT 3: ARRIVAL&lt;/h2&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
-/* --- VISUALS --- */
-&lt;div style=&quot;margin-bottom: 15px; text-align: center;&quot;&gt;
-&lt;&lt;if _arrivedLate&gt;&gt;
-    &lt;img src=&quot;image/Act3/outskirts_morning.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);&quot;&gt;
-&lt;&lt;else&gt;&gt;
-    &lt;img src=&quot;image/Act3/outskirts_night.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);&quot;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;/div&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            ACT 3: TIMBERLINE OUTSKIRTS
+        &lt;/div&gt;
 
-/* --- 1. ATMOSPHERIC ARRIVAL TEXT --- */
-&lt;&lt;if _arrivedLate&gt;&gt;
-The sedan&#39;s engine idles in a low, sputtering rattle as you coast down the hill.
-A pale, freezing mist rises off the wet asphalt, lit by a weak gray morning sun
-struggling to pierce the thick canopy of pines. You slept a few hours at the
-cabin, but the exhaustion still sits heavy in your joints. The air out here
-carries the smell of pine resin and dead leaves. Clean, compared to the
-smoke-choked city. But it is too quiet. The kind of quiet that means all the
-birds left.
-&lt;&lt;else&gt;&gt;
-You have been driving on fumes for hours—steering through freezing rain until it
-died into a thick, suffocating fog. The road is pitch black, headlights cutting
-weak cones through mist that swallows landmarks whole. The dead of night, the
-cold, hollow hours before dawn when even your own breathing feels like a
-violation of the silence. Your eyes burn. The fuel gauge needle is buried past
-the red line, kissing empty.
-&lt;&lt;/if&gt;&gt;
+        /* --- VISUALS --- */
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;&lt;if _arrivedLate&gt;&gt;
+                &lt;img src=&quot;image/Act3/outskirts_morning.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;else&gt;&gt;
+                &lt;img src=&quot;image/Act3/outskirts_night.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
 
-&lt;br&gt;&lt;br&gt;
-You bring the car to a crawl at a skewed intersection. A rusted metal signpost
-hangs from a bent post overhead, bullet-pocked and tilted from what might have
-been a vehicle impact days ago:
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            
+            &lt;span id=&quot;vn-text-arrival&quot;&gt;
+                /* --- 1. ATMOSPHERIC ARRIVAL TEXT --- */
+                &lt;&lt;if _arrivedLate&gt;&gt;
+                    The sedan&#39;s engine idles in a low, sputtering rattle as you coast down the hill. A pale, freezing mist rises off the wet asphalt, lit by a weak gray morning sun struggling to pierce the thick canopy of pines. 
+                    &lt;br&gt;&lt;br&gt;
+                    You slept a few hours at the cabin, but exhaustion still sits heavy in your joints. The air out here carries the smell of pine resin and dead leaves. Clean, compared to the smoke-choked city. But it is too quiet. The kind of quiet that means all the birds left.
+                &lt;&lt;else&gt;&gt;
+                    You have been driving on fumes for hours—steering through freezing rain until it died into a thick, suffocating fog. The road is pitch black, headlights cutting weak cones through mist that swallows landmarks whole. 
+                    &lt;br&gt;&lt;br&gt;
+                    It is the dead of night. The cold, hollow hours before dawn when even your own breathing feels like a violation of the silence. Your eyes burn.
+                &lt;&lt;/if&gt;&gt;
 
-&lt;div style=&quot;margin: 15px 0; padding: 10px 15px; border-left: 3px solid #555; background: rgba(0,0,0,0.4); font-family: &#39;Courier Prime&#39;, monospace; font-size: 0.9em; color: #aaa; letter-spacing: 1px;&quot;&gt;
-    &lt;i&gt;WELCOME TO TIMBERLINE — POP. 4,200&lt;/i&gt;
-&lt;/div&gt;
+                &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                    &lt;button style=&quot;border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);&quot;&gt;
+                        &lt;&lt;link &quot;Next ▼&quot;&gt;&gt;
+                            &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                            &lt;&lt;replace &quot;#vn-text-arrival&quot;&gt;&gt;
+                                You bring the car to a crawl at a skewed intersection. A rusted metal signpost hangs from a bent post overhead, bullet-pocked and tilted from what might have been a vehicle impact days ago:
 
-The outskirts. Less dense than the concrete maze you fled, but the virus doesn&#39;t
-care about zip codes. The ditches are littered with abandoned cars, doors left
-wide open to the cold as if their owners simply stepped out and never came back.
+                                &lt;div style=&quot;margin: 15px 0; padding: 10px 15px; border-left: 3px solid #555; background: rgba(0,0,0,0.4); font-family: &#39;Courier Prime&#39;, monospace; font-size: 0.9em; color: #aaa; letter-spacing: 1px; text-align:center;&quot;&gt;
+                                    &lt;i&gt;WELCOME TO TIMBERLINE — POP. 4,200&lt;/i&gt;
+                                &lt;/div&gt;
 
-/* --- 2. COMPANION DIALOGUE BRANCHES --- */
-&lt;&lt;nobr&gt;&gt;
-&lt;&lt;if _hasVane and _hasMaya&gt;&gt;
-    /* -----------------------------------------------------------------
-       THREE-WAY DIALOGUE: MC + VANE + MAYA
-       ----------------------------------------------------------------- */
-    &lt;br&gt;&lt;br&gt;
-    Vane leans against the passenger window, face pale under the dashboard glow,
-    cradling Marcus&#39;s old journal in both hands. In the backseat, Maya holds Lily 
-    close, her eyes scanning the fogged glass with protective alertness.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;We&#39;ve got maybe half a kilometer before the engine quits. Whatever we pick here, we&#39;re committing to it on foot if we&#39;re wrong.&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;And doing this on foot with Lily... it isn&#39;t an option. We need to be smart about our first step.&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Then we look before we commit. Vane, track our coordinates with the journal&#39;s map. Maya, what&#39;s your read on the intersection?&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;The house to the right. Someone took their time covering that window. But the concrete building? That&#39;s where people run when they panic. Panic makes a mess.&quot;&gt;&gt;
+                                The outskirts. Less dense than the concrete maze you fled, but the virus doesn&#39;t care about zip codes. The ditches are littered with abandoned cars, doors left wide open to the cold as if their owners simply stepped out and never came back.
 
-&lt;&lt;elseif _hasVane and _hasDiane&gt;&gt;
-    /* -----------------------------------------------------------------
-       THREE-WAY DIALOGUE: MC + VANE + DIANE
-       ----------------------------------------------------------------- */
-    &lt;br&gt;&lt;br&gt;
-    Vane sits slightly forward, knuckles white on Marcus&#39;s journal. Beside him, 
-    Diane stares blankly at the signpost, her sons huddled under a heavy survival 
-    blanket in the back. The silence in the car carries the heavy, raw sting of 
-    the cabin.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;We&#39;re running on nothing but vapors. If we don&#39;t find fuel or a place to hole up soon, we&#39;re going to be pushing this car.&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;Marcus used to say you could read a town like a face. You look at the doors. Right now, both of those doors look like warnings.&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;He was right. We don&#39;t commit until we&#39;ve read the layout. Diane, what else did Marcus say about this ridge?&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;He said the substation was secure, but the residential areas are where people would panic first. I need you to be right about this one. I can&#39;t lose them too.&quot;&gt;&gt;
+                                &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                                    &lt;button style=&quot;border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);&quot;&gt;
+                                        &lt;&lt;link &quot;Next ▼&quot;&gt;&gt;
+                                            &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                            &lt;&lt;replace &quot;#vn-text-arrival&quot;&gt;&gt;
+                                                
+                                                /* --- 2. THE STAKES (INDEPENDENT COMPANION CHECKS) --- */
+                                                &lt;&lt;if _hasVane&gt;&gt;
+                                                    Vane nervously taps the dashboard fuel gauge. The needle is buried entirely past the red line. &lt;span style=&quot;color:var(--accent-blue);&quot;&gt;&quot;We&#39;re completely out of gas. Whatever we pick here, we&#39;re committing on foot if we&#39;re wrong.&quot;&lt;/span&gt;
+                                                    &lt;br&gt;&lt;br&gt;
+                                                &lt;&lt;/if&gt;&gt;
 
-&lt;&lt;elseif _hasVane&gt;&gt;
-    /* -----------------------------------------------------------------
-       TWO-WAY DIALOGUE: MC + VANE ONLY
-       ----------------------------------------------------------------- */
-    &lt;br&gt;&lt;br&gt;
-    Vane leans against the passenger window, face pale under the dashboard glow,
-    cradling Marcus&#39;s old journal in both hands. He&#39;s been staring at the cover
-    for the last twenty miles without opening it.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;We&#39;ve got maybe half a kilometer before the engine quits. Whatever we pick here, we&#39;re committing to it on foot if we&#39;re wrong.&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Then we look before we commit. Tell me what you see.&quot;&gt;&gt;
-    &lt;br&gt;
-    Vane presses his face to the glass and squints into the fog.
+                                                &lt;&lt;if _hasMaya&gt;&gt;
+                                                    In the back of your sedan, Maya rubs her seven-year-old niece&#39;s arms. Lily&#39;s lips are pale from the dropping temperature. &lt;span style=&quot;color:var(--accent-gold);&quot;&gt;&quot;Lily is freezing. We need to get inside somewhere. Just pick a safe door.&quot;&lt;/span&gt;
+                                                    &lt;br&gt;&lt;br&gt;
+                                                &lt;&lt;/if&gt;&gt;
 
-&lt;&lt;elseif _hasMaya&gt;&gt;
-    /* -----------------------------------------------------------------
-       TWO-WAY DIALOGUE: MC + MAYA ONLY
-       ----------------------------------------------------------------- */
-    &lt;br&gt;&lt;br&gt;
-    In the backseat, Lily is curled tightly into her mother&#39;s side, finally asleep
-    after hours of silent weeping. Maya watches you in the rearview mirror.
-    Her jaw is set, but her eyes are exhausted in a way that has nothing to do
-    with sleep deprivation.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;I don&#39;t know this town. Tell me what you need and tell me what you want me to do if you don&#39;t come back.&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I need intel on the local sanctuary. Every town this size had an emergency protocol. If anyone organized a response, there&#39;ll be evidence of it—signs, barricades, or a marked building. Give me five minutes to read the intersection.&quot;&gt;&gt;
+                                                &lt;&lt;if _hasDiane&gt;&gt;
+                                                    Outside, Diane&#39;s pickup truck rolls to a stop alongside your sedan. She rolls down her rain-slicked window, glancing back at her sleeping twins in her backseat. &lt;span style=&quot;color:var(--accent-gold);&quot;&gt;&quot;My boys need to get out of this cold. Pick a door, I&#39;ll follow your lead.&quot;&lt;/span&gt;
+                                                    &lt;br&gt;&lt;br&gt;
+                                                &lt;&lt;/if&gt;&gt;
 
-&lt;&lt;elseif _hasDiane&gt;&gt;
-    /* -----------------------------------------------------------------
-       TWO-WAY DIALOGUE: MC + DIANE ONLY
-       ----------------------------------------------------------------- */
-    &lt;br&gt;&lt;br&gt;
-    Diane sits in the passenger seat, staring at the signpost. Her sons are asleep
-    in the back under a coarse blanket, their breathing shallow and slow. She
-    hasn&#39;t spoken since the cabin. The weight between you is the specific,
-    unbearable weight of a death that didn&#39;t need to happen, and that both of you
-    know it.
-    &lt;br&gt;&lt;br&gt;
-    After a long silence, she speaks. Quietly. Not looking at you.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;Marcus used to say you could read a town like a face. That you could tell within five minutes of arriving whether people there were going to help you or take from you. He said you just had to look at the doors.&quot;&gt;&gt;
-    &lt;br&gt;
-    She turns her head and looks at the two structures ahead. Her voice doesn&#39;t
-    waver.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;I need you to be right about this one. I can&#39;t—I can&#39;t lose them too.&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I&#39;m going to be right about this one. I promise you.&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;i style=&quot;color:#666; font-size:0.85em;&quot;&gt;You aren&#39;t sure you believe it. But you say it the way you mean it, which is the only way a promise like that works.&lt;/i&gt;
+                                                &lt;&lt;if ndef $companions or $companions.length === 0&gt;&gt;
+                                                    You tap the dashboard. The fuel gauge is dead. The silence inside the cabin is heavy and suffocating. You are completely alone, and whatever you choose here, you are committing to it on foot.
+                                                    &lt;br&gt;&lt;br&gt;
+                                                &lt;&lt;/if&gt;&gt;
 
-&lt;&lt;else&gt;&gt;
-    /* -----------------------------------------------------------------
-       ALONE: MC INTERNAL MONOLOGUE
-       ----------------------------------------------------------------- */
-    &lt;br&gt;&lt;br&gt;
-    The silence inside the cabin is a living thing—heavy, suffocating, pressing
-    in from every dark corner. You killed the radio hours ago when the stations
-    stopped being stations and became something else. You rub your eyes with the
-    heel of your hand and try to remember the last time you heard another human
-    voice that wasn&#39;t screaming.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Okay. Think. Timberline. Population forty-two hundred. Emergency broadcast. Someone would have organized. A school, a church, a civic building—somewhere with walls and a roof. Find the staging point, find the people.&quot;&gt;&gt;
-    &lt;br&gt;
-    Your voice sounds strange. Too flat. Too rehearsed. Like you&#39;re reading from
-    a manual that someone else wrote for a situation you were never supposed to
-    be in.
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
+                                                You cut the headlights. Through the fogged windshield, two structures emerge from the mist at the fork in the road.
+                                                &lt;br&gt;&lt;br&gt;
+                                                To the &lt;b&gt;left&lt;/b&gt;: a squat, reinforced concrete block of a building behind a chain-link fence. Barred windows. A heavy steel door. A rusted blue star emblem on the facade, too dirty to read from here. No lights visible. The front approach is partially blocked by what looks like a pile of dark debris.
+                                                &lt;br&gt;&lt;br&gt;
+                                                To the &lt;b&gt;right&lt;/b&gt;: an overgrown cul-de-sac winds into a dark suburban development. Prominent at the corner, a large two-story colonial home. In the mist, you can see one of the ground-floor windows has been covered from the inside with what appears to be a dark curtain or blanket. The front door is closed. The porch light is dead.
+                                                &lt;br&gt;&lt;br&gt;
+                                                Two options. Very different silences. You need to decide.
 
-/* --- 3. THE CROSSROADS --- */
-&lt;br&gt;&lt;br&gt;
-Through the fogged windshield, two structures emerge from the mist at the fork
-in the road. You cut the headlights.
+                                                /* --- 3. CHOICE MENU --- */
+                                                &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:25px;&quot;&gt;
 
-&lt;br&gt;&lt;br&gt;
-To the &lt;b&gt;left&lt;/b&gt;: a squat, reinforced concrete block of a building behind a
-chain-link fence. Barred windows. A heavy steel door. A rusted blue star emblem
-on the facade, too dirty to read from here. No lights visible. The front
-approach is partially blocked by what looks like a vehicle—possibly a crash,
-possibly a barricade. Something dark is piled against the main entrance.
+                                                    /* Option A: Sheriff Substation */
+                                                    &lt;button&gt;
+                                                        &lt;&lt;link &quot;Investigate the concrete building to the left&quot;&gt;&gt;
+                                                            &lt;&lt;addTime 15&gt;&gt;
+                                                            &lt;&lt;set $act3_location to &quot;sheriff&quot;&gt;&gt;
+                                                            &lt;&lt;goto &quot;Act3_Sheriff&quot;&gt;&gt;
+                                                        &lt;&lt;/link&gt;&gt;
+                                                        &lt;span class=&quot;btn-sub&quot;&gt;The reinforced structure behind the fence. It looks like it was built to last.&lt;/span&gt;
+                                                    &lt;/button&gt;
 
-&lt;br&gt;&lt;br&gt;
-To the &lt;b&gt;right&lt;/b&gt;: an overgrown cul-de-sac winds into a dark suburban
-development. Prominent at the corner, a large two-story colonial home with its
-windows intact—every single one. In the mist, you can see one of the ground-
-floor windows has been covered from the inside with what appears to be a dark
-curtain or blanket. The front door is closed. The porch light is dead.
+                                                    /* Option B: Suburban Home */
+                                                    &lt;button&gt;
+                                                        &lt;&lt;link &quot;Search the two-story home to the right&quot;&gt;&gt;
+                                                            &lt;&lt;addTime 15&gt;&gt;
+                                                            &lt;&lt;set $act3_location to &quot;suburban_home&quot;&gt;&gt;
+                                                            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                                                        &lt;&lt;/link&gt;&gt;
+                                                        &lt;span class=&quot;btn-sub&quot;&gt;The colonial house with the intact windows. Someone covered the ground floor from the inside.&lt;/span&gt;
+                                                    &lt;/button&gt;
 
-&lt;br&gt;&lt;br&gt;
-Two options. Very different silences. You need to decide.
+                                                    /* Option C: Observe First */
+                                                    &lt;&lt;if $per &gt;= 5 or hasTrait(&quot;NIGHT OWL&quot;) or hasTrait(&quot;TRACKER&quot;) or $skills.stealth &gt;= 2&gt;&gt;
+                                                        &lt;button&gt;
+                                                            &lt;&lt;link &quot;Kill the engine and observe both locations first&quot;&gt;&gt;
+                                                                &lt;&lt;addTime 10&gt;&gt;
+                                                                &lt;&lt;set $act3_observed to true&gt;&gt;
+                                                                &lt;&lt;goto &quot;Act3_Arrival_Observe&quot;&gt;&gt;
+                                                            &lt;&lt;/link&gt;&gt;
+                                                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[PER 5 / STEALTH 2 / TRACKER]&lt;/b&gt; 10 Minutes. Spend time tracking and reading the environment for hidden tactical details before committing.&lt;/span&gt;
+                                                        &lt;/button&gt;
+                                                    &lt;&lt;else&gt;&gt;
+                                                        &lt;button disabled style=&quot;opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
+                                                            &lt;span style=&quot;text-decoration: line-through;&quot;&gt;Observe from a distance first&lt;/span&gt;&lt;br&gt;
+                                                            &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES PER 5 / STEALTH 2 / TRACKER] You lack the trained eye to read the environment for hidden clues before moving.&lt;/span&gt;
+                                                        &lt;/button&gt;
+                                                    &lt;&lt;/if&gt;&gt;
 
-/* --- 4. PER / JOB OBSERVATION TIER --- */
-&lt;&lt;nobr&gt;&gt;
-&lt;&lt;if $per &gt;= 6 or hasTrait(&quot;NIGHT OWL&quot;) or hasTrait(&quot;TRACKER&quot;)&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;div style=&quot;padding: 12px 15px; background: rgba(0, 40, 60, 0.3); border-left: 3px solid var(--accent-blue); margin: 10px 0;&quot;&gt;
-        &lt;span style=&quot;color: var(--accent-blue); font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px;&quot;&gt;[ PER 6 / TRACKER ]&lt;/span&gt;&lt;br&gt;&lt;br&gt;
-        Your eyes are better than most in this dark. You study both structures
-        carefully before making a call.
-        &lt;br&gt;&lt;br&gt;
-        The concrete building: the dark shapes piled against the front entrance
-        aren&#39;t debris. They&#39;re bodies. At least a dozen. And the chain-link
-        fence on the east side has been cut—then crudely rewired shut from the
-        outside. Someone left through that fence in a hurry and didn&#39;t want
-        anything following them.
-        &lt;br&gt;&lt;br&gt;
-        The colonial home: one set of tire tracks in the mud leading up to the
-        driveway. Recent—within the last day or two based on the edge definition.
-        Whoever arrived, they came alone, from the south. And the blanket over
-        the window isn&#39;t thick enough. There&#39;s a faint, dying light source
-        behind it. A candle or a low-battery torch. Someone is still inside.
+                                                &lt;/div&gt;
+
+                                            &lt;&lt;/replace&gt;&gt;
+                                        &lt;&lt;/link&gt;&gt;
+                                    &lt;/button&gt;
+                                &lt;/div&gt;
+                            &lt;&lt;/replace&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
     &lt;/div&gt;
-&lt;&lt;elseif $job == &quot;Police Officer&quot;&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;div style=&quot;padding: 12px 15px; background: rgba(0, 40, 60, 0.3); border-left: 3px solid var(--accent-blue); margin: 10px 0;&quot;&gt;
-        &lt;span style=&quot;color: var(--accent-blue); font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px;&quot;&gt;[ POLICE OFFICER ]&lt;/span&gt;&lt;br&gt;&lt;br&gt;
-        Old instincts. You read the left-side building in two seconds.
-        &lt;br&gt;&lt;br&gt;
-        It&#39;s a substation. King County, if the building layout matches the
-        standard municipal template. Brick-over-block construction, barred
-        windows, digital entry locks on the secondary doors. The dark shapes
-        blocking the main entrance are bodies—multiple subjects, uniform
-        fragments visible. Deputies and civilians, mixed. Whatever happened at
-        that front door was fast and overwhelming.
-        &lt;br&gt;&lt;br&gt;
-        You know the layout from training. Booking desk up front, evidence locker
-        center, secure armory in the rear. If the armory safe wasn&#39;t opened
-        during the breach—and the front-door massacre suggests it wasn&#39;t—there
-        are weapons inside that no infected thing has touched.
-    &lt;/div&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
-
-/* --- 5. CHOICE MENU --- */
-&lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:25px;&quot;&gt;
-
-    /* Option A: Sheriff Substation */
-    &lt;button&gt;
-        &lt;&lt;link &quot;Investigate the concrete building to the left&quot;&gt;&gt;
-            &lt;&lt;addTime 15&gt;&gt;
-            &lt;&lt;set $act3_location to &quot;sheriff&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_Sheriff&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-        &lt;span class=&quot;btn-sub&quot;&gt;The reinforced structure behind the fence. It looks like it was built to last.&lt;/span&gt;
-    &lt;/button&gt;
-
-    /* Option B: Suburban Home */
-    &lt;button&gt;
-        &lt;&lt;link &quot;Search the two-story home to the right&quot;&gt;&gt;
-            &lt;&lt;addTime 15&gt;&gt;
-            &lt;&lt;set $act3_location to &quot;suburban_home&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-        &lt;span class=&quot;btn-sub&quot;&gt;The colonial house with the intact windows. Someone covered the ground floor from the inside.&lt;/span&gt;
-    &lt;/button&gt;
-
-    /* Option C: Observe First (NEW) */
-    &lt;&lt;if $per &gt;= 5 or hasTrait(&quot;NIGHT OWL&quot;) or hasTrait(&quot;TRACKER&quot;) or $skills.stealth &gt;= 2&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;Kill the engine and observe both locations first&quot;&gt;&gt;
-                &lt;&lt;addTime 10&gt;&gt;
-                &lt;&lt;set $act3_observed to true&gt;&gt;
-                &lt;&lt;goto &quot;Act3_Arrival_Observe&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[PER 5 / STEALTH 2 / TRACKER]&lt;/b&gt; 10 Minutes. Kill the ignition and spend time reading both structures from a distance before committing.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;button disabled style=&quot;opacity: 0.4; cursor: not-allowed; border-color: #333;&quot;&gt;
-            &lt;span style=&quot;text-decoration: line-through;&quot;&gt;Observe from a distance first&lt;/span&gt;&lt;br&gt;
-            &lt;span class=&quot;btn-sub&quot; style=&quot;color: #666;&quot;&gt;[REQUIRES PER 5 / STEALTH 2 / TRACKER] You lack the trained eye to read the environment before moving.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
-
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="14" name="Act3_ArrivalSchool" tags="" position="500,1600" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* =====================================================================
    ACT 3: ARRIVAL — INITIALIZATION &amp; STATE SETUP
@@ -7713,185 +7591,183 @@ Two options. Very different silences. You need to decide.
 /* 1. TIME OF DAY CHECK */
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
 
-/* 2. COMPANION EXISTENCE CHECKS */
+/* 2. COMPANION EXISTENCE CHECKS (FIXED: Independent Status Checks) */
 &lt;&lt;set _hasVane to ($vane_status == &quot;joined&quot;)&gt;&gt;
-&lt;&lt;set _hasMaya to (typeof $companions !== &#39;undefined&#39; &amp;&amp; ($companions.includes(&quot;Maya&quot;) or $maya_status == &quot;joined&quot;))&gt;&gt;
-&lt;&lt;set _hasDiane to (typeof $companions !== &#39;undefined&#39; &amp;&amp; $companions.includes(&quot;Diane&quot;))&gt;&gt;
+&lt;&lt;set _hasMaya to ($maya_status == &quot;joined&quot;)&gt;&gt;
+&lt;&lt;set _hasDiane to ($diane_status == &quot;joined&quot;)&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;THE OUTSKIRTS — TIMBERLINE&lt;/h2&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
-&lt;div style=&quot;margin-bottom: 15px; text-align: center;&quot;&gt;
-&lt;&lt;if _arrivedLate&gt;&gt;
-    &lt;img src=&quot;image/Act3/outskirts_morning.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);&quot;&gt;
-&lt;&lt;else&gt;&gt;
-    &lt;img src=&quot;image/Act3/outskirts_night.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);&quot;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;/div&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            THE OUTSKIRTS — OBSERVATION
+        &lt;/div&gt;
 
-&lt;&lt;if _arrivedLate&gt;&gt;
-    You twist the key and the sedan&#39;s engine dies with a low, ticking sigh. The headlights flicker out, and the pale, freezing mist of morning presses against the glass. The heavy rain from the night has stopped, but the fog rolling off the pine canopy is thick, illuminated by a weak gray sun struggling to rise. You slept a few hours at the cabin, but the exhaustion still sits heavy in your joints. 
-    &lt;br&gt;&lt;br&gt;
-    Ten minutes pass in silence. In the cold light of day, you watch both structures carefully, reading the still, eerie shapes.
-&lt;&lt;else&gt;&gt;
-    You twist the key and the sedan&#39;s engine dies with a low, ticking sigh. The headlights flicker out, plunging the car into the absolute blackness of 4:30 AM. The rain continues to beat a relentless, cold drum against the metal roof. The world is pitch black, and the air is thick with freezing fog. You are running on nothing but empty fuel vapors and raw, trembling adrenaline.
-    &lt;br&gt;&lt;br&gt;
-    Ten minutes pass in silence. In the dead of night, you wait for your eyes to fully adjust, staring intently into the dark.
-&lt;&lt;/if&gt;&gt;
+        /* --- VISUALS --- */
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;img src=&quot;image/Act3/crossroads_fog.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+        &lt;/div&gt;
 
-&lt;br&gt;&lt;br&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            
+            &lt;span id=&quot;vn-text-obs&quot;&gt;
+                &lt;&lt;if _arrivedLate&gt;&gt;
+                    You twist the key and the sedan&#39;s engine dies with a low, ticking sigh. The headlights flicker out, and the pale, freezing mist of morning presses against the glass. The heavy rain from the night has stopped, but the fog rolling off the pine canopy is thick, illuminated by a weak gray sun struggling to rise. 
+                    &lt;br&gt;&lt;br&gt;
+                    Ten minutes pass in silence. In the cold light of day, you watch both structures carefully, picking apart the details.
+                &lt;&lt;else&gt;&gt;
+                    You twist the key and the sedan&#39;s engine dies with a low, ticking sigh. The headlights flicker out, plunging the car into the absolute blackness of 4:30 AM. The rain continues to beat a relentless, cold drum against the metal roof. You are running on nothing but empty fuel vapors and raw adrenaline.
+                    &lt;br&gt;&lt;br&gt;
+                    Ten minutes pass in silence. In the dead of night, you wait for your eyes to fully adjust, studying the shadows.
+                &lt;&lt;/if&gt;&gt;
 
-&lt;!-- TACTICAL OBSERVATION CARDS --&gt;
-&lt;div class=&quot;crisis-grid&quot;&gt;
+                &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                    &lt;button style=&quot;border-left-color: var(--accent-gold) !important; background: rgba(255,255,255,0.05);&quot;&gt;
+                        &lt;&lt;link &quot;Analyze the Structures ▼&quot;&gt;&gt;
+                            &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                            &lt;&lt;replace &quot;#vn-text-obs&quot;&gt;&gt;
+                                
+                                &lt;!-- TACTICAL OBSERVATION CARDS --&gt;
+                                &lt;div class=&quot;crisis-grid&quot; style=&quot;display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;&quot;&gt;
 
-    &lt;!-- SUBSTATION INTEL --&gt;
-    &lt;div class=&quot;crisis-card&quot;&gt;
-        &lt;img src=&quot;image/Act3/substation_exterior.gif&quot; style=&quot;height: 180px; object-fit: cover;&quot;&gt;
-        &lt;div class=&quot;crisis-text&quot;&gt;
-            &lt;b style=&quot;color:var(--accent-red);&quot;&gt;LEFT: SUBSTATION 4&lt;/b&gt;
-            &lt;hr style=&quot;border-color:#222; margin: 8px 0;&quot;&gt;
-            &lt;&lt;if _arrivedLate&gt;&gt;
-                The dark mounds blocking the glass doors are bodies—stiff, cold, and covered in morning dew. The emergency red strobe is dead, and the backup generator is completely silent, having run out of fuel hours ago.
-                &lt;br&gt;&lt;br&gt;
-                The east-side fence is wired shut from the &lt;i&gt;outside&lt;/i&gt;, sealing the threat within. Because the generator is dead, the building is in total darkness and the digital security systems are entirely offline.
-            &lt;&lt;else&gt;&gt;
-                The dark mounds blocking the glass doors are bodies—freshly killed deputies and civilians in torn winter wear. Through the dark, you hear the loud, mechanical roar of an emergency backup generator running on its first tank of fuel, powering a red strobe that pulses aggressively through the barred windows.
-                &lt;br&gt;&lt;br&gt;
-                The east-side fence is wired shut from the &lt;i&gt;outside&lt;/i&gt;, sealing the threat within. Because the power is active, the station&#39;s digital security systems are still online.
-            &lt;&lt;/if&gt;&gt;
+                                    &lt;!-- SUBSTATION INTEL --&gt;
+                                    &lt;div class=&quot;crisis-card&quot; style=&quot;background: rgba(138,28,28,0.1); border: 1px solid #333; padding: 10px;&quot;&gt;
+                                        &lt;img src=&quot;image/Act3/substation_exterior.gif&quot; style=&quot;width: 100%; height: 120px; object-fit: cover; border: 1px solid #222; margin-bottom: 10px;&quot;&gt;
+                                        &lt;b style=&quot;color:var(--accent-red); font-size:0.9em; display:block; text-align:center;&quot;&gt;LEFT: SUBSTATION 4&lt;/b&gt;
+                                        &lt;hr style=&quot;border-color:#222; margin: 8px 0;&quot;&gt;
+                                        &lt;div style=&quot;font-size:0.85em; color:#bbb;&quot;&gt;
+                                            &lt;&lt;if _arrivedLate&gt;&gt;
+                                                The dark mounds blocking the glass doors are bodies—stiff, cold, and covered in morning dew. The emergency red strobe is dead, and the backup generator is completely silent, having run out of fuel.
+                                                &lt;br&gt;&lt;br&gt;
+                                                The east-side fence is wired shut from the &lt;i&gt;outside&lt;/i&gt;. Because the generator is dead, the building is in total darkness and the digital security systems are entirely offline.
+                                            &lt;&lt;else&gt;&gt;
+                                                The dark mounds blocking the glass doors are bodies—freshly killed deputies and civilians. Through the dark, you hear the loud roar of an emergency generator powering a red strobe.
+                                                &lt;br&gt;&lt;br&gt;
+                                                The east-side fence is wired shut from the &lt;i&gt;outside&lt;/i&gt;. Because the power is active, the station&#39;s digital security systems are still online.
+                                            &lt;&lt;/if&gt;&gt;
+                                        &lt;/div&gt;
+                                    &lt;/div&gt;
+
+                                    &lt;!-- SUBURBAN HOME INTEL --&gt;
+                                    &lt;div class=&quot;crisis-card&quot; style=&quot;background: rgba(0,40,60,0.2); border: 1px solid #333; padding: 10px;&quot;&gt;
+                                        &lt;&lt;if _arrivedLate&gt;&gt;
+                                            &lt;img src=&quot;image/Act3/suburban_house_morning.gif&quot; style=&quot;width: 100%; height: 120px; object-fit: cover; border: 1px solid #222; margin-bottom: 10px;&quot;&gt;
+                                        &lt;&lt;else&gt;&gt;
+                                            &lt;img src=&quot;image/Act3/suburban_house_night.gif&quot; style=&quot;width: 100%; height: 120px; object-fit: cover; border: 1px solid #222; margin-bottom: 10px;&quot;&gt;
+                                        &lt;&lt;/if&gt;&gt;
+                                        &lt;b style=&quot;color:var(--accent-blue); font-size:0.9em; display:block; text-align:center;&quot;&gt;RIGHT: COLONIAL HOME&lt;/b&gt;
+                                        &lt;hr style=&quot;border-color:#222; margin: 8px 0;&quot;&gt;
+                                        &lt;div style=&quot;font-size:0.85em; color:#bbb;&quot;&gt;
+                                            &lt;&lt;if _arrivedLate&gt;&gt;
+                                                The dark wool blanket pinned over the window looks highly conspicuous in the daylight. The candle has burned down to a dead wax stub.
+                                                &lt;br&gt;&lt;br&gt;
+                                                A fresh bicycle track leads around toward the back garage. The occupant is likely exhausted after a long night of watching and may be asleep.
+                                            &lt;&lt;else&gt;&gt;
+                                                The blanket covering the window is pinned precisely to prevent light leaks, but a bright, warm amber candle glow escapes from the bottom edge.
+                                                &lt;br&gt;&lt;br&gt;
+                                                A fresh bicycle track leads around toward the back garage. The occupant is awake, using a fresh candle, and likely hyper-vigilant in the dark.
+                                            &lt;&lt;/if&gt;&gt;
+                                        &lt;/div&gt;
+                                    &lt;/div&gt;
+                                &lt;/div&gt;
+
+                                &lt;div class=&quot;choice-menu&quot;&gt;
+                                    &lt;button style=&quot;border-left-color: var(--accent-gold) !important; background: rgba(255,255,255,0.05);&quot;&gt;
+                                        &lt;&lt;link &quot;Relay intel to the group ▼&quot;&gt;&gt;
+                                            &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                            &lt;&lt;replace &quot;#vn-text-obs&quot;&gt;&gt;
+
+                                                You lean back from the windshield, relaying what your eyes picked up from the darkness.
+                                                &lt;br&gt;&lt;br&gt;
+
+                                                &lt;!-- COMPANION DIALOGUE SECTIONS (INDEPENDENT) --&gt;
+                                                &lt;&lt;if _hasVane&gt;&gt;
+                                                    Vane pulls his jacket tighter around his slender shoulders, adjusting his glasses nervously.
+                                                    &lt;br&gt;&lt;br&gt;
+                                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                                        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;U-um... so the station is dead quiet. If the generator ran out of fuel, that means the digital keypads to their weapon lockers are dead too. We&#39;re going to have to smash our way in to get gear. That makes noise.&quot;&gt;&gt;
+                                                    &lt;&lt;else&gt;&gt;
+                                                        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;H-hear that hum? The station&#39;s generator is still running. If we can get past those bodies, we might be able to bypass their electronic locks and raid the armory cleanly while the systems are up.&quot;&gt;&gt;
+                                                    &lt;&lt;/if&gt;&gt;
+                                                    &lt;br&gt;
+                                                &lt;&lt;/if&gt;&gt;
+
+                                                &lt;&lt;if _hasMaya&gt;&gt;
+                                                    From the backseat, Maya holds Lily tight against her chest. She looks at the colonial home, her expression purely pragmatical and deeply protective of her niece.
+                                                    &lt;br&gt;&lt;br&gt;
+                                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                                        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;The candle in the house is out. Whoever is living there has been awake all night; they&#39;re probably exhausted and sleeping right now. I&#39;m not dragging a seven-year-old into a loud fight at a police station if we have a quiet option to clear that house.&quot;&gt;&gt;
+                                                    &lt;&lt;else&gt;&gt;
+                                                        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;Look at that fresh candle glow. Whoever is hiding in that house is awake, paranoid, and holding a gun at the door right now. I&#39;m not risking Lily on a jumpy survivor in the pitch black.&quot;&gt;&gt;
+                                                    &lt;&lt;/if&gt;&gt;
+                                                    &lt;br&gt;
+                                                &lt;&lt;/if&gt;&gt;
+
+                                                &lt;&lt;if _hasDiane&gt;&gt;
+                                                    Outside, Diane leans out from the window of her truck. The loss of Marcus has hardened her, and her primary focus remains the twin boys sleeping in her backseat.
+                                                    &lt;br&gt;&lt;br&gt;
+                                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                                        &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;The morning is cold, and their candle is dead. If they&#39;re resting, we have the advantage. We should take the house quietly, for the kids&#39; sake. We just need shelter.&quot;&gt;&gt;
+                                                    &lt;&lt;else&gt;&gt;
+                                                        &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;That candle is bright. They&#39;re awake in the dark. It&#39;s a sanctuary, not a loot drop. If we go to the house, we need to approach with our hands up.&quot;&gt;&gt;
+                                                    &lt;&lt;/if&gt;&gt;
+                                                    &lt;br&gt;
+                                                &lt;&lt;/if&gt;&gt;
+
+                                                &lt;&lt;if ndef $companions or $companions.length === 0&gt;&gt;
+                                                    You sit alone in the driver&#39;s seat, mapping the variables in your head. 
+                                                    &lt;br&gt;&lt;br&gt;
+                                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                                        The silent substation is a tomb—its generator dead, its digital locks frozen shut, requiring brute force. The colonial house is quiet; its candle has burned out, meaning the survivor inside may have finally succumbed to exhaustion and gone to sleep.
+                                                    &lt;&lt;else&gt;&gt;
+                                                        The roaring generator at the substation means the power is still active, keeping electronic systems alive if you can get past the fresh bodies. The colonial house&#39;s bright candle means someone is awake, paranoid, and waiting with a gun pointed at the door.
+                                                    &lt;&lt;/if&gt;&gt;
+                                                    &lt;br&gt;&lt;br&gt;
+                                                &lt;&lt;/if&gt;&gt;
+
+                                                &lt;!-- CHOICE MENU --&gt;
+                                                &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:25px;&quot;&gt;
+                                                    &lt;!-- Option A: Sheriff Substation --&gt;
+                                                    &lt;button&gt;
+                                                        &lt;&lt;link &quot;Investigate the concrete substation to the left&quot;&gt;&gt;
+                                                            &lt;&lt;addTime 5&gt;&gt;
+                                                            &lt;&lt;set $act3_location to &quot;sheriff&quot;&gt;&gt;
+                                                            &lt;&lt;goto &quot;Act3_Sheriff&quot;&gt;&gt;
+                                                        &lt;&lt;/link&gt;&gt;
+                                                        &lt;&lt;if _arrivedLate&gt;&gt;
+                                                            &lt;span class=&quot;btn-sub&quot;&gt;Approach the quiet yard. The generator is dead; electronic systems are offline, requiring physical force to clear path.&lt;/span&gt;
+                                                        &lt;&lt;else&gt;&gt;
+                                                            &lt;span class=&quot;btn-sub&quot;&gt;Approach the active yard. The generator is loud; electronic systems are online and bypassable if you move fast.&lt;/span&gt;
+                                                        &lt;&lt;/if&gt;&gt;
+                                                    &lt;/button&gt;
+
+                                                    &lt;!-- Option B: Suburban Home --&gt;
+                                                    &lt;button&gt;
+                                                        &lt;&lt;link &quot;Search the two-story home to the right&quot;&gt;&gt;
+                                                            &lt;&lt;addTime 5&gt;&gt;
+                                                            &lt;&lt;set $act3_location to &quot;suburban_home&quot;&gt;&gt;
+                                                            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                                                        &lt;&lt;/link&gt;&gt;
+                                                        &lt;&lt;if _arrivedLate&gt;&gt;
+                                                            &lt;span class=&quot;btn-sub&quot;&gt;Approach the colonial home. The candle is out; the occupant may be exhausted and sleeping, making stealth easier.&lt;/span&gt;
+                                                        &lt;&lt;else&gt;&gt;
+                                                            &lt;span class=&quot;btn-sub&quot;&gt;Approach the colonial home. A fresh candle burns behind the blanket; the occupant is awake and highly alert in the dark.&lt;/span&gt;
+                                                        &lt;&lt;/if&gt;&gt;
+                                                    &lt;/button&gt;
+                                                &lt;/div&gt;
+
+                                            &lt;&lt;/replace&gt;&gt;
+                                        &lt;&lt;/link&gt;&gt;
+                                    &lt;/button&gt;
+                                &lt;/div&gt;
+                            &lt;&lt;/replace&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/span&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-
-    &lt;!-- SUBURBAN HOME INTEL --&gt;
-    &lt;div class=&quot;crisis-card&quot;&gt;
-        &lt;&lt;if _arrivedLate&gt;&gt;
-            &lt;img src=&quot;image/Act3/suburban_house_morning.gif&quot; style=&quot;height: 180px; object-fit: cover;&quot;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;img src=&quot;image/Act3/suburban_house_night.gif&quot; style=&quot;height: 180px; object-fit: cover;&quot;&gt;
-        &lt;&lt;/if&gt;&gt;
-        &lt;div class=&quot;crisis-text&quot;&gt;
-            &lt;b style=&quot;color:var(--accent-blue);&quot;&gt;RIGHT: COLONIAL HOME&lt;/b&gt;
-            &lt;hr style=&quot;border-color:#222; margin: 8px 0;&quot;&gt;
-            &lt;&lt;if _arrivedLate&gt;&gt;
-                In the pale morning light, this house stands out as strangely intact. The dark wool blanket pinned over the window looks highly conspicuous in the daylight. There is no amber glow anymore—the candle has burned down to a dead wax stub, or the occupant blew it out at dawn.
-                &lt;br&gt;&lt;br&gt;
-                A fresh bicycle track leads around toward the back garage. The occupant is likely exhausted after a long night of watching and may be asleep.
-            &lt;&lt;else&gt;&gt;
-                In a neighborhood of broken glass, this entrance is shut tight, its windows unbroken. The blanket covering the lower-left window is pinned precisely to prevent light leaks, but in the pitch black, a bright, warm amber candle glow escapes from the bottom edge.
-                &lt;br&gt;&lt;br&gt;
-                A fresh bicycle track leads around toward the back garage. The occupant is awake, using a fresh candle, and likely hyper-vigilant in the dead of night.
-            &lt;&lt;/if&gt;&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-
-&lt;/div&gt;
-
-&lt;!-- COMPANION DIALOGUE SECTIONS --&gt;
-&lt;&lt;nobr&gt;&gt;
-&lt;&lt;if _hasVane and _hasMaya&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    Vane leans forward between the seats, his voice a quiet breath against the headrest.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;The station is dead silent. Generator must have run out of fuel. If we try to get into their safes or terminals, we&#39;ll have to use brute force.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;Hear that hum? The station&#39;s generator is still running. If we can get inside, we might be able to bypass their electronic locks cleanly.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;
-    In the backseat, Maya shifts Lily slightly in her sleep, her voice equally low.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;The candle in the house is out. In this daylight, that blanket on the window stands out like a sore thumb. They&#39;ve been awake all night; they might be asleep now.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;That candle in the window is fresh, burning in the pitch black. Whoever is inside is awake, hiding, and holding their breath. If we go there, we&#39;re dealing with someone on high alert.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-
-&lt;&lt;elseif _hasVane and _hasDiane&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    Vane points quietly at the substation.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;The station is completely dark—the power is out. It&#39;s dangerous, but if we go, we&#39;ll need tools to pry our way into the armory.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;The emergency strobe is flashing; the power is still on. If we move fast, we can use their systems before the fuel runs out.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;
-    Diane watches the house, her face set in a hard, tired line.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;The candle is dead, and the morning fog is rolling in. If someone&#39;s inside, they&#39;re resting. We should go quietly, for the boys&#39; sake.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;The candle is bright. They&#39;re awake in the dark. It&#39;s a sanctuary, Vane. We need to approach with our hands up.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-
-&lt;&lt;elseif _hasVane&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;The station is completely dark, and the candle in the house is dead. The world has slowed down. We can slip into the house while they sleep, or pry our way into the dead station.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;The station&#39;s generator is roaring, and the house has a fresh candle. Both places are active. Which one are we gambling our last drop of fuel on?&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-
-&lt;&lt;elseif _hasMaya&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;The station&#39;s power is out, and the things inside are cold. The house is quiet, the candle burned down. If we go to the house, we might catch them off guard.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;The station is surrounded by the dead, but they&#39;re locked behind that fence. The house has a fresh, bright candle. Whoever is in there is watching the road. We need to decide who we are prepared to face.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-
-&lt;&lt;elseif _hasDiane&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;Marcus always said the quiet ones are the ones who make it. The person in that house isn&#39;t looking for a fight, but they&#39;ll defend what&#39;s theirs. The station is a graveyard. If you want gear, we go left. If you want a safe place for my boys, we go right.&quot;&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;The morning is cold, and the candle&#39;s dead. We&#39;ll need to break things to get into the station. If we go to the house, they might be asleep.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;The candle is bright in the dark. Whoever is in that house is holding on, watching. The station&#39;s generator is loud. If we want weapons, we go left. If we want safety, we go right.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-
-&lt;&lt;else&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        You study the split. In the gray morning light, the silent substation is a tomb—its generator dead, its digital locks frozen. The colonial house is quiet; its candle has burned out, meaning the survivor inside may have finally gone to sleep.
-    &lt;&lt;else&gt;&gt;
-        You study the split. In the pitch black of 4:30 AM, the roaring generator at the substation means the power is still active, but the dead outside are fresh. The colonial house&#39;s bright candle means someone is awake, watching, and waiting.
-    &lt;&lt;/if&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
-
-&lt;br&gt;&lt;br&gt;
-
-&lt;div class=&quot;choice-menu&quot;&gt;
-
-    &lt;!-- Option A: Sheriff Substation --&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;Investigate the concrete substation to the left&quot;&gt;&gt;
-            &lt;&lt;addTime 5&gt;&gt;
-            &lt;&lt;set $act3_location to &quot;sheriff&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_Sheriff&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-        &lt;&lt;if _arrivedLate&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Approach the quiet yard. The generator is dead; electronic systems are offline, requiring physical force to clear path.&lt;/span&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Approach the active yard. The generator is loud; electronic systems are online and bypassable if you move fast.&lt;/span&gt;
-        &lt;&lt;/if&gt;&gt;
-    &lt;/button&gt;
-
-    &lt;!-- Option B: Suburban Home --&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;Search the two-story home to the right&quot;&gt;&gt;
-            &lt;&lt;addTime 5&gt;&gt;
-            &lt;&lt;set $act3_location to &quot;suburban_home&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-        &lt;&lt;if _arrivedLate&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Approach the colonial home. The candle is out; the occupant may be exhausted and sleeping, making stealth easier.&lt;/span&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Approach the colonial home. A fresh candle burns behind the blanket; the occupant is awake and highly alert in the dark.&lt;/span&gt;
-        &lt;&lt;/if&gt;&gt;
-    &lt;/button&gt;
-
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="16" name="Act3_Home" tags="" position="550,1500" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;if ndef $home_phase&gt;&gt;
     &lt;&lt;set $home_phase       to 1&gt;&gt;

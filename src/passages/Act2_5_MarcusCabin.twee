@@ -416,6 +416,8 @@
                                                         
                                                         /* SET STATUS DIANE SEBAGAI JOINED */
                                                         <<set $diane_status to "joined">>
+                                                        <<set $diane_recruited to true>>
+
                                                         
                                                         <<if not $marcus_cabin_xp>>
                                                             <<run window.gainXP(50)>>
