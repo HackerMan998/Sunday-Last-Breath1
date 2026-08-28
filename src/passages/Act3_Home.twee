@@ -194,7 +194,7 @@
 
 /*
 ══════════════════════════════════════════════════════════════════════════
-     PHASE 2 — ENTRY
+     PHASE 2 — ENTRY (DRAMATIC RESOLUTION CHOICES)
 ══════════════════════════════════════════════════════════════════════════
 */
 <<elseif $home_phase == 2>>
@@ -212,87 +212,155 @@
         </div>
 
         <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
-            The split-rail fence gate opens without resistance. You move up the stone path to the porch, boards solid underfoot—no rot, no creak. The front door is a heavy wooden slab with a brass handle. You try it. Locked, but the deadbolt is old, the kind installed twenty years ago by someone who thought a neighborhood like this didn't need anything serious.
-            <br><br>
-            The windows flanking the door are intact and latched from inside. Around the side of the house, a narrow gravel path leads toward a wooden gate to the backyard.
+            <span id="vn-phase2-home">
+                The split-rail fence gate opens without resistance. You move up the stone path to the porch, boards solid underfoot—no rot, no creak. The front door is a heavy wooden slab with a brass handle. You try it. Locked, but the deadbolt is old, the kind installed twenty years ago by someone who thought a neighborhood like this didn't need anything serious.
+                <br><br>
+                The windows flanking the door are intact and latched from inside. Around the side of the house, a narrow gravel path leads toward a wooden gate to the backyard.
 
-            <<if $per >= 5 or hasTrait("TRACKER") or hasTrait("NIGHT OWL")>>
-                <div style="padding:12px 15px; background:rgba(0,40,60,0.3); border-left:3px solid var(--accent-blue); margin:15px 0;">
-                    <span style="color:var(--accent-blue); font-size:0.8em; text-transform:uppercase; letter-spacing:1px;">[ PER 5 / TRACKER ]</span><br><br>
-                    <<if _arrivedLate>>
-                        You crouch at the front step. Tire tracks in the soft mud of the garden border—single set, bicycle width, leading around toward the back. The tracks are covered in a light layer of morning dew. Recent, but cold.
-                        <br><br>
-                        And there's something else: the faint, stale smell of cold coffee grounds drifting from the back utility pipe.
-                    <<else>>
-                        You crouch at the front step. Tire tracks in the soft mud of the garden border—single set, bicycle width, leading around toward the back. The mud is still wet and hasn't settled. Recent. Very recent.
-                        <br><br>
-                        And there's something else: a faint, warm smell of freshly brewed coffee drifting under the door.
+                <<if $per >= 5 or hasTrait("TRACKER") or hasTrait("NIGHT OWL")>>
+                    <div style="padding:12px 15px; background:rgba(0,40,60,0.3); border-left:3px solid var(--accent-blue); margin:15px 0;">
+                        <span style="color:var(--accent-blue); font-size:0.8em; text-transform:uppercase; letter-spacing:1px;">[ PER 5 / TRACKER ]</span><br><br>
+                        <<if _arrivedLate>>
+                            You crouch at the front step. Tire tracks in the soft mud of the garden border—single set, bicycle width, leading around toward the back. The tracks are covered in a light layer of morning dew. Recent, but cold.
+                            <br><br>
+                            And there's something else: the faint, stale smell of cold coffee grounds drifting from the back utility pipe.
+                        <<else>>
+                            You crouch at the front step. Tire tracks in the soft mud of the garden border—single set, bicycle width, leading around toward the back. The mud is still wet and hasn't settled. Recent. Very recent.
+                            <br><br>
+                            And there's something else: a faint, warm smell of freshly brewed coffee drifting under the door.
+                        <</if>>
+                    </div>
+                <</if>>
+
+                <div class="choice-menu" style="margin-top:20px;">
+
+                    <<if hasTrait("LOCKSMITH") or $inventory.find(i => i.id === "Lockpicks")>>
+                        <button>
+                            <<link "Pick the front door lock. [LOCKSMITH / LOCKPICKS]">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<replace "#vn-phase2-home">>
+                                    You kneel on the porch and insert the tension wrench into the aged brass keyway. With two light strokes of the pick, the upper pins set into place. The cylinder turns smoothly with a satisfying mechanical click.
+                                    <br><br>
+                                    <b style="color:var(--accent-green);">Zero noise generated.</b> The heavy wooden door swings open on well-oiled hinges, revealing the dark, silent hallway within.
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button style="border-left-color: var(--accent-gold) !important;">
+                                            <<link "Step inside the house ▼">>
+                                                <<set $home_phase to 3>>
+                                                <<goto "Act3_Home">>
+                                            <</link>>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOCKSMITH / LOCKPICKS]</b> Old brass tumbler. <b style="color:var(--accent-green);">Zero noise.</b></span>
+                        </button>
                     <</if>>
+
+                    <<if $per >= 5 or hasTrait("TRACKER") or $agi >= 5>>
+                        <button>
+                            <<link "Check the back door. [PER 5 / TRACKER / AGI 5]">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<replace "#vn-phase2-home">>
+                                    You follow the narrow stone path around the side of the house, stepping over wet rose bushes into the backyard. The rear kitchen door is closed, but you notice the strike plate isn't fully seated—someone left in a frantic rush and failed to lock it.
+                                    <br><br>
+                                    <b style="color:var(--accent-green);">Zero noise generated.</b> You give the handle a gentle push. The door glides open silently, leading right into the shadowy kitchen.
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button style="border-left-color: var(--accent-gold) !important;">
+                                            <<link "Step inside the house ▼">>
+                                                <<set $home_phase to 3>>
+                                                <<goto "Act3_Home">>
+                                            <</link>>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[PER 5 / TRACKER / AGI 5]</b> Unlatched back door. <b style="color:var(--accent-green);">Zero noise.</b></span>
+                        </button>
+                    <<else>>
+                        <button disabled style="opacity:0.4; cursor:not-allowed; border-color:#333;">
+                            <span style="text-decoration:line-through;">Check the back door</span><br>
+                            <span class="btn-sub" style="color:#666;">[REQUIRES PER 5 / TRACKER / AGI 5] You don't notice anything useful around the sides of the house.</span>
+                        </button>
+                    <</if>>
+
+                    <<if $str >= 5>>
+                        <button>
+                            <<link "Force the door frame. [STR 5]">>
+                                <<exert 10>>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<replace "#vn-phase2-home">>
+                                    You brace your boot against the base of the porch wall and lean your full weight into the door beside the deadbolt. You give one powerful, controlled shove—
+                                    <br><br>
+                                    <i>*CRACK!*</i>
+                                    <br><br>
+                                    The aged pine frame splinters and the deadbolt pops free. The sharp crack echoes across the porch, but the thick trees baffle the noise.
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button style="border-left-color: var(--accent-gold) !important;">
+                                            <<link "Step inside the house ▼">>
+                                                <<set $home_phase to 3>>
+                                                <<goto "Act3_Home">>
+                                            <</link>>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 5]</b> Pop the door frame. Costs 10 STAMINA. <b style="color:var(--accent-gold);">Low noise.</b></span>
+                        </button>
+                    <<else>>
+                        <button disabled style="opacity:0.4; cursor:not-allowed; border-color:#333;">
+                            <span style="text-decoration:line-through;">Force the door frame</span><br>
+                            <span class="btn-sub" style="color:#666;">[REQUIRES STR 5] The deadbolt is too solid for you to pop cleanly.</span>
+                        </button>
+                    <</if>>
+
+                    <<if _isBlunt or _hasMultiTool>>
+                        <button>
+                            <<link "Lever a side window open. [TOOLS]">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<replace "#vn-phase2-home">>
+                                    You work your tool under the wooden sash of the dining room window. Applying steady leverage, the small brass catch inside gives way with a muted pop.
+                                    <br><br>
+                                    You lift the sash, catch the frame, and climb over the sill into the dining room.
+                                    <div class="choice-menu" style="margin-top:20px;">
+                                        <button style="border-left-color: var(--accent-gold) !important;">
+                                            <<link "Step inside the house ▼">>
+                                                <<set $home_phase to 3>>
+                                                <<goto "Act3_Home">>
+                                            <</link>>
+                                        </button>
+                                    </div>
+                                <</replace>>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[TOOLS]</b> Pop window latch. <b style="color:var(--accent-gold);">Low noise.</b></span>
+                        </button>
+                    <</if>>
+
+                    <button style="border-left-color:var(--accent-red) !important;">
+                        <<link "Break the front window. (Brute Force)">>
+                            <<set $made_noise to true>>
+                            <<run $(".vn-dialogue-box").scrollTop(0)>>
+                            <<replace "#vn-phase2-home">>
+                                You bundle your thick jacket sleeve around your forearm and drive your elbow straight through the lower window pane!
+                                <br><br>
+                                <i>*CRASH—SHATTER!*</i>
+                                <br><br>
+                                Shards of glass cascade across the hardwood floor inside with a loud, ringing clatter. The sound carries sharply into the dead, quiet street.
+                                <br><br>
+                                <b style="color:var(--accent-red);">[HIGH NOISE GENERATED]</b> You reach through the broken frame, unlock the front deadbolt from inside, and step into the foyer over broken glass.
+                                <div class="choice-menu" style="margin-top:20px;">
+                                    <button style="border-left-color: var(--accent-red) !important;">
+                                        <<link "Step inside the house ▼">>
+                                            <<set $home_phase to 3>>
+                                            <<goto "Act3_Home">>
+                                        <</link>>
+                                    </button>
+                                </div>
+                            <</replace>>
+                        <</link>>
+                        <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: NOISE]</b> Smash window pane. <b style="color:var(--accent-red);">High noise generated.</b></span>
+                    </button>
                 </div>
-            <</if>>
-
-            <div class="choice-menu" style="margin-top:20px;">
-
-                <<if hasTrait("LOCKSMITH") or $inventory.find(i => i.id === "Lockpicks")>>
-                    <button>
-                        <<link "Pick the front door lock. [LOCKSMITH / LOCKPICKS]">>
-                            <<set $home_phase to 3>>
-                            <<goto "Act3_Home">>
-                        <</link>>
-                        <span class="btn-sub"><b style="color:var(--accent-gold);">[LOCKSMITH / LOCKPICKS]</b> Old brass tumbler. Ten seconds. The door swings open without a sound. <b style="color:var(--accent-green);">Zero noise.</b></span>
-                    </button>
-                <</if>>
-
-                <<if $per >= 5 or hasTrait("TRACKER") or $agi >= 5>>
-                    <button>
-                        <<link "Check the back door. [PER 5 / TRACKER / AGI 5]">>
-                            <<set $home_phase to 3>>
-                            <<goto "Act3_Home">>
-                        <</link>>
-                        <span class="btn-sub"><b style="color:var(--accent-gold);">[PER 5 / TRACKER / AGI 5]</b> You follow the side path to the backyard. The kitchen door is closed but the latch hasn't caught properly—it gives at the slightest push. Someone left in a hurry and didn't check it. Silent entry. <b style="color:var(--accent-green);">Zero noise.</b></span>
-                    </button>
-                <<else>>
-                    <button disabled style="opacity:0.4; cursor:not-allowed; border-color:#333;">
-                        <span style="text-decoration:line-through;">Check the back door</span><br>
-                        <span class="btn-sub" style="color:#666;">[REQUIRES PER 5 / TRACKER / AGI 5] You don't notice anything useful around the sides of the house.</span>
-                    </button>
-                <</if>>
-
-                <<if $str >= 5>>
-                    <button>
-                        <<link "Force the door frame. [STR 5]">>
-                            <<exert 10>>
-                            <<set $home_phase to 3>>
-                            <<goto "Act3_Home">>
-                        <</link>>
-                        <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 5]</b> Costs 10 STAMINA. You lean into the door at the lock point and pop the frame. The wood cracks once—sharp but brief. <b style="color:var(--accent-gold);">Low noise.</b></span>
-                    </button>
-                <<else>>
-                    <button disabled style="opacity:0.4; cursor:not-allowed; border-color:#333;">
-                        <span style="text-decoration:line-through;">Force the door frame</span><br>
-                        <span class="btn-sub" style="color:#666;">[REQUIRES STR 5] The deadbolt is too solid for you to pop cleanly.</span>
-                    </button>
-                <</if>>
-
-                <<if _isBlunt or _hasMultiTool>>
-                    <button>
-                        <<link "Lever a side window open. [TOOLS]">>
-                            <<set $home_phase to 3>>
-                            <<goto "Act3_Home">>
-                        <</link>>
-                        <span class="btn-sub"><b style="color:var(--accent-gold);">[TOOLS]</b> You work your equipment under the window sill and pop the latch bracket. The window swings inward. The creak of old wood is contained to the side yard. <b style="color:var(--accent-gold);">Low noise.</b></span>
-                    </button>
-                <</if>>
-
-                <button style="border-left-color:var(--accent-red) !important;">
-                    <<link "Break the front window. (Brute Force)">>
-                        <<set $made_noise to true>>
-                        <<set $home_phase to 3>>
-                        <<goto "Act3_Home">>
-                    <</link>>
-                    <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: NOISE]</b> You wrap your elbow in your jacket and punch through the glass. The sound of breaking glass carries further than almost anything else in a dead neighborhood. <b style="color:var(--accent-red);">High noise generated.</b></span>
-                </button>
-            </div>
+            </span>
         </div>
 
 /*
@@ -307,7 +375,7 @@
         </div>
 
         <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
-            <<if not $looted_kitchen and not $looted_medicine and not $looted_living>>
+            <<if not $looted_kitchen and not $looted_medicine and not $looted_living and not $looted_bedroom>>
                 <<if _hasVane>>
                     You step inside. Vane follows, pulling the door almost closed behind him. 
                     <br><br>
@@ -335,9 +403,8 @@
             <</if>>
 
             <br><br>
-            Three areas within reach. You can search them in any order.
+            Four areas within reach. You can search them in any order.
 
-            /* GRID LAYOUT YANG SUDAH DIRAPIKAN */
             <div class="crisis-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 20px;">
 
                 /* ══ ZONE 1: THE KITCHEN ══ */
@@ -468,21 +535,19 @@
 
                 /* ══ ZONE 3: THE LIVING ROOM (NEW LORE) ══ */
                 <<if not $looted_living>>
-                    <div class="crisis-card" style="background: rgba(0,40,60,0.2); border: 1px solid #333; padding: 15px; display: flex; flex-direction: column; grid-column: 1 / -1; box-sizing: border-box;">
+                    <div class="crisis-card" style="background: rgba(0,40,60,0.2); border: 1px solid #333; padding: 15px; display: flex; flex-direction: column; box-sizing: border-box;">
                         
-                        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                            <img src="image/Act3/house_livingroom.gif" style="width: 100%; max-width: 250px; height: 160px; object-fit: cover; border: 1px solid #222; flex-shrink: 0;">
-                            
-                            <div style="flex-grow: 1;">
-                                <b style="color:var(--accent-gold); font-size:1.1em;">The Living Room</b><br><br>
-                                The coffee table holds a folded road map of King County, an open leather-bound journal, and a small framed photograph face-up next to it.
-                                <br><br>
-                                <<if _arrivedLate>>
-                                    The fat pillar candle on the table has burned completely down into an unusable puddle of cold wax.
-                                <<else>>
-                                    A fat pillar candle sits here, burning brightly and casting a warm glow over the pages.
-                                <</if>>
-                            </div>
+                        <img src="image/Act3/house_livingroom.gif" style="width: 100%; height: 160px; object-fit: cover; border: 1px solid #222; margin-bottom: 10px;">
+                        
+                        <div style="flex-grow: 1;">
+                            <b style="color:var(--accent-gold); font-size:1.1em;">The Living Room</b><br><br>
+                            The coffee table holds a folded road map of King County, an open leather-bound journal, and a small framed photograph face-up next to it.
+                            <br><br>
+                            <<if _arrivedLate>>
+                                The fat pillar candle on the table has burned completely down into an unusable puddle of cold wax.
+                            <<else>>
+                                A fat pillar candle sits here, burning brightly and casting a warm glow over the pages.
+                            <</if>>
                         </div>
 
                         <div class="choice-menu" style="margin-top: auto; padding-top: 15px; width: 100%;">
@@ -505,7 +570,7 @@
                         </div>
                     </div>
                 <<else>>
-                    <div class="crisis-card" style="background: rgba(0,40,60,0.1); border: 1px solid #333; padding: 15px; grid-column: 1 / -1;">
+                    <div class="crisis-card" style="background: rgba(0,40,60,0.1); border: 1px solid #333; padding: 15px; display: flex; flex-direction: column;">
                         <span style="color:var(--accent-green); font-weight:bold;">✓ [LIVING ROOM SEARCHED]</span>
                         <br><br>
                         <<if $int >= 5 or hasTrait("THEORY") or $job == "Police Officer">>
@@ -515,7 +580,17 @@
                                 "Day 0. 22:00. The infection hit us two hours before the city sirens even started. I tried to get Emma to the high school sanctuary. We didn't make it to the gates. I wear the badge, but I couldn't protect my own daughter. Now I just sit in her empty house, scouting the perimeter, finding stragglers to save because I couldn't save her. The Vice Principal has the high school locked down tight. They're a good leader, maybe the best we could ask for, but they are strict. They aren't letting anyone through the gates without a thorough vetting. I've been vouching for the ones who deserve to live."
                             </div>
                             <br>
-                            <i style="color:#666; font-size:0.8em;">You set the photograph down gently. The Vice Principal is running the sanctuary? You know them. If anyone can hold a perimeter, it's them. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.</i>
+                            <<if $anchor == "partner_f">>
+                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. The Vice Principal is running the sanctuary? That's $anchor_name. Your $anchor_rel. If anyone can hold a perimeter, it's her. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.</i>
+                            <<elseif $anchor == "partner_m">>
+                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A sanctuary at the local high school—where your $anchor_rel, $anchor_name, is the Athletic Director. If he's alive, he'll be there. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.</i>
+                            <<elseif $anchor == "partner_nb">>
+                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A sanctuary at the local high school—where your $anchor_rel, $anchor_name, works as a counselor. If they're alive, they'll be there. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.</i>
+                            <<elseif $anchor == "parents">>
+                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A sanctuary at the local high school. If your folks were evacuated from their neighborhood, they might be there. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.</i>
+                            <<else>>
+                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A sanctuary at the local high school, locked down by someone called 'the Vice Principal'. You memorize the location from the road map. It's a solid lead for shelter. And you know who lives in this house now—and what she lost.</i>
+                            <</if>>
                         <<else>>
                             The journal sits next to a framed photograph of a little girl. The handwriting inside is frantic but fresh.
                             <br><br>
@@ -523,13 +598,51 @@
                                 "Emma didn't make it to the sanctuary. I couldn't save my own daughter. Now I just scout the roads, trying to guide stragglers to the gates to make up for it. The Vice Principal has the high school on total lockdown. They're strict, but it's keeping the place safe. I'll vouch for whoever makes it this far."
                             </div>
                             <br>
-                            <i style="color:#666; font-size:0.8em;">You set the photograph down gently. You memorize the sanctuary coordinates from the road map. You know what happened here.</i>
+                            <<if $anchor == "partner_f">>
+                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. The high school is a fortified sanctuary, and your $anchor_rel is running it. You memorize the coordinates from the road map. You know what happened in this house.</i>
+                            <<elseif $anchor == "partner_m" or $anchor == "partner_nb">>
+                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A fortified sanctuary at the high school—where your $anchor_rel works. You memorize the coordinates from the road map. You know what happened in this house.</i>
+                            <<elseif $anchor == "parents">>
+                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A fortified high school sanctuary—maybe your folks made it there. You memorize the coordinates from the road map. You know what happened in this house.</i>
+                            <<else>>
+                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A fortified high school sanctuary. You memorize the coordinates from the road map. It's the best chance for survival. You know what happened in this house.</i>
+                            <</if>>
                         <</if>>
+                    </div>
+                <</if>>
+
+                /* ══ ZONE 4: THE UPSTAIRS BEDROOMS ══ */
+                <<if not $looted_bedroom>>
+                    <div class="crisis-card" style="background: rgba(0,40,60,0.2); border: 1px solid #333; padding: 15px; display: flex; flex-direction: column; box-sizing: border-box;">
+                        
+                        <img src="image/Act3/house_hallway_stairs.gif" style="width: 100%; height: 160px; object-fit: cover; border: 1px solid #222; margin-bottom: 10px;">
+                        
+                        <div style="flex-grow: 1;">
+                            <b style="color:var(--accent-red); font-size:1.1em;">The Upstairs Bedroom</b><br><br>
+                            A child's bedroom directly across from the master suite. A small pink backpack is gone from its hook, but a heavy police uniform jacket is draped hastily over a rocking chair. A gun lockbox under the bed is open and empty.
+                        </div>
+
+                        <div class="choice-menu" style="margin-top: auto; padding-top: 15px; width: 100%;">
+                            <button style="width: 100%; margin: 0;">
+                                <<link "Search the Bedroom">>
+                                    <<addTime 3>>
+                                    <<set $looted_bedroom to true>>
+                                    <<run setup.addItem("Scrap Metal", 2)>>
+                                    <<goto "Act3_Home">>
+                                <</link>>
+                                <span class="btn-sub" style="font-size:0.7em;">Check the uniform pockets and lockbox. Acquire: <b>2× Scrap Metal</b>.</span>
+                            </button>
+                        </div>
+                    </div>
+                <<else>>
+                    <div class="crisis-card" style="opacity:0.5; background: rgba(0,40,60,0.1); border: 1px solid #333; padding: 15px; display: flex; flex-direction: column;">
+                        <span style="color:var(--accent-green); font-weight:bold;">✓ [BEDROOM SEARCHED]</span><br>
+                        You checked the pockets and the lockbox. Nothing else of use remains.
                     </div>
                 <</if>>
             </div>
             
-            <<if ($looted_kitchen or $looted_medicine or $looted_living) and not $home_reyes_found>>
+            <<if ($looted_kitchen or $looted_medicine or $looted_living or $looted_bedroom) and not $home_reyes_found>>
                 <div class="choice-menu" style="margin-top:25px;">
                     <button style="border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);">
                         <<link "Move deeper into the house">>
