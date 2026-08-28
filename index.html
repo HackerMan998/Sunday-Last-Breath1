@@ -4081,7 +4081,7 @@ window.preloadAssets = function(assetList) {
             }
         }
     });
-};</script><tw-tag name="PassageReady" color="green"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-tag name="Initialize" color="red"></tw-tag><tw-passagedata pid="1" name="Act2_5_MarcusCabin" tags="" position="450,1300" size="100,100">&lt;&lt;nobr&gt;&gt;
+};</script><tw-tag name="widget" color="purple"></tw-tag><tw-tag name="Initialize" color="red"></tw-tag><tw-tag name="PassageReady" color="green"></tw-tag><tw-passagedata pid="1" name="Act2_5_MarcusCabin" tags="" position="450,1300" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* ====================================================================
    INITIALIZATION &amp; STATE SETUP
    ==================================================================== */
@@ -7781,23 +7781,30 @@ Miller turns to you, placing a heavy hand on your shoulder.
 &lt;&lt;if ndef $stranger_trust&gt;&gt;  &lt;&lt;set $stranger_trust  to &quot;none&quot;&gt;&gt;&lt;&lt;/if&gt;&gt;
 &lt;&lt;if ndef $companion_reyes&gt;&gt; &lt;&lt;set $companion_reyes to false&gt;&gt;&lt;&lt;/if&gt;&gt;
 
-&lt;&lt;set _hasVane  to ($vane_status is &quot;joined&quot;)&gt;&gt;
-&lt;&lt;set _hasMaya  to ($maya_status is &quot;joined&quot;)&gt;&gt;
-&lt;&lt;set _hasDiane to (typeof $companions !== &#39;undefined&#39; &amp;&amp; $companions.includes(&quot;Diane&quot;))&gt;&gt;
+/* ── COMPANION CHECKS (BULLETPROOF) ── */
+&lt;&lt;set _hasVane  to ($vane_status == &quot;joined&quot; or (def $companions and $companions.includes(&quot;Vane&quot;)))&gt;&gt;
+&lt;&lt;set _hasMaya  to ($maya_status == &quot;joined&quot; or (def $companions and $companions.includes(&quot;Maya&quot;)))&gt;&gt;
+&lt;&lt;set _hasDiane to ($diane_status == &quot;joined&quot; or (def $companions and $companions.includes(&quot;Diane&quot;)))&gt;&gt;
 
-/* ── TIME OF ARRIVAL — mirrors Act3_Sheriff logic ── */
+/* ── TIME OF ARRIVAL ── */
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
 
+/* ── CAR CAPACITY CALCULATION ── */
 &lt;&lt;set _carCount to 1&gt;&gt;
 &lt;&lt;if _hasVane&gt;&gt;  &lt;&lt;set _carCount to _carCount + 1&gt;&gt;&lt;&lt;/if&gt;&gt;
-&lt;&lt;if _hasMaya&gt;&gt;  &lt;&lt;set _carCount to _carCount + 2&gt;&gt;&lt;&lt;/if&gt;&gt;
-&lt;&lt;if _hasDiane&gt;&gt; &lt;&lt;set _carCount to _carCount + 3&gt;&gt;&lt;&lt;/if&gt;&gt;
+&lt;&lt;if _hasMaya&gt;&gt;  &lt;&lt;set _carCount to _carCount + 2&gt;&gt;&lt;&lt;/if&gt;&gt; /* Maya + Lily */
+&lt;&lt;if _hasDiane&gt;&gt; &lt;&lt;set _carCount to _carCount + 3&gt;&gt;&lt;&lt;/if&gt;&gt; /* Diane + 2 Boys */
 &lt;&lt;set _carFull to (_carCount &gt;= 4)&gt;&gt;
 &lt;&lt;set _hasKids to (_hasMaya or _hasDiane)&gt;&gt;
 
-&lt;&lt;set _isBlade to [&quot;Combat Knife&quot;,&quot;Hunting Knife&quot;,&quot;Kitchen Knife&quot;,&quot;Scalpel&quot;].includes($equip.weapon)&gt;&gt;
+/* ── DYNAMIC WEAPON CHECK FOR DIALOGUE ── */
+&lt;&lt;set _isGun to [&quot;Pistol&quot;, &quot;Shotgun&quot;, &quot;Revolver&quot;, &quot;Hunting Rifle&quot;, &quot;9mm Pistol&quot;].includes($equip.weapon)&gt;&gt;
+&lt;&lt;set _isBlade to [&quot;Combat Knife&quot;, &quot;Hunting Knife&quot;, &quot;Kitchen Knife&quot;, &quot;Scalpel&quot;, &quot;Machete&quot;].includes($equip.weapon)&gt;&gt;
+&lt;&lt;set _isBlunt to [&quot;Baseball Bat&quot;, &quot;Crowbar&quot;, &quot;Tire Iron&quot;, &quot;Fire Axe&quot;, &quot;Lead Pipe&quot;].includes($equip.weapon)&gt;&gt;
 &lt;&lt;set _hasMultiTool to ($inventory.find(i =&gt; i.id === &quot;Multi-Tool&quot;) or $equip.weapon === &quot;Multi-Tool&quot;)&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
+
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
 /*
 ══════════════════════════════════════════════════════════════════════════
@@ -7806,155 +7813,153 @@ Miller turns to you, placing a heavy hand on your shoulder.
 */
 &lt;&lt;if $home_phase == 1&gt;&gt;
 
-&lt;h2&gt;THE COLONIAL HOUSE — APPROACH&lt;/h2&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            THE COLONIAL HOUSE — EXTERIOR
+        &lt;/div&gt;
 
-&lt;div style=&quot;margin-bottom:15px; text-align:center;&quot;&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;img src=&quot;image/Act3/suburban_house_morning.gif&quot;
-             style=&quot;max-width:100%; border:1px solid #333; box-shadow:0 4px 8px rgba(0,0,0,0.5);&quot;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;img src=&quot;image/Act3/suburban_house_night.gif&quot;
-             style=&quot;max-width:100%; border:1px solid #333; box-shadow:0 4px 8px rgba(0,0,0,0.5);&quot;&gt;
-    &lt;&lt;/if&gt;&gt;
-&lt;/div&gt;
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;&lt;if _arrivedLate&gt;&gt;
+                &lt;img src=&quot;image/Act3/suburban_house_morning.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;else&gt;&gt;
+                &lt;img src=&quot;image/Act3/suburban_house_night.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
 
-You pull the sedan to the curb and cut the engine. The colonial house sits
-quiet at the head of the cul-de-sac, set back from the road behind a low
-split-rail fence. Up close, the details resolve out of the fog:
-&lt;&lt;if _arrivedLate&gt;&gt;
-every window intact, every shutter still on its hinges. In the pale gray
-of early morning, against a street of broken glass and kicked-in doors, the
-house looks almost normal. Like the world stopped just before it got here.
-&lt;br&gt;&lt;br&gt;
-The ground-floor window to the left of the porch has been covered from the
-inside with a dark blanket. In daylight, the covering looks deliberate—
-measured, tucked at the corners. Not panicked. Someone took their time
-doing this. And along the bottom edge, just barely: a faint amber warmth.
-Too steady for anything battery-powered.
-&lt;br&gt;&lt;br&gt;
-A candle burning in the middle of the morning. Either no one told them it
-was daylight. Or they never went to sleep.
-&lt;&lt;else&gt;&gt;
-every window intact, every shutter still on its hinges. In a neighborhood
-where every other house has at least one broken pane or kicked-in door, this
-is conspicuous. Someone maintained this place after the world stopped
-maintaining anything.
-&lt;br&gt;&lt;br&gt;
-The ground-floor window to the left of the porch has been covered from the
-inside with a dark blanket—thick enough to block light but not thick
-enough. A faint, unsteady glow pulses behind it. Too warm for electronics.
-&lt;br&gt;&lt;br&gt;
-A candle. Someone is in there, or was recently.
-&lt;&lt;/if&gt;&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-text-approach&quot;&gt;
+                You pull the sedan to the curb and cut the engine. The colonial house sits quiet at the head of the cul-de-sac, set back from the road behind a low split-rail fence. Up close, the details resolve out of the fog:
+                &lt;br&gt;&lt;br&gt;
+                &lt;&lt;if _arrivedLate&gt;&gt;
+                    Every window intact, every shutter still on its hinges. In the pale gray of early morning, against a street of broken glass and kicked-in doors, the house looks almost normal. Like the world stopped just before it got here.
+                    &lt;br&gt;&lt;br&gt;
+                    The ground-floor window to the left of the porch has been covered from the inside with a dark blanket. In daylight, the covering looks deliberate—measured, tucked at the corners. Not panicked. Someone took their time doing this. Along the bottom edge: a faint amber warmth. A candle burning in the middle of the morning. Either no one told them it was daylight, or they never went to sleep.
+                &lt;&lt;else&gt;&gt;
+                    Every window intact, every shutter still on its hinges. In a neighborhood where every other house has at least one broken pane or kicked-in door, this is conspicuous. Someone maintained this place after the world stopped maintaining anything.
+                    &lt;br&gt;&lt;br&gt;
+                    The ground-floor window to the left of the porch has been covered from the inside with a dark blanket—thick enough to block most light. But a faint, unsteady amber glow pulses behind it. A candle. Someone is in there, holding the dark at bay.
+                &lt;&lt;/if&gt;&gt;
 
-&lt;&lt;nobr&gt;&gt;
-&lt;&lt;if _hasVane and _hasMaya&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    Vane leans forward between the seats, studying the house with the
-    focused expression he gets when he&#39;s running numbers.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;A candle burning in broad daylight? Looks like a signal, or they&#39;ve been asleep since dawn. We should watch the side door.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;Candle in the window. Covered from the inside. They&#39;re keeping a low profile in the dark. Keep your eyes on the tree line.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;
-    In the backseat, Maya has Lily tucked under her arm. Her voice is careful.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;The mist is lifting. We&#39;re completely exposed out here on the curb. If we&#39;re going inside, we need to do it now.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;It&#39;s freezing. Lily is shivering. If there&#39;s a heat source in there, I don&#39;t care who owns it. Just go slow. No shooting.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Stay in the car with Lily. Doors locked. Vane, you&#39;re on the porch with me. We read the situation before we commit to anything.&quot;&gt;&gt;
+                &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                    &lt;button style=&quot;border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);&quot;&gt;
+                        &lt;&lt;link &quot;Discuss the approach ▼&quot;&gt;&gt;
+                            &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                            &lt;&lt;replace &quot;#vn-text-approach&quot;&gt;&gt;
+                                
+                                &lt;&lt;if _hasVane and _hasMaya&gt;&gt;
+                                    Vane leans forward between the seats. He’s chewing his lower lip nervously, studying the house with the focused expression he gets when he&#39;s running numbers.
+                                    &lt;br&gt;&lt;br&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;A candle burning in broad daylight? I-it looks like a signal... or they&#39;ve been awake all night and finally passed out. We should watch the side door.&quot;&gt;&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;Candle in the window. Covered from the inside. They&#39;re trying to keep a low profile in the dark. Keep your eyes on the tree line, please.&quot;&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;br&gt;
+                                    In the backseat, Maya has seven-year-old Lily tucked securely under her arm. Her voice is careful, but edged with a mother&#39;s desperation.
+                                    &lt;br&gt;&lt;br&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;The mist is lifting. We&#39;re completely exposed out here on the curb. If we&#39;re going inside, we need to do it now before whoever is in there wakes up.&quot;&gt;&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        /* ── DYNAMIC WEAPON DIALOGUE FOR MAYA ── */
+                                        &lt;&lt;set _mayaAdvice to &quot;Try to talk to them first. No fighting unless you absolutely have to.&quot;&gt;&gt;
+                                        &lt;&lt;if _isGun&gt;&gt;
+                                            &lt;&lt;set _mayaAdvice to &quot;Keep your finger off the trigger unless they force your hand. Talk first.&quot;&gt;&gt;
+                                        &lt;&lt;elseif _isBlade&gt;&gt;
+                                            &lt;&lt;set _mayaAdvice to &quot;Keep that blade down unless they force your hand. Try talking first.&quot;&gt;&gt;
+                                        &lt;&lt;elseif _isBlunt&gt;&gt;
+                                            &lt;&lt;set _mayaAdvice to &quot;Don&#39;t start swinging that thing unless they force your hand. Talk first.&quot;&gt;&gt;
+                                        &lt;&lt;/if&gt;&gt;
+                                        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;It&#39;s freezing out here. Lily is shivering violently. If there&#39;s a heat source in there, I don&#39;t care who owns it. Just... go slow. _mayaAdvice&quot;&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;br&gt;
+                                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Stay in the car with Lily. Doors locked. Vane, you&#39;re on the porch with me. We assess the situation before we confront anyone.&quot;&gt;&gt;
 
-&lt;&lt;elseif _hasVane and _hasDiane&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    Vane squints at the covered window.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;Morning light makes that dark blanket stand out. Anyone walking down the road will spot it. I don&#39;t think they&#39;re alert upstairs.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;Candle. Someone&#39;s awake in there, or the draft hasn&#39;t knocked it out. Could be infected drawn to the flame, or a survivor holding the angle.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;
-    Diane looks at the house without expression. Her hands are folded in her lap.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;My boys are exhausted. They need a warm floor, not a wet car seat. Let&#39;s go see what&#39;s left.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;Marcus warned me about these cul-de-sacs. Too many blind corners in the dark. Keep your hand on your weapon.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Diane, keep the boys down and the doors locked. Vane, we go in together. Quiet and slow.&quot;&gt;&gt;
+                                &lt;&lt;elseif _hasVane and _hasDiane&gt;&gt;
+                                    Vane squints nervously at the covered window.
+                                    &lt;br&gt;&lt;br&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;M-morning light makes that dark blanket stand out. Anyone walking down the road will spot it. I don&#39;t think they&#39;re alert upstairs.&quot;&gt;&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;Candle. Someone&#39;s awake in there, or the draft hasn&#39;t knocked it out. Could be infected drawn to the flame, or a survivor holding the angle.&quot;&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;br&gt;
+                                    Diane looks at the house without expression. Her hands are folded tightly in her lap.
+                                    &lt;br&gt;&lt;br&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;My boys are exhausted. They need a warm floor, not a wet car seat. Let&#39;s go see what&#39;s left.&quot;&gt;&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        /* ── DYNAMIC WEAPON DIALOGUE FOR DIANE ── */
+                                        &lt;&lt;if $equip.weapon == &quot;none&quot;&gt;&gt;
+                                            &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;Marcus warned me about these suburban cul-de-sacs. Too many blind corners in the dark. Keep your guard up, even if you just want to talk.&quot;&gt;&gt;
+                                        &lt;&lt;else&gt;&gt;
+                                            &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;Marcus warned me about these suburban cul-de-sacs. Too many blind corners in the dark. Keep a hand on your weapon, but let them speak first.&quot;&gt;&gt;
+                                        &lt;&lt;/if&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;br&gt;
+                                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Diane, keep the boys down and the doors locked. Vane, we go in together. Quiet and slow.&quot;&gt;&gt;
 
-&lt;&lt;elseif _hasVane&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;Faint light behind the blanket. It&#39;s too late for a candle, which means they&#39;ve been burning it all night. They might be asleep from exhaustion.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;Keying on a live candle at four in the morning... they are awake for a reason. Go slow.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Either way we go in. Stay behind my shoulder until we know what we&#39;re dealing with.&quot;&gt;&gt;
+                                &lt;&lt;elseif _hasVane&gt;&gt;
+                                    Vane shivers, clutching Marcus&#39;s journal.
+                                    &lt;br&gt;&lt;br&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;Faint light behind the blanket. It&#39;s too late for a candle, which means they&#39;ve been burning it all night. They might be asleep from exhaustion.&quot;&gt;&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;K-keying on a live candle at four in the morning... they are awake for a reason. Please go slow. Let&#39;s not start a fight.&quot;&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;br&gt;
+                                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Either way we go in. Stay behind my shoulder until we know what we&#39;re dealing with. I&#39;ll try to talk if someone&#39;s there.&quot;&gt;&gt;
 
-&lt;&lt;elseif _hasMaya&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    Maya is already looking at the house the way she looks at things she&#39;s
-    trying to decide whether to be afraid of.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;Morning is coming. If someone is inside, they are going to notice a car idling outside their front gate. We need to move.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;It&#39;s pitch black out here. A single candle inside means they&#39;re trying to save battery power. They are living by simple rules.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I&#39;ll be careful. Keep Lily asleep if you can. If anything sounds wrong—not a creak, an actual alarm or a scream—you drive.&quot;&gt;&gt;
+                                &lt;&lt;elseif _hasMaya&gt;&gt;
+                                    Maya is already looking at the house the way she looks at things she&#39;s trying to decide whether to be afraid of. She rubs Lily&#39;s shoulders to generate heat.
+                                    &lt;br&gt;&lt;br&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;Morning is coming. If someone is inside, they are going to notice a car idling outside their front gate. We need to move.&quot;&gt;&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        &lt;&lt;chat &quot;Maya&quot; &quot;image/avatars/maya.gif&quot; &quot;right&quot; &quot;It&#39;s pitch black out here. A single candle inside means they&#39;re trying to save battery power. They are living by simple rules. Find us a way in, but don&#39;t force a fight if you don&#39;t have to.&quot;&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;br&gt;
+                                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I&#39;ll be careful. Keep Lily asleep if you can. If things go wrong and negotiations fail, you drive.&quot;&gt;&gt;
 
-&lt;&lt;elseif _hasDiane&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    Diane studies the house from the passenger seat. The boys are asleep in the back, finally.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;The morning mist is thick. The soil in those garden boxes is recently turned. They were tending this place yesterday.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;It&#39;s too dark to see if the perimeter is clear. Marcus used to say you never walk up the front path of a house with a covered window in the dark.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;
-    A pause.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;Take what you need. They would understand.&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Lock the doors behind me. I&#39;ll be fast.&quot;&gt;&gt;
+                                &lt;&lt;elseif _hasDiane&gt;&gt;
+                                    Diane studies the house from the passenger seat. The boys are asleep in the back, finally.
+                                    &lt;br&gt;&lt;br&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;The morning mist is thick. The soil in those garden boxes is recently turned. They were tending this place yesterday.&quot;&gt;&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;It&#39;s too dark to see if the perimeter is clear. Marcus used to say you never walk up the front path of a house with a covered window in the dark without being ready.&quot;&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;br&gt;
+                                    A pause.
+                                    &lt;br&gt;&lt;br&gt;
+                                    &lt;&lt;chat &quot;Diane&quot; &quot;image/avatars/diane.gif&quot; &quot;right&quot; &quot;We need shelter. Talk to them if you can. Take what you need if you can&#39;t.&quot;&gt;&gt;
+                                    &lt;br&gt;
+                                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Lock the doors behind me. I&#39;ll read the room before I do anything drastic.&quot;&gt;&gt;
 
-&lt;&lt;else&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    You sit with the engine ticking cool and look at the covered window for
-    a long moment. 
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        The candle glow behind the blanket is struggling against the cold morning light. It’s been burning all night.
-    &lt;&lt;else&gt;&gt;
-        The candle glow behind the blanket is sharp and warm against the pitch-black exterior. Someone is awake.
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    You get out of the car. The cold hits you immediately.
-    &lt;br&gt;&lt;br&gt;
-    You need food. You need medicine. Whatever is inside that house is more
-    useful to you than the dark.
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
+                                &lt;&lt;else&gt;&gt;
+                                    You sit alone with the engine ticking cool and look at the covered window for a long moment. 
+                                    &lt;br&gt;&lt;br&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        The candle glow behind the blanket is struggling against the cold morning light. It’s been burning all night.
+                                    &lt;&lt;else&gt;&gt;
+                                        The candle glow behind the blanket is sharp and warm against the pitch-black exterior. Someone is awake.
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;br&gt;&lt;br&gt;
+                                    You get out of the car. The cold hits you immediately. You need food. You need medicine. You decide to approach carefully—if someone is holding this house, a loud confrontation is the last thing you want right now.
+                                &lt;&lt;/if&gt;&gt;
 
-&lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;Move up to the front porch&quot;&gt;&gt;
-            &lt;&lt;set $home_phase to 2&gt;&gt;
-            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-        &lt;span class=&quot;btn-sub&quot;&gt;Approach the house and find a way inside.&lt;/span&gt;
-    &lt;/button&gt;
-&lt;/div&gt;
+                                &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                                    &lt;button style=&quot;border-left-color: var(--accent-gold) !important; background: rgba(255,255,255,0.05);&quot;&gt;
+                                        &lt;&lt;link &quot;Step onto the porch (Entry Phase) ▼&quot;&gt;&gt;
+                                            &lt;&lt;set $home_phase to 2&gt;&gt;
+                                            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                                        &lt;&lt;/link&gt;&gt;
+                                    &lt;/button&gt;
+                                &lt;/div&gt;
+                            &lt;&lt;/replace&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
 
 /*
 ══════════════════════════════════════════════════════════════════════════
@@ -7963,103 +7968,101 @@ A candle. Someone is in there, or was recently.
 */
 &lt;&lt;elseif $home_phase == 2&gt;&gt;
 
-&lt;h2&gt;THE COLONIAL HOUSE — ENTRY&lt;/h2&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            THE COLONIAL HOUSE — ENTRY
+        &lt;/div&gt;
 
-The split-rail fence gate opens without resistance. You move up the stone
-path to the porch, boards solid underfoot—no rot, no creak. The front door
-is a heavy wooden slab with a brass handle. You try it. Locked, but the
-deadbolt is old, the kind installed twenty years ago by someone who thought
-a neighborhood like this didn&#39;t need anything serious.
-&lt;br&gt;&lt;br&gt;
-The windows flanking the door are intact and latched from inside. Around
-the side of the house, a narrow gravel path leads toward a wooden gate to
-the backyard.
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;&lt;if _arrivedLate&gt;&gt;
+                &lt;img src=&quot;image/Act3/suburban_house_morning.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;else&gt;&gt;
+                &lt;img src=&quot;image/Act3/suburban_house_night.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
 
-&lt;&lt;nobr&gt;&gt;
-&lt;&lt;if $per &gt;= 5 or hasTrait(&quot;TRACKER&quot;) or hasTrait(&quot;NIGHT OWL&quot;)&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;div style=&quot;padding:12px 15px; background:rgba(0,40,60,0.3); border-left:3px solid var(--accent-blue); margin:10px 0;&quot;&gt;
-        &lt;span style=&quot;color:var(--accent-blue); font-size:0.8em; text-transform:uppercase; letter-spacing:1px;&quot;&gt;[ PER 5 / TRACKER ]&lt;/span&gt;&lt;br&gt;&lt;br&gt;
-        &lt;&lt;if _arrivedLate&gt;&gt;
-            You crouch at the front step. Tire tracks in the soft mud of the garden
-            border—single set, bicycle width, leading around toward the back. 
-            The tracks are covered in a light layer of morning dew. Recent, but cold.
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            The split-rail fence gate opens without resistance. You move up the stone path to the porch, boards solid underfoot—no rot, no creak. The front door is a heavy wooden slab with a brass handle. You try it. Locked, but the deadbolt is old, the kind installed twenty years ago by someone who thought a neighborhood like this didn&#39;t need anything serious.
             &lt;br&gt;&lt;br&gt;
-            And there&#39;s something else: the faint, stale smell of cold coffee grounds drifting from the back utility pipe.
-        &lt;&lt;else&gt;&gt;
-            You crouch at the front step. Tire tracks in the soft mud of the garden
-            border—single set, bicycle width, leading around toward the back.
-            The mud is still wet and hasn&#39;t settled. Recent. Very recent.
-            &lt;br&gt;&lt;br&gt;
-            And there&#39;s something else: a faint, warm smell of freshly brewed coffee drifting under the door.
-        &lt;&lt;/if&gt;&gt;
-    &lt;/div&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
+            The windows flanking the door are intact and latched from inside. Around the side of the house, a narrow gravel path leads toward a wooden gate to the backyard.
 
-&lt;div class=&quot;choice-menu&quot;&gt;
+            &lt;&lt;if $per &gt;= 5 or hasTrait(&quot;TRACKER&quot;) or hasTrait(&quot;NIGHT OWL&quot;)&gt;&gt;
+                &lt;div style=&quot;padding:12px 15px; background:rgba(0,40,60,0.3); border-left:3px solid var(--accent-blue); margin:15px 0;&quot;&gt;
+                    &lt;span style=&quot;color:var(--accent-blue); font-size:0.8em; text-transform:uppercase; letter-spacing:1px;&quot;&gt;[ PER 5 / TRACKER ]&lt;/span&gt;&lt;br&gt;&lt;br&gt;
+                    &lt;&lt;if _arrivedLate&gt;&gt;
+                        You crouch at the front step. Tire tracks in the soft mud of the garden border—single set, bicycle width, leading around toward the back. The tracks are covered in a light layer of morning dew. Recent, but cold.
+                        &lt;br&gt;&lt;br&gt;
+                        And there&#39;s something else: the faint, stale smell of cold coffee grounds drifting from the back utility pipe.
+                    &lt;&lt;else&gt;&gt;
+                        You crouch at the front step. Tire tracks in the soft mud of the garden border—single set, bicycle width, leading around toward the back. The mud is still wet and hasn&#39;t settled. Recent. Very recent.
+                        &lt;br&gt;&lt;br&gt;
+                        And there&#39;s something else: a faint, warm smell of freshly brewed coffee drifting under the door.
+                    &lt;&lt;/if&gt;&gt;
+                &lt;/div&gt;
+            &lt;&lt;/if&gt;&gt;
 
-    &lt;&lt;if hasTrait(&quot;LOCKSMITH&quot;) or $inventory.find(i =&gt; i.id === &quot;Lockpicks&quot;)&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;Pick the front door lock. [LOCKSMITH / LOCKPICKS]&quot;&gt;&gt;
-                &lt;&lt;set $home_phase to 3&gt;&gt;
-                &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[LOCKSMITH / LOCKPICKS]&lt;/b&gt; Old brass tumbler. Ten seconds. The door swings open without a sound. &lt;b style=&quot;color:var(--accent-green);&quot;&gt;Zero noise.&lt;/b&gt;&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
+            &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
 
-    &lt;&lt;if $per &gt;= 5 or hasTrait(&quot;TRACKER&quot;) or $agi &gt;= 5&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;Check the back door. [PER 5 / TRACKER / AGI 5]&quot;&gt;&gt;
-                &lt;&lt;set $home_phase to 3&gt;&gt;
-                &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[PER 5 / TRACKER / AGI 5]&lt;/b&gt; You follow the side path to the backyard. The kitchen door is closed but the latch hasn&#39;t caught properly—it gives at the slightest push. Someone left in a hurry and didn&#39;t check it. Silent entry. &lt;b style=&quot;color:var(--accent-green);&quot;&gt;Zero noise.&lt;/b&gt;&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;button disabled style=&quot;opacity:0.4; cursor:not-allowed; border-color:#333;&quot;&gt;
-            &lt;span style=&quot;text-decoration:line-through;&quot;&gt;Check the back door&lt;/span&gt;&lt;br&gt;
-            &lt;span class=&quot;btn-sub&quot; style=&quot;color:#666;&quot;&gt;[REQUIRES PER 5 / TRACKER / AGI 5] You don&#39;t notice anything useful around the sides of the house.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
+                &lt;&lt;if hasTrait(&quot;LOCKSMITH&quot;) or $inventory.find(i =&gt; i.id === &quot;Lockpicks&quot;)&gt;&gt;
+                    &lt;button&gt;
+                        &lt;&lt;link &quot;Pick the front door lock. [LOCKSMITH / LOCKPICKS]&quot;&gt;&gt;
+                            &lt;&lt;set $home_phase to 3&gt;&gt;
+                            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[LOCKSMITH / LOCKPICKS]&lt;/b&gt; Old brass tumbler. Ten seconds. The door swings open without a sound. &lt;b style=&quot;color:var(--accent-green);&quot;&gt;Zero noise.&lt;/b&gt;&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;&lt;/if&gt;&gt;
 
-    &lt;&lt;if $str &gt;= 5&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;Force the door frame. [STR 5]&quot;&gt;&gt;
-                &lt;&lt;exert 10&gt;&gt;
-                &lt;&lt;set $home_phase to 3&gt;&gt;
-                &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[STR 5]&lt;/b&gt; Costs 10 STAMINA. You lean into the door at the lock point and pop the frame. The wood cracks once—sharp but brief. &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;Low noise.&lt;/b&gt;&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;button disabled style=&quot;opacity:0.4; cursor:not-allowed; border-color:#333;&quot;&gt;
-            &lt;span style=&quot;text-decoration:line-through;&quot;&gt;Force the door frame&lt;/span&gt;&lt;br&gt;
-            &lt;span class=&quot;btn-sub&quot; style=&quot;color:#666;&quot;&gt;[REQUIRES STR 5] The deadbolt is too solid for you to pop cleanly.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
+                &lt;&lt;if $per &gt;= 5 or hasTrait(&quot;TRACKER&quot;) or $agi &gt;= 5&gt;&gt;
+                    &lt;button&gt;
+                        &lt;&lt;link &quot;Check the back door. [PER 5 / TRACKER / AGI 5]&quot;&gt;&gt;
+                            &lt;&lt;set $home_phase to 3&gt;&gt;
+                            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[PER 5 / TRACKER / AGI 5]&lt;/b&gt; You follow the side path to the backyard. The kitchen door is closed but the latch hasn&#39;t caught properly—it gives at the slightest push. Someone left in a hurry and didn&#39;t check it. Silent entry. &lt;b style=&quot;color:var(--accent-green);&quot;&gt;Zero noise.&lt;/b&gt;&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;&lt;else&gt;&gt;
+                    &lt;button disabled style=&quot;opacity:0.4; cursor:not-allowed; border-color:#333;&quot;&gt;
+                        &lt;span style=&quot;text-decoration:line-through;&quot;&gt;Check the back door&lt;/span&gt;&lt;br&gt;
+                        &lt;span class=&quot;btn-sub&quot; style=&quot;color:#666;&quot;&gt;[REQUIRES PER 5 / TRACKER / AGI 5] You don&#39;t notice anything useful around the sides of the house.&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;&lt;/if&gt;&gt;
 
-    &lt;&lt;if $equip.weapon == &quot;Crowbar&quot; or $equip.weapon == &quot;Tire Iron&quot; or $inventory.find(i =&gt; i.id === &quot;Crowbar&quot;)&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;Lever a side window open. [CROWBAR / TIRE IRON]&quot;&gt;&gt;
-                &lt;&lt;set $home_phase to 3&gt;&gt;
-                &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[CROWBAR / TIRE IRON]&lt;/b&gt; You work the bar under the window sill and pop the latch bracket. The window swings inward. The creak of old wood is contained to the side yard. &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;Low noise.&lt;/b&gt;&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
+                &lt;&lt;if $str &gt;= 5&gt;&gt;
+                    &lt;button&gt;
+                        &lt;&lt;link &quot;Force the door frame. [STR 5]&quot;&gt;&gt;
+                            &lt;&lt;exert 10&gt;&gt;
+                            &lt;&lt;set $home_phase to 3&gt;&gt;
+                            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[STR 5]&lt;/b&gt; Costs 10 STAMINA. You lean into the door at the lock point and pop the frame. The wood cracks once—sharp but brief. &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;Low noise.&lt;/b&gt;&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;&lt;else&gt;&gt;
+                    &lt;button disabled style=&quot;opacity:0.4; cursor:not-allowed; border-color:#333;&quot;&gt;
+                        &lt;span style=&quot;text-decoration:line-through;&quot;&gt;Force the door frame&lt;/span&gt;&lt;br&gt;
+                        &lt;span class=&quot;btn-sub&quot; style=&quot;color:#666;&quot;&gt;[REQUIRES STR 5] The deadbolt is too solid for you to pop cleanly.&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;&lt;/if&gt;&gt;
 
-    &lt;button style=&quot;border-left-color:var(--accent-red) !important;&quot;&gt;
-        &lt;&lt;link &quot;Break the front window. (Brute Force)&quot;&gt;&gt;
-            &lt;&lt;set $made_noise to true&gt;&gt;
-            &lt;&lt;set $home_phase to 3&gt;&gt;
-            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-        &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[RISK: NOISE]&lt;/b&gt; You wrap your elbow in your jacket and punch through the glass. The sound of breaking glass carries further than almost anything else in a dead neighborhood. &lt;b style=&quot;color:var(--accent-red);&quot;&gt;High noise generated.&lt;/b&gt;&lt;/span&gt;
-    &lt;/button&gt;
+                &lt;&lt;if _isBlunt or _hasMultiTool&gt;&gt;
+                    &lt;button&gt;
+                        &lt;&lt;link &quot;Lever a side window open. [TOOLS]&quot;&gt;&gt;
+                            &lt;&lt;set $home_phase to 3&gt;&gt;
+                            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TOOLS]&lt;/b&gt; You work your equipment under the window sill and pop the latch bracket. The window swings inward. The creak of old wood is contained to the side yard. &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;Low noise.&lt;/b&gt;&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;&lt;/if&gt;&gt;
 
-&lt;/div&gt;
+                &lt;button style=&quot;border-left-color:var(--accent-red) !important;&quot;&gt;
+                    &lt;&lt;link &quot;Break the front window. (Brute Force)&quot;&gt;&gt;
+                        &lt;&lt;set $made_noise to true&gt;&gt;
+                        &lt;&lt;set $home_phase to 3&gt;&gt;
+                        &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[RISK: NOISE]&lt;/b&gt; You wrap your elbow in your jacket and punch through the glass. The sound of breaking glass carries further than almost anything else in a dead neighborhood. &lt;b style=&quot;color:var(--accent-red);&quot;&gt;High noise generated.&lt;/b&gt;&lt;/span&gt;
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
 
 /*
 ══════════════════════════════════════════════════════════════════════════
@@ -8068,268 +8071,244 @@ the backyard.
 */
 &lt;&lt;elseif $home_phase == 3&gt;&gt;
 
-&lt;h2&gt;THE COLONIAL HOUSE — INTERIOR&lt;/h2&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            THE COLONIAL HOUSE — INTERIOR
+        &lt;/div&gt;
 
-&lt;&lt;nobr&gt;&gt;
-&lt;&lt;if not $looted_kitchen and not $looted_medicine and not $looted_living&gt;&gt;
-    &lt;&lt;if _hasVane&gt;&gt;
-        You step inside. Vane follows, pulling the door almost closed behind him. 
-        &lt;&lt;if _arrivedLate&gt;&gt;
-            The house smells of dying candle wax, old wood, and cold coffee grounds. The hallway is dimly lit by grey morning light cutting through the window cracks.
-            &lt;br&gt;&lt;br&gt;
-            &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;Coffee&#39;s cold. The pot&#39;s empty. They&#39;ve been gone—or asleep—for hours.&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            The house smells of fresh candle wax, warm wood, and freshly brewed coffee. The hallway is completely dark save for the bright amber glow bleeding under the living room door.
-            &lt;br&gt;&lt;br&gt;
-            &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;Smells like coffee. Recent. Keep your hand near your weapon, they might still be holding the corner.&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
-        &lt;br&gt;
-        He keeps his voice at a breath. His hand stays on his weapon.
-    &lt;&lt;else&gt;&gt;
-        You step inside and hold still, listening. The house smells of 
-        &lt;&lt;if _arrivedLate&gt;&gt;
-            cold morning air and stale coffee. The candle in the living room has burned down to a stub.
-        &lt;&lt;else&gt;&gt;
-            warm wax and freshly brewed coffee. The bright amber glow under the door tells you the candle is still burning strongly.
-        &lt;&lt;/if&gt;&gt;
-        &lt;br&gt;&lt;br&gt;
-        Someone was here. Maybe still is. You move anyway.
-    &lt;&lt;/if&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
-
-&lt;br&gt;
-Three areas within reach. You can search them in any order.
-
-&lt;&lt;run window.animateStatBar(&#39;.bar-fill.hp&#39;, $hp, $hp_max)&gt;&gt;
-&lt;&lt;run window.animateStatBar(&#39;.bar-fill.stamina&#39;, $stamina, $stamina_max)&gt;&gt;
-
-&lt;div class=&quot;crisis-grid&quot;&gt;
-
-    /* ══ ZONE 1: THE KITCHEN ══ */
-    &lt;&lt;if not $looted_kitchen&gt;&gt;
-        &lt;div class=&quot;crisis-card&quot;&gt;
-            &lt;div class=&quot;crisis-text&quot;&gt;
-                &lt;img src=&quot;image/Act3/house_kitchen.gif&quot;
-                     style=&quot;max-width:100%; margin-bottom:10px; border:1px solid #222;&quot;&gt;
-                &lt;b style=&quot;color:var(--accent-green);&quot;&gt;The Kitchen&lt;/b&gt; — The
-                pantry door is open. Shelves partially cleared.
-                &lt;&lt;if _arrivedLate&gt;&gt;
-                    The coffee pot on the stove is stone cold. The lower shelves are mostly bare—someone took some supplies during their watch.
-                &lt;&lt;else&gt;&gt;
-                    A half-empty pot of coffee sits lukewarm on the stovetop. The back of the lower shelf still has canned goods pushed to the wall.
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;nobr&gt;&gt;
-                &lt;&lt;if $job == &quot;Doctor&quot; or hasTrait(&quot;FIELD MEDIC&quot;)&gt;&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;&lt;if not $looted_kitchen and not $looted_medicine and not $looted_living&gt;&gt;
+                &lt;&lt;if _hasVane&gt;&gt;
+                    You step inside. Vane follows, pulling the door almost closed behind him. 
                     &lt;br&gt;&lt;br&gt;
-                    &lt;span style=&quot;color:var(--accent-blue); font-size:0.85em;&quot;&gt;
-                    Your eye catches a small wooden medicine box mounted
-                    near the back door—the kind families keep for minor
-                    emergencies. Still latched.
-                    &lt;/span&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;/nobr&gt;&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;choice-menu&quot;&gt;
-                &lt;button&gt;
-                    &lt;&lt;link &quot;Search the kitchen shelves. (3 minutes)&quot;&gt;&gt;
-                        &lt;&lt;addTime 3&gt;&gt;
-                        &lt;&lt;set $looted_kitchen to true&gt;&gt;
-                        &lt;&lt;if _arrivedLate&gt;&gt;
-                            &lt;&lt;run setup.addItem(&quot;Canned Food&quot;, 1)&gt;&gt;
-                            &lt;&lt;run setup.addItem(&quot;Bottled Water&quot;, 1)&gt;&gt;
-                        &lt;&lt;else&gt;&gt;
-                            &lt;&lt;run setup.addItem(&quot;Canned Food&quot;, 2)&gt;&gt;
-                            &lt;&lt;run setup.addItem(&quot;Bottled Water&quot;, 2)&gt;&gt;
-                        &lt;&lt;/if&gt;&gt;
-                        &lt;&lt;if $job == &quot;Doctor&quot; or hasTrait(&quot;FIELD MEDIC&quot;)&gt;&gt;
-                            &lt;&lt;run setup.addItem(&quot;Bandage&quot;, 2)&gt;&gt;
-                        &lt;&lt;/if&gt;&gt;
-                        &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;&lt;nobr&gt;&gt;
-                    &lt;&lt;if $job == &quot;Doctor&quot; or hasTrait(&quot;FIELD MEDIC&quot;)&gt;&gt;
-                        &lt;&lt;if _arrivedLate&gt;&gt;
-                            &lt;span class=&quot;btn-sub&quot;&gt;Acquire: &lt;b&gt;1× Canned Food&lt;/b&gt;, &lt;b&gt;1× Bottled Water&lt;/b&gt;, &lt;b&gt;2× Bandage&lt;/b&gt;.&lt;/span&gt;
-                        &lt;&lt;else&gt;&gt;
-                            &lt;span class=&quot;btn-sub&quot;&gt;Acquire: &lt;b&gt;2× Canned Food&lt;/b&gt;, &lt;b&gt;2× Bottled Water&lt;/b&gt;, &lt;b&gt;2× Bandage&lt;/b&gt;.&lt;/span&gt;
-                        &lt;&lt;/if&gt;&gt;
-                    &lt;&lt;else&gt;&gt;
-                        &lt;&lt;if _arrivedLate&gt;&gt;
-                            &lt;span class=&quot;btn-sub&quot;&gt;Acquire: &lt;b&gt;1× Canned Food&lt;/b&gt;, &lt;b&gt;1× Bottled Water&lt;/b&gt;.&lt;/span&gt;
-                        &lt;&lt;else&gt;&gt;
-                            &lt;span class=&quot;btn-sub&quot;&gt;Acquire: &lt;b&gt;2× Canned Food&lt;/b&gt;, &lt;b&gt;2× Bottled Water&lt;/b&gt;.&lt;/span&gt;
-                        &lt;&lt;/if&gt;&gt;
-                    &lt;&lt;/if&gt;&gt;
-                    &lt;&lt;/nobr&gt;&gt;
-                &lt;/button&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;div class=&quot;crisis-card&quot; style=&quot;opacity:0.5;&quot;&gt;
-            &lt;div class=&quot;crisis-text&quot;&gt;
-                &lt;span style=&quot;color:var(--accent-green);&quot;&gt;✓ [KITCHEN SEARCHED]&lt;/span&gt;
-                You cleared what was left on the back shelves.
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;&lt;/if&gt;&gt;
-
-    /* ══ ZONE 2: THE BATHROOM CABINET ══ */
-    &lt;&lt;if not $looted_medicine&gt;&gt;
-        &lt;div class=&quot;crisis-card&quot;&gt;
-            &lt;div class=&quot;crisis-text&quot;&gt;
-                &lt;img src=&quot;image/Act3/house_bathroom.gif&quot;
-                     style=&quot;max-width:100%; margin-bottom:10px; border:1px solid #222;&quot;&gt;
-                &lt;b style=&quot;color:var(--accent-blue);&quot;&gt;The Bathroom Cabinet&lt;/b&gt;
-                — Upstairs, end of the hall. The mirrored cabinet above the
-                sink was left open. 
-                &lt;&lt;if _arrivedLate&gt;&gt;
-                    The front shelves have been completely cleared out by whoever was resting here. Only a single container remains tucked in the back.
-                &lt;&lt;else&gt;&gt;
-                    Gaps show where bottles were grabbed in a hurry, but several packages remain standing.
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;nobr&gt;&gt;
-                &lt;&lt;if $job == &quot;Doctor&quot; or hasTrait(&quot;FIELD MEDIC&quot;)&gt;&gt;
-                    &lt;br&gt;&lt;br&gt;
-                    &lt;span style=&quot;color:var(--accent-blue); font-size:0.85em;&quot;&gt;
-                    You can read the prescription labels properly. One of
-                    them is a broad-spectrum antibiotic. The refill date is recent.
-                    &lt;/span&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;/nobr&gt;&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;choice-menu&quot;&gt;
-                &lt;button&gt;
-                    &lt;&lt;link &quot;Search the bathroom cabinet. (2 minutes)&quot;&gt;&gt;
-                        &lt;&lt;addTime 2&gt;&gt;
-                        &lt;&lt;set $looted_medicine to true&gt;&gt;
-                        &lt;&lt;if _arrivedLate&gt;&gt;
-                            &lt;&lt;run setup.addItem(&quot;Painkillers&quot;, 1)&gt;&gt;
-                            &lt;&lt;run setup.addItem(&quot;Bandage&quot;, 1)&gt;&gt;
-                        &lt;&lt;else&gt;&gt;
-                            &lt;&lt;run setup.addItem(&quot;Painkillers&quot;, 2)&gt;&gt;
-                            &lt;&lt;run setup.addItem(&quot;Bandage&quot;, 1)&gt;&gt;
-                        &lt;&lt;/if&gt;&gt;
-                        &lt;&lt;if $job == &quot;Doctor&quot; or hasTrait(&quot;FIELD MEDIC&quot;)&gt;&gt;
-                            &lt;&lt;run setup.addItem(&quot;Antibiotics&quot;, 2)&gt;&gt;
-                        &lt;&lt;/if&gt;&gt;
-                        &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;&lt;nobr&gt;&gt;
-                    &lt;&lt;if $job == &quot;Doctor&quot; or hasTrait(&quot;FIELD MEDIC&quot;)&gt;&gt;
-                        &lt;&lt;if _arrivedLate&gt;&gt;
-                            &lt;span class=&quot;btn-sub&quot;&gt;Acquire: &lt;b&gt;1× Painkillers&lt;/b&gt;, &lt;b&gt;1× Bandage&lt;/b&gt;, &lt;b&gt;2× Antibiotics&lt;/b&gt;.&lt;/span&gt;
-                        &lt;&lt;else&gt;&gt;
-                            &lt;span class=&quot;btn-sub&quot;&gt;Acquire: &lt;b&gt;2× Painkillers&lt;/b&gt;, &lt;b&gt;1× Bandage&lt;/b&gt;, &lt;b&gt;2× Antibiotics&lt;/b&gt;.&lt;/span&gt;
-                        &lt;&lt;/if&gt;&gt;
-                    &lt;&lt;else&gt;&gt;
-                        &lt;&lt;if _arrivedLate&gt;&gt;
-                            &lt;span class=&quot;btn-sub&quot;&gt;Acquire: &lt;b&gt;1× Painkillers&lt;/b&gt;, &lt;b&gt;1× Bandage&lt;/b&gt;.&lt;/span&gt;
-                        &lt;&lt;else&gt;&gt;
-                            &lt;span class=&quot;btn-sub&quot;&gt;Acquire: &lt;b&gt;2× Painkillers&lt;/b&gt;, &lt;b&gt;1× Bandage&lt;/b&gt;.&lt;/span&gt;
-                        &lt;&lt;/if&gt;&gt;
-                    &lt;&lt;/if&gt;&gt;
-                    &lt;&lt;/nobr&gt;&gt;
-                &lt;/button&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;div class=&quot;crisis-card&quot; style=&quot;opacity:0.5;&quot;&gt;
-            &lt;div class=&quot;crisis-text&quot;&gt;
-                &lt;span style=&quot;color:var(--accent-green);&quot;&gt;✓ [CABINET SEARCHED]&lt;/span&gt;
-                Cleared the back row of the medicine cabinet.
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;&lt;/if&gt;&gt;
-
-    /* ══ ZONE 3: THE LIVING ROOM ══ */
-    &lt;&lt;if not $looted_living&gt;&gt;
-        &lt;div class=&quot;crisis-card&quot;&gt;
-            &lt;div class=&quot;crisis-text&quot;&gt;
-                &lt;img src=&quot;image/Act3/house_livingroom.gif&quot;
-                     style=&quot;max-width:100%; margin-bottom:10px; border:1px solid #222;&quot;&gt;
-                &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;The Living Room&lt;/b&gt; —
-                The coffee table holds a folded road map of King County, a half-written note, and a small framed photograph face-down on the couch. A leather-bound journal sits open.
-                &lt;br&gt;&lt;br&gt;
-                &lt;&lt;if _arrivedLate&gt;&gt;
-                    The fat pillar candle on the table has burned completely down into an unusable puddle of cold wax.
-                &lt;&lt;else&gt;&gt;
-                    A fat pillar candle sits here, burning brightly and casting a warm glow.
-                &lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;choice-menu&quot;&gt;
-                &lt;button&gt;
-                    &lt;&lt;link &quot;Read the journal and search the table. (3 minutes)&quot;&gt;&gt;
-                        &lt;&lt;addTime 3&gt;&gt;
-                        &lt;&lt;set $looted_living to true&gt;&gt;
-                        &lt;&lt;set $hum += 15&gt;&gt;
-                        &lt;&lt;if not _arrivedLate&gt;&gt;
-                            &lt;&lt;run setup.addItem(&quot;Lighter&quot;, 1)&gt;&gt;
-                        &lt;&lt;/if&gt;&gt;
-                        &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;&lt;nobr&gt;&gt;
                     &lt;&lt;if _arrivedLate&gt;&gt;
-                        &lt;span class=&quot;btn-sub&quot;&gt;Read what was left behind. +15 Humanity.&lt;/span&gt;
+                        The house smells of dying candle wax, old wood, and cold coffee grounds. The hallway is dimly lit by grey morning light cutting through the window cracks.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;C-coffee&#39;s cold. The pot&#39;s empty. They&#39;ve been gone—or asleep—for hours.&quot;&gt;&gt;
                     &lt;&lt;else&gt;&gt;
-                        &lt;span class=&quot;btn-sub&quot;&gt;Read what was left behind. Take the lighter used to light the candle. +15 Humanity.&lt;/span&gt;
+                        The house smells of fresh candle wax, warm wood, and freshly brewed coffee. The hallway is completely dark save for the bright amber glow bleeding under the living room door.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;Smells like coffee. Recent. Keep your hand near your weapon, they might still be holding the corner.&quot;&gt;&gt;
                     &lt;&lt;/if&gt;&gt;
-                    &lt;&lt;/nobr&gt;&gt;
-                &lt;/button&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;div class=&quot;crisis-card&quot; style=&quot;opacity:0.5;&quot;&gt;
-            &lt;div class=&quot;crisis-text&quot;&gt;
-                &lt;span style=&quot;color:var(--accent-green);&quot;&gt;✓ [LIVING ROOM SEARCHED]&lt;/span&gt;
-                &lt;br&gt;&lt;br&gt;
-                &lt;&lt;nobr&gt;&gt;
-                &lt;&lt;if $int &gt;= 5 or hasTrait(&quot;THEORY&quot;) or $job == &quot;Police Officer&quot;&gt;&gt;
-                    The journal belongs to the family that lived here. A
-                    mother, from the handwriting—precise, controlled even
-                    under obvious distress. The last entry reads:
-                    &lt;br&gt;&lt;br&gt;
-                    &lt;div style=&quot;padding:10px; background:rgba(30,25,10,0.4); border-left:2px solid var(--accent-gold); font-size:0.85em; color:#ccc; font-style:italic; line-height:1.6;&quot;&gt;
-                        &quot;Day 0. We&#39;re leaving tonight. The man at the
-                        high school checkpoint said they have walls,
-                        food, and a generator. He also said there&#39;s been
-                        a leadership change since yesterday morning—
-                        wouldn&#39;t say who or why. He looked uncomfortable
-                        when I asked. We&#39;re going anyway. Emma needs
-                        walls. Whatever changed in there, walls are walls.
-                        God, I hope I&#39;m right.&quot;
-                    &lt;/div&gt;
                     &lt;br&gt;
-                    &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;She left the journal behind. You don&#39;t know if that was deliberate or forgotten. You memorize the sanctuary location from the road map. You pocket the family photograph.&lt;/i&gt;
+                    He keeps his voice at a breath. His hand stays nervously on his weapon.
                 &lt;&lt;else&gt;&gt;
-                    The journal is a family&#39;s. The last entry, tonight:
+                    You step inside and hold still, listening. The house smells of 
+                    &lt;&lt;if _arrivedLate&gt;&gt;
+                        cold morning air and stale coffee. The candle in the living room has burned down to a stub.
+                    &lt;&lt;else&gt;&gt;
+                        warm wax and freshly brewed coffee. The bright amber glow under the door tells you the candle is still burning strongly.
+                    &lt;&lt;/if&gt;&gt;
                     &lt;br&gt;&lt;br&gt;
-                    &lt;div style=&quot;padding:10px; background:rgba(30,25,10,0.4); border-left:2px solid var(--accent-gold); font-size:0.85em; color:#ccc; font-style:italic; line-height:1.6;&quot;&gt;
-                        &quot;Heading to the high school tonight. They have
-                        walls. That&#39;s enough.&quot;
-                    &lt;/div&gt;
-                    &lt;br&gt;
-                    The road map has the high school marked in red pen.
-                    You memorize the coordinates. You pocket the family photograph.
+                    Someone was here. Maybe still is. You move anyway.
                 &lt;&lt;/if&gt;&gt;
-                &lt;&lt;/nobr&gt;&gt;
+            &lt;&lt;/if&gt;&gt;
+
+            &lt;br&gt;&lt;br&gt;
+            Three areas within reach. You can search them in any order.
+
+            /* GRID LAYOUT YANG SUDAH DIRAPIKAN */
+            &lt;div class=&quot;crisis-grid&quot; style=&quot;display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 20px;&quot;&gt;
+
+                /* ══ ZONE 1: THE KITCHEN ══ */
+                &lt;&lt;if not $looted_kitchen&gt;&gt;
+                    &lt;div class=&quot;crisis-card&quot; style=&quot;background: rgba(0,40,60,0.2); border: 1px solid #333; padding: 15px; display: flex; flex-direction: column; box-sizing: border-box;&quot;&gt;
+                        
+                        &lt;img src=&quot;image/Act3/house_kitchen.gif&quot; style=&quot;width: 100%; height: 160px; object-fit: cover; border: 1px solid #222; margin-bottom: 10px;&quot;&gt;
+                        
+                        &lt;div style=&quot;flex-grow: 1;&quot;&gt;
+                            &lt;b style=&quot;color:var(--accent-green); font-size:1.1em;&quot;&gt;The Kitchen&lt;/b&gt;&lt;br&gt;&lt;br&gt;
+                            The pantry door is open. Shelves partially cleared.
+                            &lt;&lt;if _arrivedLate&gt;&gt;
+                                The coffee pot on the stove is stone cold. The lower shelves are mostly bare.
+                            &lt;&lt;else&gt;&gt;
+                                A half-empty pot of coffee sits lukewarm on the stovetop. Canned goods are pushed to the wall.
+                            &lt;&lt;/if&gt;&gt;
+                            
+                            &lt;&lt;if $job == &quot;Doctor&quot; or hasTrait(&quot;FIELD MEDIC&quot;)&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;span style=&quot;color:var(--accent-blue); font-size:0.85em; font-style:italic;&quot;&gt;
+                                [MEDIC] Your eye catches a small wooden medicine box mounted near the back door. Still latched.
+                                &lt;/span&gt;
+                            &lt;&lt;/if&gt;&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top: auto; padding-top: 15px; width: 100%;&quot;&gt;
+                            &lt;button style=&quot;width: 100%; margin: 0;&quot;&gt;
+                                &lt;&lt;link &quot;Search Kitchen&quot;&gt;&gt;
+                                    &lt;&lt;addTime 3&gt;&gt;
+                                    &lt;&lt;set $looted_kitchen to true&gt;&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        &lt;&lt;run setup.addItem(&quot;Canned Food&quot;, 1)&gt;&gt;
+                                        &lt;&lt;run setup.addItem(&quot;Bottled Water&quot;, 1)&gt;&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        &lt;&lt;run setup.addItem(&quot;Canned Food&quot;, 2)&gt;&gt;
+                                        &lt;&lt;run setup.addItem(&quot;Bottled Water&quot;, 2)&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;&lt;if $job == &quot;Doctor&quot; or hasTrait(&quot;FIELD MEDIC&quot;)&gt;&gt;
+                                        &lt;&lt;run setup.addItem(&quot;Bandage&quot;, 2)&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;&lt;if $job == &quot;Doctor&quot; or hasTrait(&quot;FIELD MEDIC&quot;)&gt;&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        &lt;span class=&quot;btn-sub&quot; style=&quot;font-size:0.7em;&quot;&gt;Acquire: &lt;b&gt;1× Canned Food&lt;/b&gt;, &lt;b&gt;1× Water&lt;/b&gt;, &lt;b&gt;2× Bandage&lt;/b&gt;.&lt;/span&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        &lt;span class=&quot;btn-sub&quot; style=&quot;font-size:0.7em;&quot;&gt;Acquire: &lt;b&gt;2× Canned Food&lt;/b&gt;, &lt;b&gt;2× Water&lt;/b&gt;, &lt;b&gt;2× Bandage&lt;/b&gt;.&lt;/span&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                &lt;&lt;else&gt;&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        &lt;span class=&quot;btn-sub&quot; style=&quot;font-size:0.7em;&quot;&gt;Acquire: &lt;b&gt;1× Canned Food&lt;/b&gt;, &lt;b&gt;1× Water&lt;/b&gt;.&lt;/span&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        &lt;span class=&quot;btn-sub&quot; style=&quot;font-size:0.7em;&quot;&gt;Acquire: &lt;b&gt;2× Canned Food&lt;/b&gt;, &lt;b&gt;2× Water&lt;/b&gt;.&lt;/span&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                &lt;&lt;/if&gt;&gt;
+                            &lt;/button&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;&lt;else&gt;&gt;
+                    &lt;div class=&quot;crisis-card&quot; style=&quot;opacity:0.5; background: rgba(0,40,60,0.1); border: 1px solid #333; padding: 15px; display: flex; flex-direction: column;&quot;&gt;
+                        &lt;span style=&quot;color:var(--accent-green); font-weight:bold;&quot;&gt;✓ [KITCHEN SEARCHED]&lt;/span&gt;&lt;br&gt;
+                        You cleared what was left on the back shelves.
+                    &lt;/div&gt;
+                &lt;&lt;/if&gt;&gt;
+
+                /* ══ ZONE 2: THE BATHROOM CABINET ══ */
+                &lt;&lt;if not $looted_medicine&gt;&gt;
+                    &lt;div class=&quot;crisis-card&quot; style=&quot;background: rgba(0,40,60,0.2); border: 1px solid #333; padding: 15px; display: flex; flex-direction: column; box-sizing: border-box;&quot;&gt;
+                        
+                        &lt;img src=&quot;image/Act3/house_bathroom.gif&quot; style=&quot;width: 100%; height: 160px; object-fit: cover; border: 1px solid #222; margin-bottom: 10px;&quot;&gt;
+                        
+                        &lt;div style=&quot;flex-grow: 1;&quot;&gt;
+                            &lt;b style=&quot;color:var(--accent-blue); font-size:1.1em;&quot;&gt;The Bathroom Cabinet&lt;/b&gt;&lt;br&gt;&lt;br&gt;
+                            Upstairs, end of the hall. The mirrored cabinet above the sink was left open. 
+                            &lt;&lt;if _arrivedLate&gt;&gt;
+                                The front shelves are completely cleared out. Only a single container remains.
+                            &lt;&lt;else&gt;&gt;
+                                Gaps show where bottles were grabbed in a hurry, but several packages remain standing.
+                            &lt;&lt;/if&gt;&gt;
+                            
+                            &lt;&lt;if $job == &quot;Doctor&quot; or hasTrait(&quot;FIELD MEDIC&quot;)&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;span style=&quot;color:var(--accent-blue); font-size:0.85em; font-style:italic;&quot;&gt;
+                                [MEDIC] You spot broad-spectrum antibiotics with a recent refill date.
+                                &lt;/span&gt;
+                            &lt;&lt;/if&gt;&gt;
+                        &lt;/div&gt;
+
+                        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top: auto; padding-top: 15px; width: 100%;&quot;&gt;
+                            &lt;button style=&quot;width: 100%; margin: 0;&quot;&gt;
+                                &lt;&lt;link &quot;Search Cabinet&quot;&gt;&gt;
+                                    &lt;&lt;addTime 2&gt;&gt;
+                                    &lt;&lt;set $looted_medicine to true&gt;&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        &lt;&lt;run setup.addItem(&quot;Painkillers&quot;, 1)&gt;&gt;
+                                        &lt;&lt;run setup.addItem(&quot;Bandage&quot;, 1)&gt;&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        &lt;&lt;run setup.addItem(&quot;Painkillers&quot;, 2)&gt;&gt;
+                                        &lt;&lt;run setup.addItem(&quot;Bandage&quot;, 1)&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;&lt;if $job == &quot;Doctor&quot; or hasTrait(&quot;FIELD MEDIC&quot;)&gt;&gt;
+                                        &lt;&lt;run setup.addItem(&quot;Antibiotics&quot;, 2)&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;&lt;if $job == &quot;Doctor&quot; or hasTrait(&quot;FIELD MEDIC&quot;)&gt;&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        &lt;span class=&quot;btn-sub&quot; style=&quot;font-size:0.7em;&quot;&gt;Acquire: &lt;b&gt;1× Painkillers&lt;/b&gt;, &lt;b&gt;1× Bandage&lt;/b&gt;, &lt;b&gt;2× Pills&lt;/b&gt;.&lt;/span&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        &lt;span class=&quot;btn-sub&quot; style=&quot;font-size:0.7em;&quot;&gt;Acquire: &lt;b&gt;2× Painkillers&lt;/b&gt;, &lt;b&gt;1× Bandage&lt;/b&gt;, &lt;b&gt;2× Pills&lt;/b&gt;.&lt;/span&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                &lt;&lt;else&gt;&gt;
+                                    &lt;&lt;if _arrivedLate&gt;&gt;
+                                        &lt;span class=&quot;btn-sub&quot; style=&quot;font-size:0.7em;&quot;&gt;Acquire: &lt;b&gt;1× Painkillers&lt;/b&gt;, &lt;b&gt;1× Bandage&lt;/b&gt;.&lt;/span&gt;
+                                    &lt;&lt;else&gt;&gt;
+                                        &lt;span class=&quot;btn-sub&quot; style=&quot;font-size:0.7em;&quot;&gt;Acquire: &lt;b&gt;2× Painkillers&lt;/b&gt;, &lt;b&gt;1× Bandage&lt;/b&gt;.&lt;/span&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                &lt;&lt;/if&gt;&gt;
+                            &lt;/button&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;&lt;else&gt;&gt;
+                    &lt;div class=&quot;crisis-card&quot; style=&quot;opacity:0.5; background: rgba(0,40,60,0.1); border: 1px solid #333; padding: 15px; display: flex; flex-direction: column;&quot;&gt;
+                        &lt;span style=&quot;color:var(--accent-green); font-weight:bold;&quot;&gt;✓ [CABINET SEARCHED]&lt;/span&gt;&lt;br&gt;
+                        Cleared the back row of the medicine cabinet.
+                    &lt;/div&gt;
+                &lt;&lt;/if&gt;&gt;
+
+                /* ══ ZONE 3: THE LIVING ROOM (NEW LORE) ══ */
+                &lt;&lt;if not $looted_living&gt;&gt;
+                    &lt;div class=&quot;crisis-card&quot; style=&quot;background: rgba(0,40,60,0.2); border: 1px solid #333; padding: 15px; display: flex; flex-direction: column; grid-column: 1 / -1; box-sizing: border-box;&quot;&gt;
+                        
+                        &lt;div style=&quot;display: flex; gap: 15px; flex-wrap: wrap;&quot;&gt;
+                            &lt;img src=&quot;image/Act3/house_livingroom.gif&quot; style=&quot;width: 100%; max-width: 250px; height: 160px; object-fit: cover; border: 1px solid #222; flex-shrink: 0;&quot;&gt;
+                            
+                            &lt;div style=&quot;flex-grow: 1;&quot;&gt;
+                                &lt;b style=&quot;color:var(--accent-gold); font-size:1.1em;&quot;&gt;The Living Room&lt;/b&gt;&lt;br&gt;&lt;br&gt;
+                                The coffee table holds a folded road map of King County, an open leather-bound journal, and a small framed photograph face-up next to it.
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;if _arrivedLate&gt;&gt;
+                                    The fat pillar candle on the table has burned completely down into an unusable puddle of cold wax.
+                                &lt;&lt;else&gt;&gt;
+                                    A fat pillar candle sits here, burning brightly and casting a warm glow over the pages.
+                                &lt;&lt;/if&gt;&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top: auto; padding-top: 15px; width: 100%;&quot;&gt;
+                            &lt;button style=&quot;width: 100%; margin: 0;&quot;&gt;
+                                &lt;&lt;link &quot;Read Journal &amp; Search&quot;&gt;&gt;
+                                    &lt;&lt;addTime 3&gt;&gt;
+                                    &lt;&lt;set $looted_living to true&gt;&gt;
+                                    &lt;&lt;set $hum += 15&gt;&gt;
+                                    &lt;&lt;if not _arrivedLate&gt;&gt;
+                                        &lt;&lt;run setup.addItem(&quot;Lighter&quot;, 1)&gt;&gt;
+                                    &lt;&lt;/if&gt;&gt;
+                                    &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;&lt;if _arrivedLate&gt;&gt;
+                                    &lt;span class=&quot;btn-sub&quot; style=&quot;font-size:0.7em;&quot;&gt;Read what was left behind. &lt;b style=&quot;color:var(--accent-green);&quot;&gt;+15 Humanity.&lt;/b&gt;&lt;/span&gt;
+                                &lt;&lt;else&gt;&gt;
+                                    &lt;span class=&quot;btn-sub&quot; style=&quot;font-size:0.7em;&quot;&gt;Read what was left behind. Take the lighter. &lt;b style=&quot;color:var(--accent-green);&quot;&gt;+15 Humanity.&lt;/b&gt;&lt;/span&gt;
+                                &lt;&lt;/if&gt;&gt;
+                            &lt;/button&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;&lt;else&gt;&gt;
+                    &lt;div class=&quot;crisis-card&quot; style=&quot;background: rgba(0,40,60,0.1); border: 1px solid #333; padding: 15px; grid-column: 1 / -1;&quot;&gt;
+                        &lt;span style=&quot;color:var(--accent-green); font-weight:bold;&quot;&gt;✓ [LIVING ROOM SEARCHED]&lt;/span&gt;
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;if $int &gt;= 5 or hasTrait(&quot;THEORY&quot;) or $job == &quot;Police Officer&quot;&gt;&gt;
+                            The journal sits next to a framed photograph of a smiling little girl. The handwriting inside is rigid, pressed hard into the paper. The ink is fresh.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;div style=&quot;padding:10px; background:rgba(30,25,10,0.4); border-left:2px solid var(--accent-gold); font-size:0.85em; color:#ccc; font-style:italic; line-height:1.6;&quot;&gt;
+                                &quot;Day 0. 22:00. The infection hit us two hours before the city sirens even started. I tried to get Emma to the high school sanctuary. We didn&#39;t make it to the gates. I wear the badge, but I couldn&#39;t protect my own daughter. Now I just sit in her empty house, scouting the perimeter, finding stragglers to save because I couldn&#39;t save her. The Vice Principal has the high school locked down tight. They&#39;re a good leader, maybe the best we could ask for, but they are strict. They aren&#39;t letting anyone through the gates without a thorough vetting. I&#39;ve been vouching for the ones who deserve to live.&quot;
+                            &lt;/div&gt;
+                            &lt;br&gt;
+                            &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. The Vice Principal is running the sanctuary? You know them. If anyone can hold a perimeter, it&#39;s them. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.&lt;/i&gt;
+                        &lt;&lt;else&gt;&gt;
+                            The journal sits next to a framed photograph of a little girl. The handwriting inside is frantic but fresh.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;div style=&quot;padding:10px; background:rgba(30,25,10,0.4); border-left:2px solid var(--accent-gold); font-size:0.85em; color:#ccc; font-style:italic; line-height:1.6;&quot;&gt;
+                                &quot;Emma didn&#39;t make it to the sanctuary. I couldn&#39;t save my own daughter. Now I just scout the roads, trying to guide stragglers to the gates to make up for it. The Vice Principal has the high school on total lockdown. They&#39;re strict, but it&#39;s keeping the place safe. I&#39;ll vouch for whoever makes it this far.&quot;
+                            &lt;/div&gt;
+                            &lt;br&gt;
+                            &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. You memorize the sanctuary coordinates from the road map. You know what happened here.&lt;/i&gt;
+                        &lt;&lt;/if&gt;&gt;
+                    &lt;/div&gt;
+                &lt;&lt;/if&gt;&gt;
             &lt;/div&gt;
+            
+            &lt;&lt;if ($looted_kitchen or $looted_medicine or $looted_living) and not $home_reyes_found&gt;&gt;
+                &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:25px;&quot;&gt;
+                    &lt;button style=&quot;border-left-color: var(--accent-red) !important; background: rgba(138,28,28,0.2);&quot;&gt;
+                        &lt;&lt;link &quot;Move deeper into the house&quot;&gt;&gt;
+                            &lt;&lt;set $home_phase to 4&gt;&gt;
+                            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;&lt;/if&gt;&gt;
         &lt;/div&gt;
-    &lt;&lt;/if&gt;&gt;
-
-&lt;/div&gt;
-
-&lt;&lt;if ($looted_kitchen or $looted_medicine or $looted_living) and not $home_reyes_found&gt;&gt;
-    &lt;div style=&quot;margin-top:20px; text-align:center;&quot;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;Continue searching&quot;&gt;&gt;
-                &lt;&lt;set $home_phase to 4&gt;&gt;
-                &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Move deeper into the house.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;/div&gt;
-&lt;&lt;/if&gt;&gt;
 
 /*
 ══════════════════════════════════════════════════════════════════════════
@@ -8338,468 +8317,432 @@ Three areas within reach. You can search them in any order.
 */
 &lt;&lt;elseif $home_phase == 4&gt;&gt;
 
-&lt;h2&gt;THE COLONIAL HOUSE — UPSTAIRS&lt;/h2&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            THE COLONIAL HOUSE — UPSTAIRS
+        &lt;/div&gt;
 
-&lt;div style=&quot;margin-bottom:15px; text-align:center;&quot;&gt;
-    &lt;img src=&quot;image/Act3/house_hallway_stairs.gif&quot;
-         style=&quot;max-width:100%; border:1px solid #333; box-shadow:0 4px 8px rgba(0,0,0,0.5);&quot;&gt;
-&lt;/div&gt;
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;img src=&quot;image/Act3/house_hallway_stairs.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+        &lt;/div&gt;
 
-You hear it between one room and the next.
-&lt;br&gt;&lt;br&gt;
-A floorboard. Upstairs. One deliberate creak—the sound of weight shifting
-from one foot to the other. Then silence. Then footsteps, slow and careful,
-moving toward the top of the stairs.
-&lt;br&gt;&lt;br&gt;
-&lt;&lt;nobr&gt;&gt;
-&lt;&lt;if _hasVane&gt;&gt;
-    Vane&#39;s hand finds your arm. He doesn&#39;t say anything. His eyes go to
-    the ceiling, tracking the sound.
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
-&lt;br&gt;&lt;br&gt;
-You have maybe four seconds to decide your posture before whoever is up
-there reaches the landing.
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            You hear it between one room and the next.
+            &lt;br&gt;&lt;br&gt;
+            A floorboard. Upstairs. One deliberate creak—the sound of weight shifting from one foot to the other. Then silence. Then footsteps, slow and careful, moving toward the top of the stairs.
+            &lt;br&gt;&lt;br&gt;
+            &lt;&lt;if _hasVane&gt;&gt;
+                Vane&#39;s trembling hand finds your arm. He doesn&#39;t say anything, but his breathing quickens. His eyes go wide, tracking the sound across the ceiling.
+                &lt;br&gt;&lt;br&gt;
+            &lt;&lt;/if&gt;&gt;
+            You have maybe four seconds to decide your posture before whoever is up there reaches the landing.
 
-&lt;div class=&quot;choice-menu&quot;&gt;
+            &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                &lt;button&gt;
+                    &lt;&lt;link &quot;Step into the hall. Raise your hands. Show you&#39;re not a threat.&quot;&gt;&gt;
+                        &lt;&lt;set $stranger_trust to &quot;trusted&quot;&gt;&gt;
+                        &lt;&lt;set $home_phase to 5&gt;&gt;
+                        &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;Whoever is up there is scared. Scared people react to perceived threats. You remove the threat.&lt;/span&gt;
+                &lt;/button&gt;
 
-    &lt;button&gt;
-        &lt;&lt;link &quot;Step into the hall. Raise your hands. Show you&#39;re not a threat.&quot;&gt;&gt;
-            &lt;&lt;set $stranger_trust to &quot;trusted&quot;&gt;&gt;
-            &lt;&lt;set $home_phase to 5&gt;&gt;
-            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-        &lt;span class=&quot;btn-sub&quot;&gt;Whoever is up there is scared. Scared people react to perceived threats. You remove the threat.&lt;/span&gt;
-    &lt;/button&gt;
+                &lt;&lt;if hasTrait(&quot;TRUST NO ONE&quot;) or hasTrait(&quot;LIE DETECTOR&quot;)&gt;&gt;
+                    &lt;button&gt;
+                        &lt;&lt;link &quot;Ready your weapon. Let them come to you. [TRUST NO ONE / LIE DETECTOR]&quot;&gt;&gt;
+                            &lt;&lt;set $stranger_trust to &quot;interrogated&quot;&gt;&gt;
+                            &lt;&lt;set $home_phase to 5&gt;&gt;
+                            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TRUST NO ONE / LIE DETECTOR]&lt;/b&gt; Control the chokepoint. Let them descend into your field of view on your terms. You&#39;ll read them instantly.&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;&lt;/if&gt;&gt;
 
-    &lt;&lt;if hasTrait(&quot;TRUST NO ONE&quot;) or hasTrait(&quot;LIE DETECTOR&quot;)&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;Raise your weapon. Hold the bottom of the stairs. Let them come to you. [TRUST NO ONE / LIE DETECTOR]&quot;&gt;&gt;
-                &lt;&lt;set $stranger_trust to &quot;interrogated&quot;&gt;&gt;
-                &lt;&lt;set $home_phase to 5&gt;&gt;
-                &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TRUST NO ONE / LIE DETECTOR]&lt;/b&gt; Control the chokepoint. Let them descend into your field of view on your terms. You&#39;ll know everything you need to know in the first three seconds of eye contact.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
+                &lt;&lt;if hasTrait(&quot;DIPLOMAT&quot;) or hasTrait(&quot;SILVER TONGUE&quot;) or $cha &gt;= 7&gt;&gt;
+                    &lt;button&gt;
+                        &lt;&lt;link &quot;\&quot;We&#39;re survivors. We&#39;ll put everything back.\&quot; [DIPLOMAT / CHA 7]&quot;&gt;&gt;
+                            &lt;&lt;set $stranger_trust to &quot;allied&quot;&gt;&gt;
+                            &lt;&lt;set $home_phase to 5&gt;&gt;
+                            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[DIPLOMAT / CHA 7]&lt;/b&gt; Announce yourself before they reach the landing. Give them your voice and your meaning to defuse their fear.&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;&lt;/if&gt;&gt;
 
-    &lt;&lt;if hasTrait(&quot;DIPLOMAT&quot;) or hasTrait(&quot;SILVER TONGUE&quot;) or $cha &gt;= 7&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;\&quot;We&#39;re not infected. We&#39;re survivors. We&#39;ll put everything back.\&quot; [DIPLOMAT / CHA 7]&quot;&gt;&gt;
-                &lt;&lt;set $stranger_trust to &quot;allied&quot;&gt;&gt;
-                &lt;&lt;set $home_phase to 5&gt;&gt;
-                &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[DIPLOMAT / CHA 7]&lt;/b&gt; Announce yourself before they reach the landing. Give them your voice, your meaning, and your posture all at once. Fear needs information to become something manageable.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
-
-    &lt;&lt;if hasTrait(&quot;GHOST&quot;) or $skills.stealth &gt;= 2&gt;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;Step back into the kitchen doorway. Watch the stairs from cover. [GHOST / STEALTH 2]&quot;&gt;&gt;
-                &lt;&lt;set $stranger_trust to &quot;observed&quot;&gt;&gt;
-                &lt;&lt;set $home_phase to 5&gt;&gt;
-                &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[GHOST / STEALTH 2]&lt;/b&gt; Disappear before they see you. Watch them come down. Read them completely before they know you&#39;re there. Information before contact.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
-
-&lt;/div&gt;
+                &lt;&lt;if hasTrait(&quot;GHOST&quot;) or $skills.stealth &gt;= 2&gt;&gt;
+                    &lt;button&gt;
+                        &lt;&lt;link &quot;Step back into cover. Watch the stairs. [GHOST / STEALTH 2]&quot;&gt;&gt;
+                            &lt;&lt;set $stranger_trust to &quot;observed&quot;&gt;&gt;
+                            &lt;&lt;set $home_phase to 5&gt;&gt;
+                            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[GHOST / STEALTH 2]&lt;/b&gt; Disappear before they see you. Watch them come down. Read them completely before they know you&#39;re there.&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
 
 /*
 ══════════════════════════════════════════════════════════════════════════
-     PHASE 5 — REYES REVEAL
+     PHASE 5 — REYES REVEAL (VICE PRINCIPAL LORE)
 ══════════════════════════════════════════════════════════════════════════
 */
 &lt;&lt;elseif $home_phase == 5&gt;&gt;
 
-&lt;&lt;set $home_reyes_found to true&gt;&gt;
-
-&lt;&lt;if $stranger_trust == &quot;trusted&quot;&gt;&gt;
-
-    &lt;h2&gt;THE COLONIAL HOUSE — THE HALLWAY&lt;/h2&gt;
-
-    You step into the hall and raise both hands.
-    &lt;br&gt;&lt;br&gt;
-    The figure at the top of the stairs stops. One hand is already on the
-    sidearm at her hip—not drawn, but ready. She takes you in: the raised
-    hands, the stance, the faces behind you.
-    &lt;br&gt;&lt;br&gt;
-    A long pause. Then she lowers her hand from the weapon.
-    &lt;br&gt;&lt;br&gt;
-    She comes down the stairs slowly, one hand trailing the banister. Up
-    close: mid-twenties, tactical respirator around her neck, tinted goggles
-    pushed up onto her forehead, police surplus jacket over civilian clothes.
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        Her eyes are deep with fatigue. She rubs her face, exhaling a shuddering breath.
-        &lt;br&gt;&lt;br&gt;
-        &lt;i&gt;&quot;Deputy Reyes,&quot;&lt;/i&gt; she says, her voice raspy. &lt;i&gt;&quot;Off-duty when it started. I must have drifted off. Haven&#39;t slept since Saturday night... My shift ended when the world did. This is my rest point between resupply runs.&quot;&lt;/i&gt;
-    &lt;&lt;else&gt;&gt;
-        Her eyes are sharp, pupils contracted by adrenaline. Her hand hovers near her weapon.
-        &lt;br&gt;&lt;br&gt;
-        &lt;i&gt;&quot;Deputy Reyes,&quot;&lt;/i&gt; she says, her voice flat. &lt;i&gt;&quot;Off-duty when it started. You&#39;re lucky I didn&#39;t pull the trigger. Walking into a dark house at four in the morning is a good way to get a hole in your chest. This is my staging point.&quot;&lt;/i&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    She looks at the supplies on the counter. Then back at you.
-    &lt;br&gt;&lt;br&gt;
-    &lt;i&gt;&quot;You found the food.&quot;&lt;/i&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;We&#39;ll leave you half. We didn&#39;t know anyone was here.&quot;&gt;&gt;
-    &lt;br&gt;
-    She shakes her head.
-    &lt;br&gt;&lt;br&gt;
-    &lt;i&gt;&quot;Keep it. I&#39;ve got enough. And I&#39;ve got something more useful than
-    canned beans—I know where the high school sanctuary is, I know the
-    checkpoint layout, and I know who&#39;s running it now. Which is something
-    you&#39;re going to want to know before you drive up to that gate.&quot;&lt;/i&gt;
-
-&lt;&lt;elseif $stranger_trust == &quot;interrogated&quot;&gt;&gt;
-
-    &lt;h2&gt;THE COLONIAL HOUSE — THE HALLWAY&lt;/h2&gt;
-
-    You raise your weapon and hold the bottom of the stairs.
-    &lt;br&gt;&lt;br&gt;
-    The figure at the top stops. Sees the barrel. Her hand moves toward her
-    hip—then stops when she registers your posture. You aren&#39;t panicking.
-    You&#39;re waiting. That&#39;s a different thing.
-    &lt;br&gt;&lt;br&gt;
-    &lt;i&gt;&quot;I&#39;m going to reach up very slowly,&quot;&lt;/i&gt; she says, &lt;i&gt;&quot;and pull this
-    respirator down so you can see my face. Don&#39;t shoot me.&quot;&lt;/i&gt;
-    &lt;br&gt;&lt;br&gt;
-    She does. Mid-twenties. Controlled. 
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        Her skin is pale, exhaustion tracing dark lines under her eyes. She looks like she’s running on empty.
-    &lt;&lt;else&gt;&gt;
-        Her expression is iron-tight. Adrenaline has her snapping alert by the second.
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;nobr&gt;&gt;
-    &lt;&lt;if hasTrait(&quot;LIE DETECTOR&quot;)&gt;&gt;
-        &lt;div style=&quot;padding:10px 14px; background:rgba(0,30,50,0.3); border-left:3px solid var(--accent-blue); margin:10px 0; font-size:0.85em;&quot;&gt;
-            &lt;span style=&quot;color:var(--accent-blue);&quot;&gt;[LIE DETECTOR]&lt;/span&gt;
-            First read: elevated heart rate visible at the throat, natural
-            given the circumstance. Pupil response: alarm, not aggression.
-            No deception signals in the baseline. She&#39;s exactly as scared
-            as a rational person would be with a weapon pointed at them.
+        &lt;&lt;set $home_reyes_found to true&gt;&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            THE COLONIAL HOUSE — THE HALLWAY
         &lt;/div&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;&lt;/nobr&gt;&gt;
-    &lt;i&gt;&quot;Deputy Reyes. Off-duty when it started. This house is my rest point
-    between supply runs to the substation. I&#39;ve been doing this alone since
-    the grid went down. I am not a threat to you.&quot;&lt;/i&gt;
-    &lt;br&gt;&lt;br&gt;
-    She waits. Hands visible.
-    &lt;br&gt;&lt;br&gt;
-    You lower the weapon. Slightly.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;The high school sanctuary. You know where it is.&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;i&gt;&quot;I know where it is and I know what&#39;s changed about it since this
-    morning. Which is the part you actually need.&quot;&lt;/i&gt;
 
-&lt;&lt;elseif $stranger_trust == &quot;allied&quot;&gt;&gt;
-
-    &lt;h2&gt;THE COLONIAL HOUSE — THE HALLWAY&lt;/h2&gt;
-
-    &lt;i&gt;&quot;We&#39;re not infected,&quot;&lt;/i&gt; you say clearly, to the ceiling, to
-    whoever is at the top of the stairs. &lt;i&gt;&quot;We&#39;re survivors. We&#39;ll
-    replace what we take. You have my word.&quot;&lt;/i&gt;
-    &lt;br&gt;&lt;br&gt;
-    Silence. Three seconds of it.
-    &lt;br&gt;&lt;br&gt;
-    Then the footsteps resume—slower now, deliberate. She comes down the
-    stairs with her hand away from her weapon, reading the hallway as she descends.
-    &lt;br&gt;&lt;br&gt;
-    Mid-twenties. Respirator around her neck, goggles up.
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        Her eyes carry the heavy weight of interrupted sleep, her shoulders slumped slightly with fatigue.
-    &lt;&lt;else&gt;&gt;
-        Her movement is taut, prepared to draw her weapon at the slightest sudden motion in the dark.
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    She takes in the group without comment, then looks at you specifically.
-    &lt;br&gt;&lt;br&gt;
-    &lt;i&gt;&quot;You announced yourself,&quot;&lt;/i&gt; she says. Not quite surprised. More
-    like she&#39;s filing it away. &lt;i&gt;&quot;Most people don&#39;t.&quot;&lt;/i&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Most people haven&#39;t thought about what they&#39;d want to hear if they were on the other side of that door.&quot;&gt;&gt;
-    &lt;br&gt;
-    Something in her expression shifts.
-    &lt;br&gt;&lt;br&gt;
-    &lt;i&gt;&quot;Deputy Reyes. This house is mine for now—staging point between
-    runs to the substation east of here. The food&#39;s yours. In exchange,
-    let me tell you what I know about where you&#39;re heading, because I
-    know something happened at the high school sanctuary this morning
-    and you should hear it before you walk into it.&quot;&lt;/i&gt;
-
-&lt;&lt;elseif $stranger_trust == &quot;observed&quot;&gt;&gt;
-
-    &lt;h2&gt;THE COLONIAL HOUSE — THE HALLWAY&lt;/h2&gt;
-
-    You step into the kitchen doorway and go still.
-    &lt;br&gt;&lt;br&gt;
-    The figure descends the stairs. She moves carefully, one hand on the
-    banister, scanning the hallway as she comes down.
-    She hasn&#39;t seen you yet.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;nobr&gt;&gt;
-    &lt;&lt;if hasTrait(&quot;GHOST&quot;)&gt;&gt;
-        &lt;div style=&quot;padding:10px 14px; background:rgba(0,30,50,0.3); border-left:3px solid var(--accent-blue); margin:8px 0; font-size:0.85em;&quot;&gt;
-            &lt;span style=&quot;color:var(--accent-blue);&quot;&gt;[GHOST]&lt;/span&gt;
-            You read her in ten seconds: the weapon at her hip is a
-            standard-issue police sidearm, holstered and snapped. The
-            jacket is surplus, civilian underneath. Her eyes are scanning
-            for sounds, not shapes. She&#39;s frightened but trained. She
-            isn&#39;t going to shoot first.
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;img src=&quot;image/Act3/house_hallway_stairs.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
         &lt;/div&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;&lt;/nobr&gt;&gt;
-    Mid-twenties. Tactical respirator around her neck, goggles pushed up.
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        Her eyes are heavy, blinking away sleep as she steps off the bottom stair.
-    &lt;&lt;else&gt;&gt;
-        Her gaze is sharp, sweeping the dark corners of the foyer.
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    She steps off the bottom stair and turns toward the kitchen.
-    &lt;br&gt;&lt;br&gt;
-    She sees you.
-    &lt;br&gt;&lt;br&gt;
-    Neither of you moves.
-    &lt;br&gt;&lt;br&gt;
-    Then you step fully into the hallway, hands open at your sides.
-    &lt;br&gt;&lt;br&gt;
-    &lt;i&gt;&quot;...You were already there,&quot;&lt;/i&gt; she says quietly. &lt;i&gt;&quot;You were
-    watching me come down.&quot;&lt;/i&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I needed to know what I was dealing with before I introduced myself. Now I know.&quot;&gt;&gt;
-    &lt;br&gt;
-    A long pause. Then she exhales.
-    &lt;br&gt;&lt;br&gt;
-    &lt;i&gt;&quot;Deputy Reyes. This is my rest point between resupply runs. You&#39;re
-    the first people who&#39;ve found it.&quot;&lt;/i&gt; A beat. &lt;i&gt;&quot;And the first
-    people who figured out I was upstairs before I reached the bottom of
-    the stairs. So. What do you want?&quot;&lt;/i&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;The high school sanctuary. We need to get there safely.&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;i&gt;&quot;I can do that. And I can tell you what changed there this morning
-    before you walk up to the gate blind.&quot;&lt;/i&gt;
 
-&lt;&lt;/if&gt;&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-text-reyes&quot;&gt;
 
-/* ── SHARED COMPANION BEAT ── */
-&lt;br&gt;&lt;br&gt;
-&lt;&lt;nobr&gt;&gt;
-&lt;&lt;if _hasVane&gt;&gt;
-    Vane appears in the hallway behind you. He looks at Reyes, then at
-    you, then at Reyes again.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;She&#39;s been running the substation resupply solo. That&#39;s—how long has it been since this started?&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Since the first hour. I didn&#39;t wait to see how bad it would get.&quot;&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-&lt;&lt;elseif _hasMaya&gt;&gt;
-    Through the front window, Maya watches the house. You catch her eye
-    through the glass and give a small nod—&lt;i&gt;safe&lt;/i&gt;—and she relaxes
-    by a fraction. Lily is still asleep.
-    &lt;br&gt;&lt;br&gt;
-&lt;&lt;elseif _hasDiane&gt;&gt;
-    Through the window you can see the car. Diane is watching the porch
-    with her hand on the gear shift, exactly as you left her. You hold
-    up a hand—&lt;i&gt;wait&lt;/i&gt;—and she reads it.
-    &lt;br&gt;&lt;br&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
+                &lt;&lt;if $stranger_trust == &quot;trusted&quot;&gt;&gt;
+                    You step into the hall and raise both hands.
+                    &lt;br&gt;&lt;br&gt;
+                    The figure at the top of the stairs stops. One hand is already on the sidearm at her hip—not drawn, but ready. She takes you in: the raised hands, the stance, the faces behind you.
+                    &lt;br&gt;&lt;br&gt;
+                    A long pause. Then she lowers her hand from the weapon.
+                    &lt;br&gt;&lt;br&gt;
+                    She comes down the stairs slowly. Mid-twenties, tactical respirator around her neck, tinted goggles pushed up onto her forehead, police surplus jacket over civilian clothes.
+                    &lt;&lt;if _arrivedLate&gt;&gt;
+                        Her eyes are deep with fatigue. She rubs her face, exhaling a shuddering breath.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Deputy Reyes. This is my house. I haven&#39;t slept since... since the outbreak hit at 22:00. I just run scouting routes for the sanctuary now.&quot;&gt;&gt;
+                    &lt;&lt;else&gt;&gt;
+                        Her eyes are sharp, pupils contracted by adrenaline. Her hand hovers near her weapon.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Deputy Reyes. This is my house. You&#39;re lucky I didn&#39;t pull the trigger. Walking into a dark home at four in the morning is a good way to get a hole in your chest.&quot;&gt;&gt;
+                    &lt;&lt;/if&gt;&gt;
+                    &lt;br&gt;
+                    She looks at the supplies on the counter. Then back at you.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;You found my supplies.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;We&#39;ll leave you half. We didn&#39;t know anyone was here.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    She shakes her head slowly, looking past you toward the living room.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Keep it. I don&#39;t need much anymore. I saw you looking at the journal. That was my daughter, Emma. We didn&#39;t make it to the sanctuary. Now I just try to guide people who still have a chance. I know where the high school is, I know the checkpoint layout, and I know who&#39;s running it.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;The Vice Principal. I read the journal. I actually know them. They&#39;re a good leader.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;The best we have right now. But that means they&#39;re strict. The guards at the gate won&#39;t hesitate to shoot if you spook them. You&#39;re going to want my vouch before you drive up to that gate.&quot;&gt;&gt;
 
-&lt;&lt;set $home_phase to 6&gt;&gt;
-&lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                &lt;&lt;elseif $stranger_trust == &quot;interrogated&quot;&gt;&gt;
+                    You step into the hallway, gripping your weapon, ready for anything.
+                    &lt;br&gt;&lt;br&gt;
+                    The figure at the top stops. Sees you holding your ground. Her hand moves toward her hip—then stops when she registers your posture. You aren&#39;t panicking. You&#39;re waiting. That&#39;s a different thing.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;span style=&quot;color:var(--accent-red);&quot;&gt;&quot;I&#39;m going to reach up very slowly,&quot;&lt;/span&gt; she says, &lt;span style=&quot;color:var(--accent-red);&quot;&gt;&quot;and pull this respirator down so you can see my face. Stand down.&quot;&lt;/span&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    She does. Mid-twenties. Controlled. 
+                    &lt;&lt;if _arrivedLate&gt;&gt;
+                        Her skin is pale, exhaustion tracing dark lines under her eyes. She looks like she’s running on empty.
+                    &lt;&lt;else&gt;&gt;
+                        Her expression is iron-tight. Adrenaline has her snapping alert by the second.
+                    &lt;&lt;/if&gt;&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;if hasTrait(&quot;LIE DETECTOR&quot;)&gt;&gt;
+                        &lt;div style=&quot;padding:10px 14px; background:rgba(0,30,50,0.3); border-left:3px solid var(--accent-blue); margin:10px 0; font-size:0.85em;&quot;&gt;
+                            &lt;span style=&quot;color:var(--accent-blue); font-weight:bold;&quot;&gt;[LIE DETECTOR]&lt;/span&gt; First read: elevated heart rate visible at the throat, natural given the circumstance. Pupil response: alarm, not aggression. No deception signals in the baseline. She&#39;s grieving and scared, not malicious.
+                        &lt;/div&gt;
+                    &lt;&lt;/if&gt;&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Deputy Reyes. This is my house. I run scouting routes for the high school sanctuary. I&#39;ve been doing this alone since I lost my daughter. I am not a threat to you.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    She waits. Hands visible. You lower your guard. Slightly.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;The high school sanctuary. You know where it is.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;I know the checkpoint, and I know the Vice Principal has it locked down tight. You need my vouch to get in without getting shot.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I know the Vice Principal. They&#39;ll let me in.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Maybe. But their guards are terrified. Let me make the introduction.&quot;&gt;&gt;
 
-/*
-══════════════════════════════════════════════════════════════════════════
-     PHASE 6 — CAR CAPACITY CHECK &amp; BIKE REVEAL
-══════════════════════════════════════════════════════════════════════════
-*/
-&lt;&lt;elseif $home_phase == 6&gt;&gt;
+                &lt;&lt;elseif $stranger_trust == &quot;allied&quot;&gt;&gt;
+                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;We&#39;re not infected. We&#39;re survivors. We&#39;ll replace what we take. You have my word.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    Silence. Three seconds of it.
+                    &lt;br&gt;&lt;br&gt;
+                    Then the footsteps resume—slower now, deliberate. She comes down the stairs with her hand away from her weapon, reading the hallway as she descends. Mid-twenties. Respirator around her neck, goggles up.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;if _arrivedLate&gt;&gt;
+                        Her eyes carry the heavy weight of interrupted sleep, her shoulders slumped slightly with fatigue.
+                    &lt;&lt;else&gt;&gt;
+                        Her movement is taut, prepared to draw her weapon at the slightest sudden motion in the dark.
+                    &lt;&lt;/if&gt;&gt;
+                    &lt;br&gt;
+                    She takes in the group without comment, then looks at you specifically.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;You announced yourself. Most people don&#39;t.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Most people haven&#39;t thought about what they&#39;d want to hear if they were on the other side of that door.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    Something in her expression softens, just a fraction. She looks toward the living room where her journal sits.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Deputy Reyes. This is my home. Or it was. Before I lost my daughter to this... thing. The food is yours. In exchange, let me help you. Because the Vice Principal has the high school on a hair-trigger lockdown, and you shouldn&#39;t walk up to that gate without an escort.&quot;&gt;&gt;
 
-&lt;h2&gt;THE COLONIAL HOUSE — THE ESCORT&lt;/h2&gt;
+                &lt;&lt;elseif $stranger_trust == &quot;observed&quot;&gt;&gt;
+                    You step into the kitchen doorway and go still.
+                    &lt;br&gt;&lt;br&gt;
+                    The figure descends the stairs. She moves carefully, one hand on the banister, scanning the hallway as she comes down. She hasn&#39;t seen you yet.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;if hasTrait(&quot;GHOST&quot;)&gt;&gt;
+                        &lt;div style=&quot;padding:10px 14px; background:rgba(0,30,50,0.3); border-left:3px solid var(--accent-blue); margin:8px 0; font-size:0.85em;&quot;&gt;
+                            &lt;span style=&quot;color:var(--accent-blue); font-weight:bold;&quot;&gt;[GHOST]&lt;/span&gt; You read her in ten seconds: the weapon at her hip is a standard-issue police sidearm, holstered and snapped. The jacket is surplus, civilian underneath. Her eyes are scanning for sounds, not shapes. She&#39;s frightened but trained. She isn&#39;t going to shoot first.
+                        &lt;/div&gt;
+                    &lt;&lt;/if&gt;&gt;
+                    Mid-twenties. Tactical respirator around her neck, goggles pushed up.
+                    &lt;&lt;if _arrivedLate&gt;&gt;
+                        Her eyes are heavy, blinking away sleep as she steps off the bottom stair.
+                    &lt;&lt;else&gt;&gt;
+                        Her gaze is sharp, sweeping the dark corners of the foyer.
+                    &lt;&lt;/if&gt;&gt;
+                    &lt;br&gt;
+                    She sees you. Neither of you moves.
+                    &lt;br&gt;&lt;br&gt;
+                    Then you step fully into the hallway, hands open at your sides.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;span style=&quot;color:var(--accent-red);&quot;&gt;&quot;...You were already there,&quot;&lt;/span&gt; she says quietly. &lt;span style=&quot;color:var(--accent-red);&quot;&gt;&quot;You were watching me come down.&quot;&lt;/span&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I read your journal. I needed to know who I was dealing with before I introduced myself. Now I know.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    A long pause. She looks toward the living room, a flash of deep pain crossing her features. Then she exhales.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Deputy Reyes. This is my house. You&#39;re the first people who&#39;ve figured out I was upstairs before I reached the bottom of the stairs. I couldn&#39;t save my daughter, Emma. But I can guide you. So. Do you want to reach the sanctuary safely?&quot;&gt;&gt;
+                    &lt;br&gt;
+                    &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Yes.&quot;&gt;&gt;
+                    &lt;br&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;I can do that. And I can vouch for you at the gate. The Vice Principal is running a tight ship, and their guards are jumpy.&quot;&gt;&gt;
 
-You move back toward the front door. Reyes follows, pulling her respirator
-up and checking her sidearm with practiced habit.
-&lt;br&gt;&lt;br&gt;
-Outside, the fog has thickened. Your car sits at the curb, its windows
-fogged from the people inside. Reyes stops at the porch rail and looks at it.
+                &lt;&lt;/if&gt;&gt;
 
-&lt;&lt;nobr&gt;&gt;
-&lt;&lt;if _carFull and _hasKids&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    She counts the silhouettes through the glass. A child&#39;s face is visible
-    in the back seat, watching the porch with exhausted, dark-circled eyes.
-    Reyes goes still for a moment.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;You&#39;ve got kids in there.&quot;&gt;&gt;
-    &lt;br&gt;
-    Not a question.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;That car is already full. I&#39;m not adding my weight to it—not with children inside. It&#39;s broad daylight; a blue sedan stands out like a beacon on these logging roads. My bike is in the garage out back. Quiet, no gas, and I know every back route. I&#39;ll ride ahead. Follow my tail light.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;That car is already full. I&#39;m not adding my weight to it—not with children inside. The roads are pitch black and the fog is setting in. My bike is in the garage around the back. Quiet, no gas, and I know the bypasses. I&#39;ll ride ahead. Follow my tail light.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;&lt;set $reyes_rides_bike to true&gt;&gt;
+                &lt;!-- SHARED COMPANION BEAT --&gt;
+                &lt;&lt;if _hasVane&gt;&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    Vane steps timidly into the hallway behind you. He adjusts his glasses, looking at Reyes with a mix of awe and pity.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;You&#39;ve been staying here... alone? Just scouting to save strangers?&quot;&gt;&gt;
+                    &lt;br&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;It&#39;s the only way I can sleep at night, kid. Finding people who still have a chance.&quot;&gt;&gt;
+                &lt;&lt;elseif _hasMaya&gt;&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    Through the front window, Maya watches the house. Reyes catches her eye through the glass, her gaze immediately locking onto the seven-year-old girl tucked under Maya&#39;s arm. 
+                    &lt;br&gt;&lt;br&gt;
+                    A profound, silent grief flashes across the Deputy&#39;s face as she stares at Lily. She gives Maya a slow, affirming nod. &lt;i&gt;I will get your girl there safely.&lt;/i&gt; Maya relaxes by a fraction.
+                &lt;&lt;elseif _hasDiane&gt;&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    Through the window you can see the car. Diane is watching the porch. Reyes sees the twin boys sleeping in the back seat and her posture instantly shifts from defensive to fiercely protective.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;You&#39;ve got kids out there. We need to move them before the streets wake up.&quot;&gt;&gt;
+                &lt;&lt;/if&gt;&gt;
 
-&lt;&lt;elseif _carFull&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    She counts the silhouettes and exhales slowly through her nose.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;You&#39;re already over weight for that chassis. My bike is in the garage out back—I&#39;ve been riding since the grid went down. Quiet, no fuel drain. I&#39;ll take point. You follow.&quot;&gt;&gt;
-    &lt;&lt;set $reyes_rides_bike to true&gt;&gt;
-
-&lt;&lt;elseif _hasKids&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    She sees the children through the window before she sees anything else.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;You&#39;re moving with kids. My bike is in the garage—I&#39;ve been on two wheels since the first hour. Safer for them if I ride ahead and clear the path rather than add another body to a car with children in it.&quot;&gt;&gt;
-    &lt;&lt;set $reyes_rides_bike to true&gt;&gt;
-
-&lt;&lt;else&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    She glances at the car, then back at you.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;My bike is in the garage out back. I&#39;ve been riding since the first hour—quiet, no fuel drain, and I know a back route that keeps you off the main road entirely. I can lead from the front, or ride in your back seat if you&#39;d rather keep the group together. Your call.&quot;&gt;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
-
-&lt;&lt;if not _carFull and not _hasKids&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;div class=&quot;choice-menu&quot;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;\&quot;Take the bike. Lead us in.\&quot;&quot;&gt;&gt;
-                &lt;&lt;set $reyes_rides_bike to true&gt;&gt;
-                &lt;&lt;set $home_phase to 7&gt;&gt;
-                &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;She knows the roads and she knows the checkpoint. Let her do what she does.&lt;/span&gt;
-        &lt;/button&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;\&quot;Get in the car. I want you where I can see you.\&quot;&quot;&gt;&gt;
-                &lt;&lt;set $reyes_rides_bike to false&gt;&gt;
-                &lt;&lt;set $home_phase to 7&gt;&gt;
-                &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;
-            &lt;&lt;nobr&gt;&gt;
-            &lt;&lt;if hasTrait(&quot;TRUST NO ONE&quot;)&gt;&gt;
-                &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TRUST NO ONE]&lt;/b&gt; You don&#39;t let someone you just met ride ahead of your group unsupervised.
-            &lt;&lt;else&gt;&gt;
-                Keep the group together. Slower, but unified.
-            &lt;&lt;/if&gt;&gt;
-            &lt;&lt;/nobr&gt;&gt;
+                &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                    &lt;button style=&quot;border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);&quot;&gt;
+                        &lt;&lt;link &quot;Discuss transportation ▼&quot;&gt;&gt;
+                            &lt;&lt;set $home_phase to 6&gt;&gt;
+                            &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
             &lt;/span&gt;
-        &lt;/button&gt;
-    &lt;/div&gt;
-&lt;&lt;else&gt;&gt;
-    &lt;&lt;nobr&gt;&gt;&lt;&lt;set $home_phase to 7&gt;&gt;&lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;&lt;&lt;/nobr&gt;&gt;
-&lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
 
 /*
 ══════════════════════════════════════════════════════════════════════════
-     PHASE 7 — DEPARTURE
+     PHASE 6 &amp; 7 — CAR CAPACITY CHECK &amp; DEPARTURE
 ══════════════════════════════════════════════════════════════════════════
 */
-&lt;&lt;elseif $home_phase == 7&gt;&gt;
+&lt;&lt;elseif $home_phase == 6 or $home_phase == 7&gt;&gt;
 
-&lt;&lt;if $reyes_rides_bike&gt;&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            THE COLONIAL HOUSE — THE ESCORT
+        &lt;/div&gt;
 
-    Reyes disappears around the side of the house. A minute later, she
-    rolls a matte-black mountain bike out of the garage—no reflectors,
-    deliberately invisible. She checks the tires once and clips a small
-    red light to the seat post.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;nobr&gt;&gt;
-    &lt;&lt;if _hasVane&gt;&gt;
-        &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;She had that bike prepped and ready. She&#39;s been doing this since the start.&quot;&gt;&gt;
-        &lt;br&gt;
-    &lt;&lt;elseif _hasMaya&gt;&gt;
-        &lt;&lt;if _arrivedLate&gt;&gt;
-            In the car, Maya watches Reyes through the windshield. Her posture relaxes slightly under the morning light. Another survivor holding it together.
-        &lt;&lt;else&gt;&gt;
-            In the car, Maya watches Reyes through the windshield. Her eyes track the blinking red light into the dark, suspicious but acknowledging the help.
-        &lt;&lt;/if&gt;&gt;
-        &lt;br&gt;&lt;br&gt;
-    &lt;&lt;elseif _hasDiane&gt;&gt;
-        &lt;&lt;if _arrivedLate&gt;&gt;
-            Diane&#39;s hand comes off the gear shift as Reyes rolls the bike out. She watches the red morning light catch the frame, silent and calculating.
-        &lt;&lt;else&gt;&gt;
-            Diane&#39;s hand comes off the gear shift as Reyes rolls the bike out. One of her boys presses his face to the glass, watching the red light pulse in the dark.
-        &lt;&lt;/if&gt;&gt;
-        &lt;br&gt;&lt;br&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;&lt;/nobr&gt;&gt;
-    Reyes pulls up alongside your window, the red tail light already blinking.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Follow the red light. Twenty-meter gap. Kill your headlights when I kill mine. When we hit the checkpoint fence, stay in the car and let me do the talking.&quot;&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    A beat. Something behind her eyes.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;The people running the sanctuary right now—just let me handle the introduction. It&#39;ll go better.&quot;&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    She doesn&#39;t explain what she means by &lt;i&gt;better.&lt;/i&gt;
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        She pushes off into the cold morning fog. The small red light bobs once, then steadies—a dim ruby point floating north through the gray mist.
-    &lt;&lt;else&gt;&gt;
-        She pushes off into the pitch-black fog. The small red light bobs once, then steadies—a dim ruby point floating north through the dark.
-    &lt;&lt;/if&gt;&gt;
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;&lt;if _arrivedLate&gt;&gt;
+                &lt;img src=&quot;image/Act3/suburban_house_morning.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;else&gt;&gt;
+                &lt;img src=&quot;image/Act3/suburban_house_night.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
 
-&lt;&lt;else&gt;&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-text-escort&quot;&gt;
+                &lt;&lt;if $home_phase == 6&gt;&gt;
+                    You move back toward the front door. Reyes follows, pulling her respirator up and checking her sidearm with practiced habit. Outside, the fog has thickened. Your car sits at the curb, its windows fogged from the people inside. Reyes stops at the porch rail and looks at it.
 
-    Reyes locks the house behind her. She gets in the back seat without
-    ceremony, sets her respirator on her knee, and faces forward.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;North on the main road. I&#39;ll tell you when to turn. When we reach the checkpoint fence, let me get out first and speak to them before you roll up. They know my face.&quot;&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    A pause.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;The people running the sanctuary right now—just let me handle the introduction. It&#39;ll go better.&quot;&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    She doesn&#39;t explain what she means by &lt;i&gt;better.&lt;/i&gt;
+                    &lt;&lt;if _carFull and _hasKids&gt;&gt;
+                        &lt;br&gt;&lt;br&gt;
+                        She counts the silhouettes through the glass. A child&#39;s face is visible in the back seat, watching the porch with exhausted, dark-circled eyes. Reyes goes still, her voice heavy with memory.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;You&#39;ve got kids in there. I&#39;m going to make sure they get inside those walls.&quot;&gt;&gt;
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;if _arrivedLate&gt;&gt;
+                            &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;That car is already full. I&#39;m not adding my weight to it. It&#39;s broad daylight; a blue sedan stands out like a beacon on these logging roads. My bike is in the garage out back. Quiet, no gas, and I know every back route. I&#39;ll ride ahead. Follow my tail light.&quot;&gt;&gt;
+                        &lt;&lt;else&gt;&gt;
+                            &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;That car is already full. I&#39;m not adding my weight to it. The roads are pitch black and the fog is setting in. My bike is in the garage around the back. Quiet, no gas, and I know the bypasses. I&#39;ll ride ahead. Follow my tail light.&quot;&gt;&gt;
+                        &lt;&lt;/if&gt;&gt;
+                        &lt;&lt;set $reyes_rides_bike to true&gt;&gt;
+                        
+                        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                            &lt;button style=&quot;border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);&quot;&gt;
+                                &lt;&lt;link &quot;Accept her plan ▼&quot;&gt;&gt;
+                                    &lt;&lt;set $home_phase to 7&gt;&gt;
+                                    &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                            &lt;/button&gt;
+                        &lt;/div&gt;
 
+                    &lt;&lt;elseif _carFull&gt;&gt;
+                        &lt;br&gt;&lt;br&gt;
+                        She counts the silhouettes and exhales slowly through her nose.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;You&#39;re already over weight for that chassis. My bike is in the garage out back—I&#39;ve been riding since the grid went down. Quiet, no fuel drain. I&#39;ll take point. You follow.&quot;&gt;&gt;
+                        &lt;&lt;set $reyes_rides_bike to true&gt;&gt;
+
+                        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                            &lt;button style=&quot;border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);&quot;&gt;
+                                &lt;&lt;link &quot;Accept her plan ▼&quot;&gt;&gt;
+                                    &lt;&lt;set $home_phase to 7&gt;&gt;
+                                    &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                            &lt;/button&gt;
+                        &lt;/div&gt;
+
+                    &lt;&lt;elseif _hasKids&gt;&gt;
+                        &lt;br&gt;&lt;br&gt;
+                        She sees the children through the window before she sees anything else. She stares at them for a long moment.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;You&#39;re moving with kids. My bike is in the garage—I&#39;ve been on two wheels since the first hour. Safer for them if I ride ahead and clear the path rather than add another body to a car with children in it.&quot;&gt;&gt;
+                        &lt;&lt;set $reyes_rides_bike to true&gt;&gt;
+
+                        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                            &lt;button style=&quot;border-left-color: var(--accent-blue) !important; background: rgba(255,255,255,0.05);&quot;&gt;
+                                &lt;&lt;link &quot;Accept her plan ▼&quot;&gt;&gt;
+                                    &lt;&lt;set $home_phase to 7&gt;&gt;
+                                    &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                            &lt;/button&gt;
+                        &lt;/div&gt;
+
+                    &lt;&lt;else&gt;&gt;
+                        &lt;br&gt;&lt;br&gt;
+                        She glances at the car, then back at you.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;My bike is in the garage out back. I&#39;ve been riding since the first hour—quiet, no fuel drain, and I know a back route that keeps you off the main road entirely. I can lead from the front, or ride in your back seat if you&#39;d rather keep the group together. Your call.&quot;&gt;&gt;
+
+                        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                            &lt;button&gt;
+                                &lt;&lt;link &quot;\&quot;Take the bike. Lead us in.\&quot;&quot;&gt;&gt;
+                                    &lt;&lt;set $reyes_rides_bike to true&gt;&gt;
+                                    &lt;&lt;set $home_phase to 7&gt;&gt;
+                                    &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;span class=&quot;btn-sub&quot;&gt;She knows the roads and she knows the checkpoint. Let her do what she does.&lt;/span&gt;
+                            &lt;/button&gt;
+                            &lt;button&gt;
+                                &lt;&lt;link &quot;\&quot;Get in the car. I want you where I can see you.\&quot;&quot;&gt;&gt;
+                                    &lt;&lt;set $reyes_rides_bike to false&gt;&gt;
+                                    &lt;&lt;set $home_phase to 7&gt;&gt;
+                                    &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;span class=&quot;btn-sub&quot;&gt;
+                                    &lt;&lt;if hasTrait(&quot;TRUST NO ONE&quot;)&gt;&gt;
+                                        &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TRUST NO ONE]&lt;/b&gt; You don&#39;t let someone you just met ride ahead of your group unsupervised.
+                                    &lt;&lt;else&gt;&gt;
+                                        Keep the group together. Slower, but unified.
+                                    &lt;&lt;/if&gt;&gt;
+                                &lt;/span&gt;
+                            &lt;/button&gt;
+                        &lt;/div&gt;
+                    &lt;&lt;/if&gt;&gt;
+
+                &lt;&lt;elseif $home_phase == 7&gt;&gt;
+                    &lt;&lt;if $reyes_rides_bike&gt;&gt;
+                        Reyes disappears around the side of the house. A minute later, she rolls a matte-black mountain bike out of the garage—no reflectors, deliberately invisible. She checks the tires once and clips a small red light to the seat post.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;if _hasVane&gt;&gt;
+                            &lt;&lt;chat &quot;Vane&quot; &quot;image/avatars/vane.gif&quot; &quot;right&quot; &quot;She had that bike prepped and ready. She&#39;s been surviving like a ghost since the start.&quot;&gt;&gt;
+                            &lt;br&gt;
+                        &lt;&lt;elseif _hasMaya&gt;&gt;
+                            &lt;&lt;if _arrivedLate&gt;&gt;
+                                In the car, Maya watches Reyes through the windshield. Her posture relaxes slightly under the morning light. Another survivor holding it together.
+                            &lt;&lt;else&gt;&gt;
+                                In the car, Maya watches Reyes through the windshield. Her eyes track the blinking red light into the dark, suspicious but acknowledging the help.
+                            &lt;&lt;/if&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;elseif _hasDiane&gt;&gt;
+                            &lt;&lt;if _arrivedLate&gt;&gt;
+                                Diane&#39;s hand comes off the gear shift as Reyes rolls the bike out. She watches the red morning light catch the frame, silent and calculating.
+                            &lt;&lt;else&gt;&gt;
+                                Diane&#39;s hand comes off the gear shift as Reyes rolls the bike out. One of her boys presses his face to the glass, watching the red light pulse in the dark.
+                            &lt;&lt;/if&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;/if&gt;&gt;
+                        
+                        Reyes pulls up alongside your window, the red tail light already blinking.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Follow the red light. Twenty-meter gap. Kill your headlights when I kill mine. When we hit the checkpoint fence, stay in the car and let me do the talking.&quot;&gt;&gt;
+                        &lt;br&gt;
+                        A beat.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;The Vice Principal has the perimeter guards on high alert. Just let me handle the introduction so no one gets jumpy.&quot;&gt;&gt;
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;if _arrivedLate&gt;&gt;
+                            She pushes off into the cold morning fog. The small red light bobs once, then steadies—a dim ruby point floating north through the gray mist.
+                        &lt;&lt;else&gt;&gt;
+                            She pushes off into the pitch-black fog. The small red light bobs once, then steadies—a dim ruby point floating north through the dark.
+                        &lt;&lt;/if&gt;&gt;
+
+                    &lt;&lt;else&gt;&gt;
+                        Reyes locks the house behind her. She gets in the back seat without ceremony, sets her respirator on her knee, and faces forward.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;North on the main road. I&#39;ll tell you when to turn. When we reach the checkpoint fence, let me get out first and speak to them before you roll up. They know my face.&quot;&gt;&gt;
+                        &lt;br&gt;
+                        A pause.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;The Vice Principal has the perimeter guards on high alert. Just let me handle the introduction so no one gets jumpy.&quot;&gt;&gt;
+                    &lt;&lt;/if&gt;&gt;
+
+                    &lt;br&gt;&lt;br&gt;
+                    The engine turns over. The colonial house disappears into the fog behind you as you pull away from the curb—its intact windows, 
+                    &lt;&lt;if _arrivedLate&gt;&gt;
+                        the cold, spent candle stub,
+                    &lt;&lt;else&gt;&gt;
+                        the burning candle,
+                    &lt;&lt;/if&gt;&gt;
+                    the journal left open on the coffee table. Someone tried to hold on to their humanity here despite losing everything. You hope it&#39;s enough to get you through the gates.
+                    &lt;br&gt;&lt;br&gt;
+                    Whatever Reyes is preparing to tell the guards—you&#39;ll hear it when you get there.
+
+                    &lt;&lt;set $companion_reyes to true&gt;&gt;
+                    &lt;&lt;set $home_phase to undefined&gt;&gt;
+
+                    &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:30px;&quot;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;Follow Reyes north toward the sanctuary&quot;&gt;&gt;
+                                &lt;&lt;completeObjective &quot;find_intel&quot;&gt;&gt;
+                                &lt;&lt;addObjective &quot;reach_safehaven&quot; &quot;Find and gain entry into the High School Sanctuary&quot;&gt;&gt;
+                                &lt;&lt;purgeCompleted&gt;&gt; 
+                                &lt;&lt;goto &quot;Act3_ArrivalSchool&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;She knows the checkpoint. She knows the people inside. Following her is your best chance to get past those jumpy guards alive.&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+
+                &lt;&lt;/if&gt;&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
 &lt;&lt;/if&gt;&gt;
 
-&lt;br&gt;&lt;br&gt;
-The engine turns over. The colonial house disappears into the fog behind
-you as you pull away from the curb—its intact windows, 
-&lt;&lt;if _arrivedLate&gt;&gt;
-the cold, spent candle stub,
-&lt;&lt;else&gt;&gt;
-the burning candle,
-&lt;&lt;/if&gt;&gt;
-its journal left open on the coffee table. Someone tried to hold on to
-something normal here. You hope they made it to wherever they went.
-&lt;br&gt;&lt;br&gt;
-Whatever Reyes knows about what&#39;s waiting at the high school—you&#39;ll hear
-it when she&#39;s ready. Or when you get there.
-
-&lt;&lt;nobr&gt;&gt;
-&lt;&lt;set $companion_reyes to true&gt;&gt;
-&lt;&lt;set $home_phase to undefined&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
-
-&lt;div style=&quot;margin-top:30px; text-align:center;&quot;&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;Follow Reyes north toward the sanctuary&quot;&gt;&gt;
-        	    &lt;&lt;completeObjective &quot;find_intel&quot;&gt;&gt;
-    			&lt;&lt;addObjective &quot;reach_safehaven&quot; &quot;Find and gain entry into the High School Sanctuary&quot;&gt;&gt;
-    			&lt;&lt;purgeCompleted&gt;&gt; /* METHOD B: Sweeps the HUD clean for Act 3 Sanctuary */
-            &lt;&lt;goto &quot;Act3_ArrivalSchool&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-        &lt;span class=&quot;btn-sub&quot;&gt;She knows the checkpoint. She knows the people inside. Whatever &lt;i&gt;better&lt;/i&gt; means—you need her right now more than you need the answer.&lt;/span&gt;
-    &lt;/button&gt;
+    &lt;/div&gt;
 &lt;/div&gt;
-
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="17" name="Act3_Meeting_Evelyn" tags="" position="750,1750" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="17" name="Act3_Meeting_Evelyn" tags="" position="750,1750" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;headmaster_office&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
