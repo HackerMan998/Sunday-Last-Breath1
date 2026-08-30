@@ -4081,7 +4081,7 @@ window.preloadAssets = function(assetList) {
             }
         }
     });
-};</script><tw-tag name="PassageReady" color="green"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-tag name="Initialize" color="red"></tw-tag><tw-passagedata pid="1" name="Act2_5_MarcusCabin" tags="" position="450,1300" size="100,100">&lt;&lt;nobr&gt;&gt;
+};</script><tw-tag name="Initialize" color="red"></tw-tag><tw-tag name="PassageReady" color="green"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-passagedata pid="1" name="Act2_5_MarcusCabin" tags="" position="450,1300" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* ====================================================================
    INITIALIZATION &amp; STATE SETUP
    ==================================================================== */
@@ -7380,6 +7380,8 @@ Miller turns to you, placing a heavy hand on your shoulder.
     &lt;&lt;set $companions to []&gt;&gt;
 &lt;&lt;/if&gt;&gt;
 
+&lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
+
 &lt;&lt;if ndef $act3_phase&gt;&gt;
     &lt;&lt;set $act3_phase to 1&gt;&gt;
     &lt;&lt;set $inSafehouse to true&gt;&gt;
@@ -7400,188 +7402,217 @@ Miller turns to you, placing a heavy hand on your shoulder.
 &lt;&lt;/if&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
+
 /* ═════════════════════════════════════════════════════════════════════
    PHASE 1 — THE BARRICADES
    ═════════════════════════════════════════════════════════════════════ */
 &lt;&lt;if $act3_phase == 1&gt;&gt;
-    &lt;h2&gt;TIMBERLINE REGIONAL — THE GATES&lt;/h2&gt;
 
-    &lt;div style=&quot;margin-bottom: 15px; text-align: center;&quot;&gt;
-        &lt;&lt;if _arrivedLate&gt;&gt;
-            &lt;img src=&quot;image/Act3_Timberline/exterior_morning.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);&quot;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;img src=&quot;image/Act3_Timberline/exterior_night.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);&quot;&gt;
-        &lt;&lt;/if&gt;&gt;
-    &lt;/div&gt;
-
-    You bring the car to a halt in front of the fortified highschool gates. Overturned school buses form a rigid perimeter. 
-    &lt;br&gt;&lt;br&gt;
-    
-    &lt;&lt;if _arrivedLate&gt;&gt;
-        In the gray morning light, the scale of the operation is clear. Heavily armed sentries patrol the rooftops.
-    &lt;&lt;else&gt;&gt;
-        Blinding halogen floodlights instantly snap onto your windshield, pinning you in the dark.
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    
-    &lt;span style=&quot;color:var(--accent-red); font-weight:bold;&quot;&gt;&quot;KILL THE ENGINE! HANDS WHERE WE CAN SEE THEM!&quot;&lt;/span&gt; a voice bellows through a megaphone. 
-    &lt;br&gt;&lt;br&gt;
-
-    &lt;&lt;if $companion_reyes&gt;&gt;
-        /* -----------------------------------------------------
-           ARRIVAL WITH REYES (Easy Entry)
-           ----------------------------------------------------- */
-        Before you can react, Reyes opens the passenger door and steps out into the light. She raises her police badge high.
-        &lt;br&gt;&lt;br&gt;
-        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Stand down! It&#39;s Deputy Reyes! I&#39;ve got survivors with me. Open the damn gate!&quot;&gt;&gt;
-        &lt;br&gt;
-        The tension instantly evaporates. The rifles lower. A heavy chain rattles, and the massive steel gate slowly drags open.
-        &lt;br&gt;&lt;br&gt;
-        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Drive through. Park near the foyer. I&#39;ll handle the intake.&quot;&gt;&gt;
-
-        &lt;div class=&quot;choice-menu&quot;&gt;
-            &lt;button&gt;
-                &lt;&lt;link &quot;Drive into the compound&quot;&gt;&gt;
-                    &lt;&lt;set $act3_phase to 2&gt;&gt;
-                    &lt;&lt;goto &quot;Act3_ArrivalSchool&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-blue);&quot;&gt;[REYES]&lt;/b&gt; She vouches for you. You bypass the hostile interrogation.&lt;/span&gt;
-            &lt;/button&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            TIMBERLINE REGIONAL — THE GATES
         &lt;/div&gt;
 
-    &lt;&lt;else&gt;&gt;
-        /* -----------------------------------------------------
-           ARRIVAL ALONE / WITH CIVILIANS (Hostile Entry)
-           ----------------------------------------------------- */
-        You put the car in park and slowly raise your hands. Three guards approach the vehicle, rifles leveled directly at your chest. 
-        &lt;br&gt;&lt;br&gt;
-        They yank your door open, dragging you out onto the wet asphalt. They pat you down roughly, checking for bites.
-        &lt;br&gt;&lt;br&gt;
-        &lt;&lt;if def $companions and $companions.length &gt; 0&gt;&gt;
-            They pull your companions out of the car next, forcing you all into a tight line.
-        &lt;&lt;/if&gt;&gt;
-        &lt;br&gt;
-        &quot;No bites,&quot; one of the guards grunts. &quot;They&#39;re clean. Move them inside to Screening.&quot;
-
-        &lt;div class=&quot;choice-menu&quot;&gt;
-            &lt;button&gt;
-                &lt;&lt;link &quot;Comply and walk inside&quot;&gt;&gt;
-                    &lt;&lt;set $act3_phase to 2&gt;&gt;
-                    &lt;&lt;goto &quot;Act3_ArrivalSchool&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;You don&#39;t have a choice. You are escorted into the building at gunpoint.&lt;/span&gt;
-            &lt;/button&gt;
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;&lt;if _arrivedLate&gt;&gt;
+                &lt;img src=&quot;image/Act3_Timberline/exterior_morning.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;else&gt;&gt;
+                &lt;img src=&quot;image/Act3_Timberline/exterior_night.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;/if&gt;&gt;
         &lt;/div&gt;
-    &lt;&lt;/if&gt;&gt;
+
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-phase1&quot;&gt;
+                You bring the car to a halt in front of the fortified highschool gates. Overturned school buses form a rigid perimeter. 
+                &lt;br&gt;&lt;br&gt;
+                
+                &lt;&lt;if _arrivedLate&gt;&gt;
+                    In the gray morning light, the scale of the operation is clear. Heavily armed sentries patrol the rooftops.
+                &lt;&lt;else&gt;&gt;
+                    Blinding halogen floodlights instantly snap onto your windshield, pinning you in the dark.
+                &lt;&lt;/if&gt;&gt;
+                &lt;br&gt;&lt;br&gt;
+                
+                &lt;span style=&quot;color:var(--accent-red); font-weight:bold;&quot;&gt;&quot;KILL THE ENGINE! HANDS WHERE WE CAN SEE THEM!&quot;&lt;/span&gt; a voice bellows through a megaphone. 
+                &lt;br&gt;&lt;br&gt;
+
+                &lt;&lt;if $companion_reyes&gt;&gt;
+                    /* -----------------------------------------------------
+                       ARRIVAL WITH REYES (Easy Entry)
+                       ----------------------------------------------------- */
+                    Before you can react, Reyes opens the passenger door and steps out into the light. She raises her police badge high.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Stand down! It&#39;s Deputy Reyes! I&#39;ve got survivors with me. Open the damn gate!&quot;&gt;&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    The tension instantly evaporates. The rifles lower. A heavy chain rattles, and the massive steel gate slowly drags open.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Drive through. Park near the foyer. I&#39;ll handle the intake.&quot;&gt;&gt;
+
+                    &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;Drive into the compound ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;set $act3_phase to 2&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_ArrivalSchool&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-blue);&quot;&gt;[REYES]&lt;/b&gt; She vouches for you. You bypass the hostile interrogation.&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+
+                &lt;&lt;else&gt;&gt;
+                    /* -----------------------------------------------------
+                       ARRIVAL ALONE / WITH CIVILIANS (Hostile Entry)
+                       ----------------------------------------------------- */
+                    You put the car in park and slowly raise your hands. Three guards approach the vehicle, rifles leveled directly at your chest. 
+                    &lt;br&gt;&lt;br&gt;
+                    They yank your door open, dragging you out onto the wet asphalt. They pat you down roughly, checking for bites.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;if def $companions and $companions.length &gt; 0&gt;&gt;
+                        They pull your companions out of the car next, forcing you all into a tight line.
+                        &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;/if&gt;&gt;
+                    &quot;No bites,&quot; one of the guards grunts. &quot;They&#39;re clean. Move them inside to Screening.&quot;
+
+                    &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                        &lt;button&gt;
+                            &lt;&lt;link &quot;Comply and walk inside ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;set $act3_phase to 2&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_ArrivalSchool&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;You don&#39;t have a choice. You are escorted into the building at gunpoint.&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;&lt;/if&gt;&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
 
 /* ═════════════════════════════════════════════════════════════════════
    PHASE 2 — THE SCREENING ROOM (CONFISCATION)
    ═════════════════════════════════════════════════════════════════════ */
 &lt;&lt;elseif $act3_phase == 2&gt;&gt;
-    &lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
-    &lt;h2&gt;TIMBERLINE REGIONAL — SCREENING ROOM&lt;/h2&gt;
 
-    &lt;div style=&quot;margin-bottom: 15px; text-align: center;&quot;&gt;
-        &lt;img src=&quot;image/Act3_Timberline/screening.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.5);&quot;&gt;
-    &lt;/div&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            TIMBERLINE REGIONAL — SCREENING ROOM
+        &lt;/div&gt;
 
-    You are brought into what used to be a generic utility classroom. Now, it&#39;s a sterile intake zone. A grizzled, exhausted man with a military buzzcut stands behind a foldable table covered in weapons. 
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;I&#39;m Sergeant Vance, Quartermaster. Welcome to Timberline. If you want to stay, you follow the rules. Rule number one: No civilian carries primary firearms inside the perimeter.&quot;&gt;&gt;
-    &lt;br&gt;
-    He points a thick finger at your gear. 
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Hand over the long guns and the heavy ordinance. You&#39;ll get a receipt. You can check them out when you go on patrol. But in here, you&#39;re unarmed.&quot;&gt;&gt;
-    &lt;br&gt;
-    &lt;&lt;if $companion_reyes&gt;&gt;
-        Reyes gives you a subtle nod. She has to surrender her shotgun too.
-    &lt;&lt;/if&gt;&gt;
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;img src=&quot;image/Act3_Timberline/screening.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+        &lt;/div&gt;
 
-    &lt;div class=&quot;choice-menu&quot;&gt;
-        &lt;!-- ALWAYS AVAILABLE: SURRENDER GEAR --&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;Surrender your weapons&quot;&gt;&gt;
-                /* Move weapons from inventory to stash */
-                &lt;&lt;for _i to $inventory.length - 1; _i &gt;= 0; _i--&gt;&gt;
-                    &lt;&lt;set _item to setup.items[$inventory[_i].id]&gt;&gt;
-                    &lt;&lt;if _item.type == &quot;weapon&quot;&gt;&gt;
-                        &lt;&lt;run $quartermaster_stash.push($inventory[_i])&gt;&gt;
-                        &lt;&lt;run $inventory.splice(_i, 1)&gt;&gt;
-                    &lt;&lt;/if&gt;&gt;
-                &lt;&lt;/for&gt;&gt;
-                &lt;&lt;set $equip.weapon to &quot;none&quot;&gt;&gt;
-                &lt;&lt;set $weapons_confiscated to true&gt;&gt;
-                &lt;&lt;set $safehouseTrust += 10&gt;&gt;
-                &lt;&lt;set $act3_phase to 3&gt;&gt;
-                &lt;&lt;goto &quot;Act3_ArrivalSchool&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[+10 TRUST]&lt;/b&gt; Comply with base rules. Your weapons are moved to the Locker Room.&lt;/span&gt;
-        &lt;/button&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-phase2&quot;&gt;
+                You are brought into what used to be a generic utility classroom. Now, it&#39;s a sterile intake zone. A grizzled, exhausted man with a military buzzcut stands behind a foldable table covered in weapons. 
+                &lt;br&gt;&lt;br&gt;
+                &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;I&#39;m Sergeant Vance, Quartermaster. Welcome to Timberline. If you want to stay, you follow the rules. Rule number one: No civilian carries primary firearms inside the perimeter.&quot;&gt;&gt;
+                &lt;br&gt;&lt;br&gt;
+                He points a thick finger at your gear. 
+                &lt;br&gt;&lt;br&gt;
+                &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Hand over the long guns and the heavy ordinance. You&#39;ll get a receipt. You can check them out when you go on patrol. But in here, you&#39;re unarmed.&quot;&gt;&gt;
+                &lt;br&gt;&lt;br&gt;
+                &lt;&lt;if $companion_reyes&gt;&gt;
+                    Reyes gives you a subtle nod. She has to surrender her shotgun too.
+                &lt;&lt;/if&gt;&gt;
 
-        &lt;!-- TRAIT CHECK: SMUGGLE A WEAPON --&gt;
-        &lt;&lt;if hasTrait(&quot;LIE DETECTOR&quot;) or hasTrait(&quot;DIPLOMAT&quot;) or $skills.stealth &gt;= 3&gt;&gt;
-            &lt;&lt;if $inventory.find(i =&gt; setup.items[i.id].type == &quot;weapon&quot; &amp;&amp; setup.items[i.id].desc.includes(&quot;pistol&quot;) || setup.items[i.id].desc.includes(&quot;blade&quot;))&gt;&gt;
-                &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
-                    &lt;&lt;link &quot;Hide a sidearm in your jacket&quot;&gt;&gt;
-                        /* Logic to keep one small weapon, stash the rest */
-                        &lt;&lt;set _keptWeapon to false&gt;&gt;
-                        &lt;&lt;for _i to $inventory.length - 1; _i &gt;= 0; _i--&gt;&gt;
-                            &lt;&lt;set _item to setup.items[$inventory[_i].id]&gt;&gt;
-                            &lt;&lt;if _item.type == &quot;weapon&quot;&gt;&gt;
-                                &lt;&lt;if not _keptWeapon and (_item.desc.includes(&quot;pistol&quot;) or _item.desc.includes(&quot;blade&quot;))&gt;&gt;
-                                    &lt;&lt;set $smuggled_weapon to $inventory[_i].id&gt;&gt;
-                                    &lt;&lt;set _keptWeapon to true&gt;&gt;
-                                &lt;&lt;else&gt;&gt;
+                &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                    &lt;!-- ALWAYS AVAILABLE: SURRENDER GEAR --&gt;
+                    &lt;button style=&quot;border-left-color: var(--accent-green) !important;&quot;&gt;
+                        &lt;&lt;link &quot;Surrender your weapons ▼&quot;&gt;&gt;
+                            &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                            /* Move weapons from inventory to stash */
+                            &lt;&lt;for _i to $inventory.length - 1; _i &gt;= 0; _i--&gt;&gt;
+                                &lt;&lt;set _item to setup.items[$inventory[_i].id]&gt;&gt;
+                                &lt;&lt;if _item.type == &quot;weapon&quot;&gt;&gt;
                                     &lt;&lt;run $quartermaster_stash.push($inventory[_i])&gt;&gt;
                                     &lt;&lt;run $inventory.splice(_i, 1)&gt;&gt;
                                 &lt;&lt;/if&gt;&gt;
-                            &lt;&lt;/if&gt;&gt;
-                        &lt;&lt;/for&gt;&gt;
-                        &lt;&lt;set $equip.weapon to $smuggled_weapon&gt;&gt;
-                        &lt;&lt;set $weapons_confiscated to true&gt;&gt;
-                        &lt;&lt;set $act3_phase to 3&gt;&gt;
-                        &lt;&lt;goto &quot;Act3_ArrivalSchool&quot;&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[DIPLOMAT / LIE DETECTOR / STEALTH 3]&lt;/b&gt; Distract Vance just long enough to slip a pistol or knife into your boot. He takes the heavy gear.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;&lt;/if&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
-    &lt;/div&gt;
+                            &lt;&lt;/for&gt;&gt;
+                            &lt;&lt;set $equip.weapon to &quot;none&quot;&gt;&gt;
+                            &lt;&lt;set $weapons_confiscated to true&gt;&gt;
+                            &lt;&lt;set $safehouseTrust += 10&gt;&gt;
+                            &lt;&lt;set $act3_phase to 3&gt;&gt;
+                            &lt;&lt;goto &quot;Act3_ArrivalSchool&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[+10 TRUST]&lt;/b&gt; Comply with base rules. Your weapons are moved to the Locker Room.&lt;/span&gt;
+                    &lt;/button&gt;
 
+                    &lt;!-- TRAIT CHECK: SMUGGLE A WEAPON --&gt;
+                    &lt;&lt;if hasTrait(&quot;LIE DETECTOR&quot;) or hasTrait(&quot;DIPLOMAT&quot;) or $skills.stealth &gt;= 3&gt;&gt;
+                        &lt;&lt;if $inventory.find(i =&gt; setup.items[i.id].type == &quot;weapon&quot; &amp;&amp; setup.items[i.id].desc.includes(&quot;pistol&quot;) || setup.items[i.id].desc.includes(&quot;blade&quot;))&gt;&gt;
+                            &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                                &lt;&lt;link &quot;Hide a sidearm in your jacket ▼&quot;&gt;&gt;
+                                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                    /* Logic to keep one small weapon, stash the rest */
+                                    &lt;&lt;set _keptWeapon to false&gt;&gt;
+                                    &lt;&lt;for _i to $inventory.length - 1; _i &gt;= 0; _i--&gt;&gt;
+                                        &lt;&lt;set _item to setup.items[$inventory[_i].id]&gt;&gt;
+                                        &lt;&lt;if _item.type == &quot;weapon&quot;&gt;&gt;
+                                            &lt;&lt;if not _keptWeapon and (_item.desc.includes(&quot;pistol&quot;) or _item.desc.includes(&quot;blade&quot;))&gt;&gt;
+                                                &lt;&lt;set $smuggled_weapon to $inventory[_i].id&gt;&gt;
+                                                &lt;&lt;set _keptWeapon to true&gt;&gt;
+                                            &lt;&lt;else&gt;&gt;
+                                                &lt;&lt;run $quartermaster_stash.push($inventory[_i])&gt;&gt;
+                                                &lt;&lt;run $inventory.splice(_i, 1)&gt;&gt;
+                                            &lt;&lt;/if&gt;&gt;
+                                        &lt;&lt;/if&gt;&gt;
+                                    &lt;&lt;/for&gt;&gt;
+                                    &lt;&lt;set $equip.weapon to $smuggled_weapon&gt;&gt;
+                                    &lt;&lt;set $weapons_confiscated to true&gt;&gt;
+                                    &lt;&lt;set $act3_phase to 3&gt;&gt;
+                                    &lt;&lt;goto &quot;Act3_ArrivalSchool&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[DIPLOMAT / LIE DETECTOR / STEALTH 3]&lt;/b&gt; Distract Vance just long enough to slip a pistol or knife into your boot. He takes the heavy gear.&lt;/span&gt;
+                            &lt;/button&gt;
+                        &lt;&lt;/if&gt;&gt;
+                    &lt;&lt;/if&gt;&gt;
+                &lt;/div&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
 
 /* ═════════════════════════════════════════════════════════════════════
    PHASE 3 — RELEASED INTO THE HUB
    ═════════════════════════════════════════════════════════════════════ */
 &lt;&lt;elseif $act3_phase == 3&gt;&gt;
-    &lt;&lt;set $currentLocation to &quot;security_foyer&quot;&gt;&gt;
-    &lt;h2&gt;TIMBERLINE REGIONAL — FOYER&lt;/h2&gt;
 
-    Vance tags your gear and shoves it into a heavy canvas bag. 
-    &lt;br&gt;&lt;br&gt;
-    
-    &lt;&lt;if $smuggled_weapon != &quot;none&quot;&gt;&gt;
-        You feel the cold steel of your &lt;&lt;print $smuggled_weapon&gt;&gt; pressed against your ribs. He didn&#39;t notice a thing.
-        &lt;br&gt;&lt;br&gt;
-    &lt;&lt;/if&gt;&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            TIMBERLINE REGIONAL — FOYER
+        &lt;/div&gt;
 
-    &lt;&lt;if $companion_reyes&gt;&gt;
-        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;I&#39;m going upstairs to brief the Commander. Sit tight. Stay out of trouble. I&#39;ll come get you when they&#39;re ready to see you.&quot;&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;The Commander is dealing with a crisis on the 1st Floor right now. You wait down here. Canteen is down the hall. Infirmary is across the foyer. Don&#39;t make me hunt you down.&quot;&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-    &lt;br&gt;
-    The heavy metal doors click open. You step out into the sprawling, fortified highschool. You made it. You are safe. For now.
-    &lt;br&gt;&lt;br&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-phase3&quot;&gt;
+                Vance tags your gear and shoves it into a heavy canvas bag. 
+                &lt;br&gt;&lt;br&gt;
+                
+                &lt;&lt;if $smuggled_weapon != &quot;none&quot;&gt;&gt;
+                    You feel the cold steel of your &lt;&lt;print $smuggled_weapon&gt;&gt; pressed against your ribs. He didn&#39;t notice a thing.
+                    &lt;br&gt;&lt;br&gt;
+                &lt;&lt;/if&gt;&gt;
 
-    &lt;div class=&quot;choice-menu&quot;&gt;
-        &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;Enter the Safehouse Hub&quot;&gt;&gt;
-                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-blue);&quot;&gt;[FREE ROAM]&lt;/b&gt; Explore the highschool, talk to survivors, and trade supplies.&lt;/span&gt;
-        &lt;/button&gt;
+                &lt;&lt;if $companion_reyes&gt;&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;I&#39;m going upstairs to brief the Commander. Sit tight. Stay out of trouble. I&#39;ll come get you when they&#39;re ready to see you.&quot;&gt;&gt;
+                &lt;&lt;else&gt;&gt;
+                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;The Commander is dealing with a crisis on the 1st Floor right now. You wait down here. Canteen is down the hall. Infirmary is across the foyer. Don&#39;t make me hunt you down.&quot;&gt;&gt;
+                &lt;&lt;/if&gt;&gt;
+                &lt;br&gt;&lt;br&gt;
+                The heavy metal doors click open. You step out into the sprawling, fortified highschool. You made it. You are safe. For now.
+                &lt;br&gt;&lt;br&gt;
+
+                &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                    &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+                        &lt;&lt;link &quot;Enter the Safehouse Hub ▼&quot;&gt;&gt;
+                            &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-blue);&quot;&gt;[FREE ROAM]&lt;/b&gt; Explore the highschool, talk to survivors, and trade supplies.&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
+
+&lt;&lt;/if&gt;&gt;
+
     &lt;/div&gt;
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="15" name="Act3_Arrival_Observe" tags="" position="550,1400" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="Act3_Arrival_Observe" tags="" position="550,1400" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* =====================================================================
      ACT 3: ARRIVAL - OBSERVATION RESOLUTION
    ===================================================================== */
@@ -8011,6 +8042,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
                                     You kneel on the porch and insert the tension wrench into the aged brass keyway. With two light strokes of the pick, the upper pins set into place. The cylinder turns smoothly with a satisfying mechanical click.
                                     &lt;br&gt;&lt;br&gt;
                                     &lt;b style=&quot;color:var(--accent-green);&quot;&gt;Zero noise generated.&lt;/b&gt; The heavy wooden door swings open on well-oiled hinges, revealing the dark, silent hallway within.
+                                    The heavy wooden door swings open on well-oiled hinges, revealing the dark, silent hallway within.
                                     &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
                                         &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
                                             &lt;&lt;link &quot;Step inside the house ▼&quot;&gt;&gt;
@@ -8019,9 +8051,22 @@ Miller turns to you, placing a heavy hand on your shoulder.
                                             &lt;&lt;/link&gt;&gt;
                                         &lt;/button&gt;
                                     &lt;/div&gt;
+                                    &lt;br&gt;&lt;br&gt;
+                            The heavy wooden door swings open on well-oiled hinges, revealing the dark, silent hallway within.
+                            &lt;br&gt;&lt;br&gt;
+                            You step inside, sliding the door shut behind you. 
+                            &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+                                &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                                    &lt;&lt;link &quot;Step inside the house ▼&quot;&gt;&gt;
+                                        &lt;&lt;set $home_phase to 3&gt;&gt;
+                                        &lt;&lt;goto &quot;Act3_Home&quot;&gt;&gt;
+                                    &lt;&lt;/link&gt;&gt;
+                                &lt;/button&gt;
+                            &lt;/div&gt;
                                 &lt;&lt;/replace&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
                             &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[LOCKSMITH / LOCKPICKS]&lt;/b&gt; Old brass tumbler. &lt;b style=&quot;color:var(--accent-green);&quot;&gt;Zero noise.&lt;/b&gt;&lt;/span&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[LOCKSMITH / LOCKPICKS]&lt;/b&gt; Old brass tumbler. Pick the lock silently.&lt;/span&gt;
                         &lt;/button&gt;
                     &lt;&lt;/if&gt;&gt;
 
@@ -8033,6 +8078,9 @@ Miller turns to you, placing a heavy hand on your shoulder.
                                     You follow the narrow stone path around the side of the house, stepping over wet rose bushes into the backyard. The rear kitchen door is closed, but you notice the strike plate isn&#39;t fully seated—someone left in a frantic rush and failed to lock it.
                                     &lt;br&gt;&lt;br&gt;
                                     &lt;b style=&quot;color:var(--accent-green);&quot;&gt;Zero noise generated.&lt;/b&gt; You give the handle a gentle push. The door glides open silently, leading right into the shadowy kitchen.
+                                    You give the handle a gentle push. The door glides open silently, leading right into the shadowy kitchen.
+                                    &lt;br&gt;&lt;br&gt;
+                                    You step inside, sliding the door shut behind you.
                                     &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
                                         &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
                                             &lt;&lt;link &quot;Step inside the house ▼&quot;&gt;&gt;
@@ -8044,6 +8092,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
                                 &lt;&lt;/replace&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
                             &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[PER 5 / TRACKER / AGI 5]&lt;/b&gt; Unlatched back door. &lt;b style=&quot;color:var(--accent-green);&quot;&gt;Zero noise.&lt;/b&gt;&lt;/span&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[PER 5 / TRACKER / AGI 5]&lt;/b&gt; Notice the unlatched back door and slip inside quietly.&lt;/span&gt;
                         &lt;/button&gt;
                     &lt;&lt;else&gt;&gt;
                         &lt;button disabled style=&quot;opacity:0.4; cursor:not-allowed; border-color:#333;&quot;&gt;
@@ -8074,6 +8123,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
                                 &lt;&lt;/replace&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
                             &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[STR 5]&lt;/b&gt; Pop the door frame. Costs 10 STAMINA. &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;Low noise.&lt;/b&gt;&lt;/span&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[STR 5]&lt;/b&gt; Pop the door frame. Costs 10 STAMINA.&lt;/span&gt;
                         &lt;/button&gt;
                     &lt;&lt;else&gt;&gt;
                         &lt;button disabled style=&quot;opacity:0.4; cursor:not-allowed; border-color:#333;&quot;&gt;
@@ -8101,6 +8151,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
                                 &lt;&lt;/replace&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
                             &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TOOLS]&lt;/b&gt; Pop window latch. &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;Low noise.&lt;/b&gt;&lt;/span&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[TOOLS]&lt;/b&gt; Pop window latch with a tool.&lt;/span&gt;
                         &lt;/button&gt;
                     &lt;&lt;/if&gt;&gt;
 
@@ -8114,8 +8165,10 @@ Miller turns to you, placing a heavy hand on your shoulder.
                                 &lt;i&gt;*CRASH—SHATTER!*&lt;/i&gt;
                                 &lt;br&gt;&lt;br&gt;
                                 Shards of glass cascade across the hardwood floor inside with a loud, ringing clatter. The sound carries sharply into the dead, quiet street.
+                                Shards of glass cascade across the hardwood floor inside with a loud, ringing clatter. The sound carries sharply into the dead, quiet street. You freeze, waiting for a horde, but miraculously... the street stays dead.
                                 &lt;br&gt;&lt;br&gt;
                                 &lt;b style=&quot;color:var(--accent-red);&quot;&gt;[HIGH NOISE GENERATED]&lt;/b&gt; You reach through the broken frame, unlock the front deadbolt from inside, and step into the foyer over broken glass.
+                                You reach through the broken frame, unlock the front deadbolt from inside, and step into the foyer over broken glass.
                                 &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
                                     &lt;button style=&quot;border-left-color: var(--accent-red) !important;&quot;&gt;
                                         &lt;&lt;link &quot;Step inside the house ▼&quot;&gt;&gt;
@@ -8127,6 +8180,8 @@ Miller turns to you, placing a heavy hand on your shoulder.
                             &lt;&lt;/replace&gt;&gt;
                         &lt;&lt;/link&gt;&gt;
                         &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[RISK: NOISE]&lt;/b&gt; Smash window pane. &lt;b style=&quot;color:var(--accent-red);&quot;&gt;High noise generated.&lt;/b&gt;&lt;/span&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Smash window pane. Will draw attention if anything is nearby.&lt;/span&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;Smash window pane. Will draw attention if anything is nearby.&lt;/span&gt;
                     &lt;/button&gt;
                 &lt;/div&gt;
             &lt;/span&gt;
@@ -8349,6 +8404,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
                                 &quot;Day 0. 22:00. The infection hit us two hours before the city sirens even started. I tried to get Emma to the high school sanctuary. We didn&#39;t make it to the gates. I wear the badge, but I couldn&#39;t protect my own daughter. Now I just sit in her empty house, scouting the perimeter, finding stragglers to save because I couldn&#39;t save her. The Vice Principal has the high school locked down tight. They&#39;re a good leader, maybe the best we could ask for, but they are strict. They aren&#39;t letting anyone through the gates without a thorough vetting. I&#39;ve been vouching for the ones who deserve to live.&quot;
                             &lt;/div&gt;
                             &lt;br&gt;
+                            &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. The Vice Principal is running the sanctuary? You know them. If anyone can hold a perimeter, it&#39;s them. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.&lt;/i&gt;
                             &lt;&lt;if $anchor == &quot;partner_f&quot;&gt;&gt;
                                 &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. The Vice Principal is running the sanctuary? That&#39;s $anchor_name. Your $anchor_rel. If anyone can hold a perimeter, it&#39;s her. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.&lt;/i&gt;
                             &lt;&lt;elseif $anchor == &quot;partner_m&quot;&gt;&gt;
@@ -8367,6 +8423,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
                                 &quot;Emma didn&#39;t make it to the sanctuary. I couldn&#39;t save my own daughter. Now I just scout the roads, trying to guide stragglers to the gates to make up for it. The Vice Principal has the high school on total lockdown. They&#39;re strict, but it&#39;s keeping the place safe. I&#39;ll vouch for whoever makes it this far.&quot;
                             &lt;/div&gt;
                             &lt;br&gt;
+                            &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. You memorize the sanctuary coordinates from the road map. You know what happened here.&lt;/i&gt;
                             &lt;&lt;if $anchor == &quot;partner_f&quot;&gt;&gt;
                                 &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. The high school is a fortified sanctuary, and your $anchor_rel is running it. You memorize the coordinates from the road map. You know what happened in this house.&lt;/i&gt;
                             &lt;&lt;elseif $anchor == &quot;partner_m&quot; or $anchor == &quot;partner_nb&quot;&gt;&gt;
@@ -10563,6 +10620,7 @@ Server racks hum loudly in the air-conditioned enclosure.
     &lt;&lt;set $zombie_alerted   to false&gt;&gt;
     &lt;&lt;set $made_noise       to false&gt;&gt;
     &lt;&lt;set $stranger_met     to false&gt;&gt;
+    &lt;&lt;set $met_reyes        to false&gt;&gt;
     &lt;&lt;set $stranger_trust   to &quot;none&quot;&gt;&gt;
     &lt;&lt;set $companion_reyes  to false&gt;&gt;
 &lt;&lt;/if&gt;&gt;
@@ -11261,6 +11319,7 @@ Server racks hum loudly in the air-conditioned enclosure.
             &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;I couldn&#39;t save my own little girl. So I volunteered to scout the roads outside the school on my bike... looking for people who still have a chance. You came out of that station alive, which means you&#39;re trying to reach the sanctuary too. But you won&#39;t get past the school gates without someone who knows the guards.&quot;&gt;&gt;
 
             &lt;&lt;set $stranger_met to true&gt;&gt;
+            &lt;&lt;set $met_reyes to true&gt;&gt;
 
             &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
                 &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
@@ -11324,6 +11383,7 @@ Server racks hum loudly in the air-conditioned enclosure.
             &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Deputy Reyes! Slide under the shutter NOW! It&#39;s not going to hold!&quot;&gt;&gt;
 
             &lt;&lt;set $stranger_met to true&gt;&gt;
+            &lt;&lt;set $met_reyes to true&gt;&gt;
 
             &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
                 &lt;button style=&quot;border-left-color: var(--accent-red) !important;&quot;&gt;

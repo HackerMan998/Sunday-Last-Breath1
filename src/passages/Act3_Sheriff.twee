@@ -8,6 +8,7 @@
     <<set $zombie_alerted   to false>>
     <<set $made_noise       to false>>
     <<set $stranger_met     to false>>
+    <<set $met_reyes        to false>>
     <<set $stranger_trust   to "none">>
     <<set $companion_reyes  to false>>
 <</if>>
@@ -706,6 +707,7 @@
             <<chat "Reyes" "image/avatars/reyes.gif" "right" "I couldn't save my own little girl. So I volunteered to scout the roads outside the school on my bike... looking for people who still have a chance. You came out of that station alive, which means you're trying to reach the sanctuary too. But you won't get past the school gates without someone who knows the guards.">>
 
             <<set $stranger_met to true>>
+            <<set $met_reyes to true>>
 
             <div class="choice-menu" style="margin-top:20px;">
                 <button style="border-left-color: var(--accent-blue) !important;">
@@ -769,6 +771,7 @@
             <<chat "Reyes" "image/avatars/reyes.gif" "right" "Deputy Reyes! Slide under the shutter NOW! It's not going to hold!">>
 
             <<set $stranger_met to true>>
+            <<set $met_reyes to true>>
 
             <div class="choice-menu" style="margin-top:20px;">
                 <button style="border-left-color: var(--accent-red) !important;">

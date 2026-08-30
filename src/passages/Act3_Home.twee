@@ -242,6 +242,7 @@
                                     You kneel on the porch and insert the tension wrench into the aged brass keyway. With two light strokes of the pick, the upper pins set into place. The cylinder turns smoothly with a satisfying mechanical click.
                                     <br><br>
                                     <b style="color:var(--accent-green);">Zero noise generated.</b> The heavy wooden door swings open on well-oiled hinges, revealing the dark, silent hallway within.
+                                    The heavy wooden door swings open on well-oiled hinges, revealing the dark, silent hallway within.
                                     <div class="choice-menu" style="margin-top:20px;">
                                         <button style="border-left-color: var(--accent-gold) !important;">
                                             <<link "Step inside the house ▼">>
@@ -250,9 +251,22 @@
                                             <</link>>
                                         </button>
                                     </div>
+                                    <br><br>
+                            The heavy wooden door swings open on well-oiled hinges, revealing the dark, silent hallway within.
+                            <br><br>
+                            You step inside, sliding the door shut behind you. 
+                            <div class="choice-menu" style="margin-top:20px;">
+                                <button style="border-left-color: var(--accent-gold) !important;">
+                                    <<link "Step inside the house ▼">>
+                                        <<set $home_phase to 3>>
+                                        <<goto "Act3_Home">>
+                                    <</link>>
+                                </button>
+                            </div>
                                 <</replace>>
                             <</link>>
                             <span class="btn-sub"><b style="color:var(--accent-gold);">[LOCKSMITH / LOCKPICKS]</b> Old brass tumbler. <b style="color:var(--accent-green);">Zero noise.</b></span>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOCKSMITH / LOCKPICKS]</b> Old brass tumbler. Pick the lock silently.</span>
                         </button>
                     <</if>>
 
@@ -264,6 +278,9 @@
                                     You follow the narrow stone path around the side of the house, stepping over wet rose bushes into the backyard. The rear kitchen door is closed, but you notice the strike plate isn't fully seated—someone left in a frantic rush and failed to lock it.
                                     <br><br>
                                     <b style="color:var(--accent-green);">Zero noise generated.</b> You give the handle a gentle push. The door glides open silently, leading right into the shadowy kitchen.
+                                    You give the handle a gentle push. The door glides open silently, leading right into the shadowy kitchen.
+                                    <br><br>
+                                    You step inside, sliding the door shut behind you.
                                     <div class="choice-menu" style="margin-top:20px;">
                                         <button style="border-left-color: var(--accent-gold) !important;">
                                             <<link "Step inside the house ▼">>
@@ -275,6 +292,7 @@
                                 <</replace>>
                             <</link>>
                             <span class="btn-sub"><b style="color:var(--accent-gold);">[PER 5 / TRACKER / AGI 5]</b> Unlatched back door. <b style="color:var(--accent-green);">Zero noise.</b></span>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[PER 5 / TRACKER / AGI 5]</b> Notice the unlatched back door and slip inside quietly.</span>
                         </button>
                     <<else>>
                         <button disabled style="opacity:0.4; cursor:not-allowed; border-color:#333;">
@@ -305,6 +323,7 @@
                                 <</replace>>
                             <</link>>
                             <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 5]</b> Pop the door frame. Costs 10 STAMINA. <b style="color:var(--accent-gold);">Low noise.</b></span>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[STR 5]</b> Pop the door frame. Costs 10 STAMINA.</span>
                         </button>
                     <<else>>
                         <button disabled style="opacity:0.4; cursor:not-allowed; border-color:#333;">
@@ -332,6 +351,7 @@
                                 <</replace>>
                             <</link>>
                             <span class="btn-sub"><b style="color:var(--accent-gold);">[TOOLS]</b> Pop window latch. <b style="color:var(--accent-gold);">Low noise.</b></span>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[TOOLS]</b> Pop window latch with a tool.</span>
                         </button>
                     <</if>>
 
@@ -345,8 +365,10 @@
                                 <i>*CRASH—SHATTER!*</i>
                                 <br><br>
                                 Shards of glass cascade across the hardwood floor inside with a loud, ringing clatter. The sound carries sharply into the dead, quiet street.
+                                Shards of glass cascade across the hardwood floor inside with a loud, ringing clatter. The sound carries sharply into the dead, quiet street. You freeze, waiting for a horde, but miraculously... the street stays dead.
                                 <br><br>
                                 <b style="color:var(--accent-red);">[HIGH NOISE GENERATED]</b> You reach through the broken frame, unlock the front deadbolt from inside, and step into the foyer over broken glass.
+                                You reach through the broken frame, unlock the front deadbolt from inside, and step into the foyer over broken glass.
                                 <div class="choice-menu" style="margin-top:20px;">
                                     <button style="border-left-color: var(--accent-red) !important;">
                                         <<link "Step inside the house ▼">>
@@ -358,6 +380,8 @@
                             <</replace>>
                         <</link>>
                         <span class="btn-sub"><b style="color:var(--accent-red);">[RISK: NOISE]</b> Smash window pane. <b style="color:var(--accent-red);">High noise generated.</b></span>
+                            <span class="btn-sub">Smash window pane. Will draw attention if anything is nearby.</span>
+                        <span class="btn-sub">Smash window pane. Will draw attention if anything is nearby.</span>
                     </button>
                 </div>
             </span>
@@ -580,6 +604,7 @@
                                 "Day 0. 22:00. The infection hit us two hours before the city sirens even started. I tried to get Emma to the high school sanctuary. We didn't make it to the gates. I wear the badge, but I couldn't protect my own daughter. Now I just sit in her empty house, scouting the perimeter, finding stragglers to save because I couldn't save her. The Vice Principal has the high school locked down tight. They're a good leader, maybe the best we could ask for, but they are strict. They aren't letting anyone through the gates without a thorough vetting. I've been vouching for the ones who deserve to live."
                             </div>
                             <br>
+                            <i style="color:#666; font-size:0.8em;">You set the photograph down gently. The Vice Principal is running the sanctuary? You know them. If anyone can hold a perimeter, it's them. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.</i>
                             <<if $anchor == "partner_f">>
                                 <i style="color:#666; font-size:0.8em;">You set the photograph down gently. The Vice Principal is running the sanctuary? That's $anchor_name. Your $anchor_rel. If anyone can hold a perimeter, it's her. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.</i>
                             <<elseif $anchor == "partner_m">>
@@ -598,6 +623,7 @@
                                 "Emma didn't make it to the sanctuary. I couldn't save my own daughter. Now I just scout the roads, trying to guide stragglers to the gates to make up for it. The Vice Principal has the high school on total lockdown. They're strict, but it's keeping the place safe. I'll vouch for whoever makes it this far."
                             </div>
                             <br>
+                            <i style="color:#666; font-size:0.8em;">You set the photograph down gently. You memorize the sanctuary coordinates from the road map. You know what happened here.</i>
                             <<if $anchor == "partner_f">>
                                 <i style="color:#666; font-size:0.8em;">You set the photograph down gently. The high school is a fortified sanctuary, and your $anchor_rel is running it. You memorize the coordinates from the road map. You know what happened in this house.</i>
                             <<elseif $anchor == "partner_m" or $anchor == "partner_nb">>
