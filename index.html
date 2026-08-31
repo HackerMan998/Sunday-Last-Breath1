@@ -8404,18 +8404,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
                                 &quot;Day 0. 22:00. The infection hit us two hours before the city sirens even started. I tried to get Emma to the high school sanctuary. We didn&#39;t make it to the gates. I wear the badge, but I couldn&#39;t protect my own daughter. Now I just sit in her empty house, scouting the perimeter, finding stragglers to save because I couldn&#39;t save her. The Vice Principal has the high school locked down tight. They&#39;re a good leader, maybe the best we could ask for, but they are strict. They aren&#39;t letting anyone through the gates without a thorough vetting. I&#39;ve been vouching for the ones who deserve to live.&quot;
                             &lt;/div&gt;
                             &lt;br&gt;
-                            &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. The Vice Principal is running the sanctuary? You know them. If anyone can hold a perimeter, it&#39;s them. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.&lt;/i&gt;
-                            &lt;&lt;if $anchor == &quot;partner_f&quot;&gt;&gt;
-                                &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. The Vice Principal is running the sanctuary? That&#39;s $anchor_name. Your $anchor_rel. If anyone can hold a perimeter, it&#39;s her. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.&lt;/i&gt;
-                            &lt;&lt;elseif $anchor == &quot;partner_m&quot;&gt;&gt;
-                                &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. A sanctuary at the local high school—where your $anchor_rel, $anchor_name, is the Athletic Director. If he&#39;s alive, he&#39;ll be there. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.&lt;/i&gt;
-                            &lt;&lt;elseif $anchor == &quot;partner_nb&quot;&gt;&gt;
-                                &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. A sanctuary at the local high school—where your $anchor_rel, $anchor_name, works as a counselor. If they&#39;re alive, they&#39;ll be there. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.&lt;/i&gt;
-                            &lt;&lt;elseif $anchor == &quot;parents&quot;&gt;&gt;
-                                &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. A sanctuary at the local high school. If your folks were evacuated from their neighborhood, they might be there. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.&lt;/i&gt;
-                            &lt;&lt;else&gt;&gt;
-                                &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. A sanctuary at the local high school, locked down by someone called &#39;the Vice Principal&#39;. You memorize the location from the road map. It&#39;s a solid lead for shelter. And you know who lives in this house now—and what she lost.&lt;/i&gt;
-                            &lt;&lt;/if&gt;&gt;
+                            &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. A sanctuary at the local high school, locked down by someone called &#39;the Vice Principal&#39;. You memorize the location from the road map. It&#39;s a solid lead for shelter. And you know who lives in this house now—and what she lost.&lt;/i&gt;
                         &lt;&lt;else&gt;&gt;
                             The journal sits next to a framed photograph of a little girl. The handwriting inside is frantic but fresh.
                             &lt;br&gt;&lt;br&gt;
@@ -8423,16 +8412,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
                                 &quot;Emma didn&#39;t make it to the sanctuary. I couldn&#39;t save my own daughter. Now I just scout the roads, trying to guide stragglers to the gates to make up for it. The Vice Principal has the high school on total lockdown. They&#39;re strict, but it&#39;s keeping the place safe. I&#39;ll vouch for whoever makes it this far.&quot;
                             &lt;/div&gt;
                             &lt;br&gt;
-                            &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. You memorize the sanctuary coordinates from the road map. You know what happened here.&lt;/i&gt;
-                            &lt;&lt;if $anchor == &quot;partner_f&quot;&gt;&gt;
-                                &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. The high school is a fortified sanctuary, and your $anchor_rel is running it. You memorize the coordinates from the road map. You know what happened in this house.&lt;/i&gt;
-                            &lt;&lt;elseif $anchor == &quot;partner_m&quot; or $anchor == &quot;partner_nb&quot;&gt;&gt;
-                                &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. A fortified sanctuary at the high school—where your $anchor_rel works. You memorize the coordinates from the road map. You know what happened in this house.&lt;/i&gt;
-                            &lt;&lt;elseif $anchor == &quot;parents&quot;&gt;&gt;
-                                &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. A fortified high school sanctuary—maybe your folks made it there. You memorize the coordinates from the road map. You know what happened in this house.&lt;/i&gt;
-                            &lt;&lt;else&gt;&gt;
-                                &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. A fortified high school sanctuary. You memorize the coordinates from the road map. It&#39;s the best chance for survival. You know what happened in this house.&lt;/i&gt;
-                            &lt;&lt;/if&gt;&gt;
+                            &lt;i style=&quot;color:#666; font-size:0.8em;&quot;&gt;You set the photograph down gently. A fortified high school sanctuary. You memorize the coordinates from the road map. It&#39;s the best chance for survival. You know what happened in this house.&lt;/i&gt;
                         &lt;&lt;/if&gt;&gt;
                     &lt;/div&gt;
                 &lt;&lt;/if&gt;&gt;
@@ -9518,39 +9498,54 @@ Faculty desks and filing cabinets. Armed guards rest between patrol watches.
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;GROUND FLOOR — SECURITY FOYER&lt;/h2&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
-&lt;div style=&quot;margin-bottom: 15px; text-align: center;&quot;&gt;
-&lt;&lt;if _arrivedLate&gt;&gt;
-    &lt;img src=&quot;image/Act3_Timberline/lobby_morning.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333;&quot;&gt;
-&lt;&lt;else&gt;&gt;
-    &lt;img src=&quot;image/Act3_Timberline/lobby_night.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333;&quot;&gt;
-&lt;&lt;/if&gt;&gt;
-&lt;/div&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            GROUND FLOOR — SECURITY FOYER
+        &lt;/div&gt;
 
-The main entrance foyer. Armed sentries guard the barricaded double doors against exterior threats.
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;&lt;if _arrivedLate&gt;&gt;
+                &lt;img src=&quot;image/Act3_Timberline/lobby_morning.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;else&gt;&gt;
+                &lt;img src=&quot;image/Act3_Timberline/lobby_night.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
 
-&lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;&lt;if hasObjective(&quot;rescue_leader_711&quot;) and not isObjectiveCompleted(&quot;rescue_leader_711&quot;)&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);&quot;&gt;
-            &lt;&lt;link &quot;🚗 Depart for Route 9 7-Eleven [RESCUE LEADER]&quot; &quot;Act3_7Eleven_Arrival&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Drive out with Reyes to rescue Commander Miller at the 7-Eleven.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-foyer-main&quot;&gt;
+                The main entrance foyer. Armed sentries guard the barricaded double doors against exterior threats. Piles of sandbags and overturned desks form a hardened chokepoint.
+            &lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;choice-menu&quot;&gt;
+            &lt;&lt;if hasObjective(&quot;rescue_leader_711&quot;) and not isObjectiveCompleted(&quot;rescue_leader_711&quot;)&gt;&gt;
+                &lt;button style=&quot;border-left-color:var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);&quot;&gt;
+                    &lt;&lt;link &quot;🚗 Depart for Route 9 7-Eleven [RESCUE LEADER]&quot;&gt;&gt;
+                        &lt;&lt;goto &quot;Act3_7Eleven_Arrival&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Drive out with Reyes to rescue Commander Miller at the 7-Eleven.&lt;/span&gt;
+                &lt;/button&gt;
+            &lt;&lt;/if&gt;&gt;
 
-    &lt;button&gt;
-        &lt;&lt;link &quot;➡️ Enter Screening Room [EAST]&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_School_Screening&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-    &lt;/button&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;⬆️ Walk North into Hallway Junction&quot;&gt;&gt;
-            &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-    &lt;/button&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+                &lt;&lt;link &quot;➡️ Enter Screening Room [EAST]&quot;&gt;&gt;
+                    &lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
+                    &lt;&lt;goto &quot;Act3_School_Screening&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;Head into Sgt. Vance&#39;s intake area.&lt;/span&gt;
+            &lt;/button&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+                &lt;&lt;link &quot;⬆️ Walk North into Hallway Junction&quot;&gt;&gt;
+                    &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
+                    &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;Enter the main ground floor corridor.&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="23" name="Act3_SchoolGFloor" tags="" position="600,1600" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $inSafehouse to true&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
@@ -9931,507 +9926,297 @@ setTimeout(function() {
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;GROUND FLOOR — EMERGENCY INFIRMARY&lt;/h2&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
-&lt;div style=&quot;margin-bottom: 15px; text-align: center;&quot;&gt;
-    &lt;img src=&quot;image/Act3_Timberline/infirmary.gif&quot;
-         style=&quot;max-width: 100%; border: 1px solid #333;&quot;&gt;
-&lt;/div&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            GROUND FLOOR — EMERGENCY INFIRMARY
+        &lt;/div&gt;
+
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;img src=&quot;image/Act3_Timberline/infirmary.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+        &lt;/div&gt;
+
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-infirmary-main&quot;&gt;
 
 &lt;&lt;if not $thorne_met&gt;&gt;
-
-    &lt;p&gt;
-        The smell reaches you before you fully enter the room.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        Antiseptic. Sweat. Old blood.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        Every desk has been pushed against the walls to make space for
-        cots. Some are occupied by survivors wrapped in mismatched
-        blankets. Others are empty, their sheets folded with an
-        uncomfortable neatness.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        A portable lamp flickers above the nearest cot.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        A man in a stained medical coat is bent over a wounded survivor.
-        One hand presses firmly against a blood-soaked bandage while the
-        other searches through an almost empty tray of supplies.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        His fingers move from one compartment to another.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        Gauze.
-        Empty.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        Alcohol wipes.
-        Empty.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        Antibiotics.
-        Nothing.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        The wounded survivor lets out a weak cry. The man immediately
-        leans closer.
-    &lt;/p&gt;
-
-    &lt;&lt;chat &quot;Unknown Doctor&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-    &quot;Stay with me. You hear me? Keep your eyes open.&quot;&gt;&gt;
-
-    &lt;p&gt;
-        You take another step into the room.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        The floorboard creaks.
-    &lt;/p&gt;
-
-    &lt;&lt;chat &quot;Unknown Doctor&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-    &quot;Stop there.&quot;&gt;&gt;
-
-    &lt;p&gt;
-        He does not turn around.
-    &lt;/p&gt;
-
-    &lt;&lt;chat &quot;Unknown Doctor&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-    &quot;If you&#39;re injured, sit against the wall and wait. If you&#39;re armed, keep the weapon pointed at the floor. And if you&#39;re here to ask whether anyone has seen your friends, ask quietly.&quot;&gt;&gt;
-
-    &lt;p&gt;
-        The survivor on the cot suddenly convulses.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        The doctor grabs the patient&#39;s shoulder and presses harder against
-        the wound. For several seconds, the only sounds are strained
-        breathing and the faint hum of the emergency lamp.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        Finally, the patient settles.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        The man slowly removes his blood-stained gloves and turns toward
-        you.
-    &lt;/p&gt;
-
-    &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-    &quot;Dr. Adrian Thorne. I used to work at St. Gabriel&#39;s Medical Center. Now I work wherever people are still breathing.&quot;&gt;&gt;
+    The smell reaches you before you fully enter the room.
+    &lt;br&gt;&lt;br&gt;
+    Antiseptic. Sweat. Old blood.
+    &lt;br&gt;&lt;br&gt;
+    Every desk has been pushed against the walls to make space for cots. Some are occupied by survivors wrapped in mismatched blankets. Others are empty, their sheets folded with an uncomfortable neatness.
+    &lt;br&gt;&lt;br&gt;
+    A portable lamp flickers above the nearest cot.
+    &lt;br&gt;&lt;br&gt;
+    A man in a stained medical coat is bent over a wounded survivor. One hand presses firmly against a blood-soaked bandage while the other searches through an almost empty tray of supplies.
+    &lt;br&gt;&lt;br&gt;
+    His fingers move from one compartment to another.
+    &lt;br&gt;&lt;br&gt;
+    Gauze. Empty.
+    &lt;br&gt;&lt;br&gt;
+    Alcohol wipes. Empty.
+    &lt;br&gt;&lt;br&gt;
+    Antibiotics. Nothing.
+    &lt;br&gt;&lt;br&gt;
+    The wounded survivor lets out a weak cry. The man immediately leans closer.
+    &lt;br&gt;&lt;br&gt;
+    &lt;&lt;chat &quot;Unknown Doctor&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Stay with me. You hear me? Keep your eyes open.&quot;&gt;&gt;
+    &lt;br&gt;&lt;br&gt;
+    You take another step into the room.
+    &lt;br&gt;&lt;br&gt;
+    The floorboard creaks.
+    &lt;br&gt;&lt;br&gt;
+    &lt;&lt;chat &quot;Unknown Doctor&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Stop there.&quot;&gt;&gt;
+    &lt;br&gt;&lt;br&gt;
+    He does not turn around.
+    &lt;br&gt;&lt;br&gt;
+    &lt;&lt;chat &quot;Unknown Doctor&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;If you&#39;re injured, sit against the wall and wait. If you&#39;re armed, keep the weapon pointed at the floor. And if you&#39;re here to ask whether anyone has seen your friends, ask quietly.&quot;&gt;&gt;
+    &lt;br&gt;&lt;br&gt;
+    The survivor on the cot suddenly convulses.
+    &lt;br&gt;&lt;br&gt;
+    The doctor grabs the patient&#39;s shoulder and presses harder against the wound. For several seconds, the only sounds are strained breathing and the faint hum of the emergency lamp.
+    &lt;br&gt;&lt;br&gt;
+    Finally, the patient settles.
+    &lt;br&gt;&lt;br&gt;
+    The man slowly removes his blood-stained gloves and turns toward you.
+    &lt;br&gt;&lt;br&gt;
+    &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Dr. Adrian Thorne. I used to work at St. Gabriel&#39;s Medical Center. Now I work wherever people are still breathing.&quot;&gt;&gt;
 
     &lt;&lt;set $thorne_met to true&gt;&gt;
     &lt;&lt;set $thorne_intro_seen to true&gt;&gt;
 
-    &lt;br&gt;
-
-    &lt;div class=&quot;choice-menu&quot;&gt;
-
-        &lt;button&gt;
-            &lt;&lt;link &quot;Ask about the wounded survivor&quot;&gt;&gt;
+    &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+            &lt;&lt;link &quot;Ask about the wounded survivor ▼&quot;&gt;&gt;
+                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                 &lt;&lt;addTime 3&gt;&gt;
                 &lt;&lt;set $thorne_topic_patient to true&gt;&gt;
                 &lt;&lt;goto &quot;Act3_School_Infirmary&quot;&gt;&gt;
             &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;
-                Find out how serious the situation is.
-            &lt;/span&gt;
+            &lt;span class=&quot;btn-sub&quot;&gt;Find out how serious the situation is.&lt;/span&gt;
         &lt;/button&gt;
 
-        &lt;button&gt;
-            &lt;&lt;link &quot;Ask what happened to this place&quot;&gt;&gt;
+        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+            &lt;&lt;link &quot;Ask what happened to this place ▼&quot;&gt;&gt;
+                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                 &lt;&lt;addTime 3&gt;&gt;
                 &lt;&lt;set $thorne_topic_school to true&gt;&gt;
                 &lt;&lt;goto &quot;Act3_School_Infirmary&quot;&gt;&gt;
             &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;
-                Learn how the school became an emergency shelter.
-            &lt;/span&gt;
+            &lt;span class=&quot;btn-sub&quot;&gt;Learn how the school became an emergency shelter.&lt;/span&gt;
         &lt;/button&gt;
 
-        &lt;button&gt;
-            &lt;&lt;link &quot;Ask if Thorne needs help&quot;&gt;&gt;
+        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+            &lt;&lt;link &quot;Ask if Thorne needs help ▼&quot;&gt;&gt;
+                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                 &lt;&lt;addTime 2&gt;&gt;
                 &lt;&lt;set $thorne_help_offer to true&gt;&gt;
                 &lt;&lt;goto &quot;Act3_School_Infirmary&quot;&gt;&gt;
             &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;
-                Offer assistance before asking for anything.
-            &lt;/span&gt;
+            &lt;span class=&quot;btn-sub&quot;&gt;Offer assistance before asking for anything.&lt;/span&gt;
         &lt;/button&gt;
-
     &lt;/div&gt;
 
 &lt;&lt;elseif not $helped_thorne&gt;&gt;
-
-    &lt;p&gt;
-        The infirmary is quieter than before, but not peaceful.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        Someone coughs behind a curtain. A patient shifts beneath a thin
-        blanket. The portable lamp continues to flicker over the treatment
-        area.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        Dr. Thorne is cleaning dried blood from a pair of forceps. He looks
-        up when you enter, then returns to his work.
-    &lt;/p&gt;
+    The infirmary is quieter than before, but not peaceful.
+    &lt;br&gt;&lt;br&gt;
+    Someone coughs behind a curtain. A patient shifts beneath a thin blanket. The portable lamp continues to flicker over the treatment area.
+    &lt;br&gt;&lt;br&gt;
+    Dr. Thorne is cleaning dried blood from a pair of forceps. He looks up when you enter, then returns to his work.
+    &lt;br&gt;&lt;br&gt;
 
     &lt;&lt;if $thorne_topic_patient&gt;&gt;
-
-        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-        &quot;The patient on that cot has a deep wound and a fever. I can keep him stable for now, but &#39;for now&#39; is doing a lot of work.&quot;&gt;&gt;
-
-        &lt;p&gt;
-            He places the forceps on the tray.
-        &lt;/p&gt;
-
-        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-        &quot;People think the worst part is the wound. It usually isn&#39;t. Infection is quieter. It waits until everyone believes the danger has passed.&quot;&gt;&gt;
-
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;The patient on that cot has a deep wound and a fever. I can keep him stable for now, but &#39;for now&#39; is doing a lot of work.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        He places the forceps on the tray.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;People think the worst part is the wound. It usually isn&#39;t. Infection is quieter. It waits until everyone believes the danger has passed.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
     &lt;&lt;/if&gt;&gt;
 
     &lt;&lt;if $thorne_topic_school&gt;&gt;
-
-        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-        &quot;The school had generators, running water, and enough classrooms to separate the sick from everyone else. That made it useful.&quot;&gt;&gt;
-
-        &lt;p&gt;
-            He glances toward the occupied cots.
-        &lt;/p&gt;
-
-        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-        &quot;Then the roads closed. Supplies stopped arriving. Useful became desperate.&quot;&gt;&gt;
-
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;The school had generators, running water, and enough classrooms to separate the sick from everyone else. That made it useful.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        He glances toward the occupied cots.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Then the roads closed. Supplies stopped arriving. Useful became desperate.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
     &lt;&lt;/if&gt;&gt;
 
     &lt;&lt;if $thorne_help_offer&gt;&gt;
-
-        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-        &quot;Help? Yes. I need help. But I don&#39;t need another person standing in the doorway telling me they&#39;re willing.&quot;&gt;&gt;
-
-        &lt;p&gt;
-            He opens a metal tray. Inside are a few used instruments, two
-            empty medicine packets, and a roll of tape.
-        &lt;/p&gt;
-
-        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-        &quot;I need supplies. Clean bandages. Antibiotics. Painkillers. Anything that can keep an injury from becoming a death sentence.&quot;&gt;&gt;
-
-        &lt;p&gt;
-            He studies you for a moment.
-        &lt;/p&gt;
-
-        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-        &quot;Bring me something useful, and I&#39;ll remember that you came back.&quot;&gt;&gt;
-
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Help? Yes. I need help. But I don&#39;t need another person standing in the doorway telling me they&#39;re willing.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        He opens a metal tray. Inside are a few used instruments, two empty medicine packets, and a roll of tape.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;I need supplies. Clean bandages. Antibiotics. Painkillers. Anything that can keep an injury from becoming a death sentence.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        He studies you for a moment.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Bring me something useful, and I&#39;ll remember that you came back.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
     &lt;&lt;/if&gt;&gt;
 
     &lt;&lt;if $thorne_quest_active&gt;&gt;
-
-        &lt;br&gt;
-
-        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-        &quot;You&#39;re still looking for supplies. Good. Don&#39;t take unnecessary risks, but don&#39;t come back empty-handed either.&quot;&gt;&gt;
-
-        &lt;p&gt;
-            He gestures toward the occupied cots.
-        &lt;/p&gt;
-
-        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-        &quot;Every hour matters to someone in this room.&quot;&gt;&gt;
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;You&#39;re still looking for supplies. Good. Don&#39;t take unnecessary risks, but don&#39;t come back empty-handed either.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        He gestures toward the occupied cots.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Every hour matters to someone in this room.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
 
     &lt;&lt;elseif $thorne_help_offer&gt;&gt;
-
-        &lt;br&gt;
-
-        &lt;div class=&quot;choice-menu&quot;&gt;
-
-            &lt;button&gt;
-                &lt;&lt;link &quot;Accept Thorne&#39;s medical supply mission&quot;&gt;&gt;
+        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-green) !important;&quot;&gt;
+                &lt;&lt;link &quot;Accept Thorne&#39;s medical supply mission ▼&quot;&gt;&gt;
+                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                     &lt;&lt;addTime 5&gt;&gt;
                     &lt;&lt;set $thorne_quest_active to true&gt;&gt;
-                    &lt;&lt;addObjective
-                    &quot;fetch_meds_thorne&quot;
-                    &quot;Find Antibiotics, Painkillers, a First Aid Kit, or clean Bandages for Dr. Thorne&quot;&gt;&gt;
+                    &lt;&lt;addObjective &quot;fetch_meds_thorne&quot; &quot;Find Antibiotics, Painkillers, a First Aid Kit, or clean Bandages for Dr. Thorne&quot;&gt;&gt;
                     &lt;&lt;goto &quot;Act3_School_Infirmary&quot;&gt;&gt;
                 &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;
-                    &lt;b style=&quot;color:var(--accent-green);&quot;&gt;[NEW OBJECTIVE]&lt;/b&gt;
-                    Search for medical supplies.
-                &lt;/span&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[NEW OBJECTIVE]&lt;/b&gt; Search for medical supplies.&lt;/span&gt;
             &lt;/button&gt;
 
-            &lt;button&gt;
-                &lt;&lt;link &quot;Tell Thorne you need time to prepare&quot;&gt;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                &lt;&lt;link &quot;Tell Thorne you need time to prepare ▼&quot;&gt;&gt;
+                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                     &lt;&lt;addTime 1&gt;&gt;
                     &lt;&lt;goto &quot;Act3_School_Infirmary&quot;&gt;&gt;
                 &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;
-                    Leave the mission for later.
-                &lt;/span&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;Leave the mission for later.&lt;/span&gt;
             &lt;/button&gt;
-
         &lt;/div&gt;
 
     &lt;&lt;else&gt;&gt;
-
-        &lt;br&gt;
-
-        &lt;div class=&quot;choice-menu&quot;&gt;
-
-            &lt;button&gt;
-                &lt;&lt;link &quot;Ask if Thorne needs help&quot;&gt;&gt;
+        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                &lt;&lt;link &quot;Ask if Thorne needs help ▼&quot;&gt;&gt;
+                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                     &lt;&lt;addTime 2&gt;&gt;
                     &lt;&lt;set $thorne_help_offer to true&gt;&gt;
                     &lt;&lt;goto &quot;Act3_School_Infirmary&quot;&gt;&gt;
                 &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;
-                    Ask what the infirmary needs.
-                &lt;/span&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;Ask what the infirmary needs.&lt;/span&gt;
             &lt;/button&gt;
-
         &lt;/div&gt;
-
     &lt;&lt;/if&gt;&gt;
 
-    &lt;&lt;if $inventory.find(i =&gt;
-        i.id === &quot;Antibiotics&quot; ||
-        i.id === &quot;Painkillers&quot; ||
-        i.id === &quot;First Aid Kit&quot; ||
-        i.id === &quot;Bandage&quot;)&gt;&gt;
-
-        &lt;br&gt;
-
-        &lt;div class=&quot;choice-menu&quot;&gt;
-
-            &lt;button&gt;
-                &lt;&lt;link &quot;Give medical supplies to Dr. Thorne [INVENTORY]&quot;&gt;&gt;
-
+    &lt;&lt;if $inventory.find(i =&gt; i.id === &quot;Antibiotics&quot; || i.id === &quot;Painkillers&quot; || i.id === &quot;First Aid Kit&quot; || i.id === &quot;Bandage&quot;)&gt;&gt;
+        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-green) !important;&quot;&gt;
+                &lt;&lt;link &quot;Give medical supplies to Dr. Thorne [INVENTORY] ▼&quot;&gt;&gt;
+                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                     &lt;&lt;addTime 10&gt;&gt;
-
                     &lt;&lt;set $helped_thorne to true&gt;&gt;
                     &lt;&lt;set $thorne_quest_active to false&gt;&gt;
-
                     &lt;&lt;completeObjective &quot;fetch_meds_thorne&quot;&gt;&gt;
                     &lt;&lt;purgeCompleted&gt;&gt;
-
                     &lt;&lt;set $hum to Math.min(100, $hum + 20)&gt;&gt;
-
                     &lt;&lt;run window.gainXP(30)&gt;&gt;
                     &lt;&lt;run window.gainTrust(20)&gt;&gt;
-
                     &lt;&lt;if $inventory.find(i =&gt; i.id === &quot;Antibiotics&quot;)&gt;&gt;
-
                         &lt;&lt;run setup.removeItem(&quot;Antibiotics&quot;, 1)&gt;&gt;
-
                     &lt;&lt;elseif $inventory.find(i =&gt; i.id === &quot;Painkillers&quot;)&gt;&gt;
-
                         &lt;&lt;run setup.removeItem(&quot;Painkillers&quot;, 1)&gt;&gt;
-
                     &lt;&lt;elseif $inventory.find(i =&gt; i.id === &quot;First Aid Kit&quot;)&gt;&gt;
-
                         &lt;&lt;run setup.removeItem(&quot;First Aid Kit&quot;, 1)&gt;&gt;
-
                     &lt;&lt;else&gt;&gt;
-
                         &lt;&lt;run setup.removeItem(&quot;Bandage&quot;, 1)&gt;&gt;
-
                     &lt;&lt;/if&gt;&gt;
-
                     &lt;&lt;goto &quot;Act3_School_Infirmary&quot;&gt;&gt;
-
                 &lt;&lt;/link&gt;&gt;
-
-                &lt;span class=&quot;btn-sub&quot;&gt;
-                    &lt;b style=&quot;color:var(--accent-green);&quot;&gt;
-                        [+20 HUMANITY] [+20 TRUST] [+30 XP]
-                    &lt;/b&gt;
-                    Hand over the medical supplies.
-                &lt;/span&gt;
-
+                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[+20 HUMANITY] [+20 TRUST] [+30 XP]&lt;/b&gt; Hand over the medical supplies.&lt;/span&gt;
             &lt;/button&gt;
-
         &lt;/div&gt;
-
     &lt;&lt;/if&gt;&gt;
 
 &lt;&lt;else&gt;&gt;
-
-    &lt;p&gt;
-        The infirmary has changed.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        The smell of blood is still there, but it no longer overwhelms
-        everything else. Fresh bandages have replaced several of the
-        stained ones. The supply tray is no longer empty.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        A patient near the wall is sitting upright, drinking water.
-        Another sleeps beneath a clean blanket.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        Dr. Thorne stands beside the treatment table, organizing medicine
-        into small labeled containers.
-    &lt;/p&gt;
-
-    &lt;p&gt;
-        When he notices you, his expression softens slightly.
-    &lt;/p&gt;
-
-    &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-    &quot;You came back. And you brought what we needed.&quot;&gt;&gt;
-
-    &lt;p&gt;
-        He closes one of the containers.
-    &lt;/p&gt;
-
-    &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-    &quot;The patient from Cot Four is stable. He may even keep the leg. That&#39;s more than I was prepared to promise earlier.&quot;&gt;&gt;
-
-    &lt;p&gt;
-        Thorne looks across the room at the survivors resting on the cots.
-    &lt;/p&gt;
-
-    &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-    &quot;You didn&#39;t just bring medicine. You bought these people time. Around here, time is worth more than almost anything.&quot;&gt;&gt;
+    The infirmary has changed.
+    &lt;br&gt;&lt;br&gt;
+    The smell of blood is still there, but it no longer overwhelms everything else. Fresh bandages have replaced several of the stained ones. The supply tray is no longer empty.
+    &lt;br&gt;&lt;br&gt;
+    A patient near the wall is sitting upright, drinking water. Another sleeps beneath a clean blanket.
+    &lt;br&gt;&lt;br&gt;
+    Dr. Thorne stands beside the treatment table, organizing medicine into small labeled containers.
+    &lt;br&gt;&lt;br&gt;
+    When he notices you, his expression softens slightly.
+    &lt;br&gt;&lt;br&gt;
+    &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;You came back. And you brought what we needed.&quot;&gt;&gt;
+    &lt;br&gt;&lt;br&gt;
+    He closes one of the containers.
+    &lt;br&gt;&lt;br&gt;
+    &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;The patient from Cot Four is stable. He may even keep the leg. That&#39;s more than I was prepared to promise earlier.&quot;&gt;&gt;
+    &lt;br&gt;&lt;br&gt;
+    Thorne looks across the room at the survivors resting on the cots.
+    &lt;br&gt;&lt;br&gt;
+    &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;You didn&#39;t just bring medicine. You bought these people time. Around here, time is worth more than almost anything.&quot;&gt;&gt;
+    &lt;br&gt;&lt;br&gt;
 
     &lt;&lt;if not $thorne_thanks_seen&gt;&gt;
-
         &lt;&lt;set $thorne_thanks_seen to true&gt;&gt;
-
-        &lt;p&gt;
-            He reaches beneath the treatment table and places a compact
-            medical kit beside you.
-        &lt;/p&gt;
-
-        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-        &quot;From now on, if you&#39;re hurt, come here. I won&#39;t promise miracles. I can promise I&#39;ll try.&quot;&gt;&gt;
-
+        He reaches beneath the treatment table and places a compact medical kit beside you.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;From now on, if you&#39;re hurt, come here. I won&#39;t promise miracles. I can promise I&#39;ll try.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
     &lt;&lt;else&gt;&gt;
-
-        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-        &quot;Try not to make a habit of needing me. But if you do, the infirmary is open.&quot;&gt;&gt;
-
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Try not to make a habit of needing me. But if you do, the infirmary is open.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
     &lt;&lt;/if&gt;&gt;
-
-    &lt;br&gt;
 
     &lt;&lt;if $hp &lt; $hp_max&gt;&gt;
-
-        &lt;div class=&quot;choice-menu&quot;&gt;
-
-            &lt;button&gt;
-
-                &lt;&lt;link &quot;Let Dr. Thorne treat your injuries&quot;&gt;&gt;
-
+        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-green) !important;&quot;&gt;
+                &lt;&lt;link &quot;Let Dr. Thorne treat your injuries ▼&quot;&gt;&gt;
+                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                     &lt;&lt;addTime 15&gt;&gt;
                     &lt;&lt;set $hp to $hp_max&gt;&gt;
-
                     &lt;&lt;goto &quot;Act3_School_Infirmary&quot;&gt;&gt;
-
                 &lt;&lt;/link&gt;&gt;
-
-                &lt;span class=&quot;btn-sub&quot;&gt;
-
-                    &lt;b style=&quot;color:var(--accent-green);&quot;&gt;
-                        [MAX HP RESTORED]
-                    &lt;/b&gt;
-
-                    Thorne cleans and dresses your wounds.
-
-                &lt;/span&gt;
-
+                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[MAX HP RESTORED]&lt;/b&gt; Thorne cleans and dresses your wounds.&lt;/span&gt;
             &lt;/button&gt;
-
         &lt;/div&gt;
-
     &lt;&lt;else&gt;&gt;
-
-        &lt;p style=&quot;color:var(--accent-green);&quot;&gt;
-
-            Your wounds are treated, and your health is fully restored.
-
-        &lt;/p&gt;
-
+        &lt;span style=&quot;color:var(--accent-green); font-weight:bold;&quot;&gt;Your wounds are treated, and your health is fully restored.&lt;/span&gt;
+        &lt;br&gt;&lt;br&gt;
     &lt;&lt;/if&gt;&gt;
 
-    &lt;br&gt;
-
-    &lt;div class=&quot;choice-menu&quot;&gt;
-
-        &lt;button&gt;
-
-            &lt;&lt;link &quot;Ask Thorne how the patients are doing&quot;&gt;&gt;
-
-                &lt;&lt;addTime 3&gt;&gt;
-                &lt;&lt;set $thorne_followup_patients to true&gt;&gt;
-
-                &lt;&lt;goto &quot;Act3_School_Infirmary&quot;&gt;&gt;
-
-            &lt;&lt;/link&gt;&gt;
-
-            &lt;span class=&quot;btn-sub&quot;&gt;
-
-                Check on the survivors you helped.
-
-            &lt;/span&gt;
-
-        &lt;/button&gt;
-
-    &lt;/div&gt;
-
-    &lt;&lt;if $thorne_followup_patients&gt;&gt;
-
-        &lt;br&gt;
-
-        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-        &quot;Better than yesterday. Not all of them are out of danger, but they&#39;re alive. That&#39;s enough for today.&quot;&gt;&gt;
-
-        &lt;p&gt;
-            He pauses before returning to his work.
-        &lt;/p&gt;
-
-        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot;
-        &quot;The school remembers who helps. People talk. You&#39;ve earned more trust here than you may realize.&quot;&gt;&gt;
-
+    &lt;&lt;if not $thorne_followup_patients&gt;&gt;
+        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:20px;&quot;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                &lt;&lt;link &quot;Ask Thorne how the patients are doing ▼&quot;&gt;&gt;
+                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                    &lt;&lt;addTime 3&gt;&gt;
+                    &lt;&lt;set $thorne_followup_patients to true&gt;&gt;
+                    &lt;&lt;goto &quot;Act3_School_Infirmary&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;Check on the survivors you helped.&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+    &lt;&lt;else&gt;&gt;
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Better than yesterday. Not all of them are out of danger, but they&#39;re alive. That&#39;s enough for today.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        He pauses before returning to his work.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;The school remembers who helps. People talk. You&#39;ve earned more trust here than you may realize.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
     &lt;&lt;/if&gt;&gt;
-
 &lt;&lt;/if&gt;&gt;
 
-&lt;br&gt;&lt;br&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;choice-menu&quot;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+                &lt;&lt;link &quot;🚪 Exit Infirmary to Hallway [WEST]&quot;&gt;&gt;
+                    &lt;&lt;set $currentLocation to &quot;hall_g_east_1&quot;&gt;&gt;
+                    &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;Leave Dr. Thorne&#39;s triage ward.&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
 
-&lt;div class=&quot;choice-menu&quot;&gt;
-
-    &lt;button&gt;
-
-        &lt;&lt;link &quot;🚪 Exit Infirmary to Hallway [WEST]&quot;&gt;&gt;
-
-            &lt;&lt;set $currentLocation to &quot;hall_g_east_1&quot;&gt;&gt;
-
-            &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-
-        &lt;&lt;/link&gt;&gt;
-
-    &lt;/button&gt;
-
+    &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="26" name="Act3_School_Library" tags="" position="900,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;library&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
@@ -10755,31 +10540,45 @@ Off-duty guard sleeping quarter.
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;GROUND FLOOR — SCREENING ROOM&lt;/h2&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
-&lt;div style=&quot;margin-bottom: 15px; text-align: center;&quot;&gt;
-    &lt;img src=&quot;image/Act3_Timberline/screening.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333;&quot;&gt;
-&lt;/div&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            GROUND FLOOR — SCREENING ROOM
+        &lt;/div&gt;
 
-&lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Keep your hands visible while you&#39;re in the foyer. All heavy weapons stay tagged in the locker.&quot;&gt;&gt;
-&lt;br&gt;&lt;br&gt;
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;img src=&quot;image/Act3_Timberline/screening.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+        &lt;/div&gt;
 
-Sgt. Vance inspects incoming gear and logs refugee contraband.
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-screening-main&quot;&gt;
 
-&lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;🚪 Exit Screening to Foyer [WEST]&quot;&gt;&gt;
-            &lt;&lt;set $currentLocation to &quot;security_foyer&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-    &lt;/button&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;⬆️ Exit Screening to East Hallway [NORTH]&quot;&gt;&gt;
-            &lt;&lt;set $currentLocation to &quot;hall_g_east_1&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-    &lt;/button&gt;
+                &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Keep your hands visible while you&#39;re in the foyer. All heavy weapons stay tagged in the locker.&quot;&gt;&gt;
+                &lt;br&gt;&lt;br&gt;
+                Sgt. Vance inspects incoming gear and logs refugee contraband. He doesn&#39;t look up from his clipboard as you walk past.
+
+            &lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;choice-menu&quot;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+                &lt;&lt;link &quot;🚪 Exit Screening to Foyer [WEST]&quot;&gt;&gt;
+                    &lt;&lt;set $currentLocation to &quot;security_foyer&quot;&gt;&gt;
+                    &lt;&lt;goto &quot;Act3_School_Foyer&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;Walk straight into the Main Security Foyer.&lt;/span&gt;
+            &lt;/button&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+                &lt;&lt;link &quot;⬆️ Exit Screening to East Hallway [NORTH]&quot;&gt;&gt;
+                    &lt;&lt;set $currentLocation to &quot;hall_g_east_2&quot;&gt;&gt;
+                    &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;Return to the Screening Junction corridor.&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="37" name="Act3_School_SecurityRoom" tags="" position="1000,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;security_room&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;

@@ -4,29 +4,43 @@
 <<set $activeMap to "Highschool Ground">>
 <</nobr>>
 
-<h2>GROUND FLOOR — SCREENING ROOM</h2>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
 
-<div style="margin-bottom: 15px; text-align: center;">
-    <img src="image/Act3_Timberline/screening.gif" style="max-width: 100%; border: 1px solid #333;">
-</div>
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            GROUND FLOOR — SCREENING ROOM
+        </div>
 
-<<chat "Sgt. Vance" "image/avatars/quartermaster_sgtvance.gif" "right" "Keep your hands visible while you're in the foyer. All heavy weapons stay tagged in the locker.">>
-<br><br>
+        <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+            <img src="image/Act3_Timberline/screening.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+        </div>
 
-Sgt. Vance inspects incoming gear and logs refugee contraband.
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-screening-main">
 
-<br><br>
-<div class="choice-menu">
-    <button>
-        <<link "🚪 Exit Screening to Foyer [WEST]">>
-            <<set $currentLocation to "security_foyer">>
-            <<goto "Act3_SchoolGFloor">>
-        <</link>>
-    </button>
-    <button>
-        <<link "⬆️ Exit Screening to East Hallway [NORTH]">>
-            <<set $currentLocation to "hall_g_east_1">>
-            <<goto "Act3_SchoolGFloor">>
-        <</link>>
-    </button>
+                <<chat "Sgt. Vance" "image/avatars/quartermaster_sgtvance.gif" "right" "Keep your hands visible while you're in the foyer. All heavy weapons stay tagged in the locker.">>
+                <br><br>
+                Sgt. Vance inspects incoming gear and logs refugee contraband. He doesn't look up from his clipboard as you walk past.
+
+            </span>
+        </div>
+        
+        <div class="choice-menu">
+            <button style="border-left-color: var(--accent-blue) !important;">
+                <<link "🚪 Exit Screening to Foyer [WEST]">>
+                    <<set $currentLocation to "security_foyer">>
+                    <<goto "Act3_School_Foyer">>
+                <</link>>
+                <span class="btn-sub">Walk straight into the Main Security Foyer.</span>
+            </button>
+            <button style="border-left-color: var(--accent-blue) !important;">
+                <<link "⬆️ Exit Screening to East Hallway [NORTH]">>
+                    <<set $currentLocation to "hall_g_east_2">>
+                    <<goto "Act3_SchoolGFloor">>
+                <</link>>
+                <span class="btn-sub">Return to the Screening Junction corridor.</span>
+            </button>
+        </div>
+
+    </div>
 </div>

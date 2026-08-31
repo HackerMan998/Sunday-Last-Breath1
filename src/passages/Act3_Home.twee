@@ -604,18 +604,7 @@
                                 "Day 0. 22:00. The infection hit us two hours before the city sirens even started. I tried to get Emma to the high school sanctuary. We didn't make it to the gates. I wear the badge, but I couldn't protect my own daughter. Now I just sit in her empty house, scouting the perimeter, finding stragglers to save because I couldn't save her. The Vice Principal has the high school locked down tight. They're a good leader, maybe the best we could ask for, but they are strict. They aren't letting anyone through the gates without a thorough vetting. I've been vouching for the ones who deserve to live."
                             </div>
                             <br>
-                            <i style="color:#666; font-size:0.8em;">You set the photograph down gently. The Vice Principal is running the sanctuary? You know them. If anyone can hold a perimeter, it's them. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.</i>
-                            <<if $anchor == "partner_f">>
-                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. The Vice Principal is running the sanctuary? That's $anchor_name. Your $anchor_rel. If anyone can hold a perimeter, it's her. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.</i>
-                            <<elseif $anchor == "partner_m">>
-                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A sanctuary at the local high school—where your $anchor_rel, $anchor_name, is the Athletic Director. If he's alive, he'll be there. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.</i>
-                            <<elseif $anchor == "partner_nb">>
-                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A sanctuary at the local high school—where your $anchor_rel, $anchor_name, works as a counselor. If they're alive, they'll be there. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.</i>
-                            <<elseif $anchor == "parents">>
-                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A sanctuary at the local high school. If your folks were evacuated from their neighborhood, they might be there. You memorize the location from the road map. You know who lives in this house now, and you know what she lost.</i>
-                            <<else>>
-                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A sanctuary at the local high school, locked down by someone called 'the Vice Principal'. You memorize the location from the road map. It's a solid lead for shelter. And you know who lives in this house now—and what she lost.</i>
-                            <</if>>
+                            <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A sanctuary at the local high school, locked down by someone called 'the Vice Principal'. You memorize the location from the road map. It's a solid lead for shelter. And you know who lives in this house now—and what she lost.</i>
                         <<else>>
                             The journal sits next to a framed photograph of a little girl. The handwriting inside is frantic but fresh.
                             <br><br>
@@ -623,16 +612,7 @@
                                 "Emma didn't make it to the sanctuary. I couldn't save my own daughter. Now I just scout the roads, trying to guide stragglers to the gates to make up for it. The Vice Principal has the high school on total lockdown. They're strict, but it's keeping the place safe. I'll vouch for whoever makes it this far."
                             </div>
                             <br>
-                            <i style="color:#666; font-size:0.8em;">You set the photograph down gently. You memorize the sanctuary coordinates from the road map. You know what happened here.</i>
-                            <<if $anchor == "partner_f">>
-                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. The high school is a fortified sanctuary, and your $anchor_rel is running it. You memorize the coordinates from the road map. You know what happened in this house.</i>
-                            <<elseif $anchor == "partner_m" or $anchor == "partner_nb">>
-                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A fortified sanctuary at the high school—where your $anchor_rel works. You memorize the coordinates from the road map. You know what happened in this house.</i>
-                            <<elseif $anchor == "parents">>
-                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A fortified high school sanctuary—maybe your folks made it there. You memorize the coordinates from the road map. You know what happened in this house.</i>
-                            <<else>>
-                                <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A fortified high school sanctuary. You memorize the coordinates from the road map. It's the best chance for survival. You know what happened in this house.</i>
-                            <</if>>
+                            <i style="color:#666; font-size:0.8em;">You set the photograph down gently. A fortified high school sanctuary. You memorize the coordinates from the road map. It's the best chance for survival. You know what happened in this house.</i>
                         <</if>>
                     </div>
                 <</if>>
