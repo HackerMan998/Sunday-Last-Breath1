@@ -4,34 +4,46 @@
 <<set $activeMap to "Highschool Ground">>
 <</nobr>>
 
-<h2>GROUND FLOOR — FOOD PANTRY</h2>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
 
-Industrial metal shelves stand behind the canteen kitchen.
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            GROUND FLOOR — FOOD PANTRY
+        </div>
 
-<<if not $looted_pantry>>
-    You spot unopened crates of bottled water and canned goods tucked behind flour sacks.
-    <br><br>
-    <div class="choice-menu">
-        <button>
-            <<link "Search the Pantry shelves">>
-                <<addTime 5>>
-                <<set $looted_pantry to true>>
-                <<run setup.addItem("Bottled Water", 2)>>
-                <<run setup.addItem("Canned Food", 1)>>
-                <<goto "Act3_School_Pantry">>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOOT]</b> Found 2x Bottled Water, 1x Canned Food.</span>
-        </button>
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-pantry-main">
+                Industrial metal shelves stand behind the canteen kitchen.
+
+                <<if not $looted_pantry>>
+                    You spot unopened crates of bottled water and canned goods tucked behind flour sacks.
+                    <br><br>
+                    <div class="choice-menu">
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "Search the Pantry shelves ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 5>>
+                                <<set $looted_pantry to true>>
+                                <<run setup.addItem("Bottled Water", 2)>>
+                                <<run setup.addItem("Canned Food", 1)>>
+                                <<goto "Act3_School_Pantry">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOOT]</b> Found 2x Bottled Water, 1x Canned Food.</span>
+                        </button>
+                    </div>
+                <<else>>
+                    The shelves have been cleared of useful emergency rations.
+                <</if>>
+            </span>
+        </div>
+        
+        <div class="choice-menu">
+            <button style="border-left-color: var(--accent-blue) !important;">
+                <<link "🚪 Exit Pantry to Canteen [NORTH]">>
+                    <<goto "Act3_School_Canteen">>
+                <</link>>
+            </button>
+        </div>
+
     </div>
-<<else>>
-    The shelves have been cleared of useful emergency rations.
-<</if>>
-
-<br><br>
-<div class="choice-menu">
-    <button>
-        <<link "🚪 Exit Pantry to Canteen [NORTH]">>
-            <<goto "Act3_School_Canteen">>
-        <</link>>
-    </button>
 </div>

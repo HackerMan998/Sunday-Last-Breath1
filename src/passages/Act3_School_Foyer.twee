@@ -7,11 +7,9 @@
 
 <div class="vn-container">
     <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
-
         <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
             GROUND FLOOR — SECURITY FOYER
         </div>
-
         <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
             <<if _arrivedLate>>
                 <img src="image/Act3_Timberline/lobby_morning.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
@@ -19,10 +17,13 @@
                 <img src="image/Act3_Timberline/lobby_night.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
             <</if>>
         </div>
-
         <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
             <span id="vn-foyer-main">
-                The main entrance foyer. Armed sentries guard the barricaded double doors against exterior threats. Piles of sandbags and overturned desks form a hardened chokepoint.
+                <<if _arrivedLate>>
+                    The main entrance foyer is bathed in cold morning light cutting through the dust. The frantic panic of the outbreak has burned itself out, leaving only exhaustion. Armed sentries are slumped against piles of sandbags and overturned desks, bleary-eyed and traumatized from the long night. The radios are dead quiet.
+                <<else>>
+                    The main entrance foyer is a chaotic choke point. Armed sentries are frantically stacking sandbags and overturned desks against the barricaded double doors. Radios crackle with panicked updates from the perimeter watch. The adrenaline in the room is thick enough to choke on.
+                <</if>>
             </span>
         </div>
         
@@ -35,7 +36,6 @@
                     <span class="btn-sub"><b style="color:var(--accent-red);">[ACTIVE RESCUE]</b> Drive out with Reyes to rescue Commander Miller at the 7-Eleven.</span>
                 </button>
             <</if>>
-
             <button style="border-left-color: var(--accent-blue) !important;">
                 <<link "➡️ Enter Screening Room [EAST]">>
                     <<set $currentLocation to "screening">>
@@ -51,6 +51,5 @@
                 <span class="btn-sub">Enter the main ground floor corridor.</span>
             </button>
         </div>
-
     </div>
 </div>

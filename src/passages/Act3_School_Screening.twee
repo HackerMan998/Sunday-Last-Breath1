@@ -2,29 +2,30 @@
 <<nobr>>
 <<set $currentLocation to "screening">>
 <<set $activeMap to "Highschool Ground">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
 <</nobr>>
 
 <div class="vn-container">
     <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
-
         <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
             GROUND FLOOR — SCREENING ROOM
         </div>
-
         <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
             <img src="image/Act3_Timberline/screening.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
         </div>
-
         <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
             <span id="vn-screening-main">
-
-                <<chat "Sgt. Vance" "image/avatars/quartermaster_sgtvance.gif" "right" "Keep your hands visible while you're in the foyer. All heavy weapons stay tagged in the locker.">>
-                <br><br>
-                Sgt. Vance inspects incoming gear and logs refugee contraband. He doesn't look up from his clipboard as you walk past.
-
+                <<if _arrivedLate>>
+                    <<chat "Sgt. Vance" "image/avatars/quartermaster_sgtvance.gif" "right" "Hands visible. Weapons tagged. Don't make me repeat it... I'm too tired to repeat it.">>
+                    <br><br>
+                    Sgt. Vance rubs his bloodshot eyes and takes a slow drink from a thermos of cold coffee. He mechanically inspects incoming gear and logs refugee contraband. He doesn't even look up from his clipboard as you walk past.
+                <<else>>
+                    <<chat "Sgt. Vance" "image/avatars/quartermaster_sgtvance.gif" "right" "Keep your hands visible while you're in the foyer! All heavy weapons stay tagged in the locker! Step back!">>
+                    <br><br>
+                    Sgt. Vance is yelling over the arguments of fresh, panicked refugees. He aggressively inspects incoming gear and logs refugee contraband, keeping one hand resting on his sidearm just in case someone loses their nerve.
+                <</if>>
             </span>
         </div>
-        
         <div class="choice-menu">
             <button style="border-left-color: var(--accent-blue) !important;">
                 <<link "🚪 Exit Screening to Foyer [WEST]">>
@@ -41,6 +42,5 @@
                 <span class="btn-sub">Return to the Screening Junction corridor.</span>
             </button>
         </div>
-
     </div>
 </div>

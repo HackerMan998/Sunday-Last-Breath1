@@ -9357,26 +9357,63 @@ setTimeout(function() {
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;GROUND FLOOR — CANTEEN&lt;/h2&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            GROUND FLOOR — CANTEEN
+        &lt;/div&gt;
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;&lt;if _arrivedLate&gt;&gt;
+                &lt;img src=&quot;image/Act3_Timberline/canteen_morning.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;else&gt;&gt;
+                &lt;img src=&quot;image/Act3_Timberline/canteen_night.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            &lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-canteen-main&quot;&gt;
 
-&lt;div style=&quot;margin-bottom: 15px; text-align: center;&quot;&gt;
-&lt;&lt;if _arrivedLate&gt;&gt;
-    &lt;img src=&quot;image/Act3_Timberline/canteen_morning.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333;&quot;&gt;
-&lt;&lt;else&gt;&gt;
-    &lt;img src=&quot;image/Act3_Timberline/canteen_night.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333;&quot;&gt;
+&lt;&lt;if not $sadie_met&gt;&gt;
+    &lt;&lt;if _arrivedLate&gt;&gt;
+        The cafeteria is eerily quiet. Dozens of exhausted refugees are slumped across the plastic tables or sleeping on the linoleum floor. The smell of thin, watery broth hangs heavy in the morning air. 
+        &lt;br&gt;&lt;br&gt;
+        At the serving line, a young woman in an apron is trying to scrape the bottom of a steel pot. She looks dead on her feet, her hair plastered to her forehead with sweat.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Refugee&quot; &quot;image/avatars/unknown.gif&quot; &quot;left&quot; &quot;Is there anything left? We&#39;ve been trapped in this school all night!&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Volunteer&quot; &quot;image/avatars/canteen_sadie.gif&quot; &quot;right&quot; &quot;I&#39;m scraping the bottom of the barrel. I&#39;m sorry. If the scouts bring in more today, we&#39;ll double the portions.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        The refugee nods weakly and shuffles away. When you approach, the young woman puts on a practiced, weary smile.
+    &lt;&lt;else&gt;&gt;
+        The cafeteria is the loudest room in the sanctuary, filled with the echoing murmur of dozens of hungry, frightened people. The smell of boiled rice and thin, watery broth hangs heavy in the air. 
+        &lt;br&gt;&lt;br&gt;
+        The serving line stretches across the room. At the front, a young woman in an apron is frantically trying to distribute ladles of soup into plastic bowls. She looks exhausted.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Refugee&quot; &quot;image/avatars/unknown.gif&quot; &quot;left&quot; &quot;That&#39;s it? That&#39;s half a bowl! We left everything behind when the sirens started!&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Volunteer&quot; &quot;image/avatars/canteen_sadie.gif&quot; &quot;right&quot; &quot;I know, I know. I&#39;m sorry. Please stay in line! One ration pack per family right now. If the scouts bring in more tomorrow, we&#39;ll double the portions.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        The refugee mutters something under his breath and snatches the bowl. The volunteer exhales a shaky breath and looks down at the nearly empty steel pot. When you approach, the young woman puts on a practiced smile.
+    &lt;&lt;/if&gt;&gt;
+    &lt;br&gt;&lt;br&gt;
+    &lt;&lt;chat &quot;Volunteer&quot; &quot;image/avatars/canteen_sadie.gif&quot; &quot;right&quot; &quot;New arrival? You&#39;ll need to sign in with Sgt. Vance if you haven&#39;t already. If you&#39;re here for food, the line starts by the double doors. I promise I&#39;m going as fast as I can. I&#39;m Sadie, by the way.&quot;&gt;&gt;
+    &lt;&lt;set $sadie_met to true&gt;&gt;
+    &lt;br&gt;&lt;br&gt;
 &lt;&lt;/if&gt;&gt;
-&lt;/div&gt;
-
-&lt;&lt;chat &quot;Sadie&quot; &quot;image/avatars/canteen_sadie.gif&quot; &quot;right&quot; &quot;Please stay in line! One ration pack per family!&quot;&gt;&gt;
-&lt;br&gt;&lt;br&gt;
 
 &lt;&lt;if $helped_sadie&gt;&gt;
-    &lt;span style=&quot;color:var(--accent-green);&quot;&gt;Sadie smiles as you approach. The ration line is organized and flowing smoothly.&lt;/span&gt;
+    Sadie spots you walking into the cafeteria and offers a warm, genuine smile. The ration line is much shorter now, and the atmosphere in the room feels slightly less desperate.
+    &lt;br&gt;&lt;br&gt;
+    &lt;&lt;chat &quot;Sadie&quot; &quot;image/avatars/canteen_sadie.gif&quot; &quot;right&quot; &quot;Things are finally settling down. You have no idea how much those supplies helped. People get scared when they&#39;re hungry. You kept a lot of people from panicking.&quot;&gt;&gt;
     &lt;br&gt;&lt;br&gt;
     &lt;&lt;if not $eaten_canteen_meal&gt;&gt;
-        &lt;div class=&quot;choice-menu&quot;&gt;
-            &lt;button&gt;
-                &lt;&lt;link &quot;Eat a hot ration meal [SADIE]&quot;&gt;&gt;
+        She pushes a warm bowl of thick stew and a slice of bread across the counter toward you.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Sadie&quot; &quot;image/avatars/canteen_sadie.gif&quot; &quot;right&quot; &quot;I saved a proper portion for you. Sit down. Eat. You&#39;ve earned it.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:15px;&quot;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-green) !important;&quot;&gt;
+                &lt;&lt;link &quot;Eat a hot ration meal [SADIE] ▼&quot;&gt;&gt;
+                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                     &lt;&lt;addTime 15&gt;&gt;
                     &lt;&lt;set $stamina to Math.min($stamina_max, $stamina + 40)&gt;&gt;
                     &lt;&lt;set $hunger to 100&gt;&gt;
@@ -9387,29 +9424,38 @@ setTimeout(function() {
             &lt;/button&gt;
         &lt;/div&gt;
     &lt;&lt;else&gt;&gt;
-        &lt;span style=&quot;color:var(--accent-green);&quot;&gt;You have already eaten your hot ration meal for today.&lt;/span&gt;
+        &lt;span style=&quot;color:var(--accent-green); font-weight:bold;&quot;&gt;You have already eaten your hot ration meal for today. Your hunger is satisfied.&lt;/span&gt;
     &lt;&lt;/if&gt;&gt;
+
 &lt;&lt;else&gt;&gt;
-    Sadie is stressed and struggling to stretch the emergency food supplies.
-    &lt;br&gt;&lt;br&gt;
-    &lt;div class=&quot;choice-menu&quot;&gt;
+    &lt;&lt;if $sadie_met&gt;&gt;
+        Sadie is still behind the counter, stressed and struggling to stretch the emergency food supplies. She glances at you, wiping her forehead with the back of her wrist.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Sadie&quot; &quot;image/avatars/canteen_sadie.gif&quot; &quot;right&quot; &quot;If you need rations, I&#39;m almost out. The water pipes in the school stopped working, so I can&#39;t even thin out the broth anymore.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+    &lt;&lt;/if&gt;&gt;
+
+    &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:15px;&quot;&gt;
         &lt;&lt;if $inventory.find(i =&gt; i.id === &quot;Canned Food&quot; || i.id === &quot;Energy Bar&quot; || i.id === &quot;Beef Jerky&quot;)&gt;&gt;
-            &lt;button&gt;
-                &lt;&lt;link &quot;Donate scavenged food to Sadie [INVENTORY]&quot;&gt;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-green) !important;&quot;&gt;
+                &lt;&lt;link &quot;Donate scavenged food to Sadie [INVENTORY] ▼&quot;&gt;&gt;
+                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                     &lt;&lt;addTime 10&gt;&gt;
                     &lt;&lt;set $helped_sadie to true&gt;&gt;
+                    &lt;&lt;set $sadie_quest_active to false&gt;&gt;
                     &lt;&lt;set $hum to Math.min(100, $hum + 15)&gt;&gt;
                     &lt;&lt;run window.gainXP(25)&gt;&gt;
                     &lt;&lt;run window.gainTrust(15)&gt;&gt;
                     &lt;&lt;if $inventory.find(i =&gt; i.id === &quot;Canned Food&quot;)&gt;&gt;&lt;&lt;run setup.removeItem(&quot;Canned Food&quot;, 1)&gt;&gt;&lt;&lt;elseif $inventory.find(i =&gt; i.id === &quot;Energy Bar&quot;)&gt;&gt;&lt;&lt;run setup.removeItem(&quot;Energy Bar&quot;, 1)&gt;&gt;&lt;&lt;else&gt;&gt;&lt;&lt;run setup.removeItem(&quot;Beef Jerky&quot;, 1)&gt;&gt;&lt;&lt;/if&gt;&gt;
                     &lt;&lt;goto &quot;Act3_School_Canteen&quot;&gt;&gt;
                 &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[+15 HUMANITY] [+15 TRUST]&lt;/b&gt; Donate extra rations.&lt;/span&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[+15 HUMANITY] [+15 TRUST]&lt;/b&gt; Donate extra rations to the kitchen.&lt;/span&gt;
             &lt;/button&gt;
         &lt;&lt;/if&gt;&gt;
         &lt;&lt;if $sadie_quest_active and $inventory.find(i =&gt; i.id === &quot;Bottled Water&quot; &amp;&amp; i.qty &gt;= 2)&gt;&gt;
-            &lt;button&gt;
-                &lt;&lt;link &quot;Deliver 2x Bottled Water from Pantry to Sadie&quot;&gt;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-green) !important;&quot;&gt;
+                &lt;&lt;link &quot;Deliver 2x Bottled Water from Pantry to Sadie ▼&quot;&gt;&gt;
+                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                     &lt;&lt;addTime 5&gt;&gt;
                     &lt;&lt;set $helped_sadie to true&gt;&gt;
                     &lt;&lt;completeObjective &quot;fetch_water_sadie&quot;&gt;&gt;
@@ -9420,11 +9466,12 @@ setTimeout(function() {
                     &lt;&lt;run window.gainTrust(20)&gt;&gt;
                     &lt;&lt;goto &quot;Act3_School_Canteen&quot;&gt;&gt;
                 &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[FETCH QUEST COMPLETE] [+20 TRUST]&lt;/b&gt;&lt;/span&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[FETCH QUEST COMPLETE] [+20 TRUST]&lt;/b&gt; Hand over the clean water.&lt;/span&gt;
             &lt;/button&gt;
         &lt;&lt;elseif not $sadie_quest_active&gt;&gt;
-            &lt;button&gt;
-                &lt;&lt;link &quot;Ask Sadie if she needs supplies&quot;&gt;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                &lt;&lt;link &quot;Ask Sadie if she needs supplies ▼&quot;&gt;&gt;
+                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                     &lt;&lt;addTime 5&gt;&gt;
                     &lt;&lt;set $sadie_quest_active to true&gt;&gt;
                     &lt;&lt;addObjective &quot;fetch_water_sadie&quot; &quot;Fetch 2x Bottled Water from the Pantry for Sadie&quot;&gt;&gt;
@@ -9436,36 +9483,55 @@ setTimeout(function() {
     &lt;/div&gt;
 &lt;&lt;/if&gt;&gt;
 
-&lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;🥫 Enter Food Pantry [SOUTH]&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_School_Pantry&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-    &lt;/button&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;🚪 Exit Canteen to Hallway&quot;&gt;&gt;
-            &lt;&lt;set $currentLocation to &quot;hall_g_west_1&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-    &lt;/button&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;choice-menu&quot;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+                &lt;&lt;link &quot;🥫 Enter Food Pantry [SOUTH]&quot;&gt;&gt;
+                    &lt;&lt;goto &quot;Act3_School_Pantry&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;Search the industrial storage room.&lt;/span&gt;
+            &lt;/button&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+                &lt;&lt;link &quot;🚪 Exit Canteen to Hallway [EAST]&quot;&gt;&gt;
+                    &lt;&lt;set $currentLocation to &quot;hall_g_west_2&quot;&gt;&gt;
+                    &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;Return to the Canteen Junction.&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="20" name="Act3_School_ComputerLab" tags="" position="1000,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;computer_lab&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;1ST FLOOR — COMPUTER LAB&lt;/h2&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            1ST FLOOR — COMPUTER LAB
+        &lt;/div&gt;
+
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-filler-main&quot;&gt;
 Desktop terminals glow in standby power mode.
 
 &lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;button&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;choice-menu&quot;&gt;
+    &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
         &lt;&lt;link &quot;🚪 Exit Computer Lab to Hallway [WEST]&quot;&gt;&gt;
             &lt;&lt;set $currentLocation to &quot;hall_1_east_2&quot;&gt;&gt;
             &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
         &lt;&lt;/link&gt;&gt;
     &lt;/button&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="21" name="Act3_School_DeptOffices" tags="" position="700,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;dept_offices&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
@@ -9500,11 +9566,9 @@ Faculty desks and filing cabinets. Armed guards rest between patrol watches.
 
 &lt;div class=&quot;vn-container&quot;&gt;
     &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
-
         &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
             GROUND FLOOR — SECURITY FOYER
         &lt;/div&gt;
-
         &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
             &lt;&lt;if _arrivedLate&gt;&gt;
                 &lt;img src=&quot;image/Act3_Timberline/lobby_morning.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
@@ -9512,10 +9576,13 @@ Faculty desks and filing cabinets. Armed guards rest between patrol watches.
                 &lt;img src=&quot;image/Act3_Timberline/lobby_night.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
             &lt;&lt;/if&gt;&gt;
         &lt;/div&gt;
-
         &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
             &lt;span id=&quot;vn-foyer-main&quot;&gt;
-                The main entrance foyer. Armed sentries guard the barricaded double doors against exterior threats. Piles of sandbags and overturned desks form a hardened chokepoint.
+                &lt;&lt;if _arrivedLate&gt;&gt;
+                    The main entrance foyer is bathed in cold morning light cutting through the dust. The frantic panic of the outbreak has burned itself out, leaving only exhaustion. Armed sentries are slumped against piles of sandbags and overturned desks, bleary-eyed and traumatized from the long night. The radios are dead quiet.
+                &lt;&lt;else&gt;&gt;
+                    The main entrance foyer is a chaotic choke point. Armed sentries are frantically stacking sandbags and overturned desks against the barricaded double doors. Radios crackle with panicked updates from the perimeter watch. The adrenaline in the room is thick enough to choke on.
+                &lt;&lt;/if&gt;&gt;
             &lt;/span&gt;
         &lt;/div&gt;
         
@@ -9528,7 +9595,6 @@ Faculty desks and filing cabinets. Armed guards rest between patrol watches.
                     &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Drive out with Reyes to rescue Commander Miller at the 7-Eleven.&lt;/span&gt;
                 &lt;/button&gt;
             &lt;&lt;/if&gt;&gt;
-
             &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
                 &lt;&lt;link &quot;➡️ Enter Screening Room [EAST]&quot;&gt;&gt;
                     &lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
@@ -9544,7 +9610,6 @@ Faculty desks and filing cabinets. Armed guards rest between patrol watches.
                 &lt;span class=&quot;btn-sub&quot;&gt;Enter the main ground floor corridor.&lt;/span&gt;
             &lt;/button&gt;
         &lt;/div&gt;
-
     &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="23" name="Act3_SchoolGFloor" tags="" position="600,1600" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $inSafehouse to true&gt;&gt;
@@ -9924,64 +9989,68 @@ setTimeout(function() {
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="25" name="Act3_School_Infirmary" tags="" position="700,1700" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;infirmary&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
+&lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
 &lt;div class=&quot;vn-container&quot;&gt;
     &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
-
         &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
             GROUND FLOOR — EMERGENCY INFIRMARY
         &lt;/div&gt;
-
         &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
             &lt;img src=&quot;image/Act3_Timberline/infirmary.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
         &lt;/div&gt;
-
         &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
             &lt;span id=&quot;vn-infirmary-main&quot;&gt;
 
 &lt;&lt;if not $thorne_met&gt;&gt;
-    The smell reaches you before you fully enter the room.
-    &lt;br&gt;&lt;br&gt;
-    Antiseptic. Sweat. Old blood.
-    &lt;br&gt;&lt;br&gt;
-    Every desk has been pushed against the walls to make space for cots. Some are occupied by survivors wrapped in mismatched blankets. Others are empty, their sheets folded with an uncomfortable neatness.
-    &lt;br&gt;&lt;br&gt;
-    A portable lamp flickers above the nearest cot.
-    &lt;br&gt;&lt;br&gt;
-    A man in a stained medical coat is bent over a wounded survivor. One hand presses firmly against a blood-soaked bandage while the other searches through an almost empty tray of supplies.
-    &lt;br&gt;&lt;br&gt;
-    His fingers move from one compartment to another.
-    &lt;br&gt;&lt;br&gt;
-    Gauze. Empty.
-    &lt;br&gt;&lt;br&gt;
-    Alcohol wipes. Empty.
-    &lt;br&gt;&lt;br&gt;
-    Antibiotics. Nothing.
-    &lt;br&gt;&lt;br&gt;
-    The wounded survivor lets out a weak cry. The man immediately leans closer.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Unknown Doctor&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Stay with me. You hear me? Keep your eyes open.&quot;&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    You take another step into the room.
-    &lt;br&gt;&lt;br&gt;
-    The floorboard creaks.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Unknown Doctor&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Stop there.&quot;&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    He does not turn around.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Unknown Doctor&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;If you&#39;re injured, sit against the wall and wait. If you&#39;re armed, keep the weapon pointed at the floor. And if you&#39;re here to ask whether anyone has seen your friends, ask quietly.&quot;&gt;&gt;
-    &lt;br&gt;&lt;br&gt;
-    The survivor on the cot suddenly convulses.
-    &lt;br&gt;&lt;br&gt;
-    The doctor grabs the patient&#39;s shoulder and presses harder against the wound. For several seconds, the only sounds are strained breathing and the faint hum of the emergency lamp.
-    &lt;br&gt;&lt;br&gt;
-    Finally, the patient settles.
-    &lt;br&gt;&lt;br&gt;
-    The man slowly removes his blood-stained gloves and turns toward you.
-    &lt;br&gt;&lt;br&gt;
-    &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Dr. Adrian Thorne. I used to work at St. Gabriel&#39;s Medical Center. Now I work wherever people are still breathing.&quot;&gt;&gt;
+    &lt;&lt;if _arrivedLate&gt;&gt;
+        The infirmary is dead quiet. It smells of dried sweat, cold coffee, and old blood.
+        &lt;br&gt;&lt;br&gt;
+        Every desk has been pushed against the walls to make space for cots. Most are occupied by survivors wrapped in mismatched blankets, their chests rising and falling in exhausted, feverish rhythms.
+        &lt;br&gt;&lt;br&gt;
+        A portable lamp flickers above a medical tray. 
+        &lt;br&gt;&lt;br&gt;
+        A man in a stained medical coat is sitting on an overturned bucket, staring blankly at a blood-soaked rag in his hands. He looks like he hasn&#39;t slept in days. The tray next to him is completely empty of supplies.
+        &lt;br&gt;&lt;br&gt;
+        He hears your footsteps and slowly looks up.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Exhausted Doctor&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;If you&#39;re injured, sit against the wall and wait. If you&#39;re armed, keep the weapon pointed at the floor.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        He tosses the bloody rag into a bin and stands up, wincing as his knees pop.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Dr. Adrian Thorne. I used to work at St. Gabriel&#39;s. Now I work wherever people are still breathing. The long night is over, but infection doesn&#39;t sleep.&quot;&gt;&gt;
+    &lt;&lt;else&gt;&gt;
+        The smell reaches you before you fully enter the room.
+        &lt;br&gt;&lt;br&gt;
+        Antiseptic. Sweat. Old blood.
+        &lt;br&gt;&lt;br&gt;
+        Every desk has been pushed against the walls to make space for cots. Some are occupied by survivors wrapped in mismatched blankets. Others are empty, their sheets folded with an uncomfortable neatness.
+        &lt;br&gt;&lt;br&gt;
+        A portable lamp flickers above the nearest cot.
+        &lt;br&gt;&lt;br&gt;
+        A man in a stained medical coat is bent over a wounded survivor. One hand presses firmly against a blood-soaked bandage while the other searches through an almost empty tray of supplies.
+        &lt;br&gt;&lt;br&gt;
+        His fingers move from one compartment to another. Gauze. Empty. Alcohol wipes. Empty. Antibiotics. Nothing.
+        &lt;br&gt;&lt;br&gt;
+        The wounded survivor lets out a weak cry. The man immediately leans closer.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Unknown Doctor&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Stay with me. You hear me? Keep your eyes open.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        You take another step into the room. The floorboard creaks.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Unknown Doctor&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Stop there.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        He does not turn around.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Unknown Doctor&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;If you&#39;re injured, sit against the wall and wait. If you&#39;re armed, keep the weapon pointed at the floor. And if you&#39;re here to ask whether anyone has seen your friends, ask quietly.&quot;&gt;&gt;
+        &lt;br&gt;&lt;br&gt;
+        The survivor on the cot suddenly convulses. The doctor grabs the patient&#39;s shoulder and presses harder against the wound. For several seconds, the only sounds are strained breathing and the faint hum of the emergency lamp. Finally, the patient settles.
+        &lt;br&gt;&lt;br&gt;
+        The man slowly removes his blood-stained gloves and turns toward you.
+        &lt;br&gt;&lt;br&gt;
+        &lt;&lt;chat &quot;Dr. Thorne&quot; &quot;image/avatars/drthorne.gif&quot; &quot;right&quot; &quot;Dr. Adrian Thorne. I used to work at St. Gabriel&#39;s Medical Center. Now I work wherever people are still breathing.&quot;&gt;&gt;
+    &lt;&lt;/if&gt;&gt;
 
     &lt;&lt;set $thorne_met to true&gt;&gt;
     &lt;&lt;set $thorne_intro_seen to true&gt;&gt;
@@ -10077,7 +10146,6 @@ setTimeout(function() {
                 &lt;&lt;/link&gt;&gt;
                 &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[NEW OBJECTIVE]&lt;/b&gt; Search for medical supplies.&lt;/span&gt;
             &lt;/button&gt;
-
             &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
                 &lt;&lt;link &quot;Tell Thorne you need time to prepare ▼&quot;&gt;&gt;
                     &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
@@ -10215,7 +10283,6 @@ setTimeout(function() {
                 &lt;span class=&quot;btn-sub&quot;&gt;Leave Dr. Thorne&#39;s triage ward.&lt;/span&gt;
             &lt;/button&gt;
         &lt;/div&gt;
-
     &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="26" name="Act3_School_Library" tags="" position="900,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;library&quot;&gt;&gt;
@@ -10349,36 +10416,48 @@ Mechanical, electrical, and plumbing maintenance room. Pipes groan overhead as t
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;GROUND FLOOR — FOOD PANTRY&lt;/h2&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
-Industrial metal shelves stand behind the canteen kitchen.
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            GROUND FLOOR — FOOD PANTRY
+        &lt;/div&gt;
 
-&lt;&lt;if not $looted_pantry&gt;&gt;
-    You spot unopened crates of bottled water and canned goods tucked behind flour sacks.
-    &lt;br&gt;&lt;br&gt;
-    &lt;div class=&quot;choice-menu&quot;&gt;
-        &lt;button&gt;
-            &lt;&lt;link &quot;Search the Pantry shelves&quot;&gt;&gt;
-                &lt;&lt;addTime 5&gt;&gt;
-                &lt;&lt;set $looted_pantry to true&gt;&gt;
-                &lt;&lt;run setup.addItem(&quot;Bottled Water&quot;, 2)&gt;&gt;
-                &lt;&lt;run setup.addItem(&quot;Canned Food&quot;, 1)&gt;&gt;
-                &lt;&lt;goto &quot;Act3_School_Pantry&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[LOOT]&lt;/b&gt; Found 2x Bottled Water, 1x Canned Food.&lt;/span&gt;
-        &lt;/button&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-pantry-main&quot;&gt;
+                Industrial metal shelves stand behind the canteen kitchen.
+
+                &lt;&lt;if not $looted_pantry&gt;&gt;
+                    You spot unopened crates of bottled water and canned goods tucked behind flour sacks.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;div class=&quot;choice-menu&quot;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;Search the Pantry shelves ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 5&gt;&gt;
+                                &lt;&lt;set $looted_pantry to true&gt;&gt;
+                                &lt;&lt;run setup.addItem(&quot;Bottled Water&quot;, 2)&gt;&gt;
+                                &lt;&lt;run setup.addItem(&quot;Canned Food&quot;, 1)&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_Pantry&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[LOOT]&lt;/b&gt; Found 2x Bottled Water, 1x Canned Food.&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;&lt;else&gt;&gt;
+                    The shelves have been cleared of useful emergency rations.
+                &lt;&lt;/if&gt;&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;choice-menu&quot;&gt;
+            &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+                &lt;&lt;link &quot;🚪 Exit Pantry to Canteen [NORTH]&quot;&gt;&gt;
+                    &lt;&lt;goto &quot;Act3_School_Canteen&quot;&gt;&gt;
+                &lt;&lt;/link&gt;&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+
     &lt;/div&gt;
-&lt;&lt;else&gt;&gt;
-    The shelves have been cleared of useful emergency rations.
-&lt;&lt;/if&gt;&gt;
-
-&lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;🚪 Exit Pantry to Canteen [NORTH]&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_School_Canteen&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-    &lt;/button&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="30" name="Act3_School_RadioRoom" tags="" position="800,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;radio_room&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
@@ -10455,88 +10534,33 @@ Industrial metal shelves stand behind the canteen kitchen.
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;1ST FLOOR — ROOF ACCESS LANDING&lt;/h2&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            1ST FLOOR — ROOF ACCESS LANDING
+        &lt;/div&gt;
+
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-filler-main&quot;&gt;
 Heavy steel door leading out to the rooftop sniper overlook post.
 
 &lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;button&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;choice-menu&quot;&gt;
+    &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
         &lt;&lt;link &quot;⬇️ South to Hallway&quot;&gt;&gt;
             &lt;&lt;set $currentLocation to &quot;hall_1_west_2&quot;&gt;&gt;
             &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
         &lt;&lt;/link&gt;&gt;
     &lt;/button&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="32" name="Act3_School_Room101" tags="" position="900,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;room_101&quot;&gt;&gt;
-&lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
-
-&lt;h2&gt;GROUND FLOOR — CLASSROOM 101&lt;/h2&gt;
-
-Desks have been pushed aside to make room for sleeping bags. Refugees rest quietly in the dark.
-
-&lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;🚪 Exit Classroom 101 to Hallway [EAST]&quot;&gt;&gt;
-            &lt;&lt;set $currentLocation to &quot;hall_g_west_2&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-    &lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="33" name="Act3_School_Room102" tags="" position="1000,1700" size="100,100">&lt;&lt;nobr&gt;&gt;
-&lt;&lt;set $currentLocation to &quot;room_102&quot;&gt;&gt;
-&lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
-
-&lt;h2&gt;GROUND FLOOR — CLASSROOM 102&lt;/h2&gt;
-
-Overflow sleeping cots line the room. A few exhausted city survivors sit together, talking in hushed tones.
-
-&lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;🚪 Exit Classroom 102 to Hallway [EAST]&quot;&gt;&gt;
-            &lt;&lt;set $currentLocation to &quot;hall_g_west_2&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-    &lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="34" name="Act3_School_Room201" tags="" position="1200,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
-&lt;&lt;set $currentLocation to &quot;room_201&quot;&gt;&gt;
-&lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
-
-&lt;h2&gt;1ST FLOOR — ROOM 201&lt;/h2&gt;
-
-Classroom converted to ammunition and equipment storage.
-
-&lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;🚪 Exit Room 201 to Hallway [EAST]&quot;&gt;&gt;
-            &lt;&lt;set $currentLocation to &quot;hall_1_west_2&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-    &lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="35" name="Act3_School_Room202" tags="" position="1300,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
-&lt;&lt;set $currentLocation to &quot;room_202&quot;&gt;&gt;
-&lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
-
-&lt;h2&gt;1ST FLOOR — ROOM 202&lt;/h2&gt;
-
-Off-duty guard sleeping quarter.
-
-&lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;button&gt;
-        &lt;&lt;link &quot;🚪 Exit Room 202 to Hallway [EAST]&quot;&gt;&gt;
-            &lt;&lt;set $currentLocation to &quot;hall_1_west_2&quot;&gt;&gt;
-            &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-    &lt;/button&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="36" name="Act3_School_Screening" tags="" position="700,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
-&lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
@@ -10544,23 +10568,144 @@ Off-duty guard sleeping quarter.
     &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
         &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
-            GROUND FLOOR — SCREENING ROOM
-        &lt;/div&gt;
-
-        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
-            &lt;img src=&quot;image/Act3_Timberline/screening.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+            GROUND FLOOR — CLASSROOM 101
         &lt;/div&gt;
 
         &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
-            &lt;span id=&quot;vn-screening-main&quot;&gt;
+            &lt;span id=&quot;vn-filler-main&quot;&gt;
+Desks have been pushed aside to make room for sleeping bags. Refugees rest quietly in the dark.
 
-                &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Keep your hands visible while you&#39;re in the foyer. All heavy weapons stay tagged in the locker.&quot;&gt;&gt;
-                &lt;br&gt;&lt;br&gt;
-                Sgt. Vance inspects incoming gear and logs refugee contraband. He doesn&#39;t look up from his clipboard as you walk past.
-
+&lt;br&gt;&lt;br&gt;
             &lt;/span&gt;
         &lt;/div&gt;
         
+        &lt;div class=&quot;choice-menu&quot;&gt;
+    &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+        &lt;&lt;link &quot;🚪 Exit Classroom 101 to Hallway [EAST]&quot;&gt;&gt;
+            &lt;&lt;set $currentLocation to &quot;hall_g_west_2&quot;&gt;&gt;
+            &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+        &lt;&lt;/link&gt;&gt;
+    &lt;/button&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="33" name="Act3_School_Room102" tags="" position="1000,1700" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;set $currentLocation to &quot;room_102&quot;&gt;&gt;
+&lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;
+
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
+
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            GROUND FLOOR — CLASSROOM 102
+        &lt;/div&gt;
+
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-filler-main&quot;&gt;
+Overflow sleeping cots line the room. A few exhausted city survivors sit together, talking in hushed tones.
+
+&lt;br&gt;&lt;br&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;choice-menu&quot;&gt;
+    &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+        &lt;&lt;link &quot;🚪 Exit Classroom 102 to Hallway [EAST]&quot;&gt;&gt;
+            &lt;&lt;set $currentLocation to &quot;hall_g_west_2&quot;&gt;&gt;
+            &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+        &lt;&lt;/link&gt;&gt;
+    &lt;/button&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="34" name="Act3_School_Room201" tags="" position="1200,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;set $currentLocation to &quot;room_201&quot;&gt;&gt;
+&lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;
+
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
+
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            1ST FLOOR — ROOM 201
+        &lt;/div&gt;
+
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-filler-main&quot;&gt;
+Classroom converted to ammunition and equipment storage.
+
+&lt;br&gt;&lt;br&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;choice-menu&quot;&gt;
+    &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+        &lt;&lt;link &quot;🚪 Exit Room 201 to Hallway [EAST]&quot;&gt;&gt;
+            &lt;&lt;set $currentLocation to &quot;hall_1_west_2&quot;&gt;&gt;
+            &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+        &lt;&lt;/link&gt;&gt;
+    &lt;/button&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="35" name="Act3_School_Room202" tags="" position="1300,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;set $currentLocation to &quot;room_202&quot;&gt;&gt;
+&lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;
+
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
+
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            1ST FLOOR — ROOM 202
+        &lt;/div&gt;
+
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-filler-main&quot;&gt;
+Off-duty guard sleeping quarter.
+
+&lt;br&gt;&lt;br&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;choice-menu&quot;&gt;
+    &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+        &lt;&lt;link &quot;🚪 Exit Room 202 to Hallway [EAST]&quot;&gt;&gt;
+            &lt;&lt;set $currentLocation to &quot;hall_1_west_2&quot;&gt;&gt;
+            &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+        &lt;&lt;/link&gt;&gt;
+    &lt;/button&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="36" name="Act3_School_Screening" tags="" position="700,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
+&lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
+&lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;
+
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            GROUND FLOOR — SCREENING ROOM
+        &lt;/div&gt;
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;img src=&quot;image/Act3_Timberline/screening.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-screening-main&quot;&gt;
+                &lt;&lt;if _arrivedLate&gt;&gt;
+                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Hands visible. Weapons tagged. Don&#39;t make me repeat it... I&#39;m too tired to repeat it.&quot;&gt;&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    Sgt. Vance rubs his bloodshot eyes and takes a slow drink from a thermos of cold coffee. He mechanically inspects incoming gear and logs refugee contraband. He doesn&#39;t even look up from his clipboard as you walk past.
+                &lt;&lt;else&gt;&gt;
+                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Keep your hands visible while you&#39;re in the foyer! All heavy weapons stay tagged in the locker! Step back!&quot;&gt;&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    Sgt. Vance is yelling over the arguments of fresh, panicked refugees. He aggressively inspects incoming gear and logs refugee contraband, keeping one hand resting on his sidearm just in case someone loses their nerve.
+                &lt;&lt;/if&gt;&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
         &lt;div class=&quot;choice-menu&quot;&gt;
             &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
                 &lt;&lt;link &quot;🚪 Exit Screening to Foyer [WEST]&quot;&gt;&gt;
@@ -10577,42 +10722,67 @@ Off-duty guard sleeping quarter.
                 &lt;span class=&quot;btn-sub&quot;&gt;Return to the Screening Junction corridor.&lt;/span&gt;
             &lt;/button&gt;
         &lt;/div&gt;
-
     &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="37" name="Act3_School_SecurityRoom" tags="" position="1000,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;security_room&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;GROUND FLOOR — SECURITY GUARD ROOM&lt;/h2&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            GROUND FLOOR — SECURITY GUARD ROOM
+        &lt;/div&gt;
+
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-filler-main&quot;&gt;
 Monitors display flickering static feeds from exterior cameras mounted along the bus perimeter.
 
 &lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;button&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;choice-menu&quot;&gt;
+    &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
         &lt;&lt;link &quot;🚪 Exit Security Room to Hallway [NORTH]&quot;&gt;&gt;
             &lt;&lt;set $currentLocation to &quot;hall_g_west_1&quot;&gt;&gt;
             &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
         &lt;&lt;/link&gt;&gt;
     &lt;/button&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="38" name="Act3_School_ServerRoom" tags="" position="1100,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;server_room&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;1ST FLOOR — SERVER ROOM&lt;/h2&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            1ST FLOOR — SERVER ROOM
+        &lt;/div&gt;
+
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-filler-main&quot;&gt;
 Server racks hum loudly in the air-conditioned enclosure.
 
 &lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;button&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;choice-menu&quot;&gt;
+    &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
         &lt;&lt;link &quot;🚪 Exit Server Room to Hallway [WEST]&quot;&gt;&gt;
             &lt;&lt;set $currentLocation to &quot;hall_1_east_2&quot;&gt;&gt;
             &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
         &lt;&lt;/link&gt;&gt;
     &lt;/button&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="39" name="Act3_Sheriff" tags="" position="450,1500" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;if ndef $sheriff_phase&gt;&gt;
     &lt;&lt;set $sheriff_phase    to 1&gt;&gt;

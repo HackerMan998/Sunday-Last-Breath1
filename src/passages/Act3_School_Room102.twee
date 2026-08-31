@@ -4,16 +4,29 @@
 <<set $activeMap to "Highschool Ground">>
 <</nobr>>
 
-<h2>GROUND FLOOR — CLASSROOM 102</h2>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
 
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            GROUND FLOOR — CLASSROOM 102
+        </div>
+
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-filler-main">
 Overflow sleeping cots line the room. A few exhausted city survivors sit together, talking in hushed tones.
 
 <br><br>
-<div class="choice-menu">
-    <button>
+            </span>
+        </div>
+        
+        <div class="choice-menu">
+    <button style="border-left-color: var(--accent-blue) !important;">
         <<link "🚪 Exit Classroom 102 to Hallway [EAST]">>
             <<set $currentLocation to "hall_g_west_2">>
             <<goto "Act3_SchoolGFloor">>
         <</link>>
     </button>
+        </div>
+
+    </div>
 </div>

@@ -2,64 +2,68 @@
 <<nobr>>
 <<set $currentLocation to "infirmary">>
 <<set $activeMap to "Highschool Ground">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
 <</nobr>>
 
 <div class="vn-container">
     <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
-
         <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
             GROUND FLOOR — EMERGENCY INFIRMARY
         </div>
-
         <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
             <img src="image/Act3_Timberline/infirmary.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
         </div>
-
         <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
             <span id="vn-infirmary-main">
 
 <<if not $thorne_met>>
-    The smell reaches you before you fully enter the room.
-    <br><br>
-    Antiseptic. Sweat. Old blood.
-    <br><br>
-    Every desk has been pushed against the walls to make space for cots. Some are occupied by survivors wrapped in mismatched blankets. Others are empty, their sheets folded with an uncomfortable neatness.
-    <br><br>
-    A portable lamp flickers above the nearest cot.
-    <br><br>
-    A man in a stained medical coat is bent over a wounded survivor. One hand presses firmly against a blood-soaked bandage while the other searches through an almost empty tray of supplies.
-    <br><br>
-    His fingers move from one compartment to another.
-    <br><br>
-    Gauze. Empty.
-    <br><br>
-    Alcohol wipes. Empty.
-    <br><br>
-    Antibiotics. Nothing.
-    <br><br>
-    The wounded survivor lets out a weak cry. The man immediately leans closer.
-    <br><br>
-    <<chat "Unknown Doctor" "image/avatars/drthorne.gif" "right" "Stay with me. You hear me? Keep your eyes open.">>
-    <br><br>
-    You take another step into the room.
-    <br><br>
-    The floorboard creaks.
-    <br><br>
-    <<chat "Unknown Doctor" "image/avatars/drthorne.gif" "right" "Stop there.">>
-    <br><br>
-    He does not turn around.
-    <br><br>
-    <<chat "Unknown Doctor" "image/avatars/drthorne.gif" "right" "If you're injured, sit against the wall and wait. If you're armed, keep the weapon pointed at the floor. And if you're here to ask whether anyone has seen your friends, ask quietly.">>
-    <br><br>
-    The survivor on the cot suddenly convulses.
-    <br><br>
-    The doctor grabs the patient's shoulder and presses harder against the wound. For several seconds, the only sounds are strained breathing and the faint hum of the emergency lamp.
-    <br><br>
-    Finally, the patient settles.
-    <br><br>
-    The man slowly removes his blood-stained gloves and turns toward you.
-    <br><br>
-    <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right" "Dr. Adrian Thorne. I used to work at St. Gabriel's Medical Center. Now I work wherever people are still breathing.">>
+    <<if _arrivedLate>>
+        The infirmary is dead quiet. It smells of dried sweat, cold coffee, and old blood.
+        <br><br>
+        Every desk has been pushed against the walls to make space for cots. Most are occupied by survivors wrapped in mismatched blankets, their chests rising and falling in exhausted, feverish rhythms.
+        <br><br>
+        A portable lamp flickers above a medical tray. 
+        <br><br>
+        A man in a stained medical coat is sitting on an overturned bucket, staring blankly at a blood-soaked rag in his hands. He looks like he hasn't slept in days. The tray next to him is completely empty of supplies.
+        <br><br>
+        He hears your footsteps and slowly looks up.
+        <br><br>
+        <<chat "Exhausted Doctor" "image/avatars/drthorne.gif" "right" "If you're injured, sit against the wall and wait. If you're armed, keep the weapon pointed at the floor.">>
+        <br><br>
+        He tosses the bloody rag into a bin and stands up, wincing as his knees pop.
+        <br><br>
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right" "Dr. Adrian Thorne. I used to work at St. Gabriel's. Now I work wherever people are still breathing. The long night is over, but infection doesn't sleep.">>
+    <<else>>
+        The smell reaches you before you fully enter the room.
+        <br><br>
+        Antiseptic. Sweat. Old blood.
+        <br><br>
+        Every desk has been pushed against the walls to make space for cots. Some are occupied by survivors wrapped in mismatched blankets. Others are empty, their sheets folded with an uncomfortable neatness.
+        <br><br>
+        A portable lamp flickers above the nearest cot.
+        <br><br>
+        A man in a stained medical coat is bent over a wounded survivor. One hand presses firmly against a blood-soaked bandage while the other searches through an almost empty tray of supplies.
+        <br><br>
+        His fingers move from one compartment to another. Gauze. Empty. Alcohol wipes. Empty. Antibiotics. Nothing.
+        <br><br>
+        The wounded survivor lets out a weak cry. The man immediately leans closer.
+        <br><br>
+        <<chat "Unknown Doctor" "image/avatars/drthorne.gif" "right" "Stay with me. You hear me? Keep your eyes open.">>
+        <br><br>
+        You take another step into the room. The floorboard creaks.
+        <br><br>
+        <<chat "Unknown Doctor" "image/avatars/drthorne.gif" "right" "Stop there.">>
+        <br><br>
+        He does not turn around.
+        <br><br>
+        <<chat "Unknown Doctor" "image/avatars/drthorne.gif" "right" "If you're injured, sit against the wall and wait. If you're armed, keep the weapon pointed at the floor. And if you're here to ask whether anyone has seen your friends, ask quietly.">>
+        <br><br>
+        The survivor on the cot suddenly convulses. The doctor grabs the patient's shoulder and presses harder against the wound. For several seconds, the only sounds are strained breathing and the faint hum of the emergency lamp. Finally, the patient settles.
+        <br><br>
+        The man slowly removes his blood-stained gloves and turns toward you.
+        <br><br>
+        <<chat "Dr. Thorne" "image/avatars/drthorne.gif" "right" "Dr. Adrian Thorne. I used to work at St. Gabriel's Medical Center. Now I work wherever people are still breathing.">>
+    <</if>>
 
     <<set $thorne_met to true>>
     <<set $thorne_intro_seen to true>>
@@ -155,7 +159,6 @@
                 <</link>>
                 <span class="btn-sub"><b style="color:var(--accent-green);">[NEW OBJECTIVE]</b> Search for medical supplies.</span>
             </button>
-
             <button style="border-left-color: var(--accent-gold) !important;">
                 <<link "Tell Thorne you need time to prepare ▼">>
                     <<run $(".vn-dialogue-box").scrollTop(0)>>
@@ -293,6 +296,5 @@
                 <span class="btn-sub">Leave Dr. Thorne's triage ward.</span>
             </button>
         </div>
-
     </div>
 </div>

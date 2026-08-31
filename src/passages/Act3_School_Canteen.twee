@@ -5,26 +5,63 @@
 <<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
 <</nobr>>
 
-<h2>GROUND FLOOR — CANTEEN</h2>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            GROUND FLOOR — CANTEEN
+        </div>
+        <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+            <<if _arrivedLate>>
+                <img src="image/Act3_Timberline/canteen_morning.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            <<else>>
+                <img src="image/Act3_Timberline/canteen_night.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            <</if>>
+        </div>
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-canteen-main">
 
-<div style="margin-bottom: 15px; text-align: center;">
-<<if _arrivedLate>>
-    <img src="image/Act3_Timberline/canteen_morning.gif" style="max-width: 100%; border: 1px solid #333;">
-<<else>>
-    <img src="image/Act3_Timberline/canteen_night.gif" style="max-width: 100%; border: 1px solid #333;">
+<<if not $sadie_met>>
+    <<if _arrivedLate>>
+        The cafeteria is eerily quiet. Dozens of exhausted refugees are slumped across the plastic tables or sleeping on the linoleum floor. The smell of thin, watery broth hangs heavy in the morning air. 
+        <br><br>
+        At the serving line, a young woman in an apron is trying to scrape the bottom of a steel pot. She looks dead on her feet, her hair plastered to her forehead with sweat.
+        <br><br>
+        <<chat "Refugee" "image/avatars/unknown.gif" "left" "Is there anything left? We've been trapped in this school all night!">>
+        <br><br>
+        <<chat "Volunteer" "image/avatars/canteen_sadie.gif" "right" "I'm scraping the bottom of the barrel. I'm sorry. If the scouts bring in more today, we'll double the portions.">>
+        <br><br>
+        The refugee nods weakly and shuffles away. When you approach, the young woman puts on a practiced, weary smile.
+    <<else>>
+        The cafeteria is the loudest room in the sanctuary, filled with the echoing murmur of dozens of hungry, frightened people. The smell of boiled rice and thin, watery broth hangs heavy in the air. 
+        <br><br>
+        The serving line stretches across the room. At the front, a young woman in an apron is frantically trying to distribute ladles of soup into plastic bowls. She looks exhausted.
+        <br><br>
+        <<chat "Refugee" "image/avatars/unknown.gif" "left" "That's it? That's half a bowl! We left everything behind when the sirens started!">>
+        <br><br>
+        <<chat "Volunteer" "image/avatars/canteen_sadie.gif" "right" "I know, I know. I'm sorry. Please stay in line! One ration pack per family right now. If the scouts bring in more tomorrow, we'll double the portions.">>
+        <br><br>
+        The refugee mutters something under his breath and snatches the bowl. The volunteer exhales a shaky breath and looks down at the nearly empty steel pot. When you approach, the young woman puts on a practiced smile.
+    <</if>>
+    <br><br>
+    <<chat "Volunteer" "image/avatars/canteen_sadie.gif" "right" "New arrival? You'll need to sign in with Sgt. Vance if you haven't already. If you're here for food, the line starts by the double doors. I promise I'm going as fast as I can. I'm Sadie, by the way.">>
+    <<set $sadie_met to true>>
+    <br><br>
 <</if>>
-</div>
-
-<<chat "Sadie" "image/avatars/canteen_sadie.gif" "right" "Please stay in line! One ration pack per family!">>
-<br><br>
 
 <<if $helped_sadie>>
-    <span style="color:var(--accent-green);">Sadie smiles as you approach. The ration line is organized and flowing smoothly.</span>
+    Sadie spots you walking into the cafeteria and offers a warm, genuine smile. The ration line is much shorter now, and the atmosphere in the room feels slightly less desperate.
+    <br><br>
+    <<chat "Sadie" "image/avatars/canteen_sadie.gif" "right" "Things are finally settling down. You have no idea how much those supplies helped. People get scared when they're hungry. You kept a lot of people from panicking.">>
     <br><br>
     <<if not $eaten_canteen_meal>>
-        <div class="choice-menu">
-            <button>
-                <<link "Eat a hot ration meal [SADIE]">>
+        She pushes a warm bowl of thick stew and a slice of bread across the counter toward you.
+        <br><br>
+        <<chat "Sadie" "image/avatars/canteen_sadie.gif" "right" "I saved a proper portion for you. Sit down. Eat. You've earned it.">>
+        <br><br>
+        <div class="choice-menu" style="margin-top:15px;">
+            <button style="border-left-color: var(--accent-green) !important;">
+                <<link "Eat a hot ration meal [SADIE] ▼">>
+                    <<run $(".vn-dialogue-box").scrollTop(0)>>
                     <<addTime 15>>
                     <<set $stamina to Math.min($stamina_max, $stamina + 40)>>
                     <<set $hunger to 100>>
@@ -35,29 +72,38 @@
             </button>
         </div>
     <<else>>
-        <span style="color:var(--accent-green);">You have already eaten your hot ration meal for today.</span>
+        <span style="color:var(--accent-green); font-weight:bold;">You have already eaten your hot ration meal for today. Your hunger is satisfied.</span>
     <</if>>
+
 <<else>>
-    Sadie is stressed and struggling to stretch the emergency food supplies.
-    <br><br>
-    <div class="choice-menu">
+    <<if $sadie_met>>
+        Sadie is still behind the counter, stressed and struggling to stretch the emergency food supplies. She glances at you, wiping her forehead with the back of her wrist.
+        <br><br>
+        <<chat "Sadie" "image/avatars/canteen_sadie.gif" "right" "If you need rations, I'm almost out. The water pipes in the school stopped working, so I can't even thin out the broth anymore.">>
+        <br><br>
+    <</if>>
+
+    <div class="choice-menu" style="margin-top:15px;">
         <<if $inventory.find(i => i.id === "Canned Food" || i.id === "Energy Bar" || i.id === "Beef Jerky")>>
-            <button>
-                <<link "Donate scavenged food to Sadie [INVENTORY]">>
+            <button style="border-left-color: var(--accent-green) !important;">
+                <<link "Donate scavenged food to Sadie [INVENTORY] ▼">>
+                    <<run $(".vn-dialogue-box").scrollTop(0)>>
                     <<addTime 10>>
                     <<set $helped_sadie to true>>
+                    <<set $sadie_quest_active to false>>
                     <<set $hum to Math.min(100, $hum + 15)>>
                     <<run window.gainXP(25)>>
                     <<run window.gainTrust(15)>>
                     <<if $inventory.find(i => i.id === "Canned Food")>><<run setup.removeItem("Canned Food", 1)>><<elseif $inventory.find(i => i.id === "Energy Bar")>><<run setup.removeItem("Energy Bar", 1)>><<else>><<run setup.removeItem("Beef Jerky", 1)>><</if>>
                     <<goto "Act3_School_Canteen">>
                 <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-green);">[+15 HUMANITY] [+15 TRUST]</b> Donate extra rations.</span>
+                <span class="btn-sub"><b style="color:var(--accent-green);">[+15 HUMANITY] [+15 TRUST]</b> Donate extra rations to the kitchen.</span>
             </button>
         <</if>>
         <<if $sadie_quest_active and $inventory.find(i => i.id === "Bottled Water" && i.qty >= 2)>>
-            <button>
-                <<link "Deliver 2x Bottled Water from Pantry to Sadie">>
+            <button style="border-left-color: var(--accent-green) !important;">
+                <<link "Deliver 2x Bottled Water from Pantry to Sadie ▼">>
+                    <<run $(".vn-dialogue-box").scrollTop(0)>>
                     <<addTime 5>>
                     <<set $helped_sadie to true>>
                     <<completeObjective "fetch_water_sadie">>
@@ -68,11 +114,12 @@
                     <<run window.gainTrust(20)>>
                     <<goto "Act3_School_Canteen">>
                 <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-green);">[FETCH QUEST COMPLETE] [+20 TRUST]</b></span>
+                <span class="btn-sub"><b style="color:var(--accent-green);">[FETCH QUEST COMPLETE] [+20 TRUST]</b> Hand over the clean water.</span>
             </button>
         <<elseif not $sadie_quest_active>>
-            <button>
-                <<link "Ask Sadie if she needs supplies">>
+            <button style="border-left-color: var(--accent-gold) !important;">
+                <<link "Ask Sadie if she needs supplies ▼">>
+                    <<run $(".vn-dialogue-box").scrollTop(0)>>
                     <<addTime 5>>
                     <<set $sadie_quest_active to true>>
                     <<addObjective "fetch_water_sadie" "Fetch 2x Bottled Water from the Pantry for Sadie">>
@@ -84,17 +131,23 @@
     </div>
 <</if>>
 
-<br><br>
-<div class="choice-menu">
-    <button>
-        <<link "🥫 Enter Food Pantry [SOUTH]">>
-            <<goto "Act3_School_Pantry">>
-        <</link>>
-    </button>
-    <button>
-        <<link "🚪 Exit Canteen to Hallway">>
-            <<set $currentLocation to "hall_g_west_1">>
-            <<goto "Act3_SchoolGFloor">>
-        <</link>>
-    </button>
+            </span>
+        </div>
+        
+        <div class="choice-menu">
+            <button style="border-left-color: var(--accent-blue) !important;">
+                <<link "🥫 Enter Food Pantry [SOUTH]">>
+                    <<goto "Act3_School_Pantry">>
+                <</link>>
+                <span class="btn-sub">Search the industrial storage room.</span>
+            </button>
+            <button style="border-left-color: var(--accent-blue) !important;">
+                <<link "🚪 Exit Canteen to Hallway [EAST]">>
+                    <<set $currentLocation to "hall_g_west_2">>
+                    <<goto "Act3_SchoolGFloor">>
+                <</link>>
+                <span class="btn-sub">Return to the Canteen Junction.</span>
+            </button>
+        </div>
+    </div>
 </div>
