@@ -9057,184 +9057,299 @@ Evelyn turns her sharp gaze directly toward you and Reyes.
 &lt;&lt;set _reyesUnlocked to ($act3_reyes_unlocked or _npcsVisited &gt;= 4 or _completedMissions &gt;= 2 or $act3_reyes_triggered)&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;1ST FLOOR CORRIDOR — &lt;&lt;print $currentLocation.replace(/_/g, &quot; &quot;).toUpperCase()&gt;&gt;&lt;/h2&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
-&lt;!-- REPLACED STATIC IMAGES WITH THE PDA MAP WIDGET --&gt;
-&lt;div style=&quot;margin-bottom: 20px;&quot;&gt;
-    &lt;&lt;mapDisplay&gt;&gt;
-&lt;/div&gt;
-
-You are on the upper level corridor. Carpeted floors muffle your footsteps. Trophy cases and administration plaques line the walls.
-
-&lt;br&gt;&lt;br&gt;
-
-&lt;&lt;if not $act3_reyes_triggered and not isObjectiveCompleted(&quot;rescue_leader_711&quot;)&gt;&gt;
-    &lt;&lt;if _reyesUnlocked&gt;&gt;
-        &lt;div style=&quot;margin-bottom:15px; padding: 10px; background: rgba(211, 84, 0, 0.15); border: 1px solid var(--accent-gold); border-left: 4px solid var(--accent-gold);&quot;&gt;
-            &lt;b style=&quot;color:var(--accent-gold); font-size:1.05em;&quot;&gt;❗ [MAIN QUEST AVAILABLE]&lt;/b&gt;&lt;br&gt;
-            Officer Reyes is waiting at the Center Corridor square (in front of Headmaster&#39;s Office) for your Command briefing.
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            1ST FLOOR CORRIDOR — &lt;&lt;print $currentLocation.replace(/_/g, &quot; &quot;).toUpperCase()&gt;&gt;
         &lt;/div&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;div style=&quot;margin-bottom:15px; padding: 10px; background: rgba(0, 0, 0, 0.3); border: 1px solid #444; border-left: 4px solid #888;&quot;&gt;
-            &lt;span style=&quot;color:#ccc; font-size:0.88em;&quot;&gt;🔒 &lt;b&gt;Command Briefing Locked:&lt;/b&gt; Talk with survivors in the safehouse (Canteen, Infirmary, Radio Room, Screening Room) or complete at least 2 missions to unlock Officer Reyes &amp; Sanctuary Command briefing.&lt;/span&gt;
+
+        &lt;!-- IN-PASSAGE DYNAMIC MAP --&gt;
+        &lt;style&gt;
+            .map-viewport { height: 350px !important; border-color: var(--accent-blue) !important; width: 100%; box-sizing: border-box; }
+        &lt;/style&gt;
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;&lt;mapDisplay&gt;&gt;
         &lt;/div&gt;
-    &lt;&lt;/if&gt;&gt;
-&lt;&lt;/if&gt;&gt;
 
-&lt;!-- DYNAMIC ROOM ENTRY BUTTONS BASED ON CURRENT NODE --&gt;
-&lt;div class=&quot;choice-menu&quot; style=&quot;margin-bottom:20px;&quot;&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-hub-desc&quot;&gt;
+                You are on the upper level corridor. Carpeted floors muffle your footsteps. Trophy cases and administration plaques line the walls.
+                &lt;br&gt;&lt;br&gt;
 
-    /* CENTER HALLWAY (SQUARE IN FRONT OF HEADMASTER OFFICE) */
-    &lt;&lt;if $currentLocation == &quot;hall_1_center&quot;&gt;&gt;
-        &lt;&lt;if not $act3_reyes_triggered and not isObjectiveCompleted(&quot;rescue_leader_711&quot;) and _reyesUnlocked&gt;&gt;
-            &lt;div style=&quot;margin-bottom:15px; border: 2px solid var(--accent-gold); padding: 12px; background: rgba(80, 60, 0, 0.3); border-radius: 4px;&quot;&gt;
-                &lt;div style=&quot;color: var(--accent-gold); font-weight: bold; font-size: 1.05em; margin-bottom: 6px;&quot;&gt;
-                    ❗ OFFICER REYES IS STANDING HERE IN FRONT OF THE HEADMASTER&#39;S OFFICE
+                &lt;&lt;if not $act3_reyes_triggered and not isObjectiveCompleted(&quot;rescue_leader_711&quot;)&gt;&gt;
+                    &lt;&lt;if _reyesUnlocked&gt;&gt;
+                        &lt;div style=&quot;margin-bottom:15px; padding: 10px; background: rgba(211, 84, 0, 0.15); border: 1px solid var(--accent-gold); border-left: 4px solid var(--accent-gold);&quot;&gt;
+                            &lt;b style=&quot;color:var(--accent-gold); font-size:1.05em;&quot;&gt;❗ [MAIN QUEST AVAILABLE]&lt;/b&gt;&lt;br&gt;
+                            Officer Reyes is waiting at the Center Corridor square (in front of Headmaster&#39;s Office) for your Command briefing.
+                        &lt;/div&gt;
+                    &lt;&lt;else&gt;&gt;
+                        &lt;div style=&quot;margin-bottom:15px; padding: 10px; background: rgba(0, 0, 0, 0.3); border: 1px solid #444; border-left: 4px solid #888;&quot;&gt;
+                            &lt;span style=&quot;color:#ccc; font-size:0.88em;&quot;&gt;🔒 &lt;b&gt;Command Briefing Locked:&lt;/b&gt; Talk with survivors in the safehouse (Canteen, Infirmary, Radio Room, Screening Room) or complete at least 2 missions to unlock Officer Reyes &amp; Sanctuary Command briefing.&lt;/span&gt;
+                        &lt;/div&gt;
+                    &lt;&lt;/if&gt;&gt;
+                &lt;&lt;/if&gt;&gt;
+
+                &lt;!-- DYNAMIC ROOM ENTRY BUTTONS BASED ON CURRENT NODE --&gt;
+                &lt;div class=&quot;choice-menu&quot; style=&quot;margin-bottom:20px;&quot;&gt;
+
+                    /* CENTER HALLWAY (SQUARE IN FRONT OF HEADMASTER OFFICE) */
+                    &lt;&lt;if $currentLocation == &quot;hall_1_center&quot;&gt;&gt;
+                        &lt;&lt;if not $act3_reyes_triggered and not isObjectiveCompleted(&quot;rescue_leader_711&quot;) and _reyesUnlocked&gt;&gt;
+                            &lt;div style=&quot;margin-bottom:15px; border: 2px solid var(--accent-gold); padding: 12px; background: rgba(80, 60, 0, 0.3); border-radius: 4px;&quot;&gt;
+                                &lt;div style=&quot;color: var(--accent-gold); font-weight: bold; font-size: 1.05em; margin-bottom: 6px;&quot;&gt;
+                                    ❗ OFFICER REYES IS STANDING HERE IN FRONT OF THE HEADMASTER&#39;S OFFICE
+                                &lt;/div&gt;
+                                &lt;button style=&quot;border-left-color:var(--accent-gold) !important; background: rgba(120, 90, 0, 0.4); width: 100%;&quot;&gt;
+                                    &lt;&lt;link &quot;💬 Meet Officer Reyes &amp; Command [STORY PROGRESSION]&quot;&gt;&gt;
+                                        &lt;&lt;set $act3_reyes_triggered to true&gt;&gt;
+                                        &lt;&lt;goto &quot;Act3_Meeting_Evelyn&quot;&gt;&gt;
+                                    &lt;&lt;/link&gt;&gt;
+                                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[MAIN QUEST]&lt;/b&gt; Reyes signals that Sanctuary Command is ready for your briefing.&lt;/span&gt;
+                                &lt;/button&gt;
+                            &lt;/div&gt;
+                        &lt;&lt;/if&gt;&gt;
+
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;💼 ENTER HEADMASTER&#39;S OFFICE [SOUTH]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_Headmaster&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Command office of Matriarch Evelyn.&lt;/span&gt;
+                        &lt;/button&gt;
+
+                    /* WEST HALLWAY 2: RADIO ROOM */
+                    &lt;&lt;elseif $currentLocation == &quot;hall_1_west_2&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;📻 ENTER SECURITY COMMS &amp; RADIO ROOM [SOUTH]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_RadioRoom&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Chloe&#39;s frequency scanner &amp; radio station.&lt;/span&gt;
+                        &lt;/button&gt;
+
+                    /* WEST HALLWAY 3: ROOM 201 */
+                    &lt;&lt;elseif $currentLocation == &quot;hall_1_west_3&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🚪 ENTER ROOM 201 [WEST]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_Room201&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Ammunition &amp; weapon storage locker.&lt;/span&gt;
+                        &lt;/button&gt;
+
+                    /* WEST HALLWAY 4: ROOM 202 &amp; ROOF */
+                    &lt;&lt;elseif $currentLocation == &quot;hall_1_west_4&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🚪 ENTER ROOM 202 [WEST]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_Room202&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Off-duty guard sleeping quarter.&lt;/span&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🚪 ENTER ROOF ACCESS LANDING [NORTH]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_RoofAccess&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Steel door to the rooftop lookout post.&lt;/span&gt;
+                        &lt;/button&gt;
+
+                    /* EAST HALLWAY 1: DEPARTMENT OFFICES */
+                    &lt;&lt;elseif $currentLocation == &quot;hall_1_east_1&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;📂 ENTER DEPARTMENT OFFICES [SOUTH]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_DeptOffices&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Faculty lounge and records storage.&lt;/span&gt;
+                        &lt;/button&gt;
+
+                    /* EAST HALLWAY 2: LIBRARY */
+                    &lt;&lt;elseif $currentLocation == &quot;hall_1_east_2&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;📚 ENTER SCHOOL LIBRARY [EAST]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_Library&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Reference archives and skill textbooks.&lt;/span&gt;
+                        &lt;/button&gt;
+
+                    /* EAST HALLWAY 3: COMP LAB &amp; SERVERS */
+                    &lt;&lt;elseif $currentLocation == &quot;hall_1_east_3&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;💻 ENTER COMPUTER LAB [EAST]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_ComputerLab&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Desktop terminals and local intranet.&lt;/span&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🖥️ ENTER SERVER ROOM [NORTH]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_ServerRoom&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;School network infrastructure.&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;&lt;/if&gt;&gt;
                 &lt;/div&gt;
-                &lt;button style=&quot;border-left-color:var(--accent-gold) !important; background: rgba(120, 90, 0, 0.4); width: 100%;&quot;&gt;
-                    &lt;&lt;link &quot;💬 Meet Officer Reyes &amp; Command [STORY PROGRESSION]&quot; &quot;Act3_Meeting_Evelyn&quot;&gt;&gt;
-                        &lt;&lt;set $act3_reyes_triggered to true&gt;&gt;
-                    &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[MAIN QUEST]&lt;/b&gt; Reyes signals that Sanctuary Command is ready for your briefing.&lt;/span&gt;
-                &lt;/button&gt;
-            &lt;/div&gt;
-        &lt;&lt;/if&gt;&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
 
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;💼 ENTER HEADMASTER&#39;S OFFICE [SOUTH]&quot;&gt;&gt;
-                &lt;&lt;goto &quot;Act3_School_Headmaster&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Command office of Matriarch Evelyn.&lt;/span&gt;
-        &lt;/button&gt;
+        &lt;!-- HALLWAY NODE NAVIGATION CONTROLS --&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-hub-nav&quot;&gt;
+                &lt;b style=&quot;color:var(--accent-gold); letter-spacing: 2px;&quot;&gt;🧭 CORRIDOR MOVEMENT:&lt;/b&gt;
+                &lt;hr style=&quot;border-color:#333; margin:8px 0;&quot;&gt;
 
-    /* WEST HALLWAY 2: RADIO ROOM */
-    &lt;&lt;elseif $currentLocation == &quot;hall_1_west_2&quot;&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;📻 ENTER SECURITY COMMS &amp; RADIO ROOM [SOUTH]&quot;&gt;&gt;
-                &lt;&lt;goto &quot;Act3_School_RadioRoom&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Chloe&#39;s frequency scanner &amp; radio station.&lt;/span&gt;
-        &lt;/button&gt;
+                &lt;div class=&quot;choice-menu&quot;&gt;
+                    &lt;&lt;if $currentLocation == &quot;hall_1_center&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬅️ Walk West to West Corridor 1 (Stairs Junction) ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_west_1&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;➡️ Walk East to East Corridor 1 (Stairs Junction) ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_east_1&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
 
-    /* WEST HALLWAY 3: ROOM 201 */
-    &lt;&lt;elseif $currentLocation == &quot;hall_1_west_3&quot;&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;🚪 ENTER ROOM 201 [WEST]&quot;&gt;&gt;
-                &lt;&lt;goto &quot;Act3_School_Room201&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Ammunition &amp; weapon storage locker.&lt;/span&gt;
-        &lt;/button&gt;
+                    &lt;&lt;elseif $currentLocation == &quot;hall_1_west_1&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬅️ Walk West to Radio Room Corridor ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_west_2&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;➡️ Walk East to Center Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_center&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-green) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🪜 GO DOWN TO GROUND FLOOR [WEST STAIRS]&quot;&gt;&gt;
+                                &lt;&lt;addTime 2&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_west_1&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Descend West Stairs to Security Room Junction.&lt;/span&gt;
+                        &lt;/button&gt;
 
-    /* WEST HALLWAY 4: ROOM 202 &amp; ROOF */
-    &lt;&lt;elseif $currentLocation == &quot;hall_1_west_4&quot;&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;🚪 ENTER ROOM 202 [WEST]&quot;&gt;&gt;
-                &lt;&lt;goto &quot;Act3_School_Room202&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Off-duty guard sleeping quarter.&lt;/span&gt;
-        &lt;/button&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;🚪 ENTER ROOF ACCESS LANDING [NORTH]&quot;&gt;&gt;
-                &lt;&lt;goto &quot;Act3_School_RoofAccess&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Steel door to the rooftop lookout post.&lt;/span&gt;
-        &lt;/button&gt;
+                    &lt;&lt;elseif $currentLocation == &quot;hall_1_west_2&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬆️ Walk North to Room 201 Corridor ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_west_3&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;➡️ Walk East to West Corridor 1 ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_west_1&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
 
-    /* EAST HALLWAY 1: DEPARTMENT OFFICES */
-    &lt;&lt;elseif $currentLocation == &quot;hall_1_east_1&quot;&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;📂 ENTER DEPARTMENT OFFICES [SOUTH]&quot;&gt;&gt;
-                &lt;&lt;goto &quot;Act3_School_DeptOffices&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Faculty lounge and records storage.&lt;/span&gt;
-        &lt;/button&gt;
+                    &lt;&lt;elseif $currentLocation == &quot;hall_1_west_3&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬆️ Walk North to Room 202 &amp; Roof Corridor ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_west_4&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬇️ Walk South to Radio Room Corridor ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_west_2&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
 
-    /* EAST HALLWAY 2: LIBRARY */
-    &lt;&lt;elseif $currentLocation == &quot;hall_1_east_2&quot;&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;📚 ENTER SCHOOL LIBRARY [EAST]&quot;&gt;&gt;
-                &lt;&lt;goto &quot;Act3_School_Library&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Reference archives and skill textbooks.&lt;/span&gt;
-        &lt;/button&gt;
+                    &lt;&lt;elseif $currentLocation == &quot;hall_1_west_4&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬇️ Walk South to Room 201 Corridor ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_west_3&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
 
-    /* EAST HALLWAY 3: COMP LAB &amp; SERVERS */
-    &lt;&lt;elseif $currentLocation == &quot;hall_1_east_3&quot;&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;💻 ENTER COMPUTER LAB [EAST]&quot;&gt;&gt;
-                &lt;&lt;goto &quot;Act3_School_ComputerLab&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Desktop terminals and local intranet.&lt;/span&gt;
-        &lt;/button&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;🖥️ ENTER SERVER ROOM [NORTH]&quot;&gt;&gt;
-                &lt;&lt;goto &quot;Act3_School_ServerRoom&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;School network infrastructure.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;&lt;/if&gt;&gt;
+                    &lt;&lt;elseif $currentLocation == &quot;hall_1_east_1&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;➡️ Walk East to Library Corridor ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_east_2&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬅️ Walk West to Center Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_center&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-green) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🪜 GO DOWN TO GROUND FLOOR [EAST STAIRS]&quot;&gt;&gt;
+                                &lt;&lt;addTime 2&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_east_2&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Descend East Stairs to Screening Junction.&lt;/span&gt;
+                        &lt;/button&gt;
 
-&lt;/div&gt;
+                    &lt;&lt;elseif $currentLocation == &quot;hall_1_east_2&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬆️ Walk North to Computer Lab &amp; Server Corridor ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_east_3&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬅️ Walk West to East Corridor 1 ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_east_1&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
 
-&lt;!-- HALLWAY NODE NAVIGATION CONTROLS --&gt;
-&lt;div style=&quot;padding:10px; background:rgba(0,0,0,0.4); border-left:3px solid var(--accent-blue);&quot;&gt;
-    &lt;b style=&quot;color:var(--accent-blue);&quot;&gt;🧭 CORRIDOR MOVEMENT:&lt;/b&gt;
-    &lt;hr style=&quot;border-color:#333; margin:8px 0;&quot;&gt;
+                    &lt;&lt;elseif $currentLocation == &quot;hall_1_east_3&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬇️ Walk South to Library Corridor ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_east_2&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
 
-    &lt;div class=&quot;choice-menu&quot;&gt;
-
-        &lt;&lt;if $currentLocation == &quot;hall_1_center&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬅️ Walk West to West Corridor 1 (Stairs Junction)&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_west_1&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-            &lt;&lt;button &quot;➡️ Walk East to East Corridor 1 (Stairs Junction)&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_east_1&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-
-        &lt;&lt;elseif $currentLocation == &quot;hall_1_west_1&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬅️ Walk West to Radio Room Corridor&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_west_2&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-            &lt;&lt;button &quot;➡️ Walk East to Center Junction&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_center&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-            &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
-                &lt;&lt;link &quot;🪜 GO DOWN TO GROUND FLOOR [WEST STAIRS]&quot;&gt;&gt;
-                    &lt;&lt;addTime 2&gt;&gt;
-                    &lt;&lt;set $currentLocation to &quot;hall_g_west_1&quot;&gt;&gt;
-                    &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;Descend West Stairs to Security Room Junction.&lt;/span&gt;
-            &lt;/button&gt;
-
-        &lt;&lt;elseif $currentLocation == &quot;hall_1_west_2&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬆️ Walk North to Room 201 Corridor&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_west_3&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-            &lt;&lt;button &quot;➡️ Walk East to West Corridor 1&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_west_1&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-
-        &lt;&lt;elseif $currentLocation == &quot;hall_1_west_3&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬆️ Walk North to Room 202 &amp; Roof Corridor&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_west_4&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-            &lt;&lt;button &quot;⬇️ Walk South to Radio Room Corridor&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_west_2&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-
-        &lt;&lt;elseif $currentLocation == &quot;hall_1_west_4&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬇️ Walk South to Room 201 Corridor&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_west_3&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-
-        &lt;&lt;elseif $currentLocation == &quot;hall_1_east_1&quot;&gt;&gt;
-            &lt;&lt;button &quot;➡️ Walk East to Library Corridor&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_east_2&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-            &lt;&lt;button &quot;⬅️ Walk West to Center Junction&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_center&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-            &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
-                &lt;&lt;link &quot;🪜 GO DOWN TO GROUND FLOOR [EAST STAIRS]&quot;&gt;&gt;
-                    &lt;&lt;addTime 2&gt;&gt;
-                    &lt;&lt;set $currentLocation to &quot;hall_g_east_2&quot;&gt;&gt;
-                    &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;Descend East Stairs to Screening Junction.&lt;/span&gt;
-            &lt;/button&gt;
-
-        &lt;&lt;elseif $currentLocation == &quot;hall_1_east_2&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬆️ Walk North to Computer Lab &amp; Server Corridor&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_east_3&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-            &lt;&lt;button &quot;⬅️ Walk West to East Corridor 1&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_east_1&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-
-        &lt;&lt;elseif $currentLocation == &quot;hall_1_east_3&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬇️ Walk South to Library Corridor&quot;&gt;&gt; &lt;&lt;addTime 1&gt;&gt; &lt;&lt;set $currentLocation to &quot;hall_1_east_2&quot;&gt;&gt; &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;button &quot;🔄 Return to Central Junction&quot;&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_1_center&quot;&gt;&gt;
-                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
+                    &lt;&lt;else&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🔄 Return to Central Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_1_center&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                    &lt;&lt;/if&gt;&gt;
+                &lt;/div&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
 
     &lt;/div&gt;
 &lt;/div&gt;
@@ -9461,186 +9576,274 @@ The main entrance foyer. Armed sentries guard the barricaded double doors agains
 &lt;&lt;run setup.sound.play(&quot;hub_ambience&quot;, &quot;audio/bgm/rain_and_distant_chatter.mp3&quot;, true, 0.4)&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;GROUND FLOOR CORRIDOR — &lt;&lt;print $currentLocation.replace(/_/g, &quot; &quot;).toUpperCase()&gt;&gt;&lt;/h2&gt;
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
 
-&lt;!-- IN-PASSAGE DYNAMIC MAP (Replaces Static Images) --&gt;
-&lt;style&gt;
-    /* Makes the map taller now that it has room outside the PDA */
-    .map-viewport { height: 350px !important; border-color: var(--accent-blue) !important; }
-&lt;/style&gt;
-&lt;&lt;mapDisplay&gt;&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            TIMBERLINE REGIONAL — &lt;&lt;print $currentLocation.replace(/_/g, &quot; &quot;).toUpperCase()&gt;&gt;
+        &lt;/div&gt;
 
-&lt;br&gt;
-You are standing in the ground floor corridor. Emergency halogen lamps cast long shadows across student lockers and barricaded windows.
-&lt;br&gt;&lt;br&gt;
+        &lt;!-- IN-PASSAGE DYNAMIC MAP --&gt;
+        &lt;style&gt;
+            .map-viewport { height: 350px !important; border-color: var(--accent-blue) !important; width: 100%; box-sizing: border-box; }
+        &lt;/style&gt;
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;&lt;mapDisplay&gt;&gt;
+        &lt;/div&gt;
 
-&lt;&lt;if hasObjective(&quot;rescue_leader_711&quot;) and not isObjectiveCompleted(&quot;rescue_leader_711&quot;)&gt;&gt;
-    &lt;div style=&quot;margin-bottom:15px;&quot;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);&quot;&gt;
-            &lt;&lt;link &quot;🚗 Depart for Route 9 7-Eleven [RESCUE LEADER]&quot; &quot;Act3_7Eleven_Arrival&quot;&gt;&gt;
-            &lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Drive out with Reyes to rescue Commander Miller at the 7-Eleven.&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;/div&gt;
-&lt;&lt;/if&gt;&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-hub-desc&quot;&gt;
+                You are standing in the ground floor corridor. Emergency halogen lamps cast long shadows across student lockers and barricaded windows. The sound of distant chatter and heavy rain echoes off the linoleum floors.
+                &lt;br&gt;&lt;br&gt;
 
-&lt;!-- DYNAMIC ROOM ENTRY BUTTONS BASED ON CURRENT NODE --&gt;
-&lt;div class=&quot;choice-menu&quot; style=&quot;margin-bottom:20px;&quot;&gt;
+                &lt;&lt;if hasObjective(&quot;rescue_leader_711&quot;) and not isObjectiveCompleted(&quot;rescue_leader_711&quot;)&gt;&gt;
+                    &lt;div style=&quot;margin-bottom:15px;&quot;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);&quot;&gt;
+                            &lt;&lt;link &quot;🚗 Depart for Route 9 7-Eleven [RESCUE LEADER]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_7Eleven_Arrival&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Drive out with Reyes to rescue Commander Miller at the 7-Eleven.&lt;/span&gt;
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;&lt;/if&gt;&gt;
 
-    /* SQUARE 1: CANTEEN JUNCTION (FAR LEFT) */
-    &lt;&lt;if $currentLocation == &quot;hall_g_west_2&quot;&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;🍔 ENTER CANTEEN [WEST]&quot; &quot;Act3_School_Canteen&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Sadie&#39;s ration prep line.&lt;/span&gt;
-        &lt;/button&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;🥫 ENTER FOOD PANTRY [SOUTH]&quot; &quot;Act3_School_Pantry&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Ration storage crates behind the canteen.&lt;/span&gt;
-        &lt;/button&gt;
+                &lt;!-- DYNAMIC ROOM ENTRY BUTTONS BASED ON CURRENT NODE --&gt;
+                &lt;div class=&quot;choice-menu&quot; style=&quot;margin-bottom:20px;&quot;&gt;
 
-    /* SQUARE 2: SECURITY ROOM / WEST STAIRS JUNCTION (LEFT-CENTER) */
-    &lt;&lt;elseif $currentLocation == &quot;hall_g_west_1&quot;&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;🛡️ ENTER SECURITY GUARD ROOM [SOUTH]&quot; &quot;Act3_School_SecurityRoom&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Camera monitors and security feeds.&lt;/span&gt;
-        &lt;/button&gt;
+                    /* SQUARE 1: CANTEEN JUNCTION (FAR LEFT) */
+                    &lt;&lt;if $currentLocation == &quot;hall_g_west_2&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🍔 ENTER CANTEEN [WEST]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_Canteen&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Sadie&#39;s ration prep line.&lt;/span&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🥫 ENTER FOOD PANTRY [SOUTH]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_Pantry&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Ration storage crates behind the canteen.&lt;/span&gt;
+                        &lt;/button&gt;
 
-    /* SQUARE 3: CENTRAL JUNCTION (CENTER) */
-    &lt;&lt;elseif $currentLocation == &quot;hall_g_center&quot;&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;🚪 ENTER MAIN SECURITY FOYER [SOUTH]&quot; &quot;Act3_School_Foyer&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Main Entrance / Refugee Intake Area.&lt;/span&gt;
-        &lt;/button&gt;
+                    /* SQUARE 2: SECURITY ROOM / WEST STAIRS JUNCTION (LEFT-CENTER) */
+                    &lt;&lt;elseif $currentLocation == &quot;hall_g_west_1&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🛡️ ENTER SECURITY GUARD ROOM [SOUTH]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_SecurityRoom&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Camera monitors and security feeds.&lt;/span&gt;
+                        &lt;/button&gt;
 
-    /* SQUARE 4: SCREENING / EAST STAIRS JUNCTION (RIGHT-CENTER) */
-    &lt;&lt;elseif $currentLocation == &quot;hall_g_east_2&quot;&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;📋 ENTER SCREENING ROOM [SOUTH]&quot; &quot;Act3_School_Screening&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Sgt. Vance&#39;s inspection &amp; weapons desk.&lt;/span&gt;
-        &lt;/button&gt;
+                    /* SQUARE 3: CENTRAL JUNCTION (CENTER) */
+                    &lt;&lt;elseif $currentLocation == &quot;hall_g_center&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🚪 ENTER MAIN SECURITY FOYER [SOUTH]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_Foyer&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Main Entrance / Refugee Intake Area.&lt;/span&gt;
+                        &lt;/button&gt;
 
-    /* SQUARE 5: INFIRMARY JUNCTION (FAR RIGHT) */
-    &lt;&lt;elseif $currentLocation == &quot;hall_g_east_1&quot;&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;🏥 ENTER EMERGENCY INFIRMARY [EAST]&quot; &quot;Act3_School_Infirmary&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Dr. Thorne&#39;s triage ward.&lt;/span&gt;
-        &lt;/button&gt;
+                    /* SQUARE 4: SCREENING / EAST STAIRS JUNCTION (RIGHT-CENTER) */
+                    &lt;&lt;elseif $currentLocation == &quot;hall_g_east_2&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;📋 ENTER SCREENING ROOM [SOUTH]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_Screening&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Sgt. Vance&#39;s inspection &amp; weapons desk.&lt;/span&gt;
+                        &lt;/button&gt;
 
-    /* SQUARE 6: CLASSROOMS 101/102 CORRIDOR (WEST UPPER) */
-    &lt;&lt;elseif $currentLocation == &quot;hall_g_west_3&quot;&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;🚪 ENTER CLASSROOM 101 [WEST]&quot; &quot;Act3_School_Room101&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Refugee sleeping quarters.&lt;/span&gt;
-        &lt;/button&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;🚪 ENTER CLASSROOM 102 [NORTH-WEST]&quot; &quot;Act3_School_Room102&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Temporary medical overflow / sleeping cots.&lt;/span&gt;
-        &lt;/button&gt;
+                    /* SQUARE 5: INFIRMARY JUNCTION (FAR RIGHT) */
+                    &lt;&lt;elseif $currentLocation == &quot;hall_g_east_1&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🏥 ENTER EMERGENCY INFIRMARY [EAST]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_Infirmary&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Dr. Thorne&#39;s triage ward.&lt;/span&gt;
+                        &lt;/button&gt;
 
-    /* SQUARE 8: LOCKER ROOM CORRIDOR (EAST UPPER) */
-    &lt;&lt;elseif $currentLocation == &quot;hall_g_east_3&quot;&gt;&gt;
-        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-            &lt;&lt;link &quot;🔒 ENTER ATHLETIC LOCKER ROOM [EAST]&quot; &quot;Act3_School_LockerRoom&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
-            &lt;span class=&quot;btn-sub&quot;&gt;Personal lockers and duffel storage.&lt;/span&gt;
-        &lt;/button&gt;
+                    /* SQUARE 6: CLASSROOMS 101/102 CORRIDOR (WEST UPPER) */
+                    &lt;&lt;elseif $currentLocation == &quot;hall_g_west_3&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🚪 ENTER CLASSROOM 101 [WEST]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_Room101&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Refugee sleeping quarters.&lt;/span&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🚪 ENTER CLASSROOM 102 [NORTH-WEST]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_Room102&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Temporary medical overflow / sleeping cots.&lt;/span&gt;
+                        &lt;/button&gt;
 
-    /* FALLBACK SAFETY */
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;button &quot;🔄 Return to Central Junction&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-            &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
-        &lt;&lt;/button&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
+                    /* SQUARE 8: LOCKER ROOM CORRIDOR (EAST UPPER) */
+                    &lt;&lt;elseif $currentLocation == &quot;hall_g_east_3&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🔒 ENTER ATHLETIC LOCKER ROOM [EAST]&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School_LockerRoom&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Personal lockers and duffel storage.&lt;/span&gt;
+                        &lt;/button&gt;
 
-&lt;/div&gt;
+                    /* FALLBACK SAFETY */
+                    &lt;&lt;else&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🔄 Return to Central Junction&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                    &lt;&lt;/if&gt;&gt;
+                &lt;/div&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
 
-&lt;!-- HALLWAY NODE NAVIGATION CONTROLS --&gt;
-&lt;div style=&quot;padding:10px; background:rgba(0,0,0,0.4); border-left:3px solid var(--accent-blue);&quot;&gt;
-    &lt;b style=&quot;color:var(--accent-blue);&quot;&gt;🧭 CORRIDOR MOVEMENT:&lt;/b&gt;
-    &lt;hr style=&quot;border-color:#333; margin:8px 0;&quot;&gt;
+        &lt;!-- HALLWAY NODE NAVIGATION CONTROLS --&gt;
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-hub-nav&quot;&gt;
+                &lt;b style=&quot;color:var(--accent-gold); letter-spacing: 2px;&quot;&gt;🧭 CORRIDOR MOVEMENT:&lt;/b&gt;
+                &lt;hr style=&quot;border-color:#333; margin:8px 0;&quot;&gt;
 
-    &lt;div class=&quot;choice-menu&quot;&gt;
+                &lt;div class=&quot;choice-menu&quot;&gt;
+                    &lt;&lt;if $currentLocation == &quot;hall_g_west_2&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬆️ Walk North to Classrooms Corridor (Rooms 101/102) ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_west_3&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;➡️ Walk East to Security Room Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_west_1&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
 
-        &lt;&lt;if $currentLocation == &quot;hall_g_west_2&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬆️ Walk North to Classrooms Corridor (Rooms 101/102)&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;addTime 1&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_g_west_3&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
-            &lt;&lt;button &quot;➡️ Walk East to Security Room Junction&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;addTime 1&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_g_west_1&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
+                    &lt;&lt;elseif $currentLocation == &quot;hall_g_west_1&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬅️ Walk West to Canteen Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_west_2&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;➡️ Walk East to Central Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-green) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🪜 GO UP TO 1ST FLOOR [WEST STAIRS]&quot;&gt;&gt;
+                                &lt;&lt;addTime 2&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;stairs_1_west&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Ascend the West Stairs to Upper Level.&lt;/span&gt;
+                        &lt;/button&gt;
 
-        &lt;&lt;elseif $currentLocation == &quot;hall_g_west_1&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬅️ Walk West to Canteen Junction&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;addTime 1&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_g_west_2&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
-            &lt;&lt;button &quot;➡️ Walk East to Central Junction&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;addTime 1&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
-            &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
-                &lt;&lt;link &quot;🪜 GO UP TO 1ST FLOOR [WEST STAIRS]&quot; &quot;Act3_School1Floor&quot;&gt;&gt;
-                    &lt;&lt;addTime 2&gt;&gt;
-                    &lt;&lt;set $currentLocation to &quot;stairs_1_west&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;Ascend the West Stairs to Upper Level.&lt;/span&gt;
-            &lt;/button&gt;
+                    &lt;&lt;elseif $currentLocation == &quot;hall_g_center&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬅️ Walk West to Security Room Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_west_1&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;➡️ Walk East to Screening Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_east_2&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
 
-        &lt;&lt;elseif $currentLocation == &quot;hall_g_center&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬅️ Walk West to Security Room Junction&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;addTime 1&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_g_west_1&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
-            &lt;&lt;button &quot;➡️ Walk East to Screening Junction&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;addTime 1&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_g_east_2&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
+                    &lt;&lt;elseif $currentLocation == &quot;hall_g_east_2&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬅️ Walk West to Central Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;➡️ Walk East to Infirmary Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_east_1&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-green) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🪜 GO UP TO 1ST FLOOR [EAST STAIRS]&quot;&gt;&gt;
+                                &lt;&lt;addTime 2&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;stairs_1_east&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;Ascend the East Stairs to Upper Level.&lt;/span&gt;
+                        &lt;/button&gt;
 
-        &lt;&lt;elseif $currentLocation == &quot;hall_g_east_2&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬅️ Walk West to Central Junction&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;addTime 1&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
-            &lt;&lt;button &quot;➡️ Walk East to Infirmary Junction&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;addTime 1&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_g_east_1&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
-            &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
-                &lt;&lt;link &quot;🪜 GO UP TO 1ST FLOOR [EAST STAIRS]&quot; &quot;Act3_School1Floor&quot;&gt;&gt;
-                    &lt;&lt;addTime 2&gt;&gt;
-                    &lt;&lt;set $currentLocation to &quot;stairs_1_east&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;Ascend the East Stairs to Upper Level.&lt;/span&gt;
-            &lt;/button&gt;
+                    &lt;&lt;elseif $currentLocation == &quot;hall_g_east_1&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬆️ Walk North to Locker Room Corridor ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_east_3&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬅️ Walk West to Screening Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_east_2&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
 
-        &lt;&lt;elseif $currentLocation == &quot;hall_g_east_1&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬆️ Walk North to Locker Room Corridor&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;addTime 1&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_g_east_3&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
-            &lt;&lt;button &quot;⬅️ Walk West to Screening Junction&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;addTime 1&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_g_east_2&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
+                    &lt;&lt;elseif $currentLocation == &quot;hall_g_west_3&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬇️ Walk South to Canteen Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_west_2&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
 
-        &lt;&lt;elseif $currentLocation == &quot;hall_g_west_3&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬇️ Walk South to Canteen Junction&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;addTime 1&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_g_west_2&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
+                    &lt;&lt;elseif $currentLocation == &quot;hall_g_east_3&quot;&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;⬇️ Walk South to Infirmary Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;addTime 1&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_east_1&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
 
-        &lt;&lt;elseif $currentLocation == &quot;hall_g_east_3&quot;&gt;&gt;
-            &lt;&lt;button &quot;⬇️ Walk South to Infirmary Junction&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;addTime 1&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_g_east_1&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
-
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;button &quot;🔄 Reset Position to Central Junction&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
-            &lt;&lt;/button&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
+                    &lt;&lt;else&gt;&gt;
+                        &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                            &lt;&lt;link &quot;🔄 Reset Position to Central Junction ▼&quot;&gt;&gt;
+                                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                            &lt;&lt;/link&gt;&gt;
+                        &lt;/button&gt;
+                    &lt;&lt;/if&gt;&gt;
+                &lt;/div&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
 
     &lt;/div&gt;
 &lt;/div&gt;

@@ -37,184 +37,299 @@
 <<set _reyesUnlocked to ($act3_reyes_unlocked or _npcsVisited >= 4 or _completedMissions >= 2 or $act3_reyes_triggered)>>
 <</nobr>>
 
-<h2>1ST FLOOR CORRIDOR — <<print $currentLocation.replace(/_/g, " ").toUpperCase()>></h2>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
 
-<!-- REPLACED STATIC IMAGES WITH THE PDA MAP WIDGET -->
-<div style="margin-bottom: 20px;">
-    <<mapDisplay>>
-</div>
-
-You are on the upper level corridor. Carpeted floors muffle your footsteps. Trophy cases and administration plaques line the walls.
-
-<br><br>
-
-<<if not $act3_reyes_triggered and not isObjectiveCompleted("rescue_leader_711")>>
-    <<if _reyesUnlocked>>
-        <div style="margin-bottom:15px; padding: 10px; background: rgba(211, 84, 0, 0.15); border: 1px solid var(--accent-gold); border-left: 4px solid var(--accent-gold);">
-            <b style="color:var(--accent-gold); font-size:1.05em;">❗ [MAIN QUEST AVAILABLE]</b><br>
-            Officer Reyes is waiting at the Center Corridor square (in front of Headmaster's Office) for your Command briefing.
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            1ST FLOOR CORRIDOR — <<print $currentLocation.replace(/_/g, " ").toUpperCase()>>
         </div>
-    <<else>>
-        <div style="margin-bottom:15px; padding: 10px; background: rgba(0, 0, 0, 0.3); border: 1px solid #444; border-left: 4px solid #888;">
-            <span style="color:#ccc; font-size:0.88em;">🔒 <b>Command Briefing Locked:</b> Talk with survivors in the safehouse (Canteen, Infirmary, Radio Room, Screening Room) or complete at least 2 missions to unlock Officer Reyes & Sanctuary Command briefing.</span>
+
+        <!-- IN-PASSAGE DYNAMIC MAP -->
+        <style>
+            .map-viewport { height: 350px !important; border-color: var(--accent-blue) !important; width: 100%; box-sizing: border-box; }
+        </style>
+        <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+            <<mapDisplay>>
         </div>
-    <</if>>
-<</if>>
 
-<!-- DYNAMIC ROOM ENTRY BUTTONS BASED ON CURRENT NODE -->
-<div class="choice-menu" style="margin-bottom:20px;">
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-hub-desc">
+                You are on the upper level corridor. Carpeted floors muffle your footsteps. Trophy cases and administration plaques line the walls.
+                <br><br>
 
-    /* CENTER HALLWAY (SQUARE IN FRONT OF HEADMASTER OFFICE) */
-    <<if $currentLocation == "hall_1_center">>
-        <<if not $act3_reyes_triggered and not isObjectiveCompleted("rescue_leader_711") and _reyesUnlocked>>
-            <div style="margin-bottom:15px; border: 2px solid var(--accent-gold); padding: 12px; background: rgba(80, 60, 0, 0.3); border-radius: 4px;">
-                <div style="color: var(--accent-gold); font-weight: bold; font-size: 1.05em; margin-bottom: 6px;">
-                    ❗ OFFICER REYES IS STANDING HERE IN FRONT OF THE HEADMASTER'S OFFICE
+                <<if not $act3_reyes_triggered and not isObjectiveCompleted("rescue_leader_711")>>
+                    <<if _reyesUnlocked>>
+                        <div style="margin-bottom:15px; padding: 10px; background: rgba(211, 84, 0, 0.15); border: 1px solid var(--accent-gold); border-left: 4px solid var(--accent-gold);">
+                            <b style="color:var(--accent-gold); font-size:1.05em;">❗ [MAIN QUEST AVAILABLE]</b><br>
+                            Officer Reyes is waiting at the Center Corridor square (in front of Headmaster's Office) for your Command briefing.
+                        </div>
+                    <<else>>
+                        <div style="margin-bottom:15px; padding: 10px; background: rgba(0, 0, 0, 0.3); border: 1px solid #444; border-left: 4px solid #888;">
+                            <span style="color:#ccc; font-size:0.88em;">🔒 <b>Command Briefing Locked:</b> Talk with survivors in the safehouse (Canteen, Infirmary, Radio Room, Screening Room) or complete at least 2 missions to unlock Officer Reyes & Sanctuary Command briefing.</span>
+                        </div>
+                    <</if>>
+                <</if>>
+
+                <!-- DYNAMIC ROOM ENTRY BUTTONS BASED ON CURRENT NODE -->
+                <div class="choice-menu" style="margin-bottom:20px;">
+
+                    /* CENTER HALLWAY (SQUARE IN FRONT OF HEADMASTER OFFICE) */
+                    <<if $currentLocation == "hall_1_center">>
+                        <<if not $act3_reyes_triggered and not isObjectiveCompleted("rescue_leader_711") and _reyesUnlocked>>
+                            <div style="margin-bottom:15px; border: 2px solid var(--accent-gold); padding: 12px; background: rgba(80, 60, 0, 0.3); border-radius: 4px;">
+                                <div style="color: var(--accent-gold); font-weight: bold; font-size: 1.05em; margin-bottom: 6px;">
+                                    ❗ OFFICER REYES IS STANDING HERE IN FRONT OF THE HEADMASTER'S OFFICE
+                                </div>
+                                <button style="border-left-color:var(--accent-gold) !important; background: rgba(120, 90, 0, 0.4); width: 100%;">
+                                    <<link "💬 Meet Officer Reyes & Command [STORY PROGRESSION]">>
+                                        <<set $act3_reyes_triggered to true>>
+                                        <<goto "Act3_Meeting_Evelyn">>
+                                    <</link>>
+                                    <span class="btn-sub"><b style="color:var(--accent-gold);">[MAIN QUEST]</b> Reyes signals that Sanctuary Command is ready for your briefing.</span>
+                                </button>
+                            </div>
+                        <</if>>
+
+                        <button style="border-left-color:var(--accent-blue) !important;">
+                            <<link "💼 ENTER HEADMASTER'S OFFICE [SOUTH]">>
+                                <<goto "Act3_School_Headmaster">>
+                            <</link>>
+                            <span class="btn-sub">Command office of Matriarch Evelyn.</span>
+                        </button>
+
+                    /* WEST HALLWAY 2: RADIO ROOM */
+                    <<elseif $currentLocation == "hall_1_west_2">>
+                        <button style="border-left-color:var(--accent-blue) !important;">
+                            <<link "📻 ENTER SECURITY COMMS & RADIO ROOM [SOUTH]">>
+                                <<goto "Act3_School_RadioRoom">>
+                            <</link>>
+                            <span class="btn-sub">Chloe's frequency scanner & radio station.</span>
+                        </button>
+
+                    /* WEST HALLWAY 3: ROOM 201 */
+                    <<elseif $currentLocation == "hall_1_west_3">>
+                        <button style="border-left-color:var(--accent-blue) !important;">
+                            <<link "🚪 ENTER ROOM 201 [WEST]">>
+                                <<goto "Act3_School_Room201">>
+                            <</link>>
+                            <span class="btn-sub">Ammunition & weapon storage locker.</span>
+                        </button>
+
+                    /* WEST HALLWAY 4: ROOM 202 & ROOF */
+                    <<elseif $currentLocation == "hall_1_west_4">>
+                        <button style="border-left-color:var(--accent-blue) !important;">
+                            <<link "🚪 ENTER ROOM 202 [WEST]">>
+                                <<goto "Act3_School_Room202">>
+                            <</link>>
+                            <span class="btn-sub">Off-duty guard sleeping quarter.</span>
+                        </button>
+                        <button style="border-left-color:var(--accent-blue) !important;">
+                            <<link "🚪 ENTER ROOF ACCESS LANDING [NORTH]">>
+                                <<goto "Act3_School_RoofAccess">>
+                            <</link>>
+                            <span class="btn-sub">Steel door to the rooftop lookout post.</span>
+                        </button>
+
+                    /* EAST HALLWAY 1: DEPARTMENT OFFICES */
+                    <<elseif $currentLocation == "hall_1_east_1">>
+                        <button style="border-left-color:var(--accent-blue) !important;">
+                            <<link "📂 ENTER DEPARTMENT OFFICES [SOUTH]">>
+                                <<goto "Act3_School_DeptOffices">>
+                            <</link>>
+                            <span class="btn-sub">Faculty lounge and records storage.</span>
+                        </button>
+
+                    /* EAST HALLWAY 2: LIBRARY */
+                    <<elseif $currentLocation == "hall_1_east_2">>
+                        <button style="border-left-color:var(--accent-blue) !important;">
+                            <<link "📚 ENTER SCHOOL LIBRARY [EAST]">>
+                                <<goto "Act3_School_Library">>
+                            <</link>>
+                            <span class="btn-sub">Reference archives and skill textbooks.</span>
+                        </button>
+
+                    /* EAST HALLWAY 3: COMP LAB & SERVERS */
+                    <<elseif $currentLocation == "hall_1_east_3">>
+                        <button style="border-left-color:var(--accent-blue) !important;">
+                            <<link "💻 ENTER COMPUTER LAB [EAST]">>
+                                <<goto "Act3_School_ComputerLab">>
+                            <</link>>
+                            <span class="btn-sub">Desktop terminals and local intranet.</span>
+                        </button>
+                        <button style="border-left-color:var(--accent-blue) !important;">
+                            <<link "🖥️ ENTER SERVER ROOM [NORTH]">>
+                                <<goto "Act3_School_ServerRoom">>
+                            <</link>>
+                            <span class="btn-sub">School network infrastructure.</span>
+                        </button>
+                    <</if>>
                 </div>
-                <button style="border-left-color:var(--accent-gold) !important; background: rgba(120, 90, 0, 0.4); width: 100%;">
-                    <<link "💬 Meet Officer Reyes & Command [STORY PROGRESSION]" "Act3_Meeting_Evelyn">>
-                        <<set $act3_reyes_triggered to true>>
-                    <</link>>
-                    <span class="btn-sub"><b style="color:var(--accent-gold);">[MAIN QUEST]</b> Reyes signals that Sanctuary Command is ready for your briefing.</span>
-                </button>
-            </div>
-        <</if>>
+            </span>
+        </div>
 
-        <button style="border-left-color:var(--accent-blue) !important;">
-            <<link "💼 ENTER HEADMASTER'S OFFICE [SOUTH]">>
-                <<goto "Act3_School_Headmaster">>
-            <</link>>
-            <span class="btn-sub">Command office of Matriarch Evelyn.</span>
-        </button>
+        <!-- HALLWAY NODE NAVIGATION CONTROLS -->
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-hub-nav">
+                <b style="color:var(--accent-gold); letter-spacing: 2px;">🧭 CORRIDOR MOVEMENT:</b>
+                <hr style="border-color:#333; margin:8px 0;">
 
-    /* WEST HALLWAY 2: RADIO ROOM */
-    <<elseif $currentLocation == "hall_1_west_2">>
-        <button style="border-left-color:var(--accent-blue) !important;">
-            <<link "📻 ENTER SECURITY COMMS & RADIO ROOM [SOUTH]">>
-                <<goto "Act3_School_RadioRoom">>
-            <</link>>
-            <span class="btn-sub">Chloe's frequency scanner & radio station.</span>
-        </button>
+                <div class="choice-menu">
+                    <<if $currentLocation == "hall_1_center">>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "⬅️ Walk West to West Corridor 1 (Stairs Junction) ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_west_1">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "➡️ Walk East to East Corridor 1 (Stairs Junction) ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_east_1">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
 
-    /* WEST HALLWAY 3: ROOM 201 */
-    <<elseif $currentLocation == "hall_1_west_3">>
-        <button style="border-left-color:var(--accent-blue) !important;">
-            <<link "🚪 ENTER ROOM 201 [WEST]">>
-                <<goto "Act3_School_Room201">>
-            <</link>>
-            <span class="btn-sub">Ammunition & weapon storage locker.</span>
-        </button>
+                    <<elseif $currentLocation == "hall_1_west_1">>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "⬅️ Walk West to Radio Room Corridor ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_west_2">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "➡️ Walk East to Center Junction ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_center">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
+                        <button style="border-left-color: var(--accent-green) !important;">
+                            <<link "🪜 GO DOWN TO GROUND FLOOR [WEST STAIRS]">>
+                                <<addTime 2>>
+                                <<set $currentLocation to "hall_g_west_1">>
+                                <<goto "Act3_SchoolGFloor">>
+                            <</link>>
+                            <span class="btn-sub">Descend West Stairs to Security Room Junction.</span>
+                        </button>
 
-    /* WEST HALLWAY 4: ROOM 202 & ROOF */
-    <<elseif $currentLocation == "hall_1_west_4">>
-        <button style="border-left-color:var(--accent-blue) !important;">
-            <<link "🚪 ENTER ROOM 202 [WEST]">>
-                <<goto "Act3_School_Room202">>
-            <</link>>
-            <span class="btn-sub">Off-duty guard sleeping quarter.</span>
-        </button>
-        <button style="border-left-color:var(--accent-blue) !important;">
-            <<link "🚪 ENTER ROOF ACCESS LANDING [NORTH]">>
-                <<goto "Act3_School_RoofAccess">>
-            <</link>>
-            <span class="btn-sub">Steel door to the rooftop lookout post.</span>
-        </button>
+                    <<elseif $currentLocation == "hall_1_west_2">>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "⬆️ Walk North to Room 201 Corridor ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_west_3">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "➡️ Walk East to West Corridor 1 ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_west_1">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
 
-    /* EAST HALLWAY 1: DEPARTMENT OFFICES */
-    <<elseif $currentLocation == "hall_1_east_1">>
-        <button style="border-left-color:var(--accent-blue) !important;">
-            <<link "📂 ENTER DEPARTMENT OFFICES [SOUTH]">>
-                <<goto "Act3_School_DeptOffices">>
-            <</link>>
-            <span class="btn-sub">Faculty lounge and records storage.</span>
-        </button>
+                    <<elseif $currentLocation == "hall_1_west_3">>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "⬆️ Walk North to Room 202 & Roof Corridor ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_west_4">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "⬇️ Walk South to Radio Room Corridor ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_west_2">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
 
-    /* EAST HALLWAY 2: LIBRARY */
-    <<elseif $currentLocation == "hall_1_east_2">>
-        <button style="border-left-color:var(--accent-blue) !important;">
-            <<link "📚 ENTER SCHOOL LIBRARY [EAST]">>
-                <<goto "Act3_School_Library">>
-            <</link>>
-            <span class="btn-sub">Reference archives and skill textbooks.</span>
-        </button>
+                    <<elseif $currentLocation == "hall_1_west_4">>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "⬇️ Walk South to Room 201 Corridor ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_west_3">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
 
-    /* EAST HALLWAY 3: COMP LAB & SERVERS */
-    <<elseif $currentLocation == "hall_1_east_3">>
-        <button style="border-left-color:var(--accent-blue) !important;">
-            <<link "💻 ENTER COMPUTER LAB [EAST]">>
-                <<goto "Act3_School_ComputerLab">>
-            <</link>>
-            <span class="btn-sub">Desktop terminals and local intranet.</span>
-        </button>
-        <button style="border-left-color:var(--accent-blue) !important;">
-            <<link "🖥️ ENTER SERVER ROOM [NORTH]">>
-                <<goto "Act3_School_ServerRoom">>
-            <</link>>
-            <span class="btn-sub">School network infrastructure.</span>
-        </button>
-    <</if>>
+                    <<elseif $currentLocation == "hall_1_east_1">>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "➡️ Walk East to Library Corridor ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_east_2">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "⬅️ Walk West to Center Junction ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_center">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
+                        <button style="border-left-color: var(--accent-green) !important;">
+                            <<link "🪜 GO DOWN TO GROUND FLOOR [EAST STAIRS]">>
+                                <<addTime 2>>
+                                <<set $currentLocation to "hall_g_east_2">>
+                                <<goto "Act3_SchoolGFloor">>
+                            <</link>>
+                            <span class="btn-sub">Descend East Stairs to Screening Junction.</span>
+                        </button>
 
-</div>
+                    <<elseif $currentLocation == "hall_1_east_2">>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "⬆️ Walk North to Computer Lab & Server Corridor ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_east_3">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "⬅️ Walk West to East Corridor 1 ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_east_1">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
 
-<!-- HALLWAY NODE NAVIGATION CONTROLS -->
-<div style="padding:10px; background:rgba(0,0,0,0.4); border-left:3px solid var(--accent-blue);">
-    <b style="color:var(--accent-blue);">🧭 CORRIDOR MOVEMENT:</b>
-    <hr style="border-color:#333; margin:8px 0;">
+                    <<elseif $currentLocation == "hall_1_east_3">>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "⬇️ Walk South to Library Corridor ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 1>>
+                                <<set $currentLocation to "hall_1_east_2">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
 
-    <div class="choice-menu">
-
-        <<if $currentLocation == "hall_1_center">>
-            <<button "⬅️ Walk West to West Corridor 1 (Stairs Junction)">> <<addTime 1>> <<set $currentLocation to "hall_1_west_1">> <<goto "Act3_School1Floor">> <</button>>
-            <<button "➡️ Walk East to East Corridor 1 (Stairs Junction)">> <<addTime 1>> <<set $currentLocation to "hall_1_east_1">> <<goto "Act3_School1Floor">> <</button>>
-
-        <<elseif $currentLocation == "hall_1_west_1">>
-            <<button "⬅️ Walk West to Radio Room Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_west_2">> <<goto "Act3_School1Floor">> <</button>>
-            <<button "➡️ Walk East to Center Junction">> <<addTime 1>> <<set $currentLocation to "hall_1_center">> <<goto "Act3_School1Floor">> <</button>>
-            <button style="border-left-color: var(--accent-gold) !important;">
-                <<link "🪜 GO DOWN TO GROUND FLOOR [WEST STAIRS]">>
-                    <<addTime 2>>
-                    <<set $currentLocation to "hall_g_west_1">>
-                    <<goto "Act3_SchoolGFloor">>
-                <</link>>
-                <span class="btn-sub">Descend West Stairs to Security Room Junction.</span>
-            </button>
-
-        <<elseif $currentLocation == "hall_1_west_2">>
-            <<button "⬆️ Walk North to Room 201 Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_west_3">> <<goto "Act3_School1Floor">> <</button>>
-            <<button "➡️ Walk East to West Corridor 1">> <<addTime 1>> <<set $currentLocation to "hall_1_west_1">> <<goto "Act3_School1Floor">> <</button>>
-
-        <<elseif $currentLocation == "hall_1_west_3">>
-            <<button "⬆️ Walk North to Room 202 & Roof Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_west_4">> <<goto "Act3_School1Floor">> <</button>>
-            <<button "⬇️ Walk South to Radio Room Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_west_2">> <<goto "Act3_School1Floor">> <</button>>
-
-        <<elseif $currentLocation == "hall_1_west_4">>
-            <<button "⬇️ Walk South to Room 201 Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_west_3">> <<goto "Act3_School1Floor">> <</button>>
-
-        <<elseif $currentLocation == "hall_1_east_1">>
-            <<button "➡️ Walk East to Library Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_east_2">> <<goto "Act3_School1Floor">> <</button>>
-            <<button "⬅️ Walk West to Center Junction">> <<addTime 1>> <<set $currentLocation to "hall_1_center">> <<goto "Act3_School1Floor">> <</button>>
-            <button style="border-left-color: var(--accent-gold) !important;">
-                <<link "🪜 GO DOWN TO GROUND FLOOR [EAST STAIRS]">>
-                    <<addTime 2>>
-                    <<set $currentLocation to "hall_g_east_2">>
-                    <<goto "Act3_SchoolGFloor">>
-                <</link>>
-                <span class="btn-sub">Descend East Stairs to Screening Junction.</span>
-            </button>
-
-        <<elseif $currentLocation == "hall_1_east_2">>
-            <<button "⬆️ Walk North to Computer Lab & Server Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_east_3">> <<goto "Act3_School1Floor">> <</button>>
-            <<button "⬅️ Walk West to East Corridor 1">> <<addTime 1>> <<set $currentLocation to "hall_1_east_1">> <<goto "Act3_School1Floor">> <</button>>
-
-        <<elseif $currentLocation == "hall_1_east_3">>
-            <<button "⬇️ Walk South to Library Corridor">> <<addTime 1>> <<set $currentLocation to "hall_1_east_2">> <<goto "Act3_School1Floor">> <</button>>
-
-        <<else>>
-            <<button "🔄 Return to Central Junction">>
-                <<set $currentLocation to "hall_1_center">>
-                <<goto "Act3_School1Floor">>
-            <</button>>
-        <</if>>
+                    <<else>>
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "🔄 Return to Central Junction ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<set $currentLocation to "hall_1_center">>
+                                <<goto "Act3_School1Floor">>
+                            <</link>>
+                        </button>
+                    <</if>>
+                </div>
+            </span>
+        </div>
 
     </div>
 </div>
