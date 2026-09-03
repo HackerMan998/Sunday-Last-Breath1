@@ -2,38 +2,54 @@
 <<nobr>>
 <<set $currentLocation to "mep_space">>
 <<set $activeMap to "Highschool Ground">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
 <</nobr>>
 
-<h2>GROUND FLOOR — MEP MECHANICAL SPACE</h2>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            GROUND FLOOR — MEP MECHANICAL SPACE
+        </div>
 
-<div style="margin-bottom: 15px; text-align: center;">
-    <img src="image/Act3_Timberline/mep.gif" style="max-width: 100%; border: 1px solid #333;">
-</div>
+        <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+            <img src="image/Act3_Timberline/mep.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+        </div>
 
-Mechanical, electrical, and plumbing maintenance room. Pipes groan overhead as the generator vibrates through the concrete.
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-mep-main">
+                The mechanical and electrical maintenance bay hums with tension. Overhead water pipes rattle and groan as the school's emergency backup generator throbs continuously, vibrating through the solid concrete floor.
+                <br><br>
+                The air is thick with heat, battery acid, and the bitter smell of burning diesel fuel. Breaker panels, shutoff valves, and wiring schematics cover the reinforced walls.
+                <br><br>
+                <<if not $looted_mep>>
+                    A heavy steel maintenance workbench sits beneath a flickering bulb, cluttered with spare electrical hardware, wire spools, and toolboxes.
+                    <br><br>
+                    <div class="choice-menu">
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "Search the generator workbench ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 5>>
+                                <<set $looted_mep to true>>
+                                <<run setup.addItem("Fuse", 1)>>
+                                <<run setup.addItem("Multi-Tool", 1)>>
+                                <<goto "Act3_School_MEP">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOOT]</b> Scavenge electrical components (1x Fuse, 1x Multi-Tool).</span>
+                        </button>
+                    </div>
+                <<else>>
+                    The electrical workbench has been cleared of useful maintenance supplies.
+                <</if>>
+            </span>
+        </div>
 
-<<if not $looted_mep>>
-    <div class="choice-menu">
-        <button>
-            <<link "Search the generator workbench">>
-                <<addTime 5>>
-                <<set $looted_mep to true>>
-                <<run setup.addItem("Fuse", 1)>>
-                <<run setup.addItem("Multi-Tool", 1)>>
-                <<goto "Act3_School_MEP">>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOOT]</b> Found 1x Fuse, 1x Multi-Tool.</span>
-        </button>
+        <div class="choice-menu">
+            <button style="border-left-color: var(--accent-blue) !important;">
+                <<link "🚪 Exit MEP Space to Locker Room [SOUTH]">>
+                    <<goto "Act3_School_LockerRoom">>
+                <</link>>
+                <span class="btn-sub">Step back into the athletic locker room.</span>
+            </button>
+        </div>
     </div>
-<<else>>
-    The electrical workbench is cleared.
-<</if>>
-
-<br><br>
-<div class="choice-menu">
-    <button>
-        <<link "🚪 Exit MEP Space to Locker Room [SOUTH]">>
-            <<goto "Act3_School_LockerRoom">>
-        <</link>>
-    </button>
 </div>

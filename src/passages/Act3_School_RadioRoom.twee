@@ -2,72 +2,138 @@
 <<nobr>>
 <<set $currentLocation to "radio_room">>
 <<set $activeMap to "Highschool 1st Floor">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
 <</nobr>>
 
-<h2>1ST FLOOR — SECURITY COMMS & RADIO ROOM</h2>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            1ST FLOOR — SECURITY COMMS & RADIO ROOM
+        </div>
 
-<div style="margin-bottom: 15px; text-align: center;">
-    <img src="image/Act3_Timberline/radio.gif" style="max-width: 100%; border: 1px solid #333;">
-</div>
+        <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+            <img src="image/Act3_Timberline/radio.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+        </div>
 
-<<chat "Chloe" "image/avatars/radio_chloe.gif" "right" "All military frequencies in King County went static twenty minutes ago...">>
-<br><br>
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-radio-main">
+                The school's former audio-visual control booth has been converted into an emergency communications center. Heavy coaxial cables snake out through an open acoustic vent toward the rooftop antenna array, taped to the floor with yellow hazard markers.
+                <br><br>
+                Banks of surplus transceivers and scanner monitors flicker against the wall, their needle meters twitching erratically through static.
+                <br><br>
+                <<if _arrivedLate>>
+                    Cold morning light washes through the high ventilation grate. The booth is filled with the dull, continuous thrum of the emergency generator and the smell of warm electrical plastic. The airwaves are eerily quiet—the chaotic live distress calls of the midnight outbreak have died away, leaving only automated loops.
+                <<else>>
+                    The booth is bathed in the amber glow of vacuum tubes and radio dials. Through the wall speakers, broken radio calls hiss and pop violently—distant sirens, frantic civilian transmissions, and shouted police codes echoing from the dark valley below.
+                <</if>>
+                <br><br>
+                <<if not $chloe_met>>
+                    Hunched over the primary transceiver is a young woman in an oversized jacket, wearing heavy dual-cup headphones. Her hands move rapidly across the frequency dials, desperately fighting through the background squeal.
+                    <br><br>
+                    <<if _arrivedLate>>
+                        <<chat "Radio Operator" "image/avatars/radio_chloe.gif" "right" "Static... endless static. Where did everyone go?">>
+                        <br><br>
+                        She lowers her headset around her neck and rubs exhausted, bloodshot eyes as you step inside.
+                        <br><br>
+                        <<chat "Radio Operator" "image/avatars/radio_chloe.gif" "right" "Didn't hear you come in. The live channels went dead hours before sunrise. I'm Chloe. Our backup generator surged overnight and fried the HF receiver circuit. I'm trying to catch the automated morning military beacons, but without parts to bridge the transformer, we have no idea if any safe zones are still standing outside this valley.">>
+                    <<else>>
+                        <<chat "Radio Operator" "image/avatars/radio_chloe.gif" "right" "Come on, lock in... don't drop out on me! Stay on channel!">>
+                        <br><br>
+                        She hears your boots on the linoleum, rips one earcup back from her ear, and looks up with wide, adrenaline-fueled eyes.
+                        <br><br>
+                        <<chat "Radio Operator" "image/avatars/radio_chloe.gif" "right" "Sorry! The municipal grid blew thirty minutes ago and sent a surge that cracked our antenna bridge! I was actively tracking Sheriff dispatch at the south bridge—they're falling back right now! I'm Chloe. I'm trying to hold this rig together, but without replacement parts, we're completely blind to the escape routes!">>
+                    <</if>>
+                    <<set $chloe_met to true>>
 
-<<if $helped_chloe>>
-    <span style="color:var(--accent-green);">The radio relay is humming steadily thanks to your repairs.</span>
-    <br><br>
-    <<if not $has_radio_lore>>
+                <<elseif $helped_chloe>>
+                    The transmitter console hums smoothly now. The transformer's status LED burns a steady, reassuring green. Chloe looks up from the monitor desk with a relieved smile.
+                    <br><br>
+                    <<if _arrivedLate>>
+                        <<chat "Chloe" "image/avatars/radio_chloe.gif" "right" "That replacement component saved the rig. I finally locked onto the regional high-frequency emergency broadcast. It's automated, but... you need to hear this.">>
+                    <<else>>
+                        <<chat "Chloe" "image/avatars/radio_chloe.gif" "right" "That part stabilized the bridge just in time! The antenna is pulling live tactical transmissions from the highway units right now. Put this on.">>
+                    <</if>>
+                    <br><br>
+                    <<if not $has_radio_lore>>
+                        She hands you a secondary pair of monitoring headphones connected to the console.
+                        <br><br>
+                        <div class="choice-menu">
+                            <button style="border-left-color: var(--accent-gold) !important;">
+                                <<link "Listen to regional radio transmissions [LORE] ▼">>
+                                    <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                    <<addTime 10>>
+                                    <<set $has_radio_lore to true>>
+                                    <<run window.addLore("Radio Intel: The Fall of Highway 99", "Chloe's fixed relay captured military transmissions confirming that I-5 and Highway 99 barricades have been totally overrun.")>>
+                                    <<goto "Act3_School_RadioRoom">>
+                                <</link>>
+                                <span class="btn-sub"><b style="color:var(--accent-gold);">[LORE UNLOCKED]</b> Listen to regional military feeds on Highway 99.</span>
+                            </button>
+                        </div>
+                    <<else>>
+                        <span style="color:var(--accent-gold); font-weight:bold;">
+                            <<if _arrivedLate>>
+                                You recall the chilling automated message: <i>"All civilian evacuation corridors across Western Washington are declared uncontained. Surviving safe zones are instructed to hold in place. There is no active perimeter."</i>
+                            <<else>>
+                                You recall the frantic screams over the radio: <i>"Barricade Nine is overrun! Fall back across the river, blow the spans!"</i> The entire highway corridor out of the city is gone.
+                            <</if>>
+                        </span>
+                    <</if>>
+
+                <<else>>
+                    Chloe is staring helplessly at the scorched transformer box beneath the primary receiver console.
+                    <br><br>
+                    <<if _arrivedLate>>
+                        <<chat "Chloe" "image/avatars/radio_chloe.gif" "right" "The generator spikes melted my circuit trace. If you can scavenge a Fuse, Batteries, or a Multi-Tool from the school workshops, I can rewire the high-frequency tuner and see if anyone outside is responding to our calls.">>
+                    <<else>>
+                        <<chat "Chloe" "image/avatars/radio_chloe.gif" "right" "The power surge fried my transformer bridge. If you've got a Fuse, Batteries, or a Multi-Tool from downstairs, I can splice the line and catch the evacuation orders before the towers go dead!">>
+                    <</if>>
+                    <br><br>
+                    <div class="choice-menu">
+                        <<if $inventory.find(i => i.id === "Fuse" || i.id === "Batteries" || i.id === "Multi-Tool")>>
+                            <button style="border-left-color: var(--accent-green) !important;">
+                                <<link "Fix Chloe's radio relay with your electrical parts [INVENTORY] ▼">>
+                                    <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                    <<addTime 15>>
+                                    <<set $helped_chloe to true>>
+                                    <<completeObjective "fetch_parts_chloe">>
+                                    <<purgeCompleted>>
+                                    <<run window.gainXP(35)>>
+                                    <<run window.gainTrust(20)>>
+                                    <<if $inventory.find(i => i.id === "Fuse")>>
+                                        <<run setup.removeItem("Fuse", 1)>>
+                                    <<elseif $inventory.find(i => i.id === "Batteries")>>
+                                        <<run setup.removeItem("Batteries", 1)>>
+                                    <</if>>
+                                    <<goto "Act3_School_RadioRoom">>
+                                <</link>>
+                                <span class="btn-sub"><b style="color:var(--accent-green);">[+20 TRUST] [+35 XP]</b> Splice the wiring and restore the receiver transformer.</span>
+                            </button>
+                        <</if>>
+                        <<if not $chloe_quest_active>>
+                            <button style="border-left-color: var(--accent-gold) !important;">
+                                <<link "Offer to find replacement parts for the relay ▼">>
+                                    <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                    <<addTime 5>>
+                                    <<set $chloe_quest_active to true>>
+                                    <<addObjective "fetch_parts_chloe" "Find a Fuse, Batteries, or Multi-Tool for Chloe">>
+                                    <<goto "Act3_School_RadioRoom">>
+                                <</link>>
+                                <span class="btn-sub">Agree to look for electrical components in the school (MEP mechanical space / lab).</span>
+                            </button>
+                        <</if>>
+                    </div>
+                <</if>>
+            </span>
+        </div>
+
         <div class="choice-menu">
-            <button>
-                <<link "Listen to Chloe's radio intel">>
-                    <<addTime 10>>
-                    <<set $has_radio_lore to true>>
-                    <<run window.addLore("Radio Intel: The Fall of Highway 99", "Chloe's fixed relay captured military transmissions confirming that I-5 and Highway 99 barricades have been totally overrun.")>>
-                    <<goto "Act3_School_RadioRoom">>
+            <button style="border-left-color: var(--accent-blue) !important;">
+                <<link "🚪 Exit Radio Room to Hallway [EAST]">>
+                    <<set $currentLocation to "hall_1_west_2">>
+                    <<goto "Act3_School1Floor">>
                 <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-gold);">[LORE UNLOCKED]</b> Listen to regional feeds.</span>
+                <span class="btn-sub">Return to West Hallway 2.</span>
             </button>
         </div>
-    <<else>>
-        <span style="color:var(--accent-gold);">You have recorded Chloe's regional radio chatter log.</span>
-    <</if>>
-<<else>>
-    <div class="choice-menu">
-        <<if $inventory.find(i => i.id === "Fuse" || i.id === "Batteries" || i.id === "Multi-Tool")>>
-            <button>
-                <<link "Fix Chloe's radio relay with your electrical parts [INVENTORY]">>
-                    <<addTime 15>>
-                    <<set $helped_chloe to true>>
-                    <<completeObjective "fetch_parts_chloe">>
-                    <<purgeCompleted>>
-                    <<run window.gainXP(35)>>
-                    <<run window.gainTrust(20)>>
-                    <<if $inventory.find(i => i.id === "Fuse")>><<run setup.removeItem("Fuse", 1)>><<elseif $inventory.find(i => i.id === "Batteries")>><<run setup.removeItem("Batteries", 1)>><</if>>
-                    <<goto "Act3_School_RadioRoom">>
-                <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-green);">[+20 TRUST] [+35 XP]</b> Repair the radio transformer.</span>
-            </button>
-        <</if>>
-        <<if not $chloe_quest_active>>
-            <button>
-                <<link "Ask Chloe how to help fix the radio">>
-                    <<addTime 5>>
-                    <<set $chloe_quest_active to true>>
-                    <<addObjective "fetch_parts_chloe" "Find a Fuse, Batteries, or Multi-Tool for Chloe">>
-                    <<goto "Act3_School_RadioRoom">>
-                <</link>>
-                <span class="btn-sub">Accept radio repair quest.</span>
-            </button>
-        <</if>>
     </div>
-<</if>>
-
-<br><br>
-<div class="choice-menu">
-    <button>
-        <<link "🚪 Exit Radio Room to Hallway [EAST]">>
-            <<set $currentLocation to "hall_1_west_1">>
-            <<goto "Act3_School1Floor">>
-        <</link>>
-    </button>
 </div>

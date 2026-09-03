@@ -2,46 +2,61 @@
 <<nobr>>
 <<set $currentLocation to "locker_room">>
 <<set $activeMap to "Highschool Ground">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
 <</nobr>>
 
-<h2>GROUND FLOOR — ATHLETIC LOCKER ROOM</h2>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            GROUND FLOOR — ATHLETIC LOCKER ROOM
+        </div>
 
-<div style="margin-bottom: 15px; text-align: center;">
-    <img src="image/Act3_Timberline/locker.gif" style="max-width: 100%; border: 1px solid #333;">
-</div>
+        <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+            <img src="image/Act3_Timberline/locker.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+        </div>
 
-Benches and metal lockers line the walls.
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-locker-main">
+                The locker room smells of damp sweat, rubber soles, and stale chlorine drifting in from the adjoining athletic facilities. Rows of scarred green lockers and wooden benches stand in dim fluorescent lighting.
+                <br><br>
+                Discarded jerseys, tape, and sports equipment litter the floor where refugees rummaged in panic when the building was first secured.
+                <br><br>
+                <<if not $looted_locker>>
+                    Several lockers near the equipment cage stand ajar. You notice a couple of abandoned duffel bags tucked away in the shadows under a bench.
+                    <br><br>
+                    <div class="choice-menu">
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "Search the athletic lockers ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 5>>
+                                <<set $looted_locker to true>>
+                                <<run setup.addItem("Work Gloves", 1)>>
+                                <<run setup.addItem("Running Shoes", 1)>>
+                                <<goto "Act3_School_LockerRoom">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOOT]</b> Scavenge for usable gear (Work Gloves & Running Shoes).</span>
+                        </button>
+                    </div>
+                <<else>>
+                    The lockers have already been picked through. Nothing useful remains among the scattered debris.
+                <</if>>
+            </span>
+        </div>
 
-<<if not $looted_locker>>
-    Several athletic lockers are unlocked. You see discarded duffel bags.
-    <br><br>
-    <div class="choice-menu">
-        <button>
-            <<link "Search the athletic lockers">>
-                <<addTime 5>>
-                <<set $looted_locker to true>>
-                <<run setup.addItem("Work Gloves", 1)>>
-                <<run setup.addItem("Running Shoes", 1)>>
-                <<goto "Act3_School_LockerRoom">>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOOT]</b> Found Work Gloves and Running Shoes.</span>
-        </button>
+        <div class="choice-menu">
+            <button style="border-left-color: var(--accent-blue) !important;">
+                <<link "⬆️ Enter MEP Mechanical Space [NORTH]">>
+                    <<goto "Act3_School_MEP">>
+                <</link>>
+                <span class="btn-sub">Head into the mechanical and utility room.</span>
+            </button>
+            <button style="border-left-color: var(--accent-blue) !important;">
+                <<link "🚪 Exit Locker Room to Hallway [SOUTH]">>
+                    <<set $currentLocation to "hall_g_east_1">>
+                    <<goto "Act3_SchoolGFloor">>
+                <</link>>
+                <span class="btn-sub">Return to the East Hallway junction.</span>
+            </button>
+        </div>
     </div>
-<<else>>
-    The lockers have been picked through.
-<</if>>
-
-<br><br>
-<div class="choice-menu">
-    <button>
-        <<link "⬆️ Enter MEP Mechanical Space [NORTH]">>
-            <<goto "Act3_School_MEP">>
-        <</link>>
-    </button>
-    <button>
-        <<link "🚪 Exit Locker Room to Hallway [SOUTH]">>
-            <<set $currentLocation to "hall_g_east_1">>
-            <<goto "Act3_SchoolGFloor">>
-        <</link>>
-    </button>
 </div>

@@ -5,43 +5,62 @@
 <<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
 <</nobr>>
 
-<h2>1ST FLOOR — SCHOOL LIBRARY</h2>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            1ST FLOOR — SCHOOL LIBRARY
+        </div>
 
-<div style="margin-bottom: 15px; text-align: center;">
-<<if _arrivedLate>>
-    <img src="image/Act3_Timberline/library_morning.gif" style="max-width: 100%; border: 1px solid #333;">
-<<else>>
-    <img src="image/Act3_Timberline/library_night.gif" style="max-width: 100%; border: 1px solid #333;">
-<</if>>
-</div>
+        <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+            <<if _arrivedLate>>
+                <img src="image/Act3_Timberline/library_morning.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            <<else>>
+                <img src="image/Act3_Timberline/library_night.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+            <</if>>
+        </div>
 
-Towering bookshelves cast long shadows.
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-library-main">
+                Towering wooden bookshelves stretch toward the high ceiling, casting deep shadows across rows of heavy oak tables. The air is still and cool, thick with the scent of aged paper, binding glue, and dust.
+                <br><br>
+                Surrounded by thousands of quiet volumes, the library feels strangely detached from the apocalypse raging outside the barricaded windows.
+                <br><br>
+                <<if _arrivedLate>>
+                    Golden morning sunlight streams through the high skylights, illuminating swirling dust motes. A few refugees sit quietly in the back corner carrels, softly reading to their frightened children to keep them calm.
+                <<else>>
+                    Moonlight filters through the high windows, creating silver pools between the pitch-black aisles of books. The wind outside whistles against the double-paned glass, a cold reminder of the night world beyond the school walls.
+                <</if>>
+                <br><br>
+                <<if not $looted_library>>
+                    Near the central circulation desk, someone left several open technical manuals, medical guides, and reference textbooks stacked beside a librarian's desk.
+                    <br><br>
+                    <div class="choice-menu">
+                        <button style="border-left-color: var(--accent-gold) !important;">
+                            <<link "Search the library reference manuals ▼">>
+                                <<run $(".vn-dialogue-box").scrollTop(0)>>
+                                <<addTime 10>>
+                                <<set $looted_library to true>>
+                                <<run setup.addItem("Manual: Mechanics", 1)>>
+                                <<run setup.addItem("Textbook", 1)>>
+                                <<goto "Act3_School_Library">>
+                            <</link>>
+                            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOOT]</b> Collect Manual: Mechanics (+1 Tech) and Textbook (+50 XP).</span>
+                        </button>
+                    </div>
+                <<else>>
+                    The reference desks have already been thoroughly searched. You've collected all the useful instructional materials.
+                <</if>>
+            </span>
+        </div>
 
-<<if not $looted_library>>
-    Several reference manuals on mechanics and first aid sit on the central study tables.
-    <br><br>
-    <div class="choice-menu">
-        <button>
-            <<link "Search the library reference manuals">>
-                <<addTime 10>>
-                <<set $looted_library to true>>
-                <<run setup.addItem("Manual: Mechanics", 1)>>
-                <<run setup.addItem("Textbook", 1)>>
-                <<goto "Act3_School_Library">>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-gold);">[LOOT]</b> Found Manual: Mechanics (+1 Tech) and Textbook (+50 XP).</span>
-        </button>
+        <div class="choice-menu">
+            <button style="border-left-color: var(--accent-blue) !important;">
+                <<link "🚪 Exit Library to Hallway [WEST]">>
+                    <<set $currentLocation to "hall_1_east_2">>
+                    <<goto "Act3_School1Floor">>
+                <</link>>
+                <span class="btn-sub">Return to the East Hallway corridor.</span>
+            </button>
+        </div>
     </div>
-<<else>>
-    You have already searched the library reference section.
-<</if>>
-
-<br><br>
-<div class="choice-menu">
-    <button>
-        <<link "🚪 Exit Library to Hallway [WEST]">>
-            <<set $currentLocation to "hall_1_east_2">>
-            <<goto "Act3_School1Floor">>
-        <</link>>
-    </button>
 </div>
