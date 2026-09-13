@@ -17,19 +17,40 @@
 <<if $anchor == "partner_f">>
     <<set _leaderName to $anchor_name>>
     <<set _leaderAvatar to "image/avatars/leader_f.gif">>
-    <<set _leaderRef to "your girlfriend, " + $anchor_name>>
+    <<set _leaderRef to ($anchor_rel ? "your " + $anchor_rel + ", " + $anchor_name : "your girlfriend, " + $anchor_name)>>
+    <<set _subj to "she">>
+    <<set _obj to "her">>
+    <<set _poss to "her">>
+    <<set _capSubj to "She">>
 <<elseif $anchor == "partner_m">>
     <<set _leaderName to $anchor_name>>
     <<set _leaderAvatar to "image/avatars/leader_m.gif">>
-    <<set _leaderRef to "your boyfriend, " + $anchor_name>>
+    <<set _leaderRef to ($anchor_rel ? "your " + $anchor_rel + ", " + $anchor_name : "your boyfriend, " + $anchor_name)>>
+    <<set _subj to "he">>
+    <<set _obj to "him">>
+    <<set _poss to "his">>
+    <<set _capSubj to "He">>
 <<elseif $anchor == "partner_nb">>
     <<set _leaderName to $anchor_name>>
     <<set _leaderAvatar to "image/avatars/leader_nb.gif">>
     <<set _leaderRef to "your partner, " + $anchor_name>>
+    <<set _subj to "they">>
+    <<set _obj to "them">>
+    <<set _poss to "their">>
+    <<set _capSubj to "They">>
 <<elseif $anchor == "parents">>
     <<set _leaderName to "Dad">>
     <<set _leaderAvatar to "image/avatars/leader_dad.gif">>
     <<set _leaderRef to "your father">>
+    <<set _subj to "he">>
+    <<set _obj to "him">>
+    <<set _poss to "his">>
+    <<set _capSubj to "He">>
+<<else>>
+    <<set _subj to "he">>
+    <<set _obj to "him">>
+    <<set _poss to "his">>
+    <<set _capSubj to "He">>
 <</if>>
 <</nobr>>
 
@@ -59,7 +80,11 @@
                     <<if $anchor == "parents">>
                         <<chat "Mom (Evelyn)" "image/avatars/matriarch_evelyn.gif" "right" "$firstName! Why are you still in the building? Every minute that passes is another minute your father is trapped in that cooler! Please, get to Route 9!">>
                     <<elseif $anchor == "partner_f" or $anchor == "partner_m" or $anchor == "partner_nb">>
-                        <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "$firstName, the clock is ticking. _leaderName and their team won't last long against that horde. Get down to the 7-Eleven with Reyes before it's too late!">>
+                        <<if $anchor == "partner_nb">>
+                            <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "$firstName, the clock is ticking. _leaderName and their team won't last long against that horde. Get down to the 7-Eleven with Reyes before it's too late!">>
+                        <<else>>
+                            <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "$firstName, the clock is ticking. _leaderName and <<print _poss>> team won't last long against that horde. Get down to the 7-Eleven with Reyes before it's too late!">>
+                        <</if>>
                     <<else>>
                         <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "Reyes and you need to roll out immediately. Commander Hayes is our chief tactical officer—we cannot afford to lose him on Route 9.">>
                     <</if>>
@@ -72,7 +97,11 @@
                     <<if $anchor == "parents">>
                         Your mother and father stand together behind the mahogany desk. Your dad places a firm, proud hand on your shoulder while your mom reviews regional perimeter updates.
                     <<elseif $anchor == "partner_f" or $anchor == "partner_m" or $anchor == "partner_nb">>
-                        _leaderName looks up from the supply manifests with a warm, intimate smile. Evelyn stands beside them, nodding in deep respect.
+                        <<if $anchor == "partner_nb">>
+                            _leaderName looks up from the supply manifests with a warm, intimate smile. Evelyn stands beside them, nodding in deep respect.
+                        <<else>>
+                            _leaderName looks up from the supply manifests with a warm, intimate smile. Evelyn stands beside <<print _obj>>, nodding in deep respect.
+                        <</if>>
                     <<else>>
                         Commander Hayes and Matriarch Evelyn coordinate logistics across the compound with radios and defense manifests.
                     <</if>>

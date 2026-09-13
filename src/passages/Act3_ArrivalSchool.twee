@@ -64,7 +64,7 @@
                 <br><br>
                 
                 <<if _arrivedLate>>
-                    In the gray morning light, the scale of the operation is clear. Heavily armed sentries patrol the rooftops.
+                    In the gray morning light, the scale of the sanctuary is clear. Armed guards patrol the rooftops.
                 <<else>>
                     Blinding halogen floodlights instantly snap onto your windshield, pinning you in the dark.
                 <</if>>

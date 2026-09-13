@@ -26,9 +26,9 @@
                 Desks once piled with lesson plans and exam papers are now cluttered with radio chargers, half-eaten ration bars, and ammunition crates. The large whiteboard on the wall still shows last week's school calendar, now scrawled over in dry-erase marker with patrol sectors and guard rosters.
                 <br><br>
                 <<if _arrivedLate>>
-                    Pale morning light cuts through the dusty Venetian blinds. Several sentries are sprawled across folding cots or slumped over desks in full tactical gear, catching fitful sleep after holding the school perimeter through the night. A pot of bitter coffee sits cold in the corner.
+                    Pale morning light cuts through the dusty Venetian blinds. Several guards are sprawled across folding cots or slumped over desks with shotguns across their laps, catching fitful sleep after holding the school perimeter through the night. A pot of bitter coffee sits cold in the corner.
                 <<else>>
-                    The office is dim, illuminated only by red emergency glow-sticks and the dull blue light of tactical monitors. Two sentries sit in silence at the corner desks, field-stripping their rifles and checking magazine springs. Every creak in the hallway puts them on edge.
+                    The office is dim, illuminated only by red emergency glow-sticks and the dull blue light of tactical monitors. Two guards sit in silence at the corner desks, field-stripping their rifles and checking magazine springs. Every creak in the hallway puts them on edge.
                 <</if>>
             </span>
         </div>

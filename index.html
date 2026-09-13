@@ -3476,8 +3476,6 @@ window.initDebugPanel = function () {
     initNavigation();
     initTimeControl();
     initPlayerIdentityControl();
-    initAnchorControl();
-    initTimelineControl();
 
     // ─── Player Identity (Name) Control ───
     function initPlayerIdentityControl() {
@@ -3519,99 +3517,194 @@ window.initDebugPanel = function () {
         on('btn-preset-name-james', 'click', function() { applyName('James', 'Miller'); });
     }
 
-    // ─── Anchor & Loved One Control ───
-    function initAnchorControl() {
-        var sel = byId('sel-anchor-type');
-        var input = byId('input-anchor-name');
-        var btn = byId('btn-anchor-apply');
-        var preview = byId('anchor-preview');
+    // ─── Anchor, Narrative & Story Control ───
+    function initNarrativeControl() {
+        var anchorButtons = document.querySelectorAll('.anchor-preset-btn');
+        var txtCurrentAnchor = byId('txt-current-anchor');
+        var inpFirstName = byId('inp-first-name');
+        var inpLastName = byId('inp-last-name');
+        var inpAnchorName = byId('inp-anchor-name');
+        var txtArrivalStatus = byId('txt-arrival-status');
 
-        if (!sel || !input || !btn) return;
-
-        function refreshPreview() {
-            var aType = getVar('anchor') || 'none';
-            var aName = getVar('anchor_name') || 'myself';
-            var aRel = getVar('anchor_rel') || 'none';
-            sel.value = aType;
-            input.value = aName;
-            if (preview) {
-                var label = aName;
-                if (aType === 'parents') label = 'Mom: Evelyn, Dad: Leader';
-                else if (aType === 'none') label = 'Lone Wolf (No Anchor)';
-                else label = aName + ' (' + aRel + ')';
-                preview.textContent = label;
+        function updateNarrativeDisplay() {
+            var curAnchor = getVar('anchor') || 'none';
+            if (txtCurrentAnchor) {
+                var displayMap = {
+                    'parents': 'Parents (Arthur & Evelyn Sage)',
+                    'partner_f': 'Girlfriend (' + (getVar('anchor_name') || 'Elena') + ')',
+                    'partner_m': 'Boyfriend (' + (getVar('anchor_name') || 'Liam') + ')',
+                    'partner_nb': 'Partner (' + (getVar('anchor_name') || 'Morgan') + ')',
+                    'myself': 'Lone Survivor (Commander Hayes)',
+                    'none': 'None / Default (Hayes)'
+                };
+                txtCurrentAnchor.textContent = displayMap[curAnchor] || curAnchor;
             }
-        }
-        refreshPreview();
 
-        sel.addEventListener('change', function () {
-            var val = this.value;
-            if (val === 'partner_f') input.value = 'Sarah';
-            else if (val === 'partner_m') input.value = 'David';
-            else if (val === 'partner_nb') input.value = 'Alex';
-            else if (val === 'parents') input.value = 'my folks';
-            else input.value = 'myself';
-        });
-
-        btn.addEventListener('click', function () {
-            var aType = sel.value;
-            var aName = input.value.trim() || 'Sarah';
-            var aRel = 'none';
-
-            if (aType === 'partner_f') aRel = 'wife';
-            else if (aType === 'partner_m') aRel = 'husband';
-            else if (aType === 'partner_nb') aRel = 'partner';
-            else if (aType === 'parents') { aRel = 'parents'; aName = 'my folks'; }
-            else { aType = 'none'; aRel = 'none'; aName = 'myself'; }
-
-            setVar('anchor', aType);
-            setVar('anchor_name', aName);
-            setVar('anchor_rel', aRel);
-            refreshPreview();
-        });
-    }
-
-    // ─── Timeline (Night vs Morning) Control ───
-    function initTimelineControl() {
-        var nightBtn = byId('btn-timeline-night');
-        var morningBtn = byId('btn-timeline-morning');
-        var preview = byId('timeline-preview');
-
-        function updateTimelineUi() {
-            var isLate = Array.isArray(State.expired) && State.expired.indexOf('Act2_5_MarcusCabin') > -1;
-            if (nightBtn && morningBtn) {
-                if (isLate) {
-                    morningBtn.classList.add('on');
-                    nightBtn.classList.remove('on');
-                    if (preview) preview.textContent = '☀️ Late Morning (Aftermath)';
+            for (var i = 0; i < anchorButtons.length; i++) {
+                var btn = anchorButtons[i];
+                var a = btn.getAttribute('data-anchor');
+                if (a === curAnchor || (a === 'myself' && (curAnchor === 'none' || curAnchor === 'myself'))) {
+                    btn.classList.add('on');
                 } else {
-                    nightBtn.classList.add('on');
-                    morningBtn.classList.remove('on');
-                    if (preview) preview.textContent = '🌙 Early Night (Outbreak)';
+                    btn.classList.remove('on');
                 }
             }
-        }
-        updateTimelineUi();
 
-        if (nightBtn) {
-            nightBtn.addEventListener('click', function () {
-                if (!Array.isArray(State.expired)) State.expired = [];
-                State.expired = State.expired.filter(function (t) { return t !== 'Act2_5_MarcusCabin'; });
-                updateTimelineUi();
+            if (inpFirstName) inpFirstName.value = getVar('firstName') || 'Neal';
+            if (inpLastName) inpLastName.value = getVar('lastName') || 'Sage';
+            if (inpAnchorName) inpAnchorName.value = getVar('anchor_name') || '';
+
+            if (txtArrivalStatus) {
+                var isLate = (Array.isArray(State.expired) && State.expired.indexOf('Act2_5_MarcusCabin') > -1) ||
+                             (Array.isArray(State.history) && State.history.some(function (m) { return m && m.title === 'Act2_5_MarcusCabin'; }));
+                txtArrivalStatus.textContent = isLate ? 'Current: ☀️ Late Sunrise (Marcus Cabin Visited)' : 'Current: 🌧️ Early Storm (Pre-Dawn)';
+                txtArrivalStatus.style.color = isLate ? 'var(--accent-gold)' : '#7cb9e8';
+            }
+        }
+
+        for (var i = 0; i < anchorButtons.length; i++) {
+            (function (btn) {
+                btn.addEventListener('click', function () {
+                    var a = btn.getAttribute('data-anchor');
+                    setVar('anchor', a);
+                    if (a === 'parents') {
+                        setVar('anchor_rel', 'parents');
+                        setVar('lastName', 'Sage');
+                        setVar('firstName', 'Neal');
+                        setVar('name', 'Neal Sage');
+                    } else if (a === 'partner_f') {
+                        setVar('anchor_rel', 'girlfriend');
+                        if (!getVar('anchor_name') || getVar('anchor_name') === 'Arthur') setVar('anchor_name', 'Elena');
+                    } else if (a === 'partner_m') {
+                        setVar('anchor_rel', 'boyfriend');
+                        if (!getVar('anchor_name') || getVar('anchor_name') === 'Arthur') setVar('anchor_name', 'Liam');
+                    } else if (a === 'partner_nb') {
+                        setVar('anchor_rel', 'partner');
+                        if (!getVar('anchor_name') || getVar('anchor_name') === 'Arthur') setVar('anchor_name', 'Morgan');
+                    } else if (a === 'myself') {
+                        setVar('anchor_rel', 'myself');
+                        setVar('anchor_name', '');
+                    }
+                    updateNarrativeDisplay();
+                });
+            })(anchorButtons[i]);
+        }
+
+        if (inpFirstName) {
+            inpFirstName.addEventListener('input', function () {
+                setVar('firstName', this.value);
+                setVar('name', (this.value || 'Neal') + ' ' + (getVar('lastName') || 'Sage'));
+            });
+        }
+        if (inpLastName) {
+            inpLastName.addEventListener('input', function () {
+                setVar('lastName', this.value);
+                setVar('name', (getVar('firstName') || 'Neal') + ' ' + (this.value || 'Sage'));
+            });
+        }
+        if (inpAnchorName) {
+            inpAnchorName.addEventListener('input', function () {
+                setVar('anchor_name', this.value);
+                updateNarrativeDisplay();
             });
         }
 
-        if (morningBtn) {
-            morningBtn.addEventListener('click', function () {
+        var btnEarly = byId('btn-arrival-early');
+        var btnLate = byId('btn-arrival-late');
+        if (btnEarly) {
+            btnEarly.addEventListener('click', function () {
+                if (Array.isArray(State.expired)) {
+                    State.expired = State.expired.filter(function (t) { return t !== 'Act2_5_MarcusCabin'; });
+                }
+                if (Array.isArray(State.history)) {
+                    State.history.forEach(function (m) {
+                        if (m && m.title === 'Act2_5_MarcusCabin') m.title = '__Act2_5_MarcusCabin_disabled__';
+                    });
+                }
+                updateNarrativeDisplay();
+            });
+        }
+        if (btnLate) {
+            btnLate.addEventListener('click', function () {
                 if (!Array.isArray(State.expired)) State.expired = [];
                 if (State.expired.indexOf('Act2_5_MarcusCabin') === -1) {
                     State.expired.push('Act2_5_MarcusCabin');
                 }
-                updateTimelineUi();
+                updateNarrativeDisplay();
             });
         }
-    }
 
+        var btnResetArmory = byId('btn-reset-armory');
+        if (btnResetArmory) {
+            btnResetArmory.addEventListener('click', function () {
+                setVar('armory_gearup_done', false);
+                setVar('sortie_package_chosen', 'none');
+                alert('Armory Requisition Reset: You can now pick a new sortie package at Sgt. Vance’s cage.');
+            });
+        }
+
+        var btnUnseal = byId('btn-unseal-weapons');
+        if (btnUnseal) {
+            btnUnseal.addEventListener('click', function () {
+                var stash = getVar('quartermaster_stash');
+                var inv = ensureArrayVar('inventory');
+                if (Array.isArray(stash) && stash.length > 0) {
+                    stash.forEach(function (it) { inv.push(it); });
+                    setVar('quartermaster_stash', []);
+                }
+                setVar('weapons_confiscated', false);
+                alert('Weapons unsealed and returned to backpack.');
+            });
+        }
+
+        var btnConfiscate = byId('btn-confiscate-weapons');
+        if (btnConfiscate) {
+            btnConfiscate.addEventListener('click', function () {
+                var stash = ensureArrayVar('quartermaster_stash');
+                var inv = ensureArrayVar('inventory');
+                for (var i = inv.length - 1; i >= 0; i--) {
+                    var item = setup.items[inv[i].id];
+                    if (item && item.type === 'weapon') {
+                        stash.push(inv[i]);
+                        inv.splice(i, 1);
+                    }
+                }
+                setVar('weapons_confiscated', true);
+                alert('Weapons moved to screening stash.');
+            });
+        }
+
+        var btnUnlockReyes = byId('btn-unlock-reyes');
+        if (btnUnlockReyes) {
+            btnUnlockReyes.addEventListener('click', function () {
+                setVar('act3_reyes_unlocked', true);
+                alert('Officer Reyes briefing unlocked on 1st Floor Center Hallway.');
+            });
+        }
+
+        // Quick Teleport Jumps
+        var btnTestMeeting = byId('btn-test-meeting');
+        if (btnTestMeeting) {
+            btnTestMeeting.addEventListener('click', function () {
+                setVar('act3_reyes_triggered', true);
+                Engine.play('Act3_Meeting_Evelyn');
+            });
+        }
+        var btnTestArmory = byId('btn-test-armory');
+        if (btnTestArmory) {
+            btnTestArmory.addEventListener('click', function () {
+                Engine.play('Act3_Armory_GearUp');
+            });
+        }
+        var btnTest7Eleven = byId('btn-test-7eleven');
+        if (btnTest7Eleven) {
+            btnTest7Eleven.addEventListener('click', function () {
+                Engine.play('Act3_7Eleven_Arrival');
+            });
+        }
+
+        updateNarrativeDisplay();
+    }
 
     function initSplitView() {
         var navItems = document.querySelectorAll('.dbg-nav-item');
@@ -3684,6 +3777,7 @@ window.initDebugPanel = function () {
     }
 
     initSplitView();
+    initNarrativeControl();
 
     refreshStatUi();
     refreshSkillUi();
@@ -4225,7 +4319,7 @@ window.preloadAssets = function(assetList) {
             }
         }
     });
-};</script><tw-tag name="PassageReady" color="green"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-tag name="Initialize" color="red"></tw-tag><tw-passagedata pid="1" name="Act2_5_MarcusCabin" tags="" position="450,1300" size="100,100">&lt;&lt;nobr&gt;&gt;
+};</script><tw-tag name="Initialize" color="red"></tw-tag><tw-tag name="PassageReady" color="green"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-passagedata pid="1" name="Act2_5_MarcusCabin" tags="" position="450,1300" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* ====================================================================
    INITIALIZATION &amp; STATE SETUP
    ==================================================================== */
@@ -7438,17 +7532,12 @@ window.preloadAssets = function(assetList) {
 &lt;&lt;set $inSafehouse to true&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
 
-&lt;h2&gt;1ST FLOOR — COMMAND OFFICE VICTORIOUS RETURN&lt;/h2&gt;
 /* DYNAMIC LEADER CONFIGURATION */
 &lt;&lt;set _leaderName to &quot;Commander Hayes&quot;&gt;&gt;
 &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_default_hayes.gif&quot;&gt;&gt;
 &lt;&lt;set _leaderRef to &quot;Commander Hayes&quot;&gt;&gt;
 
-&lt;div style=&quot;margin-bottom: 15px; text-align: center;&quot;&gt;
-    &lt;img src=&quot;image/Act3_Timberline/headmaster.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333;&quot;&gt;
-&lt;/div&gt;
 &lt;&lt;if $anchor == &quot;partner_f&quot;&gt;&gt;
     &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_f.gif&quot;&gt;&gt;
@@ -7467,38 +7556,21 @@ window.preloadAssets = function(assetList) {
     &lt;&lt;set _leaderRef to &quot;your father&quot;&gt;&gt;
 &lt;&lt;/if&gt;&gt;
 
-You, Reyes, and Commander Miller enter the 1st Floor Command Office.
-&lt;br&gt;&lt;br&gt;
-Matriarch Evelyn gasps in relief, rushing around the mahogany desk to check Miller&#39;s bandaged shoulder.
-&lt;br&gt;&lt;br&gt;
-&lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Thank God you made it back! We brought the fuel truck into the courtyard locker room.&quot;&gt;&gt;
 /* CLEARANCE FLAGS */
 &lt;&lt;set $senior_council_clearance to true&gt;&gt;
 &lt;&lt;set $leader_rescued to true&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
-&lt;br&gt;&lt;br&gt;
-&lt;&lt;chat &quot;Commander Miller&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;It&#39;s all thanks to this one right here. Stood shoulder to shoulder with Reyes and pulled us out of a death trap.&quot;&gt;&gt;
 &lt;div class=&quot;vn-container&quot;&gt;
     &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
         &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
             1ST FLOOR — COMMAND OFFICE VICTORIOUS RETURN
         &lt;/div&gt;
 
-&lt;br&gt;&lt;br&gt;
-Miller turns to you, placing a heavy hand on your shoulder.
-&lt;br&gt;&lt;br&gt;
-&lt;&lt;chat &quot;Commander Miller&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;You&#39;re no longer just a refugee in Timberline High. As of today, you are a full member of our Senior Defense Council. Full clearance across all wings of the sanctuary.&quot;&gt;&gt;
         &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
             &lt;img src=&quot;image/Act3_Timberline/headmaster.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
         &lt;/div&gt;
 
-&lt;br&gt;&lt;br&gt;
-&lt;div style=&quot;padding:15px; background:rgba(0,100,0,0.25); border:1px solid var(--accent-green); text-align:center;&quot;&gt;
-    &lt;b style=&quot;color:var(--accent-green); font-size:1.3em;&quot;&gt;🏆 SENIOR COUNCIL CLEARANCE UNLOCKED&lt;/b&gt;
-    &lt;br&gt;
-    &lt;span style=&quot;color:#aaa;&quot;&gt;You now have full access to all military reserves, radio feeds, and perimeter defenses in Timberline.&lt;/span&gt;
-&lt;/div&gt;
         &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-green); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
             &lt;span id=&quot;vn-711-success-main&quot;&gt;
                 You, Reyes, and &lt;&lt;print _leaderName&gt;&gt; climb the wide interior staircase and step through the double oak doors of the Command Office.
@@ -7545,17 +7617,9 @@ Miller turns to you, placing a heavy hand on your shoulder.
             &lt;/span&gt;
         &lt;/div&gt;
 
-&lt;br&gt;&lt;br&gt;
-&lt;div class=&quot;choice-menu&quot;&gt;
-    &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
-        &lt;&lt;link &quot;🏫 Return to the Safehouse Corridor&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-            &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
-        &lt;span class=&quot;btn-sub&quot;&gt;Explore the fully unlocked Timberline Sanctuary.&lt;/span&gt;
-    &lt;/button&gt;
         &lt;div class=&quot;choice-menu&quot;&gt;
             &lt;button style=&quot;border-left-color: var(--accent-blue) !important; background: rgba(0, 50, 100, 0.25);&quot;&gt;
-                &lt;&lt;link &quot;🏢 Step out to 1st Floor Upper Hallway [NORTH]&quot;&gt;&gt;
+                &lt;&lt;link &quot;🏢 Step out to 1st Floor Upper Hallway - NORTH&quot;&gt;&gt;
                     &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                     &lt;&lt;set $currentLocation to &quot;hall_1_center&quot;&gt;&gt;
                     &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
@@ -7564,7 +7628,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
             &lt;/button&gt;
 
             &lt;button style=&quot;border-left-color: var(--accent-gold) !important; background: rgba(100, 75, 0, 0.25);&quot;&gt;
-                &lt;&lt;link &quot;🏫 Descend to Ground Floor Main Corridor [SOUTH]&quot;&gt;&gt;
+                &lt;&lt;link &quot;🏫 Descend to Ground Floor Main Corridor - SOUTH&quot;&gt;&gt;
                     &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                     &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
                     &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
@@ -7576,6 +7640,9 @@ Miller turns to you, placing a heavy hand on your shoulder.
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="13" name="Act3_Armory_GearUp" tags="" position="750,1650" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;if ndef $firstName or $firstName == &quot;???&quot;&gt;&gt;
     &lt;&lt;set $firstName to &quot;Neal&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;if ndef $lastName&gt;&gt;
+    &lt;&lt;set $lastName to &quot;Sage&quot;&gt;&gt;
 &lt;&lt;/if&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
 &lt;&lt;set $inSafehouse to true&gt;&gt;
@@ -7589,19 +7656,40 @@ Miller turns to you, placing a heavy hand on your shoulder.
 &lt;&lt;if $anchor == &quot;partner_f&quot;&gt;&gt;
     &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_f.gif&quot;&gt;&gt;
-    &lt;&lt;set _leaderRef to &quot;your girlfriend, &quot; + $anchor_name&gt;&gt;
+    &lt;&lt;set _leaderRef to ($anchor_rel ? &quot;your &quot; + $anchor_rel + &quot;, &quot; + $anchor_name : &quot;your girlfriend, &quot; + $anchor_name)&gt;&gt;
+    &lt;&lt;set _subj to &quot;she&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;her&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;her&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;She&quot;&gt;&gt;
 &lt;&lt;elseif $anchor == &quot;partner_m&quot;&gt;&gt;
     &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_m.gif&quot;&gt;&gt;
-    &lt;&lt;set _leaderRef to &quot;your boyfriend, &quot; + $anchor_name&gt;&gt;
+    &lt;&lt;set _leaderRef to ($anchor_rel ? &quot;your &quot; + $anchor_rel + &quot;, &quot; + $anchor_name : &quot;your boyfriend, &quot; + $anchor_name)&gt;&gt;
+    &lt;&lt;set _subj to &quot;he&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;him&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;his&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;He&quot;&gt;&gt;
 &lt;&lt;elseif $anchor == &quot;partner_nb&quot;&gt;&gt;
     &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_nb.gif&quot;&gt;&gt;
     &lt;&lt;set _leaderRef to &quot;your partner, &quot; + $anchor_name&gt;&gt;
+    &lt;&lt;set _subj to &quot;they&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;them&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;their&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;They&quot;&gt;&gt;
 &lt;&lt;elseif $anchor == &quot;parents&quot;&gt;&gt;
     &lt;&lt;set _leaderName to &quot;Dad&quot;&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_dad.gif&quot;&gt;&gt;
     &lt;&lt;set _leaderRef to &quot;your father&quot;&gt;&gt;
+    &lt;&lt;set _subj to &quot;he&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;him&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;his&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;He&quot;&gt;&gt;
+&lt;&lt;else&gt;&gt;
+    &lt;&lt;set _subj to &quot;he&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;him&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;his&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;He&quot;&gt;&gt;
 &lt;&lt;/if&gt;&gt;
 
 /* 1. INITIALIZE SANCTUARY STORAGE CHEST (RE-STYLE ITEM BOX) */
@@ -7647,43 +7735,95 @@ Miller turns to you, placing a heavy hand on your shoulder.
         &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
             &lt;span id=&quot;vn-armory-main&quot;&gt;
                 &lt;&lt;if not $armory_gearup_done&gt;&gt;
-                    The speaker horn on the intake desk buzzes with static before Matriarch Evelyn&#39;s tense voice cuts through:
+                    The overhead PA speaker in the screening cage pops and hums with harsh feedback. Evelyn&#39;s voice cuts through the static, raw and breathless:
                     &lt;br&gt;&lt;br&gt;
-                    &lt;i style=&quot;color:var(--accent-red);&quot;&gt;&quot;Vance, emergency sortie Code Red. Release all confiscated weapons to $firstName immediately and grant full access to primary arms lockers. They are rolling out with Reyes to Route 9.&quot;&lt;/i&gt;
+                    &lt;&lt;if $anchor == &quot;parents&quot;&gt;&gt;
+                        &lt;i style=&quot;color:var(--accent-red);&quot;&gt;&quot;Vance! Arthur&#39;s kid made it—$firstName is alive! Break the seal on the intake lockers and release their confiscated gear immediately! Open the tier-one munitions crate. They are rolling with Reyes to Route 9 right now to get their father!&quot;&lt;/i&gt;
+                    &lt;&lt;elseif $anchor == &quot;partner_f&quot; or $anchor == &quot;partner_m&quot; or $anchor == &quot;partner_nb&quot;&gt;&gt;
+                        &lt;i style=&quot;color:var(--accent-red);&quot;&gt;&quot;Vance! _leaderName&#39;s partner is here—it&#39;s $firstName! Release their weapons right now! Open the tier-one munitions crate. They are deploying with Reyes to Route 9 to get _leaderName back!&quot;&lt;/i&gt;
+                    &lt;&lt;else&gt;&gt;
+                        &lt;i style=&quot;color:var(--accent-red);&quot;&gt;&quot;Vance! It&#39;s Code Red—Hayes&#39;s squad is pinned down! Give $firstName their weapons back immediately and open the heavy weapons crate! They are rolling with Reyes to Route 9 right now to get Hayes out!&quot;&lt;/i&gt;
+                    &lt;&lt;/if&gt;&gt;
                     &lt;br&gt;&lt;br&gt;
-                    Sgt. Vance drops his clipboard. Without a word of protest, he keys open the padlocked chain-link cage behind him and hoists your heavy, tagged canvas duffel bag onto the steel counter.
+                    Sgt. Vance kicks the chain-link gate open before the transmission even finishes. The sharp scent of gun solvent, copper, and cosmoline fills the air. He drops your heavy canvas duffel onto the steel counter with a metallic clatter, his eyes darting between the masking-tape tag on the fabric and your face.
                     &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Orders from Command. Here are your confiscated pieces back, untouched and loaded.&quot;&gt;&gt;
+                    &lt;&lt;if $anchor == &quot;parents&quot;&gt;&gt;
+                        &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;When you came through my screening desk an hour ago, I just saw another exhausted survivor with road mud on your boots. Wrote &#39;$firstName $lastName&#39; on the tape, tossed your bag onto the intake shelf, and told you to move along...&quot;&gt;&gt;
+                        &lt;br&gt;&lt;br&gt;
+                        He shakes his head, staring at you in sheer disbelief as he slashes the zip-tie seals on your bag with a combat blade.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Then the radio room patches Arthur&#39;s broadcast through, screaming your name over the horn, and Evelyn calls down sobbing... I looked down at this tag: $lastName. Holy hell. You&#39;re Arthur and Evelyn&#39;s kid.&quot;&gt;&gt;
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Your old man checked that intake gate fifty times before he rolled out this morning. Kept asking the guards at the gate if any cars had come down the valley road. He was worried sick about you, kid. Now go drag him back out of that freezer.&quot;&gt;&gt;
+                    &lt;&lt;elseif $anchor == &quot;partner_f&quot; or $anchor == &quot;partner_m&quot; or $anchor == &quot;partner_nb&quot;&gt;&gt;
+                        &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;When you came through intake an hour ago, I didn&#39;t think twice. Tagged your bag, tossed it on the rack, and shoved you toward the foyer...&quot;&gt;&gt;
+                        &lt;br&gt;&lt;br&gt;
+                        He shakes his head, staring at you in disbelief as he slashes the zip-tie seals on your bag with a combat blade.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;if $anchor == &quot;partner_nb&quot;&gt;&gt;
+                            &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Then the radio room patches the Route 9 distress call through, the whole floor hears _leaderName breaking down over the static when they heard your voice, and Evelyn calls down... You&#39;re the one they wouldn&#39;t stop talking about since the convoy reached Timberline.&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;_leaderName practically wore a trench in my concrete pacing this room before they left. Kept asking the gate guards if anyone matching your description had been spotted. Go bring them back in one piece.&quot;&gt;&gt;
+                        &lt;&lt;else&gt;&gt;
+                            &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Then the radio room patches the Route 9 distress call through, the whole floor hears _leaderName breaking down over the static when &lt;&lt;print _subj&gt;&gt; heard your voice, and Evelyn calls down... You&#39;re the one &lt;&lt;print _subj&gt;&gt; wouldn&#39;t stop talking about since the convoy reached Timberline.&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;_leaderName practically wore a trench in my concrete pacing this room before &lt;&lt;print _subj&gt;&gt; left. Kept asking the gate guards if anyone matching your description had been spotted. Go bring &lt;&lt;print _obj&gt;&gt; back in one piece.&quot;&gt;&gt;
+                        &lt;&lt;/if&gt;&gt;
+                    &lt;&lt;else&gt;&gt;
+                        &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;When you came through screening with Reyes, I figured you were just another mouth to feed. Now Evelyn calls down Code Red and Reyes tells me you&#39;re the one who dragged her through the road ambushes.&quot;&gt;&gt;
+                        &lt;br&gt;&lt;br&gt;
+                        He slashes the zip-tie seals on your bag with a combat blade and dumps your iron onto the counter.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Commander Hayes didn&#39;t want to leave the perimeter, but the hospital ward was going dark. We can&#39;t afford to lose our chief tactician on that highway. Let&#39;s see what you&#39;ve got.&quot;&gt;&gt;
+                    &lt;&lt;/if&gt;&gt;
                     &lt;br&gt;&lt;br&gt;
-                    He tosses a heavy, olive-drab tactical webbing rig across the counter.
+                    &lt;&lt;if _arrivedLate&gt;&gt;
+                        &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;You rolled in after sunrise with the valley roads crawling, barely got through intake, and now Evelyn&#39;s got you gearing right back up for broad daylight combat.&quot;&gt;&gt;
+                    &lt;&lt;else&gt;&gt;
+                        &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;You barely came in out of that freezing rain, boots still dripping wet from the road, and now Evelyn&#39;s got you rolling straight back out into the dark.&quot;&gt;&gt;
+                    &lt;&lt;/if&gt;&gt;
                     &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Take this military assault harness too. Gives you extra modular pouches so you&#39;re not fumbling with an overloaded pack while scavengers are shooting at your head.&quot;&gt;&gt;
+                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;No requisition slips, no signatures today. Here&#39;s your iron—clean firing pins, full springs.&quot;&gt;&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    He shoves a heavy, reinforced tactical chest harness across the scratched steel.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Strap this on. Eight modular pouches and double utility sleeves. Don&#39;t go fumbling through a civilian backpack while some scav is dumping buckshot into your windshield.&quot;&gt;&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;if $anchor == &quot;parents&quot;&gt;&gt;
+                        &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I don&#39;t care about the harness, Vance—my dad has minutes left in that cooler. What kind of heavy ordnance did Evelyn clear for us?&quot;&gt;&gt;
+                    &lt;&lt;elseif $anchor == &quot;partner_f&quot; or $anchor == &quot;partner_m&quot; or $anchor == &quot;partner_nb&quot;&gt;&gt;
+                        &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I don&#39;t care about the harness, Vance—_leaderName is holding that door with six bullets. What kind of fire did Evelyn authorize?&quot;&gt;&gt;
+                    &lt;&lt;else&gt;&gt;
+                        &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Save the lecture, Vance. If we&#39;re breaching that 7-Eleven, we need serious stopping power. Show me what Evelyn authorized.&quot;&gt;&gt;
+                    &lt;&lt;/if&gt;&gt;
                     &lt;br&gt;&lt;br&gt;
                     &lt;div style=&quot;background: rgba(0, 80, 0, 0.25); border: 1px solid var(--accent-green); border-radius: 6px; padding: 12px; margin: 12px 0; font-size: 0.9em;&quot;&gt;
-                        &lt;b style=&quot;color:var(--accent-green);&quot;&gt;✔ CONFISCATED ARSENAL UNSEALED:&lt;/b&gt; All weapons restored to your inventory.
+                        &lt;b style=&quot;color:var(--accent-green);&quot;&gt;✔ CONFISCATED ARSENAL RESTORED:&lt;/b&gt; All personal weapons returned to your hands.
                         &lt;br&gt;
-                        &lt;b style=&quot;color:var(--accent-green);&quot;&gt;✔ TACTICAL HARNESS EQUIPPED:&lt;/b&gt; Carrying capacity expanded to &lt;b&gt;&lt;&lt;print $bag_limit&gt;&gt; Slots&lt;/b&gt; (Current: &lt;&lt;print $inventory.length&gt;&gt; / &lt;&lt;print $bag_limit&gt;&gt;).
+                        &lt;b style=&quot;color:var(--accent-green);&quot;&gt;✔ COMBAT HARNESS EQUIPPED:&lt;/b&gt; Carrying capacity expanded to &lt;b&gt;&lt;&lt;print $bag_limit&gt;&gt; Slots&lt;/b&gt; (Current: &lt;&lt;print $inventory.length&gt;&gt; / &lt;&lt;print $bag_limit&gt;&gt;).
                         &lt;&lt;if $sanctuary_chest.length &gt; 0&gt;&gt;
                             &lt;br&gt;
-                            &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;📦 SANCTUARY CHEST:&lt;/b&gt; &lt;&lt;print $sanctuary_chest.length&gt;&gt; items safely stored in base locker.
+                            &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;📦 SECURE LOCKER:&lt;/b&gt; &lt;&lt;print $sanctuary_chest.length&gt;&gt; items stashed in Vance&#39;s cage.
                         &lt;&lt;/if&gt;&gt;
                     &lt;/div&gt;
 
-                    Vance unlocks a heavy steel arms crate marked &lt;b&gt;TIMBERLINE REGIONAL DEFENSE&lt;/b&gt; and lays out four specialized equipment cases on the table.
+                    Vance drops a reinforced military footlocker onto the table, popping the heavy latches with his thumb.
                     &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;You&#39;re going into an active meat grinder to save _leaderRef. Evelyn authorized ONE heavy sortie package for this raid. Pick your loadout carefully:&quot;&gt;&gt;
+                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Listen close. That 7-Eleven is a damn kill box. You&#39;ve got shattered plate glass, tight snack aisles, and an overturned fuel tanker leaking near the diesel pumps. One stray spark and the whole block turns into a funeral pyre.&quot;&gt;&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Evelyn cleared ONE heavy loadout from our reserve crates. You want raw stopping power for the front door, range to countersnipe the scavs, stealth to flank the alley, or field trauma kits to patch up the wounded? Pick your package and lock it in—Reyes is already revving the engine!&quot;&gt;&gt;
                 &lt;&lt;else&gt;&gt;
-                    Sgt. Vance leans back against the steel intake counter, arms crossed over his tactical vest.
+                    Sgt. Vance is hurriedly racking spare magazines into a secondary ammo box, sweat beading on his temple under the humming fluorescent tubes.
                     &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;You&#39;ve already received your authorized weapons and sortie loadout. Reyes has the pickup idling near the gate—stop stalling, partner, every second counts!&quot;&gt;&gt;
+                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;You&#39;re loaded for bear, partner. Reyes has the truck idling by the back gate—stop standing around staring at me! Every second you burn here is another second of glass bowing in that cooler. Get out there and bring them back!&quot;&gt;&gt;
                     &lt;br&gt;&lt;br&gt;
                     &lt;div style=&quot;background: rgba(0, 80, 150, 0.25); border: 1px solid var(--accent-blue); border-radius: 6px; padding: 12px; margin: 12px 0; font-size: 0.9em;&quot;&gt;
-                        &lt;b style=&quot;color:var(--accent-blue);&quot;&gt;✔ SORTIE PACKAGE LOCKED:&lt;/b&gt; &lt;&lt;print $sortie_package_chosen.toUpperCase()&gt;&gt; KIT EQUIPPED.
+                        &lt;b style=&quot;color:var(--accent-blue);&quot;&gt;✔ SORTIE LOADOUT READY:&lt;/b&gt; &lt;&lt;print $sortie_package_chosen.toUpperCase()&gt;&gt; KIT LOCKED.
                         &lt;br&gt;
-                        &lt;b style=&quot;color:var(--accent-green);&quot;&gt;✔ INVENTORY CAPACITY:&lt;/b&gt; &lt;&lt;print $inventory.length&gt;&gt; / &lt;&lt;print $bag_limit&gt;&gt; Slots in use.
+                        &lt;b style=&quot;color:var(--accent-green);&quot;&gt;✔ GEAR CAPACITY:&lt;/b&gt; &lt;&lt;print $inventory.length&gt;&gt; / &lt;&lt;print $bag_limit&gt;&gt; Slots in use.
                         &lt;&lt;if $sanctuary_chest.length &gt; 0&gt;&gt;
                             &lt;br&gt;
-                            &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;📦 SANCTUARY CHEST:&lt;/b&gt; &lt;&lt;print $sanctuary_chest.length&gt;&gt; items safely stored in base locker.
+                            &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;📦 SECURE LOCKER:&lt;/b&gt; &lt;&lt;print $sanctuary_chest.length&gt;&gt; items stashed in Vance&#39;s cage.
                         &lt;&lt;/if&gt;&gt;
                     &lt;/div&gt;
                 &lt;&lt;/if&gt;&gt;
@@ -7694,7 +7834,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
             &lt;!-- BASE STORAGE STASH &amp; RETRIEVE ACTIONS --&gt;
             &lt;&lt;if $inventory.some(i =&gt; setup.items[i.id] &amp;&amp; setup.items[i.id].type !== &quot;weapon&quot; &amp;&amp; setup.items[i.id].type !== &quot;ammo&quot; &amp;&amp; !setup.items[i.id].desc.includes(&quot;Medical&quot;) &amp;&amp; !setup.items[i.id].desc.includes(&quot;heals&quot;) &amp;&amp; i.id !== &quot;First Aid Kit&quot; &amp;&amp; i.id !== &quot;Bandage&quot; &amp;&amp; i.id !== &quot;Antibiotics&quot; &amp;&amp; i.id !== &quot;Painkillers&quot;)&gt;&gt;
                 &lt;button style=&quot;border-left-color: var(--accent-gold) !important; background: rgba(80, 60, 0, 0.3); margin-bottom: 12px;&quot;&gt;
-                    &lt;&lt;link &quot;📦 Stash Non-Combat Clutter into Sanctuary Locker - ITEM BOX&quot;&gt;&gt;
+                    &lt;&lt;link &quot;📦 Stash Non-Combat Clutter into Armory Locker - ITEM BOX&quot;&gt;&gt;
                         &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                         &lt;&lt;for _i to $inventory.length - 1; _i &gt;= 0; _i--&gt;&gt;
                             &lt;&lt;set _id to $inventory[_i].id&gt;&gt;
@@ -7706,19 +7846,19 @@ Miller turns to you, placing a heavy hand on your shoulder.
                         &lt;&lt;/for&gt;&gt;
                         &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
                     &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[RESIDENT EVIL ITEM BOX]&lt;/b&gt; Deposit non-essential trade goods, books, and scrap into Vance&#39;s locked locker so your bag is 100% combat-ready.&lt;/span&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[BASE LOCKER]&lt;/b&gt; Stash non-essential books, trade items, and scrap into Vance&#39;s locked locker to maximize combat carrying capacity.&lt;/span&gt;
                 &lt;/button&gt;
             &lt;&lt;/if&gt;&gt;
 
             &lt;&lt;if def $sanctuary_chest and $sanctuary_chest.length &gt; 0&gt;&gt;
                 &lt;button style=&quot;border-left-color: var(--accent-gold) !important; background: rgba(80, 60, 0, 0.2); margin-bottom: 12px;&quot;&gt;
-                    &lt;&lt;link &quot;📦 Retrieve All Items from Sanctuary Locker - ITEM BOX&quot;&gt;&gt;
+                    &lt;&lt;link &quot;📦 Retrieve All Items from Armory Locker - ITEM BOX&quot;&gt;&gt;
                         &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                         &lt;&lt;run $inventory.push(...$sanctuary_chest)&gt;&gt;
                         &lt;&lt;set $sanctuary_chest to []&gt;&gt;
                         &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
                     &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[ITEM BOX]&lt;/b&gt; Take back all items stored in Vance&#39;s lockbox.&lt;/span&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[BASE LOCKER]&lt;/b&gt; Retrieve all items currently stored in Vance&#39;s lockbox.&lt;/span&gt;
                 &lt;/button&gt;
             &lt;&lt;/if&gt;&gt;
 
@@ -7737,7 +7877,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
                         &lt;&lt;/if&gt;&gt;
                         &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
                     &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[CQB SPECIALIST]&lt;/b&gt; Devastating close-quarters stopping power inside the convenience store. Perfect for Front Assault.&lt;/span&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[CQB SPECIALIST]&lt;/b&gt; Devastating close-quarters stopping power inside the convenience store. Blows through barricades and stops infected in their tracks.&lt;/span&gt;
                 &lt;/button&gt;
 
                 &lt;!-- SORTIE PACKAGE 2: MARKSMAN (M4A1 CARBINE) --&gt;
@@ -7753,7 +7893,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
                         &lt;&lt;/if&gt;&gt;
                         &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
                     &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-blue);&quot;&gt;[RAPID ACCURACY]&lt;/b&gt; Military carbine with superior range and armor piercing. Shreds hostile lines.&lt;/span&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-blue);&quot;&gt;[RAPID FIREPOWER]&lt;/b&gt; High-velocity military carbine with lethal mid-range precision. Suppresses armed scavengers and cuts through body armor.&lt;/span&gt;
                 &lt;/button&gt;
 
                 &lt;!-- SORTIE PACKAGE 3: INFILTRATOR (BOW &amp; COMBAT KNIFE) --&gt;
@@ -7770,7 +7910,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
                         &lt;&lt;/if&gt;&gt;
                         &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
                     &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[STEALTH AMBUSH]&lt;/b&gt; Silent takedown weapons with reusable ammunition. Ideal for the rear alley flank.&lt;/span&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[STEALTH FLANK]&lt;/b&gt; Silent takedowns and reusable arrows. Perfect for slipping through the alley behind the convenience store undetected.&lt;/span&gt;
                 &lt;/button&gt;
 
                 &lt;!-- SORTIE PACKAGE 4: FIELD MEDIC (SUPPLIES) --&gt;
@@ -7784,11 +7924,11 @@ Miller turns to you, placing a heavy hand on your shoulder.
                         &lt;&lt;run setup.addItem(&quot;Antibiotics&quot;, 1)&gt;&gt;
                         &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
                     &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[SURVIVAL &amp; MEDICINE]&lt;/b&gt; Heavy emergency medical supplies to keep you, Reyes, and the squad alive under fire.&lt;/span&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[FIELD MEDIC]&lt;/b&gt; Heavy emergency surgical supplies. Vital for stabilizing wounded survivors and patching catastrophic gunshot trauma.&lt;/span&gt;
                 &lt;/button&gt;
 
                 &lt;div style=&quot;margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid #444; border-radius: 4px; text-align: center; color: #aaa; font-size: 0.88em; font-style: italic;&quot;&gt;
-                    🔒 &lt;b&gt;Rescue Vehicle Locked:&lt;/b&gt; Select one of the four authorized sortie kits above to complete your preparations and unlock the departure vehicle.
+                    🔒 &lt;b&gt;Rescue Vehicle Locked:&lt;/b&gt; Select one of the emergency supply kits above to complete your preparations and unlock the departure vehicle.
                 &lt;/div&gt;
             &lt;&lt;else&gt;&gt;
                 &lt;!-- MOUNT UP WITH REYES (UNLOCKED ONLY AFTER PACKAGE IS CHOSEN) --&gt;
@@ -7800,7 +7940,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
                             &lt;&lt;addTime 15&gt;&gt;
                             &lt;&lt;goto &quot;Act3_7Eleven_Arrival&quot;&gt;&gt;
                         &lt;&lt;/link&gt;&gt;
-                        &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[DEPLOY SORTIE]&lt;/b&gt; Fully locked, loaded, and equipped. Ride out to Route 9 with Reyes!&lt;/span&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[ROLL OUT]&lt;/b&gt; Weapon ready, rig secured. Jump into the shotgun seat with Reyes and haul ass to Route 9!&lt;/span&gt;
                     &lt;/button&gt;
 
                     &lt;button style=&quot;border-left-color: var(--accent-blue) !important; margin-top: 10px;&quot;&gt;
@@ -8050,7 +8190,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
                 &lt;br&gt;&lt;br&gt;
                 
                 &lt;&lt;if _arrivedLate&gt;&gt;
-                    In the gray morning light, the scale of the operation is clear. Heavily armed sentries patrol the rooftops.
+                    In the gray morning light, the scale of the sanctuary is clear. Armed guards patrol the rooftops.
                 &lt;&lt;else&gt;&gt;
                     Blinding halogen floodlights instantly snap onto your windshield, pinning you in the dark.
                 &lt;&lt;/if&gt;&gt;
@@ -9520,9 +9660,18 @@ Miller turns to you, placing a heavy hand on your shoulder.
     &lt;&lt;set $lastName to &quot;Sage&quot;&gt;&gt;
     &lt;&lt;set $name to &quot;Neal Sage&quot;&gt;&gt;
 &lt;&lt;/if&gt;&gt;
+&lt;&lt;if ndef $lastName&gt;&gt;
+    &lt;&lt;set $lastName to &quot;Sage&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;headmaster_office&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
+
+/* COMPANIONS ARRIVAL TRACKING */
+&lt;&lt;set _hasVane to ($vane_status == &quot;joined&quot; or (def $companions and $companions.includes(&quot;Vane&quot;)))&gt;&gt;
+&lt;&lt;set _hasMaya to ($maya_status == &quot;joined&quot; or (def $companions and $companions.includes(&quot;Maya&quot;)))&gt;&gt;
+&lt;&lt;set _hasDiane to ($diane_status == &quot;joined&quot; or (def $companions and $companions.includes(&quot;Diane&quot;)))&gt;&gt;
+&lt;&lt;set _hasCompanions to (_hasVane or _hasMaya or _hasDiane or (def $companions and $companions.length &gt; 0))&gt;&gt;
 
 /* DYNAMIC LEADER &amp; AVATAR CONFIGURATION */
 &lt;&lt;set _leaderName to &quot;Commander Hayes&quot;&gt;&gt;
@@ -9532,159 +9681,380 @@ Miller turns to you, placing a heavy hand on your shoulder.
 &lt;&lt;if $anchor == &quot;partner_f&quot;&gt;&gt;
     &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_f.gif&quot;&gt;&gt;
-    &lt;&lt;set _leaderRef to &quot;your girlfriend, &quot; + $anchor_name&gt;&gt;
+    &lt;&lt;set _leaderRef to ($anchor_rel ? &quot;your &quot; + $anchor_rel + &quot;, &quot; + $anchor_name : &quot;your girlfriend, &quot; + $anchor_name)&gt;&gt;
+    &lt;&lt;set _subj to &quot;she&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;her&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;her&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;She&quot;&gt;&gt;
 &lt;&lt;elseif $anchor == &quot;partner_m&quot;&gt;&gt;
     &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_m.gif&quot;&gt;&gt;
-    &lt;&lt;set _leaderRef to &quot;your boyfriend, &quot; + $anchor_name&gt;&gt;
+    &lt;&lt;set _leaderRef to ($anchor_rel ? &quot;your &quot; + $anchor_rel + &quot;, &quot; + $anchor_name : &quot;your boyfriend, &quot; + $anchor_name)&gt;&gt;
+    &lt;&lt;set _subj to &quot;he&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;him&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;his&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;He&quot;&gt;&gt;
 &lt;&lt;elseif $anchor == &quot;partner_nb&quot;&gt;&gt;
     &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_nb.gif&quot;&gt;&gt;
     &lt;&lt;set _leaderRef to &quot;your partner, &quot; + $anchor_name&gt;&gt;
+    &lt;&lt;set _subj to &quot;they&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;them&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;their&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;They&quot;&gt;&gt;
 &lt;&lt;elseif $anchor == &quot;parents&quot;&gt;&gt;
     &lt;&lt;set _leaderName to &quot;Dad&quot;&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_dad.gif&quot;&gt;&gt;
     &lt;&lt;set _leaderRef to &quot;your father&quot;&gt;&gt;
+    &lt;&lt;set _subj to &quot;he&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;him&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;his&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;He&quot;&gt;&gt;
+&lt;&lt;else&gt;&gt;
+    &lt;&lt;set _subj to &quot;he&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;him&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;his&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;He&quot;&gt;&gt;
 &lt;&lt;/if&gt;&gt;
+
+&lt;&lt;set $evelyn_step to 1&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
 &lt;div class=&quot;vn-container&quot;&gt;
-    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
-        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
-            1ST FLOOR — COMMAND &amp; HEADMASTER&#39;S OFFICE
+    &lt;div class=&quot;vn-stage&quot; style=&quot;display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: flex-start !important; width: 100% !important; padding: 10px 15px 5px 15px; flex: 1 1 auto; min-height: 0; box-sizing: border-box;&quot;&gt;
+        &lt;div id=&quot;vn-location-header&quot; style=&quot;width: 100% !important; text-align: center !important; color: #888; font-size: 0.8em; margin-bottom: 8px; letter-spacing: 3px; font-family: &#39;Oswald&#39;, sans-serif; text-transform: uppercase; flex-shrink: 0; display: block !important;&quot;&gt;
+            1ST FLOOR — OUTSIDE COMMAND SUITE
+        &lt;/div&gt;
+        &lt;div id=&quot;vn-stage-visual&quot; style=&quot;flex: 1 1 auto; min-height: 0; display: flex; justify-content: center; align-items: center; width: 100%; max-width: 650px;&quot;&gt;
+            &lt;&lt;if _arrivedLate&gt;&gt;
+                &lt;img id=&quot;vn-stage-img&quot; src=&quot;image/Act3_Timberline/faculty_morning.gif&quot; class=&quot;tv-static-img&quot; style=&quot;max-height: 30vh !important; max-width: 100%; object-fit: contain;&quot;&gt;
+            &lt;&lt;else&gt;&gt;
+                &lt;img id=&quot;vn-stage-img&quot; src=&quot;image/Act3_Timberline/faculty_night.gif&quot; class=&quot;tv-static-img&quot; style=&quot;max-height: 30vh !important; max-width: 100%; object-fit: contain;&quot;&gt;
+            &lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;vn-dialogue-box&quot;&gt;
+        &lt;div id=&quot;vn-text&quot;&gt;
+            Officer Reyes is slouched against the cold painted brick wall outside the heavy double doors of the Command suite, both thumbs hooked into her tactical vest to keep her fingers from trembling. Under the flickering fluorescent tube, her knuckles are split and crusted with dried road grime.
+            &lt;br&gt;&lt;br&gt;
+            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Reyes...&quot;&gt;&gt;
+            &lt;br&gt;&lt;br&gt;
+            Reyes flinches slightly, blinking against the glare before blowing out a long, ragged breath through her teeth.
+            &lt;br&gt;&lt;br&gt;
+            &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Still upright? Good. For a minute down in that stairwell, I thought I was gonna have to carry you up here.&quot;&gt;&gt;
+            &lt;br&gt;&lt;br&gt;
+            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;My legs are shaking so hard I can barely feel the linoleum. Is... is Evelyn inside?&quot;&gt;&gt;
+            &lt;br&gt;&lt;br&gt;
+            &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Yeah. She&#39;s in there. Listen to me for two seconds—don&#39;t let her ice-queen routine rattle you. She hasn&#39;t slept thirty consecutive minutes since the city went dark. She&#39;s running this whole sanctuary on bitter coffee and raw nerve.&quot;&gt;&gt;
+            &lt;br&gt;&lt;br&gt;
+            &lt;&lt;if _arrivedLate&gt;&gt;
+                &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Ever since the sun broke, the tension&#39;s been suffocating. The boiler in the basement is choking black smoke, and the guys on the fence are jumping at shadows on the tree line.&quot;&gt;&gt;
+                &lt;br&gt;&lt;br&gt;
+                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I just spent the morning watching people get dragged through car windows on that highway. A tired woman with a clipboard isn&#39;t what scares me. Let&#39;s just get in there.&quot;&gt;&gt;
+            &lt;&lt;else&gt;&gt;
+                &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;That storm washed out the south bridge an hour ago. The guards outside are soaked to the bone and jumping at every twig snap. We&#39;re on edge.&quot;&gt;&gt;
+                &lt;br&gt;&lt;br&gt;
+                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;My boots are full of muddy water and my chest aches every time I breathe, but I&#39;m standing. Open the door.&quot;&gt;&gt;
+            &lt;&lt;/if&gt;&gt;
+            &lt;&lt;if _hasCompanions&gt;&gt;
+                &lt;br&gt;&lt;br&gt;
+                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;The folks who came in with us through the gate... someone&#39;s looking after them?&quot;&gt;&gt;
+                &lt;br&gt;&lt;br&gt;
+                &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Checked on them myself. They&#39;re down in the gym getting dry blankets and hot broth. You dragged them out of hell, partner. Now take a breath—let&#39;s face the Matriarch.&quot;&gt;&gt;
+            &lt;&lt;else&gt;&gt;
+                &lt;br&gt;&lt;br&gt;
+                &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;That&#39;s the spirit. Take a breath—let&#39;s go see the Matriarch.&quot;&gt;&gt;
+            &lt;&lt;/if&gt;&gt;
         &lt;/div&gt;
 
-        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
-            &lt;img src=&quot;image/Act3_Timberline/headmaster.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+        &lt;div id=&quot;vn-action-area&quot;&gt;&lt;/div&gt;
+
+        &lt;div class=&quot;vn-prompt-text&quot;&gt;
+            CLICK TO CONTINUE &lt;span class=&quot;vn-prompt-icon&quot;&gt;▶&lt;/span&gt;
         &lt;/div&gt;
 
-        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
-            &lt;span id=&quot;vn-evelyn-main&quot;&gt;
-                &lt;!-- 1. REYES BRIEFING OUTSIDE --&gt;
-                &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Hey. You&#39;ve been pulling your weight around Timberline. The refugees downstairs have nothing but good things to say.&quot;&gt;&gt;
-                &lt;br&gt;&lt;br&gt;
-                Officer Reyes wipes grease off her tactical gloves and steps up beside you as you reach the heavy mahogany double doors of the Command suite.
-                &lt;br&gt;&lt;br&gt;
-                &lt;&lt;if _arrivedLate&gt;&gt;
-                    Harsh morning sunlight bleaches the dusty corridor glass. You arrived late after sunrise, and the tension in the air is palpable.
-                    &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;We got in late, but Sanctuary Command has been running non-stop since dawn broke. The generator is running on fumes. Let&#39;s go in.&quot;&gt;&gt;
-                &lt;&lt;else&gt;&gt;
-                    Cold rain and distant thunder hammer against the window panes. You arrived under cover of midnight darkness, before the valley roads were fully severed.
-                    &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;We made it inside before the south bridge was cut off. Command is running on pure adrenaline after the sirens. Let&#39;s go in.&quot;&gt;&gt;
+        &lt;div id=&quot;vn-advance&quot; style=&quot;display:none;&quot;&gt;
+            &lt;&lt;link &quot;Next&quot;&gt;&gt;
+                &lt;&lt;set $evelyn_step++&gt;&gt;
+                &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+
+                &lt;!-- STEP 2: ENTERING COMMAND OFFICE &amp; REVEAL --&gt;
+                &lt;&lt;if $evelyn_step is 2&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-location-header&quot;&gt;&gt;1ST FLOOR — COMMAND &amp;amp; HEADMASTER&#39;S OFFICE&lt;&lt;/replace&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-stage-visual&quot;&gt;&gt;&lt;img id=&quot;vn-stage-img&quot; src=&quot;image/Act3_Timberline/headmaster.gif&quot; class=&quot;tv-static-img&quot; style=&quot;max-height: 30vh !important; max-width: 100%; object-fit: contain;&quot;&gt;&lt;&lt;/replace&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;
+                        Reyes pushes open the heavy oak double doors. The office smells of stale grounds, copper, and wet wool. Topographic road maps are tacked over the bookshelves, transceivers murmuring low, hollow static.
+                        &lt;br&gt;&lt;br&gt;
+                        Behind a massive oak desk strewn with ammunition manifests stands a woman with dark, sunken hollows under her eyes—&lt;b&gt;Matriarch Evelyn&lt;/b&gt;.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;if $anchor == &quot;parents&quot;&gt;&gt;
+                            You take two steps past the threshold, bracing for the cold, intimidating commander Reyes warned you about. But as your eyes land on the woman behind the desk, your breath violently snags in your chest. The room tilts.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Mom...? Mom, is that... is that really you?!&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            At the sound of your voice, she snaps her head up from the grease-pencil map, jaw tight and ready to bark an order—and completely freezes. Her eyes widen in stunned, disbelieving horror, then flood with tears. The grease pencil slips from her limp fingers, hitting the blotter and rolling onto the linoleum with a soft click.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;...$firstName...?! God in heaven... $firstName! You&#39;re alive?!&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            She scrambles around the mahogany desk, catching her hip on the sharp corner, and throws her arms around you in a desperate, bruising embrace. Her hands tremble uncontrollably against your soaked jacket, clutching at your shoulder blades, her face buried into your neck as if checking that you are warm, breathing flesh.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;God, Mom, it&#39;s really you... I thought—when the sirens blared and the phones died, I thought you and Dad never made it out of the city...&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;if _arrivedLate&gt;&gt;
+                                &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;You&#39;re breathing... you&#39;re really here! When dawn broke and the sky over the city was red with fire, we thought—we thought you were trapped in the high-rise district when the power died! Tell me you&#39;re not hurt! Where were you all night?!&quot;&gt;&gt;
+                            &lt;&lt;else&gt;&gt;
+                                &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;You made it through the storm... oh God, you made it. When the bridges blew and the sirens cut out, we thought we&#39;d left you behind in that nightmare to die! Look at me—tell me you&#39;re not bitten!&quot;&gt;&gt;
+                            &lt;&lt;/if&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I&#39;m clean, Mom. Look at me—I&#39;m not bitten. The highway was a nightmare, but I found a way through the valley. I&#39;m right here.&quot;&gt;&gt;
+                            &lt;&lt;if _hasCompanions&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;The guys at the gate told me you brought survivors in behind you... you kept other people alive on that road... oh God, my baby... I am so proud of you...&quot;&gt;&gt;
+                            &lt;&lt;/if&gt;&gt;
+                        &lt;&lt;elseif $anchor == &quot;partner_f&quot; or $anchor == &quot;partner_m&quot; or $anchor == &quot;partner_nb&quot;&gt;&gt;
+                            She looks up with cold tactical scrutiny—until her gaze fixes on your face. A sharp, stunned gasp catches in her throat.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Wait... Reyes, who is this? Merciful God... you&#39;re $firstName. _leaderName had a photo of you tucked in &lt;&lt;print _poss&gt;&gt; jacket... &lt;&lt;print _subj&gt;&gt; wouldn&#39;t stop showing it to every guard at the gate!&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;if $anchor == &quot;partner_nb&quot;&gt;&gt;
+                                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Evelyn! Where&#39;s _leaderName? Please—tell me they&#39;re here! Are they safe?!&quot;&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;They made it in last night with the first convoy, $firstName! They brought twenty refugees through the front gates... spent all night by the radio console scanning for your voice until their vocal cords gave out. They swore you were still alive!&quot;&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Thank God... when the cell towers cut on the interstate, I thought I&#39;d lost them forever.&quot;&gt;&gt;
+                            &lt;&lt;else&gt;&gt;
+                                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Evelyn! Where&#39;s _leaderName? Please—tell me &lt;&lt;print _subj&gt;&gt;&#39;s here! Is &lt;&lt;print _subj&gt;&gt; safe?!&quot;&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;&lt;&lt;print _capSubj&gt;&gt; made it in last night with the first convoy, $firstName! &lt;&lt;print _capSubj&gt;&gt; brought twenty refugees through the front gates... spent all night by the radio console scanning for your voice until &lt;&lt;print _poss&gt;&gt; vocal cords gave out. &lt;&lt;print _capSubj&gt;&gt; swore you were still alive!&quot;&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Thank God... when the cell towers cut on the interstate, I thought I&#39;d lost &lt;&lt;print _obj&gt;&gt; forever.&quot;&gt;&gt;
+                            &lt;&lt;/if&gt;&gt;
+                            &lt;&lt;if _hasCompanions&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;And the checkpoint told me you brought survivors in behind you. _leaderName knew you&#39;d be out there keeping people alive.&quot;&gt;&gt;
+                            &lt;&lt;/if&gt;&gt;
+                        &lt;&lt;else&gt;&gt;
+                            She looks up from the maps, her gaze assessing you with cold, hard scrutiny.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Reyes. You&#39;re back on two feet. And who&#39;s this with you?&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Survivor off the valley highway, ma&#39;am. Cleared road blocks, watched my six, pulled me out of two ambushes. We need Commander Hayes right now.&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Reyes told me this school was a fortified safe haven. But the guards outside look like they&#39;re barely holding the gates together.&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;We are holding by the skin of our teeth. If you survived Route 9, you&#39;re welcome to dry blankets and hot rations—provided you can pull your weight.&quot;&gt;&gt;
+                            &lt;&lt;if _hasCompanions&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;They also escorted a civilian vehicle through the checkpoint, ma&#39;am. Good people under fire.&quot;&gt;&gt;
+                            &lt;&lt;/if&gt;&gt;
+                        &lt;&lt;/if&gt;&gt;
+                    &lt;&lt;/replace&gt;&gt;
+
+                &lt;!-- STEP 3: WHERE IS THE LEADER? --&gt;
+                &lt;&lt;elseif $evelyn_step is 3&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;
+                        &lt;&lt;if $anchor == &quot;parents&quot;&gt;&gt;
+                            You pull back from her arms, your eyes scanning the room. A second command chair sits empty by the radio console; a cold tin mug sits beside an unread clipboard.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Mom... where&#39;s Dad? Why isn&#39;t he here?&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            Her fingers tighten abruptly on your wrists. Her expression shatters into raw, sick terror.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;if _arrivedLate&gt;&gt;
+                                &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Your father... God, $firstName, when dawn broke and you still hadn&#39;t shown up, he was losing his mind. He was up on the roof in the freezing rain all night with a spotlight, praying every engine rumble on the road was you. But when sunrise hit, the main generator died... the infirmary down in the gym lost heat. Sick people and kids were freezing. He couldn&#39;t just sit here doing nothing. He took the flatbed out to Route 9 at first light to get diesel!&quot;&gt;&gt;
+                            &lt;&lt;else&gt;&gt;
+                                &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Your father... oh God, $firstName, you missed him by twenty minutes! Twenty minutes! When the morning fog rolled in, he took a flatbed down Route 9 to siphon diesel from an abandoned tanker before the infected started moving. If you&#39;d pulled into the gate just a little sooner, he&#39;d be standing right here!&quot;&gt;&gt;
+                            &lt;&lt;/if&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;He went back out onto Route 9?! Mom, that road is a slaughterhouse—there are swarms packed at every overpass! Why the hell did you let him leave?!&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Because he&#39;s Arthur! You know your father—he couldn&#39;t just sit by while people froze to death! He swore he&#39;d be back before breakfast with enough fuel to keep the clinic heaters going. He took Miller and two guys from the gate with him...&quot;&gt;&gt;
+                        &lt;&lt;elseif $anchor == &quot;partner_f&quot; or $anchor == &quot;partner_m&quot; or $anchor == &quot;partner_nb&quot;&gt;&gt;
+                            You look across the room, your stomach dropping when you see only Evelyn and Reyes.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;if $anchor == &quot;partner_nb&quot;&gt;&gt;
+                                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Wait... if they&#39;re here, where are they right now? Why aren&#39;t they in the office?&quot;&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                Evelyn&#39;s relief instantly hardens into a mask of grim dread.
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;if _arrivedLate&gt;&gt;
+                                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;They aren&#39;t here right now, $firstName. They stayed up all night watching the road, running down to the gate every time an engine revved. But when our generator died at sunrise and the infirmary lost power, they took a crew down Route 9 to get fuel rather than lose their mind waiting.&quot;&gt;&gt;
+                                &lt;&lt;else&gt;&gt;
+                                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;They aren&#39;t here, $firstName. You missed them by less than half an hour. When the pre-dawn fog rolled in, they took a crew down Route 9 to siphon fuel before the infected on the highway started moving. If you&#39;d pulled in twenty minutes sooner, you would&#39;ve caught them at the loading dock.&quot;&gt;&gt;
+                                &lt;&lt;/if&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Route 9 is a graveyard! Why the hell would you let them go out there?!&quot;&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Because our clinic was freezing, the heaters were failing, and _leaderName refused to let anyone else shoulder that risk. They took an armored flatbed and three volunteers from the gate...&quot;&gt;&gt;
+                            &lt;&lt;else&gt;&gt;
+                                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Wait... if &lt;&lt;print _subj&gt;&gt;&#39;s here, where is &lt;&lt;print _subj&gt;&gt; right now? Why isn&#39;t &lt;&lt;print _subj&gt;&gt; in the office?&quot;&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                Evelyn&#39;s relief instantly hardens into a mask of grim dread.
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;if _arrivedLate&gt;&gt;
+                                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;&lt;&lt;print _capSubj&gt;&gt; isn&#39;t here right now, $firstName. &lt;&lt;print _capSubj&gt;&gt; stayed up all night watching the road, running down to the gate every time an engine revved. But when our generator died at sunrise and the infirmary lost power, &lt;&lt;print _subj&gt;&gt; took a crew down Route 9 to get fuel rather than lose &lt;&lt;print _poss&gt;&gt; mind waiting.&quot;&gt;&gt;
+                                &lt;&lt;else&gt;&gt;
+                                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;&lt;&lt;print _capSubj&gt;&gt; isn&#39;t here, $firstName. You missed &lt;&lt;print _obj&gt;&gt; by less than half an hour. When the pre-dawn fog rolled in, &lt;&lt;print _subj&gt;&gt; took a crew down Route 9 to siphon fuel before the infected on the highway started moving. If you&#39;d pulled in twenty minutes sooner, you would&#39;ve caught &lt;&lt;print _obj&gt;&gt; at the loading dock.&quot;&gt;&gt;
+                                &lt;&lt;/if&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Route 9 is a graveyard! Why the hell would you let &lt;&lt;print _obj&gt;&gt; go out there?!&quot;&gt;&gt;
+                                &lt;br&gt;&lt;br&gt;
+                                &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Because our clinic was freezing, the heaters were failing, and _leaderName refused to let anyone else shoulder that risk. &lt;&lt;print _capSubj&gt;&gt; took an armored flatbed and three volunteers from the gate...&quot;&gt;&gt;
+                            &lt;&lt;/if&gt;&gt;
+                        &lt;&lt;else&gt;&gt;
+                            Reyes steps up to the desk, her expression tightening.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Where is Commander Hayes, Evelyn? He was supposed to be coordinating the defenses.&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;if _arrivedLate&gt;&gt;
+                                &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Hayes waited as long as he could for your report, Reyes. But when our fuel reserves hit zero at dawn, he took a team down Route 9 to get diesel.&quot;&gt;&gt;
+                            &lt;&lt;else&gt;&gt;
+                                &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Hayes isn&#39;t here, Reyes. You missed him by twenty minutes. He used the morning fog to slip down Route 9 before the infected on the highway started roaming.&quot;&gt;&gt;
+                            &lt;&lt;/if&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;We just drove through the valley pass. Route 9 is crawling with infected and armed scavengers. If your commander took people down there, they walked into a meat grinder.&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Hayes knew the risk. The clinic was freezing and people were dying. But their check-in was due ten minutes ago...&quot;&gt;&gt;
+                        &lt;&lt;/if&gt;&gt;
+                    &lt;&lt;/replace&gt;&gt;
+
+                &lt;!-- STEP 4: EMERGENCY RADIO DISTRESS CALL --&gt;
+                &lt;&lt;elseif $evelyn_step is 4&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-location-header&quot;&gt;&gt;📻 FREQUENCY 146.520 — EMERGENCY DISTRESS BROADCAST&lt;&lt;/replace&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;
+                        Before another word can be spoken, the Motorola base station screams with redlined static!
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;div style=&quot;padding:14px; background:rgba(60,0,0,0.45); border:1px solid var(--accent-red); border-left: 4px solid var(--accent-red); margin-bottom:15px; border-radius:4px;&quot;&gt;
+                            &lt;div style=&quot;display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;&quot;&gt;
+                                &lt;b style=&quot;color:var(--accent-red); font-size: 1.05em; letter-spacing:1px;&quot;&gt;📻 EMERGENCY BROADCAST — FREQ 146.520 [MAYDAY]&lt;/b&gt;
+                                &lt;span style=&quot;font-size:0.75em; color:#ff6666;&quot;&gt;● LIVE SIGNAL&lt;/span&gt;
+                            &lt;/div&gt;
+                            &lt;hr style=&quot;border-color:#662222; margin:6px 0 12px 0;&quot;&gt;
+                            
+                            &lt;&lt;chat &quot;Chloe (Radio Room)&quot; &quot;image/avatars/radio_chloe.gif&quot; &quot;right&quot; &quot;Command, Radio Room! It&#39;s the Route 9 team—they just broke silence, screaming for help! Patching the channel through now!&quot;&gt;&gt;
+                            &lt;br&gt;
+
+                            &lt;&lt;if $anchor == &quot;parents&quot;&gt;&gt;
+                                &lt;div style=&quot;color:#ffdddd; font-style:italic; line-height:1.6; padding:8px 12px; background:rgba(0,0,0,0.3); border-left:2px solid #ff4444;&quot;&gt;
+                                    [HEAVY SQUELCH... VIOLENT AUTOMATIC SHOTGUN BLASTS CRACKING OFF CERAMIC TILE]
+                                &lt;/div&gt;
+                                &lt;br&gt;
+                                &lt;&lt;chat &quot;Dad&quot; &quot;image/avatars/leader_dad.gif&quot; &quot;right&quot; &quot;Evelyn?! Evie, can you hear me through the—[CONCUSSIVE SHOTGUN ROAR]... damn it! They boxed the truck at the 7-Eleven pumps! Snipers on the car wash roof! Miller took buckshot through the chest—he&#39;s bleeding out!&quot;&gt;&gt;
+                                &lt;br&gt;
+                                &lt;&lt;chat &quot;Dad&quot; &quot;image/avatars/leader_dad.gif&quot; &quot;right&quot; &quot;The gunfire pulled the whole highway down on us! We&#39;re wedged inside the walk-in dairy cooler... hundreds of infected slamming against the display glass! The metal frame is bowing inward, Evelyn! It&#39;s starring... it&#39;s about to burst!&quot;&gt;&gt;
+                                &lt;br&gt;
+                                &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Arthur! Arthur, hold on! Neal is here! Listen to me—Neal is alive, he&#39;s standing right in front of me! Hold that door!&quot;&gt;&gt;
+                                &lt;br&gt;
+                                &lt;&lt;chat &quot;Dad&quot; &quot;image/avatars/leader_dad.gif&quot; &quot;right&quot; &quot;[SQUELCH... RAGGED, SHAKEN GASP] ...Neal?! Neal&#39;s... oh God... my boy&#39;s alive... [TERRIFYING METALLIC GROAN, GLASS SPRAYING, ROARS] Evie, NO! Do NOT open the gates! Don&#39;t send the guards out here! Keep the school sealed! Neal... Neal, don&#39;t let her come out here... take care of your mother... tell her I—[BLINDING STATIC SCREECH, TRANSMISSION SNAPPED]&quot;&gt;&gt;
+
+                            &lt;&lt;elseif $anchor == &quot;partner_f&quot; or $anchor == &quot;partner_m&quot; or $anchor == &quot;partner_nb&quot;&gt;&gt;
+                                &lt;div style=&quot;color:#ffdddd; font-style:italic; line-height:1.6; padding:8px 12px; background:rgba(0,0,0,0.3); border-left:2px solid #ff4444;&quot;&gt;
+                                    [STATIC BURST... RAPID, BREATHLESS SOBBING AND HAMMERING BLOWS AGAINST GLASS]
+                                &lt;/div&gt;
+                                &lt;br&gt;
+                                &lt;&lt;chat _leaderName _leaderAvatar &quot;right&quot; &quot;Command?! Evelyn! Is anyone hearing this?! [HEAVY METALLIC THUD, GLASS GROANING] They pinned our flatbed at the pumps! Armed scavengers opened up, and the noise drew a whole highway horde right into the lot!&quot;&gt;&gt;
+                                &lt;br&gt;
+                                &lt;&lt;chat _leaderName _leaderAvatar &quot;right&quot; &quot;We&#39;re trapped in the back... the commercial dairy cooler! Miller&#39;s down on the tiles—I&#39;m bracing the handle with my shoulder, firing through the wire mesh! My hands are shaking so bad... I&#39;m down to my last six rounds!&quot;&gt;&gt;
+                                &lt;br&gt;
+                                &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;_leaderName, hold on! $firstName is right here—standing right beside me! We are coming for you!&quot;&gt;&gt;
+                                &lt;br&gt;
+                                &lt;&lt;chat _leaderName _leaderAvatar &quot;right&quot; &quot;[SQUELCH... CHOKED, BROKEN CRY] ...$firstName?! You&#39;re... you&#39;re breathing?! Oh God... [TERRIFYING ROAR, GLASS CRACKING VIOLENTLY] The cooler doors are bowing inward! There are too many of them! $firstName, please... don&#39;t let them break through this glass—[BURST OF GUNFIRE, PIERCING FEEDBACK, CUTS DEAD]&quot;&gt;&gt;
+
+                            &lt;&lt;else&gt;&gt;
+                                &lt;div style=&quot;color:#ffdddd; font-style:italic; line-height:1.6; padding:8px 12px; background:rgba(0,0,0,0.3); border-left:2px solid #ff4444;&quot;&gt;
+                                    [HIGH-PITCHED SQUELCH... HEAVY AUTOMATIC WEAPONS FIRE ECHOING IN ENCLOSED SPACE]
+                                &lt;/div&gt;
+                                &lt;br&gt;
+                                &lt;&lt;chat &quot;Commander Hayes&quot; &quot;image/avatars/leader_default_hayes.gif&quot; &quot;right&quot; &quot;Command, Hayes! MAYDAY, MAYDAY! Route 9 commercial strip—the 7-Eleven! Armed hostiles pinned our flatbed at the pumps! The exchange pulled a horde off the expressway!&quot;&gt;&gt;
+                                &lt;br&gt;
+                                &lt;&lt;chat &quot;Commander Hayes&quot; &quot;image/avatars/leader_default_hayes.gif&quot; &quot;right&quot; &quot;Miller took a slug to the lung, we&#39;re pushed into the walk-in cooler! Scavs suppressing the front while infected are hammering the display windows! The frame is warping—we have under twenty rounds left! We need someone to hit their flank NOW, or we&#39;re slaughtered! [EXPLOSIVE IMPACT, RADIO GOES DEAD]&quot;&gt;&gt;
+                            &lt;&lt;/if&gt;&gt;
+                        &lt;/div&gt;
+                    &lt;&lt;/replace&gt;&gt;
+
+                &lt;!-- STEP 5: THE AFTERMATH &amp; RESCUE SORTIE DECISION --&gt;
+                &lt;&lt;elseif $evelyn_step is 5&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-location-header&quot;&gt;&gt;1ST FLOOR — COMMAND &amp;amp; HEADMASTER&#39;S OFFICE&lt;&lt;/replace&gt;&gt;
+                    &lt;&lt;replace &quot;#vn-text&quot;&gt;&gt;
+                        Evelyn stands frozen, the dead microphone resting against her trembling fingers. Tears cut clean tracks through the dust on her cheeks as the flatline carrier tone hums through the silent room.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;if $anchor == &quot;parents&quot;&gt;&gt;
+                            She turns toward you, her voice a cracked, horrifying whisper.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;He told us not to open the gates... he&#39;s giving up. He&#39;s sitting in the dark waiting for that glass to cave in. But if I pull the guards off the fence, five hundred people in this gymnasium will be torn to shreds.&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            She grabs your wrists with bruising force, her eyes wild with grief.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;$firstName... your truck is the only vehicle warm and running. Please. Don&#39;t let him die in that cold room. Bring your father back to me!&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            You pull away, your chest burning with shallow, violent breaths. Your knuckles are clenched white. You look directly at Reyes.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Keys. Reyes, where are the truck keys?&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Partner, that 7-Eleven is a kill box—&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I didn&#39;t crawl forty miles across an ash-covered city just to stand in this office and listen to my dad die through a speaker. Tell Vance to open that armory cage. We&#39;re moving. Right now.&quot;&gt;&gt;
+                        &lt;&lt;elseif $anchor == &quot;partner_f&quot; or $anchor == &quot;partner_m&quot; or $anchor == &quot;partner_nb&quot;&gt;&gt;
+                            Your hand slams into the desk so hard the maps rattle. The dead hiss from the speaker feels like poison in your ears.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;How far is that 7-Eleven?&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Four miles down Route 9. By the car wash junction. But that highway is a graveyard—our guards can&#39;t leave the barricade or the school will fall.&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;if $anchor == &quot;partner_nb&quot;&gt;&gt;
+                                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I don&#39;t give a damn about the road. They&#39;re bracing that cooler with one shoulder and six bullets. Reyes, tell me your scout truck has fuel.&quot;&gt;&gt;
+                            &lt;&lt;else&gt;&gt;
+                                &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;I don&#39;t give a damn about the road. &lt;&lt;print _capSubj&gt;&gt;&#39;s bracing that cooler with one shoulder and six bullets. Reyes, tell me your scout truck has fuel.&quot;&gt;&gt;
+                            &lt;&lt;/if&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Half a tank and an armored bull-bar. If we&#39;re hitting that alley, we roll this second before that display glass shatters.&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;Tell Vance to give me my gear and whatever heavy fire he&#39;s got downstairs. We&#39;re rolling out.&quot;&gt;&gt;
+                        &lt;&lt;else&gt;&gt;
+                            She slams both fists onto the desk, her expression dark as iron.
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;God damn it! If we pull the guards off the fence, the infected will breach the front doors. Reyes, take $firstName and the truck. Hit those scavengers from the rear car wash alley, blow the horde off the cooler glass, and drag Hayes out!&quot;&gt;&gt;
+                            &lt;br&gt;&lt;br&gt;
+                            &lt;&lt;chat &quot;You&quot; &quot;image/avatars/player.gif&quot; &quot;left&quot; &quot;If we&#39;re heading back into that meat grinder, I need my weapons back and whatever heavy fire you have. Tell Vance to open the steel cage before I kick it in myself.&quot;&gt;&gt;
+                        &lt;&lt;/if&gt;&gt;
+                        &lt;br&gt;&lt;br&gt;
+                        Officer Reyes pulls her slide back with a sharp, heavy metallic snap, checking the brass in the chamber.
+                        &lt;br&gt;&lt;br&gt;
+                        &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;You heard the Matriarch. Grab your gear, partner—we hit Vance&#39;s armory and roll before that glass gives way.&quot;&gt;&gt;
+                    &lt;&lt;/replace&gt;&gt;
+
+                    /* OBJECTIVE LIFECYCLE */
+                    &lt;&lt;addObjective &quot;rescue_leader_711&quot; &quot;Respond to the distress signal and rescue the Sanctuary Leader at the Route 9 7-Eleven&quot;&gt;&gt;
+                    &lt;&lt;purgeCompleted&gt;&gt;
+                    &lt;&lt;set $act3_reyes_triggered to true&gt;&gt;
+
+                    &lt;&lt;replace &quot;#vn-action-area&quot;&gt;&gt;
+                        &lt;div class=&quot;choice-menu&quot; style=&quot;margin-top:15px;&quot;&gt;
+                            &lt;button style=&quot;border-left-color: var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);&quot;&gt;
+                                &lt;&lt;link &quot;🔫 Proceed to Armory with Reyes to Gear Up - RESCUE PREP&quot;&gt;&gt;
+                                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                    &lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
+                                    &lt;&lt;addTime 5&gt;&gt;
+                                    &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Get your confiscated weapons back, grab emergency firepower, and roll out to Route 9.&lt;/span&gt;
+                            &lt;/button&gt;
+                            &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+                                &lt;&lt;link &quot;🎒 Prepare your gear in the Hub before departing&quot;&gt;&gt;
+                                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                                    &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
+                                    &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                                &lt;&lt;/link&gt;&gt;
+                                &lt;span class=&quot;btn-sub&quot;&gt;Return to the Ground Floor corridor to check equipment and supplies.&lt;/span&gt;
+                            &lt;/button&gt;
+                        &lt;/div&gt;
+                    &lt;&lt;/replace&gt;&gt;
+
+                    &lt;&lt;replace &quot;#vn-advance&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
+                    &lt;&lt;run $(&#39;.vn-prompt-text&#39;).remove()&gt;&gt;
                 &lt;&lt;/if&gt;&gt;
-                &lt;br&gt;&lt;br&gt;
-
-                &lt;!-- 2. ENTERING COMMAND OFFICE --&gt;
-                You and Reyes push open the heavy double doors into the Headmaster&#39;s Office. Topographic road maps, radio transceivers, and ammunition manifests clutter the massive desk.
-                &lt;br&gt;&lt;br&gt;
-                Standing behind the desk, studying a map pinned with red warning flags, is a mature woman with sharp, weathered eyes—&lt;b&gt;Matriarch Evelyn&lt;/b&gt;.
-                &lt;br&gt;&lt;br&gt;
-
-                &lt;!-- 3. THE REVEAL BRANCHING --&gt;
-                &lt;&lt;if $anchor == &quot;parents&quot;&gt;&gt;
-                    She glances up from the manifests—and freezes. Her eyes widen in shock, tears welling up almost instantly. The pen slips from her trembling fingers.
-                    &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;$firstName?! Oh merciful God... $firstName! You&#39;re alive!&quot;&gt;&gt;
-                    &lt;br&gt;&lt;br&gt;
-                    She rushes around the mahogany desk and pulls you into a fierce, trembling embrace, holding you as if afraid you&#39;ll vanish into thin air.
-                    &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;When the sirens blared at ten last night and the city phones died... we thought you were trapped in the downtown blackout! Your father and I helped the volunteers secure this high school, praying you&#39;d find your way here.&quot;&gt;&gt;
-                    &lt;br&gt;&lt;br&gt;
-                    You look around the room, your heart pounding. &lt;i&gt;Where is Dad?&lt;/i&gt;
-                    &lt;br&gt;&lt;br&gt;
-                    Your mother&#39;s face tightens with sudden, painful anxiety.
-                    &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Your father... he&#39;s the commander here, $firstName. But he isn&#39;t in the building. He had to lead an emergency team out to Route 9!&quot;&gt;&gt;
-
-                &lt;&lt;elseif $anchor == &quot;partner_f&quot; or $anchor == &quot;partner_m&quot; or $anchor == &quot;partner_nb&quot;&gt;&gt;
-                    She glances up from the tactical maps, her gaze sweeping over you. Then, her eyes suddenly widen in pure recognition.
-                    &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;$firstName? Good God in heaven... you actually made it through the valley!&quot;&gt;&gt;
-                    &lt;br&gt;&lt;br&gt;
-                    You take a step forward, your chest tightening. You ask her if _leaderRef survived the collapse.
-                    &lt;br&gt;&lt;br&gt;
-                    Evelyn places both palms flat against the desk, nodding with immense relief.
-                    &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Yes! When the infection exploded at ten last night, _leaderName made it to Timberline with the first wave of refugees. They took command of our volunteer defense—they&#39;re the one holding this entire sanctuary together!&quot;&gt;&gt;
-                    &lt;br&gt;&lt;br&gt;
-                    Her expression abruptly darkens, shadowed by deep worry.
-                    &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;But they aren&#39;t in the building right now, $firstName. They had to lead an emergency sortie out to Route 9.&quot;&gt;&gt;
-
-                &lt;&lt;else&gt;&gt;
-                    She looks up from the maps, assessing you with keen veteran scrutiny.
-                    &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Officer Reyes. You&#39;re back in one piece. And this is the survivor who brought you in?&quot;&gt;&gt;
-                    &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Yes, ma&#39;am. Handled the road like a seasoned pro. We need to speak with Commander Hayes immediately.&quot;&gt;&gt;
-                    &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Hayes isn&#39;t here, Reyes. He couldn&#39;t wait. He mobilized a strike team down Route 9.&quot;&gt;&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;br&gt;&lt;br&gt;
-
-                &lt;!-- 4. REASON FOR SORTIE (NIGHT VS MORNING) --&gt;
-                &lt;&lt;if _arrivedLate&gt;&gt;
-                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Because you two arrived late after sunrise, our generator fuel reserves ran completely dry overnight. At first light, _leaderName had to scramble a team to raid the Route 9 commercial strip for fuel, or our power and heat would die.&quot;&gt;&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Since you two got in early under cover of dark, _leaderName seized the quiet window before dawn. They took a recon squad out to Route 9 to secure emergency fuel and medical crates before the hordes spread across the highway.&quot;&gt;&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;br&gt;&lt;br&gt;
-
-                &lt;!-- 5. EMERGENCY RADIO DISTRESS CALL --&gt;
-                Before anyone can say another word, the desktop radio transceiver erupts with deafening, violent static!
-                &lt;br&gt;&lt;br&gt;
-                &lt;div style=&quot;padding:12px; background:rgba(80,0,0,0.35); border:1px solid var(--accent-red); border-left: 4px solid var(--accent-red); margin-bottom:15px;&quot;&gt;
-                    &lt;b style=&quot;color:var(--accent-red); font-size: 1.05em;&quot;&gt;📻 INCOMING EMERGENCY BROADCAST — CHANNEL 4&lt;/b&gt;
-                    &lt;hr style=&quot;border-color:#552222; margin:6px 0;&quot;&gt;
-                    &lt;&lt;chat &quot;Chloe (Radio Feed)&quot; &quot;image/avatars/radio_chloe.gif&quot; &quot;right&quot; &quot;Command, this is Radio Room! Red alert! We just picked up a MAYDAY transmission from the Route 9 squad!&quot;&gt;&gt;
-                    &lt;br&gt;
-                    &lt;&lt;chat _leaderName _leaderAvatar &quot;right&quot; &quot;...under heavy fire at the Route 9 7-Eleven! Scavengers blocked the pumps... infected swarming through the front glass... we&#39;re pinned inside the walk-in cooler... ammo critical... need immediate support!&quot;&gt;&gt;
-                &lt;/div&gt;
-                &lt;br&gt;
-                Evelyn slams both fists onto the desk map!
-                &lt;br&gt;&lt;br&gt;
-                &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Damn it! Our main guard force is locked onto the bus barricades at the gates. If we pull sentries from the perimeter, the whole high school is defenseless!&quot;&gt;&gt;
-                &lt;br&gt;&lt;br&gt;
-                Evelyn turns her desperate gaze directly toward you and Reyes.
-                &lt;br&gt;&lt;br&gt;
-                &lt;&lt;if $anchor == &quot;parents&quot;&gt;&gt;
-                    &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;$firstName... your father is trapped in that cooler. You and Reyes are the only mobile team with a vehicle ready to roll. Please... bring your father home alive!&quot;&gt;&gt;
-                &lt;&lt;elseif $anchor == &quot;partner_f&quot; or $anchor == &quot;partner_m&quot; or $anchor == &quot;partner_nb&quot;&gt;&gt;
-                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;$firstName... _leaderRef is trapped in that cooler. You two are our only combat-ready squad on standby. Get down to that 7-Eleven, break them out of that trap, and bring our leader back alive!&quot;&gt;&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;You two are the only combat-ready squad on standby. Get down to that 7-Eleven on Route 9, break Commander Hayes&#39;s squad out, and bring him back alive!&quot;&gt;&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;br&gt;&lt;br&gt;
-                Officer Reyes racks the slide of her firearm with grim resolve.
-                &lt;br&gt;&lt;br&gt;
-                &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Consider it done. Gear up, partner. We&#39;re moving out right now.&quot;&gt;&gt;
-            &lt;/span&gt;
-        &lt;/div&gt;
-
-        /* OBJECTIVE LIFECYCLE */
-        &lt;&lt;addObjective &quot;rescue_leader_711&quot; &quot;Respond to the distress signal and rescue the Sanctuary Leader at the Route 9 7-Eleven&quot;&gt;&gt;
-        &lt;&lt;purgeCompleted&gt;&gt;
-
-        &lt;div class=&quot;choice-menu&quot;&gt;
-            &lt;button style=&quot;border-left-color: var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);&quot;&gt;
-                &lt;&lt;link &quot;🔫 Proceed to Armory with Reyes to Gear Up - RESCUE PREP&quot;&gt;&gt;
-                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
-                    &lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
-                    &lt;&lt;addTime 5&gt;&gt;
-                    &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Unseal your confiscated weapons, requisition heavy ordnance, and roll out to Route 9.&lt;/span&gt;
-            &lt;/button&gt;
-            &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
-                &lt;&lt;link &quot;🎒 Prepare your gear in the Hub before departing&quot;&gt;&gt;
-                    &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
-                    &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
-                    &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
-                &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;Return to the Ground Floor corridor to check equipment and supplies.&lt;/span&gt;
-            &lt;/button&gt;
+            &lt;&lt;/link&gt;&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="Act3_School1Floor" tags="" position="700,1600" size="100,100">&lt;&lt;nobr&gt;&gt;
@@ -10250,9 +10620,9 @@ Desktop terminals glow in standby power mode.
                 Desks once piled with lesson plans and exam papers are now cluttered with radio chargers, half-eaten ration bars, and ammunition crates. The large whiteboard on the wall still shows last week&#39;s school calendar, now scrawled over in dry-erase marker with patrol sectors and guard rosters.
                 &lt;br&gt;&lt;br&gt;
                 &lt;&lt;if _arrivedLate&gt;&gt;
-                    Pale morning light cuts through the dusty Venetian blinds. Several sentries are sprawled across folding cots or slumped over desks in full tactical gear, catching fitful sleep after holding the school perimeter through the night. A pot of bitter coffee sits cold in the corner.
+                    Pale morning light cuts through the dusty Venetian blinds. Several guards are sprawled across folding cots or slumped over desks with shotguns across their laps, catching fitful sleep after holding the school perimeter through the night. A pot of bitter coffee sits cold in the corner.
                 &lt;&lt;else&gt;&gt;
-                    The office is dim, illuminated only by red emergency glow-sticks and the dull blue light of tactical monitors. Two sentries sit in silence at the corner desks, field-stripping their rifles and checking magazine springs. Every creak in the hallway puts them on edge.
+                    The office is dim, illuminated only by red emergency glow-sticks and the dull blue light of tactical monitors. Two guards sit in silence at the corner desks, field-stripping their rifles and checking magazine springs. Every creak in the hallway puts them on edge.
                 &lt;&lt;/if&gt;&gt;
             &lt;/span&gt;
         &lt;/div&gt;
@@ -10291,9 +10661,9 @@ Desktop terminals glow in standby power mode.
         &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
             &lt;span id=&quot;vn-foyer-main&quot;&gt;
                 &lt;&lt;if _arrivedLate&gt;&gt;
-                    The main entrance foyer is bathed in cold morning light cutting through the dust. The frantic panic of the outbreak has burned itself out, leaving only exhaustion. Armed sentries are slumped against piles of sandbags and overturned desks, bleary-eyed and traumatized from the long night. The radios are dead quiet.
+                    The main entrance foyer is bathed in cold morning light cutting through the dust. The frantic panic of the outbreak has burned itself out, leaving only exhaustion. Armed guards are slumped against piles of sandbags and overturned desks, bleary-eyed and traumatized from the long night. The radios are dead quiet.
                 &lt;&lt;else&gt;&gt;
-                    The main entrance foyer is a chaotic choke point. Armed sentries are frantically stacking sandbags and overturned desks against the barricaded double doors. Radios crackle with panicked updates from the perimeter watch. The adrenaline in the room is thick enough to choke on.
+                    The main entrance foyer is a chaotic choke point. Tired guards are frantically stacking sandbags and overturned desks against the barricaded double doors. Radios crackle with panicked updates from the perimeter watch. The adrenaline in the room is thick enough to choke on.
                 &lt;&lt;/if&gt;&gt;
             &lt;/span&gt;
         &lt;/div&gt;
@@ -10304,7 +10674,7 @@ Desktop terminals glow in standby power mode.
                     &lt;&lt;link &quot;🔫 Proceed to Armory with Reyes to Gear Up - RESCUE PREP&quot;&gt;&gt;
                         &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
                     &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Unseal your weapons, requisition heavy ordnance, and roll out with Reyes.&lt;/span&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Get your weapons back, grab emergency firepower, and roll out with Reyes.&lt;/span&gt;
                 &lt;/button&gt;
             &lt;&lt;/if&gt;&gt;
             &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
@@ -10656,19 +11026,40 @@ setTimeout(function() {
 &lt;&lt;if $anchor == &quot;partner_f&quot;&gt;&gt;
     &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_f.gif&quot;&gt;&gt;
-    &lt;&lt;set _leaderRef to &quot;your girlfriend, &quot; + $anchor_name&gt;&gt;
+    &lt;&lt;set _leaderRef to ($anchor_rel ? &quot;your &quot; + $anchor_rel + &quot;, &quot; + $anchor_name : &quot;your girlfriend, &quot; + $anchor_name)&gt;&gt;
+    &lt;&lt;set _subj to &quot;she&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;her&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;her&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;She&quot;&gt;&gt;
 &lt;&lt;elseif $anchor == &quot;partner_m&quot;&gt;&gt;
     &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_m.gif&quot;&gt;&gt;
-    &lt;&lt;set _leaderRef to &quot;your boyfriend, &quot; + $anchor_name&gt;&gt;
+    &lt;&lt;set _leaderRef to ($anchor_rel ? &quot;your &quot; + $anchor_rel + &quot;, &quot; + $anchor_name : &quot;your boyfriend, &quot; + $anchor_name)&gt;&gt;
+    &lt;&lt;set _subj to &quot;he&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;him&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;his&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;He&quot;&gt;&gt;
 &lt;&lt;elseif $anchor == &quot;partner_nb&quot;&gt;&gt;
     &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_nb.gif&quot;&gt;&gt;
     &lt;&lt;set _leaderRef to &quot;your partner, &quot; + $anchor_name&gt;&gt;
+    &lt;&lt;set _subj to &quot;they&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;them&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;their&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;They&quot;&gt;&gt;
 &lt;&lt;elseif $anchor == &quot;parents&quot;&gt;&gt;
     &lt;&lt;set _leaderName to &quot;Dad&quot;&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_dad.gif&quot;&gt;&gt;
     &lt;&lt;set _leaderRef to &quot;your father&quot;&gt;&gt;
+    &lt;&lt;set _subj to &quot;he&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;him&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;his&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;He&quot;&gt;&gt;
+&lt;&lt;else&gt;&gt;
+    &lt;&lt;set _subj to &quot;he&quot;&gt;&gt;
+    &lt;&lt;set _obj to &quot;him&quot;&gt;&gt;
+    &lt;&lt;set _poss to &quot;his&quot;&gt;&gt;
+    &lt;&lt;set _capSubj to &quot;He&quot;&gt;&gt;
 &lt;&lt;/if&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
@@ -10698,7 +11089,11 @@ setTimeout(function() {
                     &lt;&lt;if $anchor == &quot;parents&quot;&gt;&gt;
                         &lt;&lt;chat &quot;Mom (Evelyn)&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;$firstName! Why are you still in the building? Every minute that passes is another minute your father is trapped in that cooler! Please, get to Route 9!&quot;&gt;&gt;
                     &lt;&lt;elseif $anchor == &quot;partner_f&quot; or $anchor == &quot;partner_m&quot; or $anchor == &quot;partner_nb&quot;&gt;&gt;
-                        &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;$firstName, the clock is ticking. _leaderName and their team won&#39;t last long against that horde. Get down to the 7-Eleven with Reyes before it&#39;s too late!&quot;&gt;&gt;
+                        &lt;&lt;if $anchor == &quot;partner_nb&quot;&gt;&gt;
+                            &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;$firstName, the clock is ticking. _leaderName and their team won&#39;t last long against that horde. Get down to the 7-Eleven with Reyes before it&#39;s too late!&quot;&gt;&gt;
+                        &lt;&lt;else&gt;&gt;
+                            &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;$firstName, the clock is ticking. _leaderName and &lt;&lt;print _poss&gt;&gt; team won&#39;t last long against that horde. Get down to the 7-Eleven with Reyes before it&#39;s too late!&quot;&gt;&gt;
+                        &lt;&lt;/if&gt;&gt;
                     &lt;&lt;else&gt;&gt;
                         &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Reyes and you need to roll out immediately. Commander Hayes is our chief tactical officer—we cannot afford to lose him on Route 9.&quot;&gt;&gt;
                     &lt;&lt;/if&gt;&gt;
@@ -10711,7 +11106,11 @@ setTimeout(function() {
                     &lt;&lt;if $anchor == &quot;parents&quot;&gt;&gt;
                         Your mother and father stand together behind the mahogany desk. Your dad places a firm, proud hand on your shoulder while your mom reviews regional perimeter updates.
                     &lt;&lt;elseif $anchor == &quot;partner_f&quot; or $anchor == &quot;partner_m&quot; or $anchor == &quot;partner_nb&quot;&gt;&gt;
-                        _leaderName looks up from the supply manifests with a warm, intimate smile. Evelyn stands beside them, nodding in deep respect.
+                        &lt;&lt;if $anchor == &quot;partner_nb&quot;&gt;&gt;
+                            _leaderName looks up from the supply manifests with a warm, intimate smile. Evelyn stands beside them, nodding in deep respect.
+                        &lt;&lt;else&gt;&gt;
+                            _leaderName looks up from the supply manifests with a warm, intimate smile. Evelyn stands beside &lt;&lt;print _obj&gt;&gt;, nodding in deep respect.
+                        &lt;&lt;/if&gt;&gt;
                     &lt;&lt;else&gt;&gt;
                         Commander Hayes and Matriarch Evelyn coordinate logistics across the compound with radios and defense manifests.
                     &lt;&lt;/if&gt;&gt;
@@ -12613,7 +13012,7 @@ Server racks hum loudly in the air-conditioned enclosure.
             &lt;&lt;else&gt;&gt;
                 Reyes climbs into the car and rests her hands on her knees, staring out at the foggy windshield.
                 &lt;br&gt;&lt;br&gt;
-                &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Head north on County Road 4. When we pull up to the high school gate, let me step out first. The Vice Principal has the place locked down tight, and the sentries will be on edge. They know my face.&quot;&gt;&gt;
+                &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Head north on County Road 4. When we pull up to the high school gate, let me step out first. The Vice Principal has the place locked down tight, and the guards will be on edge. They know my face.&quot;&gt;&gt;
                 &lt;br&gt;&lt;br&gt;
                 She leans back against the headrest, closing her eyes for a brief moment to gather her strength.
             &lt;&lt;/if&gt;&gt;
@@ -12632,7 +13031,7 @@ Server racks hum loudly in the air-conditioned enclosure.
                         &lt;&lt;purgeCompleted&gt;&gt;
                         &lt;&lt;goto &quot;Act3_ArrivalSchool&quot;&gt;&gt;
                     &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;She knows the checkpoint sentries. Follow her lead to get past the gates safely.&lt;/span&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;She knows the checkpoint guards. Follow her lead to get past the gates safely.&lt;/span&gt;
                 &lt;/button&gt;
             &lt;/div&gt;
         &lt;/div&gt;
@@ -13390,6 +13789,10 @@ Server racks hum loudly in the air-conditioned enclosure.
                     &lt;span class=&quot;dbg-nav-icon&quot;&gt;⚡&lt;/span&gt;
                     &lt;span class=&quot;dbg-nav-label&quot;&gt;Presets&lt;/span&gt;
                 &lt;/button&gt;
+                &lt;button class=&quot;dbg-nav-item&quot; data-target=&quot;sec-narrative&quot; style=&quot;border-left: 2px solid var(--accent-gold);&quot;&gt;
+                    &lt;span class=&quot;dbg-nav-icon&quot;&gt;🎭&lt;/span&gt;
+                    &lt;span class=&quot;dbg-nav-label&quot; style=&quot;color:var(--accent-gold);&quot;&gt;Anchor &amp;amp; Story&lt;/span&gt;
+                &lt;/button&gt;
                 &lt;button class=&quot;dbg-nav-item&quot; data-target=&quot;sec-vitals&quot;&gt;
                     &lt;span class=&quot;dbg-nav-icon&quot;&gt;📊&lt;/span&gt;
                     &lt;span class=&quot;dbg-nav-label&quot;&gt;Vitals &amp;amp; Stats&lt;/span&gt;
@@ -13442,7 +13845,120 @@ Server racks hum loudly in the air-conditioned enclosure.
                 &lt;/div&gt;
             &lt;/div&gt;
 
-                        &lt;!-- 2. VITALS &amp; STATS --&gt;
+            &lt;!-- NARRATIVE &amp; ANCHOR TESTER --&gt;
+            &lt;div class=&quot;dbg-section&quot; id=&quot;sec-narrative&quot;&gt;
+                &lt;div class=&quot;dbg-section-header&quot;&gt;
+                    &lt;span&gt;🎭 Anchor &amp;amp; Narrative Choice Switcher&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;dnotice&quot;&gt;
+                    Quickly switch your story Anchor, relationship, player identity, and arrival timing to test Act 3 dialogue and distress broadcasts.
+                &lt;/div&gt;
+
+                &lt;!-- 1. ANCHOR PRESETS --&gt;
+                &lt;div class=&quot;dlabel&quot; style=&quot;color:var(--accent-gold);&quot;&gt;Story Anchor &amp;amp; Relationship Switch&lt;/div&gt;
+                &lt;div style=&quot;display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-bottom: 15px;&quot;&gt;
+                    &lt;button class=&quot;dbg-list-btn anchor-preset-btn&quot; id=&quot;anchor-parents&quot; data-anchor=&quot;parents&quot;&gt;
+                        &lt;div class=&quot;list-icon&quot;&gt;👨‍👩‍👦&lt;/div&gt;
+                        &lt;div class=&quot;list-content&quot;&gt;
+                            &lt;div class=&quot;list-title&quot;&gt;PARENTS (ARTHUR &amp;amp; EVELYN)&lt;/div&gt;
+                            &lt;div class=&quot;list-sub&quot;&gt;Evelyn is Mom. Trapped leader is Dad (Arthur Sage). Player is Neal Sage.&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/button&gt;
+
+                    &lt;button class=&quot;dbg-list-btn anchor-preset-btn&quot; id=&quot;anchor-partner-f&quot; data-anchor=&quot;partner_f&quot;&gt;
+                        &lt;div class=&quot;list-icon&quot;&gt;👩‍❤️‍👨&lt;/div&gt;
+                        &lt;div class=&quot;list-content&quot;&gt;
+                            &lt;div class=&quot;list-title&quot;&gt;GIRLFRIEND (ELENA)&lt;/div&gt;
+                            &lt;div class=&quot;list-sub&quot;&gt;Trapped leader is girlfriend Elena. Evelyn is Safehouse Matriarch.&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/button&gt;
+
+                    &lt;button class=&quot;dbg-list-btn anchor-preset-btn&quot; id=&quot;anchor-partner-m&quot; data-anchor=&quot;partner_m&quot;&gt;
+                        &lt;div class=&quot;list-icon&quot;&gt;👨‍❤️‍👨&lt;/div&gt;
+                        &lt;div class=&quot;list-content&quot;&gt;
+                            &lt;div class=&quot;list-title&quot;&gt;BOYFRIEND (LIAM)&lt;/div&gt;
+                            &lt;div class=&quot;list-sub&quot;&gt;Trapped leader is boyfriend Liam. Evelyn is Safehouse Matriarch.&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/button&gt;
+
+                    &lt;button class=&quot;dbg-list-btn anchor-preset-btn&quot; id=&quot;anchor-partner-nb&quot; data-anchor=&quot;partner_nb&quot;&gt;
+                        &lt;div class=&quot;list-icon&quot;&gt;🧑‍🤝‍🧑&lt;/div&gt;
+                        &lt;div class=&quot;list-content&quot;&gt;
+                            &lt;div class=&quot;list-title&quot;&gt;PARTNER (MORGAN)&lt;/div&gt;
+                            &lt;div class=&quot;list-sub&quot;&gt;Trapped leader is non-binary partner Morgan. Evelyn is Safehouse Matriarch.&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/button&gt;
+
+                    &lt;button class=&quot;dbg-list-btn anchor-preset-btn&quot; id=&quot;anchor-myself&quot; data-anchor=&quot;myself&quot;&gt;
+                        &lt;div class=&quot;list-icon&quot;&gt;🎖️&lt;/div&gt;
+                        &lt;div class=&quot;list-content&quot;&gt;
+                            &lt;div class=&quot;list-title&quot;&gt;LONE SURVIVOR (COMMANDER HAYES)&lt;/div&gt;
+                            &lt;div class=&quot;list-sub&quot;&gt;Default route. Trapped leader is military tactician Commander Hayes.&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+
+                &lt;!-- 2. IDENTITY &amp; CUSTOM NAMES --&gt;
+                &lt;div class=&quot;dlabel&quot;&gt;Player Identity &amp;amp; Custom Partner Name&lt;/div&gt;
+                &lt;div class=&quot;dgrid&quot; style=&quot;margin-bottom: 15px;&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;dr&quot;&gt;
+                            &lt;span class=&quot;dl&quot;&gt;First Name&lt;/span&gt;
+                            &lt;input type=&quot;text&quot; class=&quot;dinput&quot; id=&quot;inp-first-name&quot; placeholder=&quot;First Name&quot;&gt;
+                        &lt;/div&gt;
+                        &lt;div class=&quot;dr&quot;&gt;
+                            &lt;span class=&quot;dl&quot;&gt;Last Name&lt;/span&gt;
+                            &lt;input type=&quot;text&quot; class=&quot;dinput&quot; id=&quot;inp-last-name&quot; placeholder=&quot;Last Name&quot;&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;dr&quot;&gt;
+                            &lt;span class=&quot;dl&quot;&gt;Partner Name&lt;/span&gt;
+                            &lt;input type=&quot;text&quot; class=&quot;dinput&quot; id=&quot;inp-anchor-name&quot; placeholder=&quot;Partner Name (if applicable)&quot;&gt;
+                        &lt;/div&gt;
+                        &lt;div class=&quot;dr&quot;&gt;
+                            &lt;span class=&quot;dl&quot;&gt;Current Anchor&lt;/span&gt;
+                            &lt;span id=&quot;txt-current-anchor&quot; style=&quot;color:var(--accent-gold); font-weight:bold; font-size:0.9em;&quot;&gt;-&lt;/span&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;!-- 3. ARRIVAL TIMING SWITCH --&gt;
+                &lt;div class=&quot;dlabel&quot;&gt;Arrival Timing (Rain Storm vs. Sunrise)&lt;/div&gt;
+                &lt;div class=&quot;dnotice&quot; style=&quot;margin-bottom: 8px;&quot;&gt;
+                    Controls whether Vance &amp;amp; Reyes treat your arrival as early pre-dawn fog/rain or late morning road dust (Marcus Cabin visited).
+                &lt;/div&gt;
+                &lt;div class=&quot;dbr&quot; style=&quot;margin-bottom: 15px;&quot;&gt;
+                    &lt;button class=&quot;db&quot; id=&quot;btn-arrival-early&quot;&gt;🌧️ Set Arrival: Early Night Storm (Pre-Dawn)&lt;/button&gt;
+                    &lt;button class=&quot;db&quot; id=&quot;btn-arrival-late&quot;&gt;☀️ Set Arrival: Late Sunrise (Marcus Cabin Visited)&lt;/button&gt;
+                    &lt;span id=&quot;txt-arrival-status&quot; style=&quot;font-size:0.85em; color:#aaa; margin-left:8px; align-self:center;&quot;&gt;&lt;/span&gt;
+                &lt;/div&gt;
+
+                &lt;!-- 4. ACT 3 ARMORY &amp; SORTIE STATE --&gt;
+                &lt;div class=&quot;dlabel&quot;&gt;Act 3 Sortie &amp;amp; Armory Status&lt;/div&gt;
+                &lt;div class=&quot;dbr&quot; style=&quot;margin-bottom: 15px;&quot;&gt;
+                    &lt;button class=&quot;db&quot; id=&quot;btn-reset-armory&quot;&gt;🔄 Reset Armory Requisition (Allows Re-Picking Kit)&lt;/button&gt;
+                    &lt;button class=&quot;db&quot; id=&quot;btn-unseal-weapons&quot;&gt;🔓 Restore Confiscated Weapons&lt;/button&gt;
+                    &lt;button class=&quot;db bad&quot; id=&quot;btn-confiscate-weapons&quot;&gt;🔒 Confiscate Weapons to Stash&lt;/button&gt;
+                    &lt;button class=&quot;db go&quot; id=&quot;btn-unlock-reyes&quot;&gt;🔓 Unlock Officer Reyes Briefing&lt;/button&gt;
+                &lt;/div&gt;
+
+                &lt;!-- 5. QUICK TEST JUMPS --&gt;
+                &lt;div class=&quot;dlabel&quot; style=&quot;color:var(--accent-green);&quot;&gt;⚡ Quick Test Teleporters&lt;/div&gt;
+                &lt;div class=&quot;dbr&quot;&gt;
+                    &lt;button class=&quot;db go&quot; id=&quot;btn-test-meeting&quot; style=&quot;background:rgba(200,50,50,0.3); border-color:var(--accent-red); font-weight:bold;&quot;&gt;
+                        ▶ Test Meeting Evelyn (Headmaster Office)
+                    &lt;/button&gt;
+                    &lt;button class=&quot;db go&quot; id=&quot;btn-test-armory&quot; style=&quot;background:rgba(200,150,50,0.3); border-color:var(--accent-gold); font-weight:bold;&quot;&gt;
+                        ▶ Test Armory Gear-Up (Sgt. Vance)
+                    &lt;/button&gt;
+                    &lt;button class=&quot;db go&quot; id=&quot;btn-test-7eleven&quot; style=&quot;border-color:var(--accent-blue);&quot;&gt;
+                        ▶ Test 7-Eleven Arrival (Route 9)
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- 2. VITALS &amp; STATS --&gt;
             &lt;div class=&quot;dbg-section&quot; id=&quot;sec-vitals&quot;&gt;
                 &lt;div class=&quot;dbg-section-header&quot;&gt;
                     &lt;span&gt;📊 Core Vitals, Attributes &amp;amp; Skills&lt;/span&gt;
@@ -14152,7 +14668,8 @@ Server racks hum loudly in the air-conditioned enclosure.
                     &lt;button class=&quot;db go&quot; id=&quot;nav-act3-arrival&quot;&gt;Act 3: Outskirts Arrival&lt;/button&gt;
                     &lt;button class=&quot;db go&quot; id=&quot;nav-act3-sheriff&quot;&gt;Substation 4&lt;/button&gt;
                     &lt;button class=&quot;db go&quot; id=&quot;nav-act3-home&quot;&gt;Suburban Home&lt;/button&gt;
-                    &lt;button class=&quot;db go&quot; id=&quot;nav-act3-hub&quot; style=&quot;border-color:var(--accent-gold); color:var(--accent-gold);&quot;&gt;Ground Floor Corridor&lt;/button&gt;
+                    &lt;button class=&quot;db go&quot; id=&quot;nav-act3-safe&quot;&gt;High School Gates&lt;/button&gt;
+                    &lt;button class=&quot;db go&quot; id=&quot;nav-act3-hub&quot; style=&quot;border-color:var(--accent-gold); color:var(--accent-gold);&quot;&gt;Act 3: Ground Floor Hub&lt;/button&gt;
                     &lt;button class=&quot;db go&quot; id=&quot;nav-act3-hub1&quot; style=&quot;border-color:var(--accent-blue); color:var(--accent-blue);&quot;&gt;1st Floor Corridor&lt;/button&gt;
                     &lt;button class=&quot;db go&quot; id=&quot;nav-act3-headmaster&quot;&gt;Headmaster&#39;s Office&lt;/button&gt;
                     &lt;button class=&quot;db go&quot; id=&quot;nav-act3-meeting&quot; style=&quot;border-color:var(--accent-red); color:var(--accent-red);&quot;&gt;Command Briefing (Evelyn)&lt;/button&gt;

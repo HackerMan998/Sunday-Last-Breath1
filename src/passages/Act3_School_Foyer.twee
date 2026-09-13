@@ -23,9 +23,9 @@
         <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
             <span id="vn-foyer-main">
                 <<if _arrivedLate>>
-                    The main entrance foyer is bathed in cold morning light cutting through the dust. The frantic panic of the outbreak has burned itself out, leaving only exhaustion. Armed sentries are slumped against piles of sandbags and overturned desks, bleary-eyed and traumatized from the long night. The radios are dead quiet.
+                    The main entrance foyer is bathed in cold morning light cutting through the dust. The frantic panic of the outbreak has burned itself out, leaving only exhaustion. Armed guards are slumped against piles of sandbags and overturned desks, bleary-eyed and traumatized from the long night. The radios are dead quiet.
                 <<else>>
-                    The main entrance foyer is a chaotic choke point. Armed sentries are frantically stacking sandbags and overturned desks against the barricaded double doors. Radios crackle with panicked updates from the perimeter watch. The adrenaline in the room is thick enough to choke on.
+                    The main entrance foyer is a chaotic choke point. Tired guards are frantically stacking sandbags and overturned desks against the barricaded double doors. Radios crackle with panicked updates from the perimeter watch. The adrenaline in the room is thick enough to choke on.
                 <</if>>
             </span>
         </div>
@@ -36,7 +36,7 @@
                     <<link "🔫 Proceed to Armory with Reyes to Gear Up - RESCUE PREP">>
                         <<goto "Act3_Armory_GearUp">>
                     <</link>>
-                    <span class="btn-sub"><b style="color:var(--accent-red);">[ACTIVE RESCUE]</b> Unseal your weapons, requisition heavy ordnance, and roll out with Reyes.</span>
+                    <span class="btn-sub"><b style="color:var(--accent-red);">[ACTIVE RESCUE]</b> Get your weapons back, grab emergency firepower, and roll out with Reyes.</span>
                 </button>
             <</if>>
             <button style="border-left-color: var(--accent-blue) !important;">

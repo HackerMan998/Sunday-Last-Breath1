@@ -2075,8 +2075,6 @@ window.initDebugPanel = function () {
     initNavigation();
     initTimeControl();
     initPlayerIdentityControl();
-    initAnchorControl();
-    initTimelineControl();
 
     // ─── Player Identity (Name) Control ───
     function initPlayerIdentityControl() {
@@ -2118,99 +2116,194 @@ window.initDebugPanel = function () {
         on('btn-preset-name-james', 'click', function() { applyName('James', 'Miller'); });
     }
 
-    // ─── Anchor & Loved One Control ───
-    function initAnchorControl() {
-        var sel = byId('sel-anchor-type');
-        var input = byId('input-anchor-name');
-        var btn = byId('btn-anchor-apply');
-        var preview = byId('anchor-preview');
+    // ─── Anchor, Narrative & Story Control ───
+    function initNarrativeControl() {
+        var anchorButtons = document.querySelectorAll('.anchor-preset-btn');
+        var txtCurrentAnchor = byId('txt-current-anchor');
+        var inpFirstName = byId('inp-first-name');
+        var inpLastName = byId('inp-last-name');
+        var inpAnchorName = byId('inp-anchor-name');
+        var txtArrivalStatus = byId('txt-arrival-status');
 
-        if (!sel || !input || !btn) return;
-
-        function refreshPreview() {
-            var aType = getVar('anchor') || 'none';
-            var aName = getVar('anchor_name') || 'myself';
-            var aRel = getVar('anchor_rel') || 'none';
-            sel.value = aType;
-            input.value = aName;
-            if (preview) {
-                var label = aName;
-                if (aType === 'parents') label = 'Mom: Evelyn, Dad: Leader';
-                else if (aType === 'none') label = 'Lone Wolf (No Anchor)';
-                else label = aName + ' (' + aRel + ')';
-                preview.textContent = label;
+        function updateNarrativeDisplay() {
+            var curAnchor = getVar('anchor') || 'none';
+            if (txtCurrentAnchor) {
+                var displayMap = {
+                    'parents': 'Parents (Arthur & Evelyn Sage)',
+                    'partner_f': 'Girlfriend (' + (getVar('anchor_name') || 'Elena') + ')',
+                    'partner_m': 'Boyfriend (' + (getVar('anchor_name') || 'Liam') + ')',
+                    'partner_nb': 'Partner (' + (getVar('anchor_name') || 'Morgan') + ')',
+                    'myself': 'Lone Survivor (Commander Hayes)',
+                    'none': 'None / Default (Hayes)'
+                };
+                txtCurrentAnchor.textContent = displayMap[curAnchor] || curAnchor;
             }
-        }
-        refreshPreview();
 
-        sel.addEventListener('change', function () {
-            var val = this.value;
-            if (val === 'partner_f') input.value = 'Sarah';
-            else if (val === 'partner_m') input.value = 'David';
-            else if (val === 'partner_nb') input.value = 'Alex';
-            else if (val === 'parents') input.value = 'my folks';
-            else input.value = 'myself';
-        });
-
-        btn.addEventListener('click', function () {
-            var aType = sel.value;
-            var aName = input.value.trim() || 'Sarah';
-            var aRel = 'none';
-
-            if (aType === 'partner_f') aRel = 'wife';
-            else if (aType === 'partner_m') aRel = 'husband';
-            else if (aType === 'partner_nb') aRel = 'partner';
-            else if (aType === 'parents') { aRel = 'parents'; aName = 'my folks'; }
-            else { aType = 'none'; aRel = 'none'; aName = 'myself'; }
-
-            setVar('anchor', aType);
-            setVar('anchor_name', aName);
-            setVar('anchor_rel', aRel);
-            refreshPreview();
-        });
-    }
-
-    // ─── Timeline (Night vs Morning) Control ───
-    function initTimelineControl() {
-        var nightBtn = byId('btn-timeline-night');
-        var morningBtn = byId('btn-timeline-morning');
-        var preview = byId('timeline-preview');
-
-        function updateTimelineUi() {
-            var isLate = Array.isArray(State.expired) && State.expired.indexOf('Act2_5_MarcusCabin') > -1;
-            if (nightBtn && morningBtn) {
-                if (isLate) {
-                    morningBtn.classList.add('on');
-                    nightBtn.classList.remove('on');
-                    if (preview) preview.textContent = '☀️ Late Morning (Aftermath)';
+            for (var i = 0; i < anchorButtons.length; i++) {
+                var btn = anchorButtons[i];
+                var a = btn.getAttribute('data-anchor');
+                if (a === curAnchor || (a === 'myself' && (curAnchor === 'none' || curAnchor === 'myself'))) {
+                    btn.classList.add('on');
                 } else {
-                    nightBtn.classList.add('on');
-                    morningBtn.classList.remove('on');
-                    if (preview) preview.textContent = '🌙 Early Night (Outbreak)';
+                    btn.classList.remove('on');
                 }
             }
-        }
-        updateTimelineUi();
 
-        if (nightBtn) {
-            nightBtn.addEventListener('click', function () {
-                if (!Array.isArray(State.expired)) State.expired = [];
-                State.expired = State.expired.filter(function (t) { return t !== 'Act2_5_MarcusCabin'; });
-                updateTimelineUi();
+            if (inpFirstName) inpFirstName.value = getVar('firstName') || 'Neal';
+            if (inpLastName) inpLastName.value = getVar('lastName') || 'Sage';
+            if (inpAnchorName) inpAnchorName.value = getVar('anchor_name') || '';
+
+            if (txtArrivalStatus) {
+                var isLate = (Array.isArray(State.expired) && State.expired.indexOf('Act2_5_MarcusCabin') > -1) ||
+                             (Array.isArray(State.history) && State.history.some(function (m) { return m && m.title === 'Act2_5_MarcusCabin'; }));
+                txtArrivalStatus.textContent = isLate ? 'Current: ☀️ Late Sunrise (Marcus Cabin Visited)' : 'Current: 🌧️ Early Storm (Pre-Dawn)';
+                txtArrivalStatus.style.color = isLate ? 'var(--accent-gold)' : '#7cb9e8';
+            }
+        }
+
+        for (var i = 0; i < anchorButtons.length; i++) {
+            (function (btn) {
+                btn.addEventListener('click', function () {
+                    var a = btn.getAttribute('data-anchor');
+                    setVar('anchor', a);
+                    if (a === 'parents') {
+                        setVar('anchor_rel', 'parents');
+                        setVar('lastName', 'Sage');
+                        setVar('firstName', 'Neal');
+                        setVar('name', 'Neal Sage');
+                    } else if (a === 'partner_f') {
+                        setVar('anchor_rel', 'girlfriend');
+                        if (!getVar('anchor_name') || getVar('anchor_name') === 'Arthur') setVar('anchor_name', 'Elena');
+                    } else if (a === 'partner_m') {
+                        setVar('anchor_rel', 'boyfriend');
+                        if (!getVar('anchor_name') || getVar('anchor_name') === 'Arthur') setVar('anchor_name', 'Liam');
+                    } else if (a === 'partner_nb') {
+                        setVar('anchor_rel', 'partner');
+                        if (!getVar('anchor_name') || getVar('anchor_name') === 'Arthur') setVar('anchor_name', 'Morgan');
+                    } else if (a === 'myself') {
+                        setVar('anchor_rel', 'myself');
+                        setVar('anchor_name', '');
+                    }
+                    updateNarrativeDisplay();
+                });
+            })(anchorButtons[i]);
+        }
+
+        if (inpFirstName) {
+            inpFirstName.addEventListener('input', function () {
+                setVar('firstName', this.value);
+                setVar('name', (this.value || 'Neal') + ' ' + (getVar('lastName') || 'Sage'));
+            });
+        }
+        if (inpLastName) {
+            inpLastName.addEventListener('input', function () {
+                setVar('lastName', this.value);
+                setVar('name', (getVar('firstName') || 'Neal') + ' ' + (this.value || 'Sage'));
+            });
+        }
+        if (inpAnchorName) {
+            inpAnchorName.addEventListener('input', function () {
+                setVar('anchor_name', this.value);
+                updateNarrativeDisplay();
             });
         }
 
-        if (morningBtn) {
-            morningBtn.addEventListener('click', function () {
+        var btnEarly = byId('btn-arrival-early');
+        var btnLate = byId('btn-arrival-late');
+        if (btnEarly) {
+            btnEarly.addEventListener('click', function () {
+                if (Array.isArray(State.expired)) {
+                    State.expired = State.expired.filter(function (t) { return t !== 'Act2_5_MarcusCabin'; });
+                }
+                if (Array.isArray(State.history)) {
+                    State.history.forEach(function (m) {
+                        if (m && m.title === 'Act2_5_MarcusCabin') m.title = '__Act2_5_MarcusCabin_disabled__';
+                    });
+                }
+                updateNarrativeDisplay();
+            });
+        }
+        if (btnLate) {
+            btnLate.addEventListener('click', function () {
                 if (!Array.isArray(State.expired)) State.expired = [];
                 if (State.expired.indexOf('Act2_5_MarcusCabin') === -1) {
                     State.expired.push('Act2_5_MarcusCabin');
                 }
-                updateTimelineUi();
+                updateNarrativeDisplay();
             });
         }
-    }
 
+        var btnResetArmory = byId('btn-reset-armory');
+        if (btnResetArmory) {
+            btnResetArmory.addEventListener('click', function () {
+                setVar('armory_gearup_done', false);
+                setVar('sortie_package_chosen', 'none');
+                alert('Armory Requisition Reset: You can now pick a new sortie package at Sgt. Vance’s cage.');
+            });
+        }
+
+        var btnUnseal = byId('btn-unseal-weapons');
+        if (btnUnseal) {
+            btnUnseal.addEventListener('click', function () {
+                var stash = getVar('quartermaster_stash');
+                var inv = ensureArrayVar('inventory');
+                if (Array.isArray(stash) && stash.length > 0) {
+                    stash.forEach(function (it) { inv.push(it); });
+                    setVar('quartermaster_stash', []);
+                }
+                setVar('weapons_confiscated', false);
+                alert('Weapons unsealed and returned to backpack.');
+            });
+        }
+
+        var btnConfiscate = byId('btn-confiscate-weapons');
+        if (btnConfiscate) {
+            btnConfiscate.addEventListener('click', function () {
+                var stash = ensureArrayVar('quartermaster_stash');
+                var inv = ensureArrayVar('inventory');
+                for (var i = inv.length - 1; i >= 0; i--) {
+                    var item = setup.items[inv[i].id];
+                    if (item && item.type === 'weapon') {
+                        stash.push(inv[i]);
+                        inv.splice(i, 1);
+                    }
+                }
+                setVar('weapons_confiscated', true);
+                alert('Weapons moved to screening stash.');
+            });
+        }
+
+        var btnUnlockReyes = byId('btn-unlock-reyes');
+        if (btnUnlockReyes) {
+            btnUnlockReyes.addEventListener('click', function () {
+                setVar('act3_reyes_unlocked', true);
+                alert('Officer Reyes briefing unlocked on 1st Floor Center Hallway.');
+            });
+        }
+
+        // Quick Teleport Jumps
+        var btnTestMeeting = byId('btn-test-meeting');
+        if (btnTestMeeting) {
+            btnTestMeeting.addEventListener('click', function () {
+                setVar('act3_reyes_triggered', true);
+                Engine.play('Act3_Meeting_Evelyn');
+            });
+        }
+        var btnTestArmory = byId('btn-test-armory');
+        if (btnTestArmory) {
+            btnTestArmory.addEventListener('click', function () {
+                Engine.play('Act3_Armory_GearUp');
+            });
+        }
+        var btnTest7Eleven = byId('btn-test-7eleven');
+        if (btnTest7Eleven) {
+            btnTest7Eleven.addEventListener('click', function () {
+                Engine.play('Act3_7Eleven_Arrival');
+            });
+        }
+
+        updateNarrativeDisplay();
+    }
 
     function initSplitView() {
         var navItems = document.querySelectorAll('.dbg-nav-item');
@@ -2283,6 +2376,7 @@ window.initDebugPanel = function () {
     }
 
     initSplitView();
+    initNarrativeControl();
 
     refreshStatUi();
     refreshSkillUi();

@@ -944,7 +944,7 @@
             <<else>>
                 Reyes climbs into the car and rests her hands on her knees, staring out at the foggy windshield.
                 <br><br>
-                <<chat "Reyes" "image/avatars/reyes.gif" "right" "Head north on County Road 4. When we pull up to the high school gate, let me step out first. The Vice Principal has the place locked down tight, and the sentries will be on edge. They know my face.">>
+                <<chat "Reyes" "image/avatars/reyes.gif" "right" "Head north on County Road 4. When we pull up to the high school gate, let me step out first. The Vice Principal has the place locked down tight, and the guards will be on edge. They know my face.">>
                 <br><br>
                 She leans back against the headrest, closing her eyes for a brief moment to gather her strength.
             <</if>>
@@ -963,7 +963,7 @@
                         <<purgeCompleted>>
                         <<goto "Act3_ArrivalSchool">>
                     <</link>>
-                    <span class="btn-sub">She knows the checkpoint sentries. Follow her lead to get past the gates safely.</span>
+                    <span class="btn-sub">She knows the checkpoint guards. Follow her lead to get past the gates safely.</span>
                 </button>
             </div>
         </div>

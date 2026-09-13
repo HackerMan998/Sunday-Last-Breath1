@@ -582,6 +582,10 @@
                     <span class="dbg-nav-icon">⚡</span>
                     <span class="dbg-nav-label">Presets</span>
                 </button>
+                <button class="dbg-nav-item" data-target="sec-narrative" style="border-left: 2px solid var(--accent-gold);">
+                    <span class="dbg-nav-icon">🎭</span>
+                    <span class="dbg-nav-label" style="color:var(--accent-gold);">Anchor &amp; Story</span>
+                </button>
                 <button class="dbg-nav-item" data-target="sec-vitals">
                     <span class="dbg-nav-icon">📊</span>
                     <span class="dbg-nav-label">Vitals &amp; Stats</span>
@@ -634,7 +638,120 @@
                 </div>
             </div>
 
-                        <!-- 2. VITALS & STATS -->
+            <!-- NARRATIVE & ANCHOR TESTER -->
+            <div class="dbg-section" id="sec-narrative">
+                <div class="dbg-section-header">
+                    <span>🎭 Anchor &amp; Narrative Choice Switcher</span>
+                </div>
+                <div class="dnotice">
+                    Quickly switch your story Anchor, relationship, player identity, and arrival timing to test Act 3 dialogue and distress broadcasts.
+                </div>
+
+                <!-- 1. ANCHOR PRESETS -->
+                <div class="dlabel" style="color:var(--accent-gold);">Story Anchor &amp; Relationship Switch</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-bottom: 15px;">
+                    <button class="dbg-list-btn anchor-preset-btn" id="anchor-parents" data-anchor="parents">
+                        <div class="list-icon">👨‍👩‍👦</div>
+                        <div class="list-content">
+                            <div class="list-title">PARENTS (ARTHUR &amp; EVELYN)</div>
+                            <div class="list-sub">Evelyn is Mom. Trapped leader is Dad (Arthur Sage). Player is Neal Sage.</div>
+                        </div>
+                    </button>
+
+                    <button class="dbg-list-btn anchor-preset-btn" id="anchor-partner-f" data-anchor="partner_f">
+                        <div class="list-icon">👩‍❤️‍👨</div>
+                        <div class="list-content">
+                            <div class="list-title">GIRLFRIEND (ELENA)</div>
+                            <div class="list-sub">Trapped leader is girlfriend Elena. Evelyn is Safehouse Matriarch.</div>
+                        </div>
+                    </button>
+
+                    <button class="dbg-list-btn anchor-preset-btn" id="anchor-partner-m" data-anchor="partner_m">
+                        <div class="list-icon">👨‍❤️‍👨</div>
+                        <div class="list-content">
+                            <div class="list-title">BOYFRIEND (LIAM)</div>
+                            <div class="list-sub">Trapped leader is boyfriend Liam. Evelyn is Safehouse Matriarch.</div>
+                        </div>
+                    </button>
+
+                    <button class="dbg-list-btn anchor-preset-btn" id="anchor-partner-nb" data-anchor="partner_nb">
+                        <div class="list-icon">🧑‍🤝‍🧑</div>
+                        <div class="list-content">
+                            <div class="list-title">PARTNER (MORGAN)</div>
+                            <div class="list-sub">Trapped leader is non-binary partner Morgan. Evelyn is Safehouse Matriarch.</div>
+                        </div>
+                    </button>
+
+                    <button class="dbg-list-btn anchor-preset-btn" id="anchor-myself" data-anchor="myself">
+                        <div class="list-icon">🎖️</div>
+                        <div class="list-content">
+                            <div class="list-title">LONE SURVIVOR (COMMANDER HAYES)</div>
+                            <div class="list-sub">Default route. Trapped leader is military tactician Commander Hayes.</div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- 2. IDENTITY & CUSTOM NAMES -->
+                <div class="dlabel">Player Identity &amp; Custom Partner Name</div>
+                <div class="dgrid" style="margin-bottom: 15px;">
+                    <div>
+                        <div class="dr">
+                            <span class="dl">First Name</span>
+                            <input type="text" class="dinput" id="inp-first-name" placeholder="First Name">
+                        </div>
+                        <div class="dr">
+                            <span class="dl">Last Name</span>
+                            <input type="text" class="dinput" id="inp-last-name" placeholder="Last Name">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="dr">
+                            <span class="dl">Partner Name</span>
+                            <input type="text" class="dinput" id="inp-anchor-name" placeholder="Partner Name (if applicable)">
+                        </div>
+                        <div class="dr">
+                            <span class="dl">Current Anchor</span>
+                            <span id="txt-current-anchor" style="color:var(--accent-gold); font-weight:bold; font-size:0.9em;">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. ARRIVAL TIMING SWITCH -->
+                <div class="dlabel">Arrival Timing (Rain Storm vs. Sunrise)</div>
+                <div class="dnotice" style="margin-bottom: 8px;">
+                    Controls whether Vance &amp; Reyes treat your arrival as early pre-dawn fog/rain or late morning road dust (Marcus Cabin visited).
+                </div>
+                <div class="dbr" style="margin-bottom: 15px;">
+                    <button class="db" id="btn-arrival-early">🌧️ Set Arrival: Early Night Storm (Pre-Dawn)</button>
+                    <button class="db" id="btn-arrival-late">☀️ Set Arrival: Late Sunrise (Marcus Cabin Visited)</button>
+                    <span id="txt-arrival-status" style="font-size:0.85em; color:#aaa; margin-left:8px; align-self:center;"></span>
+                </div>
+
+                <!-- 4. ACT 3 ARMORY & SORTIE STATE -->
+                <div class="dlabel">Act 3 Sortie &amp; Armory Status</div>
+                <div class="dbr" style="margin-bottom: 15px;">
+                    <button class="db" id="btn-reset-armory">🔄 Reset Armory Requisition (Allows Re-Picking Kit)</button>
+                    <button class="db" id="btn-unseal-weapons">🔓 Restore Confiscated Weapons</button>
+                    <button class="db bad" id="btn-confiscate-weapons">🔒 Confiscate Weapons to Stash</button>
+                    <button class="db go" id="btn-unlock-reyes">🔓 Unlock Officer Reyes Briefing</button>
+                </div>
+
+                <!-- 5. QUICK TEST JUMPS -->
+                <div class="dlabel" style="color:var(--accent-green);">⚡ Quick Test Teleporters</div>
+                <div class="dbr">
+                    <button class="db go" id="btn-test-meeting" style="background:rgba(200,50,50,0.3); border-color:var(--accent-red); font-weight:bold;">
+                        ▶ Test Meeting Evelyn (Headmaster Office)
+                    </button>
+                    <button class="db go" id="btn-test-armory" style="background:rgba(200,150,50,0.3); border-color:var(--accent-gold); font-weight:bold;">
+                        ▶ Test Armory Gear-Up (Sgt. Vance)
+                    </button>
+                    <button class="db go" id="btn-test-7eleven" style="border-color:var(--accent-blue);">
+                        ▶ Test 7-Eleven Arrival (Route 9)
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. VITALS & STATS -->
             <div class="dbg-section" id="sec-vitals">
                 <div class="dbg-section-header">
                     <span>📊 Core Vitals, Attributes &amp; Skills</span>
@@ -1344,7 +1461,8 @@
                     <button class="db go" id="nav-act3-arrival">Act 3: Outskirts Arrival</button>
                     <button class="db go" id="nav-act3-sheriff">Substation 4</button>
                     <button class="db go" id="nav-act3-home">Suburban Home</button>
-                    <button class="db go" id="nav-act3-hub" style="border-color:var(--accent-gold); color:var(--accent-gold);">Ground Floor Corridor</button>
+                    <button class="db go" id="nav-act3-safe">High School Gates</button>
+                    <button class="db go" id="nav-act3-hub" style="border-color:var(--accent-gold); color:var(--accent-gold);">Act 3: Ground Floor Hub</button>
                     <button class="db go" id="nav-act3-hub1" style="border-color:var(--accent-blue); color:var(--accent-blue);">1st Floor Corridor</button>
                     <button class="db go" id="nav-act3-headmaster">Headmaster's Office</button>
                     <button class="db go" id="nav-act3-meeting" style="border-color:var(--accent-red); color:var(--accent-red);">Command Briefing (Evelyn)</button>

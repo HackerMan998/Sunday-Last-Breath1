@@ -7,17 +7,12 @@
 <<set $inSafehouse to true>>
 <<set $activeMap to "Highschool 1st Floor">>
 <<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
-<</nobr>>
 
-<h2>1ST FLOOR — COMMAND OFFICE VICTORIOUS RETURN</h2>
 /* DYNAMIC LEADER CONFIGURATION */
 <<set _leaderName to "Commander Hayes">>
 <<set _leaderAvatar to "image/avatars/leader_default_hayes.gif">>
 <<set _leaderRef to "Commander Hayes">>
 
-<div style="margin-bottom: 15px; text-align: center;">
-    <img src="image/Act3_Timberline/headmaster.gif" style="max-width: 100%; border: 1px solid #333;">
-</div>
 <<if $anchor == "partner_f">>
     <<set _leaderName to $anchor_name>>
     <<set _leaderAvatar to "image/avatars/leader_f.gif">>
@@ -36,38 +31,21 @@
     <<set _leaderRef to "your father">>
 <</if>>
 
-You, Reyes, and Commander Miller enter the 1st Floor Command Office.
-<br><br>
-Matriarch Evelyn gasps in relief, rushing around the mahogany desk to check Miller's bandaged shoulder.
-<br><br>
-<<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "Thank God you made it back! We brought the fuel truck into the courtyard locker room.">>
 /* CLEARANCE FLAGS */
 <<set $senior_council_clearance to true>>
 <<set $leader_rescued to true>>
 <</nobr>>
 
-<br><br>
-<<chat "Commander Miller" "image/avatars/quartermaster_sgtvance.gif" "right" "It's all thanks to this one right here. Stood shoulder to shoulder with Reyes and pulled us out of a death trap.">>
 <div class="vn-container">
     <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
         <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
             1ST FLOOR — COMMAND OFFICE VICTORIOUS RETURN
         </div>
 
-<br><br>
-Miller turns to you, placing a heavy hand on your shoulder.
-<br><br>
-<<chat "Commander Miller" "image/avatars/quartermaster_sgtvance.gif" "right" "You're no longer just a refugee in Timberline High. As of today, you are a full member of our Senior Defense Council. Full clearance across all wings of the sanctuary.">>
         <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
             <img src="image/Act3_Timberline/headmaster.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
         </div>
 
-<br><br>
-<div style="padding:15px; background:rgba(0,100,0,0.25); border:1px solid var(--accent-green); text-align:center;">
-    <b style="color:var(--accent-green); font-size:1.3em;">🏆 SENIOR COUNCIL CLEARANCE UNLOCKED</b>
-    <br>
-    <span style="color:#aaa;">You now have full access to all military reserves, radio feeds, and perimeter defenses in Timberline.</span>
-</div>
         <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-green); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
             <span id="vn-711-success-main">
                 You, Reyes, and <<print _leaderName>> climb the wide interior staircase and step through the double oak doors of the Command Office.
@@ -114,17 +92,9 @@ Miller turns to you, placing a heavy hand on your shoulder.
             </span>
         </div>
 
-<br><br>
-<div class="choice-menu">
-    <button style="border-left-color: var(--accent-blue) !important;">
-        <<link "🏫 Return to the Safehouse Corridor" "Act3_SchoolGFloor">>
-            <<set $currentLocation to "hall_g_center">>
-        <</link>>
-        <span class="btn-sub">Explore the fully unlocked Timberline Sanctuary.</span>
-    </button>
         <div class="choice-menu">
             <button style="border-left-color: var(--accent-blue) !important; background: rgba(0, 50, 100, 0.25);">
-                <<link "🏢 Step out to 1st Floor Upper Hallway [NORTH]">>
+                <<link "🏢 Step out to 1st Floor Upper Hallway - NORTH">>
                     <<run $(".vn-dialogue-box").scrollTop(0)>>
                     <<set $currentLocation to "hall_1_center">>
                     <<goto "Act3_School1Floor">>
@@ -133,7 +103,7 @@ Miller turns to you, placing a heavy hand on your shoulder.
             </button>
 
             <button style="border-left-color: var(--accent-gold) !important; background: rgba(100, 75, 0, 0.25);">
-                <<link "🏫 Descend to Ground Floor Main Corridor [SOUTH]">>
+                <<link "🏫 Descend to Ground Floor Main Corridor - SOUTH">>
                     <<run $(".vn-dialogue-box").scrollTop(0)>>
                     <<set $currentLocation to "hall_g_center">>
                     <<goto "Act3_SchoolGFloor">>
