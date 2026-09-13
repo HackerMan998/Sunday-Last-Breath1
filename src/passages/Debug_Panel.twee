@@ -1344,8 +1344,12 @@
                     <button class="db go" id="nav-act3-arrival">Act 3: Outskirts Arrival</button>
                     <button class="db go" id="nav-act3-sheriff">Substation 4</button>
                     <button class="db go" id="nav-act3-home">Suburban Home</button>
-                    <button class="db go" id="nav-act3-safe">High School Gates</button>
-                    <button class="db go" id="nav-act3-hub" style="border-color:var(--accent-gold); color:var(--accent-gold);">Act 3: Ground Floor Hub</button>
+                    <button class="db go" id="nav-act3-hub" style="border-color:var(--accent-gold); color:var(--accent-gold);">Ground Floor Corridor</button>
+                    <button class="db go" id="nav-act3-hub1" style="border-color:var(--accent-blue); color:var(--accent-blue);">1st Floor Corridor</button>
+                    <button class="db go" id="nav-act3-headmaster">Headmaster's Office</button>
+                    <button class="db go" id="nav-act3-meeting" style="border-color:var(--accent-red); color:var(--accent-red);">Command Briefing (Evelyn)</button>
+                    <button class="db go" id="nav-act3-gearup" style="border-color:var(--accent-gold); color:var(--accent-gold);">Armory Gear-Up (Vance)</button>
+                    <button class="db go" id="nav-act3-7eleven">Route 9 7-Eleven</button>
                 </div>
 
                 <div class="dsep"></div>

@@ -2018,6 +2018,7 @@ window.initDebugPanel = function () {
         on('nav-act3-hub1',       'click', function () { Engine.play('Act3_School1Floor'); });
         on('nav-act3-headmaster', 'click', function () { Engine.play('Act3_School_Headmaster'); });
         on('nav-act3-meeting',    'click', function () { Engine.play('Act3_Meeting_Evelyn'); });
+        on('nav-act3-gearup',     'click', function () { Engine.play('Act3_Armory_GearUp'); });
         on('nav-act3-7eleven',    'click', function () { Engine.play('Act3_7Eleven_Arrival'); });
 
         on('nav-lobby', 'click', function () {

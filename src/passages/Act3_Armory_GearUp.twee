@@ -1,0 +1,245 @@
+:: Act3_Armory_GearUp {"position":"750,1650","size":"100,100"}
+<<nobr>>
+<<if ndef $firstName or $firstName == "???">>
+    <<set $firstName to "Neal">>
+<</if>>
+<<set $currentLocation to "screening">>
+<<set $inSafehouse to true>>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
+
+/* DYNAMIC LEADER CONFIGURATION */
+<<set _leaderName to "Commander Hayes">>
+<<set _leaderAvatar to "image/avatars/leader_default_hayes.gif">>
+<<set _leaderRef to "Commander Hayes">>
+
+<<if $anchor == "partner_f">>
+    <<set _leaderName to $anchor_name>>
+    <<set _leaderAvatar to "image/avatars/leader_f.gif">>
+    <<set _leaderRef to "your girlfriend, " + $anchor_name>>
+<<elseif $anchor == "partner_m">>
+    <<set _leaderName to $anchor_name>>
+    <<set _leaderAvatar to "image/avatars/leader_m.gif">>
+    <<set _leaderRef to "your boyfriend, " + $anchor_name>>
+<<elseif $anchor == "partner_nb">>
+    <<set _leaderName to $anchor_name>>
+    <<set _leaderAvatar to "image/avatars/leader_nb.gif">>
+    <<set _leaderRef to "your partner, " + $anchor_name>>
+<<elseif $anchor == "parents">>
+    <<set _leaderName to "Dad">>
+    <<set _leaderAvatar to "image/avatars/leader_dad.gif">>
+    <<set _leaderRef to "your father">>
+<</if>>
+
+/* 1. INITIALIZE SANCTUARY STORAGE CHEST (RE-STYLE ITEM BOX) */
+<<if ndef $sanctuary_chest>>
+    <<set $sanctuary_chest to []>>
+<</if>>
+
+/* 2. AUTOMATICALLY UNSEAL AND RETURN CONFISCATED WEAPONS */
+<<set _returnedCount to 0>>
+<<if def $quartermaster_stash and $quartermaster_stash.length > 0>>
+    <<for _i to 0; _i < $quartermaster_stash.length; _i++>>
+        <<run $inventory.push($quartermaster_stash[_i])>>
+        <<set _returnedCount++>>
+    <</for>>
+    <<set $quartermaster_stash to []>>
+    <<set $weapons_confiscated to false>>
+<</if>>
+
+/* 3. ISSUE MILITARY TACTICAL HARNESS (+4 BAG SLOTS EXPANSION) */
+<<if ndef $bag_limit or $bag_limit < 16>>
+    <<set $bag_limit to 16>>
+<</if>>
+
+/* 4. TRACK SORTIE SELECTION & ONE-TIME GEAR UP FLAG */
+<<if ndef $armory_gearup_done>>
+    <<set $armory_gearup_done to false>>
+<</if>>
+<<if ndef $sortie_package_chosen>>
+    <<set $sortie_package_chosen to "none">>
+<</if>>
+<</nobr>>
+
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            GROUND FLOOR — SCREENING &amp; TACTICAL ARMORY CAGE
+        </div>
+
+        <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+            <img src="image/Act3_Timberline/screening.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+        </div>
+
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-armory-main">
+                <<if not $armory_gearup_done>>
+                    The speaker horn on the intake desk buzzes with static before Matriarch Evelyn's tense voice cuts through:
+                    <br><br>
+                    <i style="color:var(--accent-red);">"Vance, emergency sortie Code Red. Release all confiscated weapons to $firstName immediately and grant full access to primary arms lockers. They are rolling out with Reyes to Route 9."</i>
+                    <br><br>
+                    Sgt. Vance drops his clipboard. Without a word of protest, he keys open the padlocked chain-link cage behind him and hoists your heavy, tagged canvas duffel bag onto the steel counter.
+                    <br><br>
+                    <<chat "Sgt. Vance" "image/avatars/quartermaster_sgtvance.gif" "right" "Orders from Command. Here are your confiscated pieces back, untouched and loaded.">>
+                    <br><br>
+                    He tosses a heavy, olive-drab tactical webbing rig across the counter.
+                    <br><br>
+                    <<chat "Sgt. Vance" "image/avatars/quartermaster_sgtvance.gif" "right" "Take this military assault harness too. Gives you extra modular pouches so you're not fumbling with an overloaded pack while scavengers are shooting at your head.">>
+                    <br><br>
+                    <div style="background: rgba(0, 80, 0, 0.25); border: 1px solid var(--accent-green); border-radius: 6px; padding: 12px; margin: 12px 0; font-size: 0.9em;">
+                        <b style="color:var(--accent-green);">✔ CONFISCATED ARSENAL UNSEALED:</b> All weapons restored to your inventory.
+                        <br>
+                        <b style="color:var(--accent-green);">✔ TACTICAL HARNESS EQUIPPED:</b> Carrying capacity expanded to <b><<print $bag_limit>> Slots</b> (Current: <<print $inventory.length>> / <<print $bag_limit>>).
+                        <<if $sanctuary_chest.length > 0>>
+                            <br>
+                            <b style="color:var(--accent-gold);">📦 SANCTUARY CHEST:</b> <<print $sanctuary_chest.length>> items safely stored in base locker.
+                        <</if>>
+                    </div>
+
+                    Vance unlocks a heavy steel arms crate marked <b>TIMBERLINE REGIONAL DEFENSE</b> and lays out four specialized equipment cases on the table.
+                    <br><br>
+                    <<chat "Sgt. Vance" "image/avatars/quartermaster_sgtvance.gif" "right" "You're going into an active meat grinder to save _leaderRef. Evelyn authorized ONE heavy sortie package for this raid. Pick your loadout carefully:">>
+                <<else>>
+                    Sgt. Vance leans back against the steel intake counter, arms crossed over his tactical vest.
+                    <br><br>
+                    <<chat "Sgt. Vance" "image/avatars/quartermaster_sgtvance.gif" "right" "You've already received your authorized weapons and sortie loadout. Reyes has the pickup idling near the gate—stop stalling, partner, every second counts!">>
+                    <br><br>
+                    <div style="background: rgba(0, 80, 150, 0.25); border: 1px solid var(--accent-blue); border-radius: 6px; padding: 12px; margin: 12px 0; font-size: 0.9em;">
+                        <b style="color:var(--accent-blue);">✔ SORTIE PACKAGE LOCKED:</b> <<print $sortie_package_chosen.toUpperCase()>> KIT EQUIPPED.
+                        <br>
+                        <b style="color:var(--accent-green);">✔ INVENTORY CAPACITY:</b> <<print $inventory.length>> / <<print $bag_limit>> Slots in use.
+                        <<if $sanctuary_chest.length > 0>>
+                            <br>
+                            <b style="color:var(--accent-gold);">📦 SANCTUARY CHEST:</b> <<print $sanctuary_chest.length>> items safely stored in base locker.
+                        <</if>>
+                    </div>
+                <</if>>
+            </span>
+        </div>
+
+        <div class="choice-menu">
+            <!-- BASE STORAGE STASH & RETRIEVE ACTIONS -->
+            <<if $inventory.some(i => setup.items[i.id] && setup.items[i.id].type !== "weapon" && setup.items[i.id].type !== "ammo" && !setup.items[i.id].desc.includes("Medical") && !setup.items[i.id].desc.includes("heals") && i.id !== "First Aid Kit" && i.id !== "Bandage" && i.id !== "Antibiotics" && i.id !== "Painkillers")>>
+                <button style="border-left-color: var(--accent-gold) !important; background: rgba(80, 60, 0, 0.3); margin-bottom: 12px;">
+                    <<link "📦 Stash Non-Combat Clutter into Sanctuary Locker - ITEM BOX">>
+                        <<run $(".vn-dialogue-box").scrollTop(0)>>
+                        <<for _i to $inventory.length - 1; _i >= 0; _i-->>
+                            <<set _id to $inventory[_i].id>>
+                            <<set _db to setup.items[_id]>>
+                            <<if _db and _db.type !== "weapon" and _db.type !== "ammo" and _id !== "First Aid Kit" and _id !== "Bandage" and _id !== "Antibiotics" and _id !== "Painkillers">>
+                                <<run $sanctuary_chest.push($inventory[_i])>>
+                                <<run $inventory.splice(_i, 1)>>
+                            <</if>>
+                        <</for>>
+                        <<goto "Act3_Armory_GearUp">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-gold);">[RESIDENT EVIL ITEM BOX]</b> Deposit non-essential trade goods, books, and scrap into Vance's locked locker so your bag is 100% combat-ready.</span>
+                </button>
+            <</if>>
+
+            <<if def $sanctuary_chest and $sanctuary_chest.length > 0>>
+                <button style="border-left-color: var(--accent-gold) !important; background: rgba(80, 60, 0, 0.2); margin-bottom: 12px;">
+                    <<link "📦 Retrieve All Items from Sanctuary Locker - ITEM BOX">>
+                        <<run $(".vn-dialogue-box").scrollTop(0)>>
+                        <<run $inventory.push(...$sanctuary_chest)>>
+                        <<set $sanctuary_chest to []>>
+                        <<goto "Act3_Armory_GearUp">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-gold);">[ITEM BOX]</b> Take back all items stored in Vance's lockbox.</span>
+                </button>
+            <</if>>
+
+            <!-- SORTIE PACKAGES: 1-TIME SELECTION ONLY -->
+            <<if not $armory_gearup_done>>
+                <!-- SORTIE PACKAGE 1: BREACHER (SHOTGUN) -->
+                <button style="border-left-color: var(--accent-red) !important;">
+                    <<link "💥 Requisition: Breacher Kit - REMINGTON 870 SHOTGUN + 12 SHELLS">>
+                        <<run $(".vn-dialogue-box").scrollTop(0)>>
+                        <<set $sortie_package_chosen to "breacher">>
+                        <<set $armory_gearup_done to true>>
+                        <<run setup.addItem("Remington 870", 1)>>
+                        <<run setup.addItem("Shotgun Shells", 12)>>
+                        <<if $equip.weapon == "none">>
+                            <<set $equip.weapon to "Remington 870">>
+                        <</if>>
+                        <<goto "Act3_Armory_GearUp">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-red);">[CQB SPECIALIST]</b> Devastating close-quarters stopping power inside the convenience store. Perfect for Front Assault.</span>
+                </button>
+
+                <!-- SORTIE PACKAGE 2: MARKSMAN (M4A1 CARBINE) -->
+                <button style="border-left-color: var(--accent-blue) !important;">
+                    <<link "🎯 Requisition: Marksman Kit - M4A1 ASSAULT RIFLE + 60 ROUNDS 5.56MM">>
+                        <<run $(".vn-dialogue-box").scrollTop(0)>>
+                        <<set $sortie_package_chosen to "marksman">>
+                        <<set $armory_gearup_done to true>>
+                        <<run setup.addItem("M4A1", 1)>>
+                        <<run setup.addItem("5.56mm Ammo", 60)>>
+                        <<if $equip.weapon == "none">>
+                            <<set $equip.weapon to "M4A1">>
+                        <</if>>
+                        <<goto "Act3_Armory_GearUp">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-blue);">[RAPID ACCURACY]</b> Military carbine with superior range and armor piercing. Shreds hostile lines.</span>
+                </button>
+
+                <!-- SORTIE PACKAGE 3: INFILTRATOR (BOW & COMBAT KNIFE) -->
+                <button style="border-left-color: var(--accent-gold) !important;">
+                    <<link "🥷 Requisition: Silent Infiltrator Kit - COMPOUND BOW + COMBAT KNIFE">>
+                        <<run $(".vn-dialogue-box").scrollTop(0)>>
+                        <<set $sortie_package_chosen to "infiltrator">>
+                        <<set $armory_gearup_done to true>>
+                        <<run setup.addItem("Compound Bow", 1)>>
+                        <<run setup.addItem("Arrows", 15)>>
+                        <<run setup.addItem("Combat Knife", 1)>>
+                        <<if $equip.weapon == "none">>
+                            <<set $equip.weapon to "Compound Bow">>
+                        <</if>>
+                        <<goto "Act3_Armory_GearUp">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-gold);">[STEALTH AMBUSH]</b> Silent takedown weapons with reusable ammunition. Ideal for the rear alley flank.</span>
+                </button>
+
+                <!-- SORTIE PACKAGE 4: FIELD MEDIC (SUPPLIES) -->
+                <button style="border-left-color: var(--accent-green) !important;">
+                    <<link "💉 Requisition: Field Trauma Kit - 2 FIRST AID KITS, 3 BANDAGES, 1 ANTIBIOTICS">>
+                        <<run $(".vn-dialogue-box").scrollTop(0)>>
+                        <<set $sortie_package_chosen to "medic">>
+                        <<set $armory_gearup_done to true>>
+                        <<run setup.addItem("First Aid Kit", 2)>>
+                        <<run setup.addItem("Bandage", 3)>>
+                        <<run setup.addItem("Antibiotics", 1)>>
+                        <<goto "Act3_Armory_GearUp">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-green);">[SURVIVAL & MEDICINE]</b> Heavy emergency medical supplies to keep you, Reyes, and the squad alive under fire.</span>
+                </button>
+
+                <div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid #444; border-radius: 4px; text-align: center; color: #aaa; font-size: 0.88em; font-style: italic;">
+                    🔒 <b>Rescue Vehicle Locked:</b> Select one of the four authorized sortie kits above to complete your preparations and unlock the departure vehicle.
+                </div>
+            <<else>>
+                <!-- MOUNT UP WITH REYES (UNLOCKED ONLY AFTER PACKAGE IS CHOSEN) -->
+                <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
+                    <button style="border-left-color: var(--accent-green) !important; background: rgba(0, 100, 0, 0.35); font-size: 1.05em;">
+                        <<link "🚗 Mount up with Reyes in the Pickup & Roll Out - ROUTE 9 RESCUE">>
+                            <<run $(".vn-dialogue-box").scrollTop(0)>>
+                            <<set $currentLocation to "seven_eleven_outskirts">>
+                            <<addTime 15>>
+                            <<goto "Act3_7Eleven_Arrival">>
+                        <</link>>
+                        <span class="btn-sub"><b style="color:var(--accent-green);">[DEPLOY SORTIE]</b> Fully locked, loaded, and equipped. Ride out to Route 9 with Reyes!</span>
+                    </button>
+
+                    <button style="border-left-color: var(--accent-blue) !important; margin-top: 10px;">
+                        <<link "🏫 Step back into Ground Floor Corridor - HUB">>
+                            <<run $(".vn-dialogue-box").scrollTop(0)>>
+                            <<set $currentLocation to "hall_g_east_2">>
+                            <<goto "Act3_SchoolGFloor">>
+                        <</link>>
+                        <span class="btn-sub">Check on other survivors or visit the infirmary before departing.</span>
+                    </button>
+                </div>
+            <</if>>
+        </div>
+    </div>
+</div>
+

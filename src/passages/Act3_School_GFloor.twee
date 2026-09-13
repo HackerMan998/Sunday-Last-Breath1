@@ -47,10 +47,11 @@
                 <<if hasObjective("rescue_leader_711") and not isObjectiveCompleted("rescue_leader_711")>>
                     <div style="margin-bottom:15px;">
                         <button style="border-left-color:var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);">
-                            <<link "🚗 Depart for Route 9 7-Eleven [RESCUE LEADER]">>
-                                <<goto "Act3_7Eleven_Arrival">>
+                            <<link "🔫 Proceed to Armory with Reyes to Gear Up - RESCUE PREP">>
+                                <<set $currentLocation to "screening">>
+                                <<goto "Act3_Armory_GearUp">>
                             <</link>>
-                            <span class="btn-sub"><b style="color:var(--accent-red);">[ACTIVE RESCUE]</b> Drive out with Reyes to rescue the Sanctuary Leader at the 7-Eleven.</span>
+                            <span class="btn-sub"><b style="color:var(--accent-red);">[ACTIVE RESCUE]</b> Unseal your weapons, requisition heavy ordnance, and roll out with Reyes.</span>
                         </button>
                     </div>
                 <</if>>
@@ -58,82 +59,82 @@
                 <!-- DYNAMIC ROOM ENTRY BUTTONS BASED ON CURRENT NODE -->
                 <div class="choice-menu" style="margin-bottom:20px;">
 
-                    /* SQUARE 1: CANTEEN JUNCTION (FAR LEFT) */
+                    <!-- SQUARE 1: CANTEEN JUNCTION (FAR LEFT) -->
                     <<if $currentLocation == "hall_g_west_2">>
                         <button style="border-left-color:var(--accent-blue) !important;">
-                            <<link "🍔 ENTER CANTEEN [WEST]">>
+                            <<link "🍔 ENTER CANTEEN - WEST">>
                                 <<goto "Act3_School_Canteen">>
                             <</link>>
                             <span class="btn-sub">Sadie's ration prep line.</span>
                         </button>
                         <button style="border-left-color:var(--accent-blue) !important;">
-                            <<link "🥫 ENTER FOOD PANTRY [SOUTH]">>
+                            <<link "🥫 ENTER FOOD PANTRY - SOUTH">>
                                 <<goto "Act3_School_Pantry">>
                             <</link>>
                             <span class="btn-sub">Ration storage crates behind the canteen.</span>
                         </button>
 
-                    /* SQUARE 2: SECURITY ROOM / WEST STAIRS JUNCTION (LEFT-CENTER) */
+                    <!-- SQUARE 2: SECURITY ROOM / WEST STAIRS JUNCTION (LEFT-CENTER) -->
                     <<elseif $currentLocation == "hall_g_west_1">>
                         <button style="border-left-color:var(--accent-blue) !important;">
-                            <<link "🛡️ ENTER SECURITY GUARD ROOM [SOUTH]">>
+                            <<link "🛡️ ENTER SECURITY GUARD ROOM - SOUTH">>
                                 <<goto "Act3_School_SecurityRoom">>
                             <</link>>
                             <span class="btn-sub">Camera monitors and security feeds.</span>
                         </button>
 
-                    /* SQUARE 3: CENTRAL JUNCTION (CENTER) */
+                    <!-- SQUARE 3: CENTRAL JUNCTION (CENTER) -->
                     <<elseif $currentLocation == "hall_g_center">>
                         <button style="border-left-color:var(--accent-blue) !important;">
-                            <<link "🚪 ENTER MAIN SECURITY FOYER [SOUTH]">>
+                            <<link "🚪 ENTER MAIN SECURITY FOYER - SOUTH">>
                                 <<goto "Act3_School_Foyer">>
                             <</link>>
                             <span class="btn-sub">Main Entrance / Refugee Intake Area.</span>
                         </button>
 
-                    /* SQUARE 4: SCREENING / EAST STAIRS JUNCTION (RIGHT-CENTER) */
+                    <!-- SQUARE 4: SCREENING / EAST STAIRS JUNCTION (RIGHT-CENTER) -->
                     <<elseif $currentLocation == "hall_g_east_2">>
                         <button style="border-left-color:var(--accent-blue) !important;">
-                            <<link "📋 ENTER SCREENING ROOM [SOUTH]">>
+                            <<link "📋 ENTER SCREENING ROOM - SOUTH">>
                                 <<goto "Act3_School_Screening">>
                             <</link>>
                             <span class="btn-sub">Sgt. Vance's inspection & weapons desk.</span>
                         </button>
 
-                    /* SQUARE 5: INFIRMARY JUNCTION (FAR RIGHT) */
+                    <!-- SQUARE 5: INFIRMARY JUNCTION (FAR RIGHT) -->
                     <<elseif $currentLocation == "hall_g_east_1">>
                         <button style="border-left-color:var(--accent-blue) !important;">
-                            <<link "🏥 ENTER EMERGENCY INFIRMARY [EAST]">>
+                            <<link "🏥 ENTER EMERGENCY INFIRMARY - EAST">>
                                 <<goto "Act3_School_Infirmary">>
                             <</link>>
                             <span class="btn-sub">Dr. Thorne's triage ward.</span>
                         </button>
 
-                    /* SQUARE 6: CLASSROOMS 101/102 CORRIDOR (WEST UPPER) */
+                    <!-- SQUARE 6: CLASSROOMS 101/102 CORRIDOR (WEST UPPER) -->
                     <<elseif $currentLocation == "hall_g_west_3">>
                         <button style="border-left-color:var(--accent-blue) !important;">
-                            <<link "🚪 ENTER CLASSROOM 101 [WEST]">>
+                            <<link "🚪 ENTER CLASSROOM 101 - WEST">>
                                 <<goto "Act3_School_Room101">>
                             <</link>>
                             <span class="btn-sub">Refugee sleeping quarters.</span>
                         </button>
                         <button style="border-left-color:var(--accent-blue) !important;">
-                            <<link "🚪 ENTER CLASSROOM 102 [NORTH-WEST]">>
+                            <<link "🚪 ENTER CLASSROOM 102 - NORTH-WEST">>
                                 <<goto "Act3_School_Room102">>
                             <</link>>
                             <span class="btn-sub">Temporary medical overflow / sleeping cots.</span>
                         </button>
 
-                    /* SQUARE 8: LOCKER ROOM CORRIDOR (EAST UPPER) */
+                    <!-- SQUARE 8: LOCKER ROOM CORRIDOR (EAST UPPER) -->
                     <<elseif $currentLocation == "hall_g_east_3">>
                         <button style="border-left-color:var(--accent-blue) !important;">
-                            <<link "🔒 ENTER ATHLETIC LOCKER ROOM [EAST]">>
+                            <<link "🔒 ENTER ATHLETIC LOCKER ROOM - EAST">>
                                 <<goto "Act3_School_LockerRoom">>
                             <</link>>
                             <span class="btn-sub">Personal lockers and duffel storage.</span>
                         </button>
 
-                    /* FALLBACK SAFETY */
+                    <!-- FALLBACK SAFETY -->
                     <<else>>
                         <button style="border-left-color: var(--accent-gold) !important;">
                             <<link "🔄 Return to Central Junction">>

@@ -32,6 +32,9 @@
 <<run setup.sound.play("upper_ambience", "audio/bgm/fluorescent_buzz.mp3", true, 0.3)>>
 
 /* Calculate NPC talk & mission count for Reyes briefing unlock */
+<<set _npcsVisited to [visited("Act3_School_Canteen"), visited("Act3_School_Infirmary"), visited("Act3_School_RadioRoom"), visited("Act3_School_Screening"), visited("Act3_School_SecurityRoom"), visited("Act3_School_Foyer")].filter(Boolean).length>>
+<<set _completedMissions to ($objectives ? $objectives.filter(function(o) { return o.status === "completed"; }).length : 0)>>
+<<set _reyesUnlocked to ($act3_reyes_unlocked or _npcsVisited >= 4 or _completedMissions >= 2 or $act3_reyes_triggered)>>
 <<set _missionsHelped to [$helped_sadie, $helped_thorne, $helped_chloe].filter(Boolean).length>>
 <<set _npcsVisited to [visited("Act3_School_Canteen"), visited("Act3_School_Infirmary"), visited("Act3_School_RadioRoom"), visited("Act3_School_Screening"), visited("Act3_School_SecurityRoom"), visited("Act3_School_Foyer"), $sadie_met, $thorne_met, $chloe_met].filter(Boolean).length>>
 <<set _reyesUnlocked to ($act3_reyes_unlocked or _missionsHelped >= 2 or _npcsVisited >= 4 or $act3_reyes_triggered)>>

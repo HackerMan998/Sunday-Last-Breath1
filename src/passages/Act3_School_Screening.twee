@@ -27,15 +27,26 @@
             </span>
         </div>
         <div class="choice-menu">
+            <<if def $sanctuary_chest and $sanctuary_chest.length > 0>>
+                <button style="border-left-color: var(--accent-gold) !important; background: rgba(80, 60, 0, 0.3); margin-bottom: 12px;">
+                    <<link "📦 Retrieve Stashed Items from Sanctuary Locker - ITEM BOX">>
+                        <<run $(".vn-dialogue-box").scrollTop(0)>>
+                        <<run $inventory.push(...$sanctuary_chest)>>
+                        <<set $sanctuary_chest to []>>
+                        <<goto "Act3_School_Screening">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-gold);">[ITEM BOX]</b> Take back all items stored in Vance's base lockbox.</span>
+                </button>
+            <</if>>
             <button style="border-left-color: var(--accent-blue) !important;">
-                <<link "🚪 Exit Screening to Foyer [WEST]">>
+                <<link "🚪 Exit Screening to Foyer - WEST">>
                     <<set $currentLocation to "security_foyer">>
                     <<goto "Act3_School_Foyer">>
                 <</link>>
                 <span class="btn-sub">Walk straight into the Main Security Foyer.</span>
             </button>
             <button style="border-left-color: var(--accent-blue) !important;">
-                <<link "⬆️ Exit Screening to East Hallway [NORTH]">>
+                <<link "⬆️ Exit Screening to East Hallway - NORTH">>
                     <<set $currentLocation to "hall_g_east_2">>
                     <<goto "Act3_SchoolGFloor">>
                 <</link>>

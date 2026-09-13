@@ -83,18 +83,18 @@
         <div class="choice-menu">
             <<if not isObjectiveCompleted("rescue_leader_711")>>
                 <button style="border-left-color: var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);">
-                    <<link "🚗 Depart with Reyes for Route 9 7-Eleven [RESCUE LEADER]">>
+                    <<link "🔫 Proceed to Armory with Reyes to Gear Up - RESCUE PREP">>
                         <<run $(".vn-dialogue-box").scrollTop(0)>>
-                        <<set $currentLocation to "seven_eleven_outskirts">>
-                        <<addTime 15>>
-                        <<goto "Act3_7Eleven_Arrival">>
+                        <<set $currentLocation to "screening">>
+                        <<addTime 5>>
+                        <<goto "Act3_Armory_GearUp">>
                     <</link>>
-                    <span class="btn-sub"><b style="color:var(--accent-red);">[ACTIVE RESCUE]</b> Ride out with Reyes to rescue the Sanctuary Leader from the 7-Eleven.</span>
+                    <span class="btn-sub"><b style="color:var(--accent-red);">[ACTIVE RESCUE]</b> Unseal your confiscated weapons, requisition heavy ordnance, and roll out to Route 9.</span>
                 </button>
             <</if>>
 
             <button style="border-left-color: var(--accent-blue) !important;">
-                <<link "🚪 Exit Headmaster's Office to Hallway [NORTH]">>
+                <<link "🚪 Exit Headmaster's Office to Hallway - NORTH">>
                     <<run $(".vn-dialogue-box").scrollTop(0)>>
                     <<set $currentLocation to "hall_1_center">>
                     <<goto "Act3_School1Floor">>

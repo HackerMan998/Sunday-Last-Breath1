@@ -101,9 +101,9 @@
                 <<else>>
                     She looks up from the maps, assessing you with keen veteran scrutiny.
                     <br><br>
-                    <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "Reyes. I see you brought our new arrival up. Good. We don't carry dead weight here, but I hear they proved themselves downstairs.">>
+                    <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "Officer Reyes. You're back in one piece. And this is the survivor who brought you in?">>
                     <br><br>
-                    <<chat "Reyes" "image/avatars/reyes.gif" "right" "Where's Commander Hayes, Evelyn? I thought he was handling intake debriefings.">>
+                    <<chat "Reyes" "image/avatars/reyes.gif" "right" "Yes, ma'am. Handled the road like a seasoned pro. We need to speak with Commander Hayes immediately.">>
                     <br><br>
                     <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "Hayes isn't here, Reyes. He couldn't wait. He mobilized a strike team down Route 9.">>
                 <</if>>
@@ -154,13 +154,13 @@
 
         <div class="choice-menu">
             <button style="border-left-color: var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);">
-                <<link "🚗 Depart with Reyes for the Route 9 7-Eleven [IMMEDIATE RESCUE]">>
+                <<link "🔫 Proceed to Armory with Reyes to Gear Up - RESCUE PREP">>
                     <<run $(".vn-dialogue-box").scrollTop(0)>>
-                    <<set $currentLocation to "seven_eleven_outskirts">>
-                    <<addTime 15>>
-                    <<goto "Act3_7Eleven_Arrival">>
+                    <<set $currentLocation to "screening">>
+                    <<addTime 5>>
+                    <<goto "Act3_Armory_GearUp">>
                 <</link>>
-                <span class="btn-sub"><b style="color:var(--accent-red);">[ACTIVE RESCUE]</b> Ride out with Reyes to rescue the Sanctuary Leader from the overrun 7-Eleven.</span>
+                <span class="btn-sub"><b style="color:var(--accent-red);">[ACTIVE RESCUE]</b> Unseal your confiscated weapons, requisition heavy ordnance, and roll out to Route 9.</span>
             </button>
             <button style="border-left-color: var(--accent-blue) !important;">
                 <<link "🎒 Prepare your gear in the Hub before departing">>

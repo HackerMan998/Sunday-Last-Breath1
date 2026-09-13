@@ -104,7 +104,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<!-- UUID://7063291B-129B-4B6B-B05D-A2968060E9C0// --><tw-storydata name="Sunday&#39;s Last Breath" startnode="71" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="7063291B-129B-4B6B-B05D-A2968060E9C0" zoom="0.3" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/***********************************************************************
+	<!-- UUID://7063291B-129B-4B6B-B05D-A2968060E9C0// --><tw-storydata name="Sunday&#39;s Last Breath" startnode="72" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="7063291B-129B-4B6B-B05D-A2968060E9C0" zoom="0.3" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/***********************************************************************
  * TWINE SURVIVAL UI - MASTER STYLESHEET
  ***********************************************************************/
 
@@ -3419,6 +3419,7 @@ window.initDebugPanel = function () {
         on('nav-act3-hub1',       'click', function () { Engine.play('Act3_School1Floor'); });
         on('nav-act3-headmaster', 'click', function () { Engine.play('Act3_School_Headmaster'); });
         on('nav-act3-meeting',    'click', function () { Engine.play('Act3_Meeting_Evelyn'); });
+        on('nav-act3-gearup',     'click', function () { Engine.play('Act3_Armory_GearUp'); });
         on('nav-act3-7eleven',    'click', function () { Engine.play('Act3_7Eleven_Arrival'); });
 
         on('nav-lobby', 'click', function () {
@@ -4224,7 +4225,7 @@ window.preloadAssets = function(assetList) {
             }
         }
     });
-};</script><tw-tag name="Initialize" color="red"></tw-tag><tw-tag name="PassageReady" color="green"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-passagedata pid="1" name="Act2_5_MarcusCabin" tags="" position="450,1300" size="100,100">&lt;&lt;nobr&gt;&gt;
+};</script><tw-tag name="PassageReady" color="green"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-tag name="Initialize" color="red"></tw-tag><tw-passagedata pid="1" name="Act2_5_MarcusCabin" tags="" position="450,1300" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* ====================================================================
    INITIALIZATION &amp; STATE SETUP
    ==================================================================== */
@@ -7437,12 +7438,17 @@ window.preloadAssets = function(assetList) {
 &lt;&lt;set $inSafehouse to true&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;
 
+&lt;h2&gt;1ST FLOOR — COMMAND OFFICE VICTORIOUS RETURN&lt;/h2&gt;
 /* DYNAMIC LEADER CONFIGURATION */
 &lt;&lt;set _leaderName to &quot;Commander Hayes&quot;&gt;&gt;
 &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_default_hayes.gif&quot;&gt;&gt;
 &lt;&lt;set _leaderRef to &quot;Commander Hayes&quot;&gt;&gt;
 
+&lt;div style=&quot;margin-bottom: 15px; text-align: center;&quot;&gt;
+    &lt;img src=&quot;image/Act3_Timberline/headmaster.gif&quot; style=&quot;max-width: 100%; border: 1px solid #333;&quot;&gt;
+&lt;/div&gt;
 &lt;&lt;if $anchor == &quot;partner_f&quot;&gt;&gt;
     &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
     &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_f.gif&quot;&gt;&gt;
@@ -7461,21 +7467,38 @@ window.preloadAssets = function(assetList) {
     &lt;&lt;set _leaderRef to &quot;your father&quot;&gt;&gt;
 &lt;&lt;/if&gt;&gt;
 
+You, Reyes, and Commander Miller enter the 1st Floor Command Office.
+&lt;br&gt;&lt;br&gt;
+Matriarch Evelyn gasps in relief, rushing around the mahogany desk to check Miller&#39;s bandaged shoulder.
+&lt;br&gt;&lt;br&gt;
+&lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Thank God you made it back! We brought the fuel truck into the courtyard locker room.&quot;&gt;&gt;
 /* CLEARANCE FLAGS */
 &lt;&lt;set $senior_council_clearance to true&gt;&gt;
 &lt;&lt;set $leader_rescued to true&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
+&lt;br&gt;&lt;br&gt;
+&lt;&lt;chat &quot;Commander Miller&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;It&#39;s all thanks to this one right here. Stood shoulder to shoulder with Reyes and pulled us out of a death trap.&quot;&gt;&gt;
 &lt;div class=&quot;vn-container&quot;&gt;
     &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
         &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
             1ST FLOOR — COMMAND OFFICE VICTORIOUS RETURN
         &lt;/div&gt;
 
+&lt;br&gt;&lt;br&gt;
+Miller turns to you, placing a heavy hand on your shoulder.
+&lt;br&gt;&lt;br&gt;
+&lt;&lt;chat &quot;Commander Miller&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;You&#39;re no longer just a refugee in Timberline High. As of today, you are a full member of our Senior Defense Council. Full clearance across all wings of the sanctuary.&quot;&gt;&gt;
         &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
             &lt;img src=&quot;image/Act3_Timberline/headmaster.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
         &lt;/div&gt;
 
+&lt;br&gt;&lt;br&gt;
+&lt;div style=&quot;padding:15px; background:rgba(0,100,0,0.25); border:1px solid var(--accent-green); text-align:center;&quot;&gt;
+    &lt;b style=&quot;color:var(--accent-green); font-size:1.3em;&quot;&gt;🏆 SENIOR COUNCIL CLEARANCE UNLOCKED&lt;/b&gt;
+    &lt;br&gt;
+    &lt;span style=&quot;color:#aaa;&quot;&gt;You now have full access to all military reserves, radio feeds, and perimeter defenses in Timberline.&lt;/span&gt;
+&lt;/div&gt;
         &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-green); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
             &lt;span id=&quot;vn-711-success-main&quot;&gt;
                 You, Reyes, and &lt;&lt;print _leaderName&gt;&gt; climb the wide interior staircase and step through the double oak doors of the Command Office.
@@ -7522,6 +7545,14 @@ window.preloadAssets = function(assetList) {
             &lt;/span&gt;
         &lt;/div&gt;
 
+&lt;br&gt;&lt;br&gt;
+&lt;div class=&quot;choice-menu&quot;&gt;
+    &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+        &lt;&lt;link &quot;🏫 Return to the Safehouse Corridor&quot; &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+            &lt;&lt;set $currentLocation to &quot;hall_g_center&quot;&gt;&gt;
+        &lt;&lt;/link&gt;&gt;
+        &lt;span class=&quot;btn-sub&quot;&gt;Explore the fully unlocked Timberline Sanctuary.&lt;/span&gt;
+    &lt;/button&gt;
         &lt;div class=&quot;choice-menu&quot;&gt;
             &lt;button style=&quot;border-left-color: var(--accent-blue) !important; background: rgba(0, 50, 100, 0.25);&quot;&gt;
                 &lt;&lt;link &quot;🏢 Step out to 1st Floor Upper Hallway [NORTH]&quot;&gt;&gt;
@@ -7542,7 +7573,249 @@ window.preloadAssets = function(assetList) {
             &lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="13" name="Act3_Arrival" tags="" position="450,1400" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="13" name="Act3_Armory_GearUp" tags="" position="750,1650" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;if ndef $firstName or $firstName == &quot;???&quot;&gt;&gt;
+    &lt;&lt;set $firstName to &quot;Neal&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
+&lt;&lt;set $inSafehouse to true&gt;&gt;
+&lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
+
+/* DYNAMIC LEADER CONFIGURATION */
+&lt;&lt;set _leaderName to &quot;Commander Hayes&quot;&gt;&gt;
+&lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_default_hayes.gif&quot;&gt;&gt;
+&lt;&lt;set _leaderRef to &quot;Commander Hayes&quot;&gt;&gt;
+
+&lt;&lt;if $anchor == &quot;partner_f&quot;&gt;&gt;
+    &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
+    &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_f.gif&quot;&gt;&gt;
+    &lt;&lt;set _leaderRef to &quot;your girlfriend, &quot; + $anchor_name&gt;&gt;
+&lt;&lt;elseif $anchor == &quot;partner_m&quot;&gt;&gt;
+    &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
+    &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_m.gif&quot;&gt;&gt;
+    &lt;&lt;set _leaderRef to &quot;your boyfriend, &quot; + $anchor_name&gt;&gt;
+&lt;&lt;elseif $anchor == &quot;partner_nb&quot;&gt;&gt;
+    &lt;&lt;set _leaderName to $anchor_name&gt;&gt;
+    &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_nb.gif&quot;&gt;&gt;
+    &lt;&lt;set _leaderRef to &quot;your partner, &quot; + $anchor_name&gt;&gt;
+&lt;&lt;elseif $anchor == &quot;parents&quot;&gt;&gt;
+    &lt;&lt;set _leaderName to &quot;Dad&quot;&gt;&gt;
+    &lt;&lt;set _leaderAvatar to &quot;image/avatars/leader_dad.gif&quot;&gt;&gt;
+    &lt;&lt;set _leaderRef to &quot;your father&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+/* 1. INITIALIZE SANCTUARY STORAGE CHEST (RE-STYLE ITEM BOX) */
+&lt;&lt;if ndef $sanctuary_chest&gt;&gt;
+    &lt;&lt;set $sanctuary_chest to []&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+/* 2. AUTOMATICALLY UNSEAL AND RETURN CONFISCATED WEAPONS */
+&lt;&lt;set _returnedCount to 0&gt;&gt;
+&lt;&lt;if def $quartermaster_stash and $quartermaster_stash.length &gt; 0&gt;&gt;
+    &lt;&lt;for _i to 0; _i &lt; $quartermaster_stash.length; _i++&gt;&gt;
+        &lt;&lt;run $inventory.push($quartermaster_stash[_i])&gt;&gt;
+        &lt;&lt;set _returnedCount++&gt;&gt;
+    &lt;&lt;/for&gt;&gt;
+    &lt;&lt;set $quartermaster_stash to []&gt;&gt;
+    &lt;&lt;set $weapons_confiscated to false&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+/* 3. ISSUE MILITARY TACTICAL HARNESS (+4 BAG SLOTS EXPANSION) */
+&lt;&lt;if ndef $bag_limit or $bag_limit &lt; 16&gt;&gt;
+    &lt;&lt;set $bag_limit to 16&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+
+/* 4. TRACK SORTIE SELECTION &amp; ONE-TIME GEAR UP FLAG */
+&lt;&lt;if ndef $armory_gearup_done&gt;&gt;
+    &lt;&lt;set $armory_gearup_done to false&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;if ndef $sortie_package_chosen&gt;&gt;
+    &lt;&lt;set $sortie_package_chosen to &quot;none&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;
+
+&lt;div class=&quot;vn-container&quot;&gt;
+    &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;&quot;&gt;
+        &lt;div style=&quot;text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: &#39;Oswald&#39;, sans-serif;&quot;&gt;
+            GROUND FLOOR — SCREENING &amp;amp; TACTICAL ARMORY CAGE
+        &lt;/div&gt;
+
+        &lt;div style=&quot;width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);&quot;&gt;
+            &lt;img src=&quot;image/Act3_Timberline/screening.gif&quot; style=&quot;width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);&quot;&gt;
+        &lt;/div&gt;
+
+        &lt;div style=&quot;background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-gold); font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;&quot;&gt;
+            &lt;span id=&quot;vn-armory-main&quot;&gt;
+                &lt;&lt;if not $armory_gearup_done&gt;&gt;
+                    The speaker horn on the intake desk buzzes with static before Matriarch Evelyn&#39;s tense voice cuts through:
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;i style=&quot;color:var(--accent-red);&quot;&gt;&quot;Vance, emergency sortie Code Red. Release all confiscated weapons to $firstName immediately and grant full access to primary arms lockers. They are rolling out with Reyes to Route 9.&quot;&lt;/i&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    Sgt. Vance drops his clipboard. Without a word of protest, he keys open the padlocked chain-link cage behind him and hoists your heavy, tagged canvas duffel bag onto the steel counter.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Orders from Command. Here are your confiscated pieces back, untouched and loaded.&quot;&gt;&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    He tosses a heavy, olive-drab tactical webbing rig across the counter.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;Take this military assault harness too. Gives you extra modular pouches so you&#39;re not fumbling with an overloaded pack while scavengers are shooting at your head.&quot;&gt;&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;div style=&quot;background: rgba(0, 80, 0, 0.25); border: 1px solid var(--accent-green); border-radius: 6px; padding: 12px; margin: 12px 0; font-size: 0.9em;&quot;&gt;
+                        &lt;b style=&quot;color:var(--accent-green);&quot;&gt;✔ CONFISCATED ARSENAL UNSEALED:&lt;/b&gt; All weapons restored to your inventory.
+                        &lt;br&gt;
+                        &lt;b style=&quot;color:var(--accent-green);&quot;&gt;✔ TACTICAL HARNESS EQUIPPED:&lt;/b&gt; Carrying capacity expanded to &lt;b&gt;&lt;&lt;print $bag_limit&gt;&gt; Slots&lt;/b&gt; (Current: &lt;&lt;print $inventory.length&gt;&gt; / &lt;&lt;print $bag_limit&gt;&gt;).
+                        &lt;&lt;if $sanctuary_chest.length &gt; 0&gt;&gt;
+                            &lt;br&gt;
+                            &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;📦 SANCTUARY CHEST:&lt;/b&gt; &lt;&lt;print $sanctuary_chest.length&gt;&gt; items safely stored in base locker.
+                        &lt;&lt;/if&gt;&gt;
+                    &lt;/div&gt;
+
+                    Vance unlocks a heavy steel arms crate marked &lt;b&gt;TIMBERLINE REGIONAL DEFENSE&lt;/b&gt; and lays out four specialized equipment cases on the table.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;You&#39;re going into an active meat grinder to save _leaderRef. Evelyn authorized ONE heavy sortie package for this raid. Pick your loadout carefully:&quot;&gt;&gt;
+                &lt;&lt;else&gt;&gt;
+                    Sgt. Vance leans back against the steel intake counter, arms crossed over his tactical vest.
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;&lt;chat &quot;Sgt. Vance&quot; &quot;image/avatars/quartermaster_sgtvance.gif&quot; &quot;right&quot; &quot;You&#39;ve already received your authorized weapons and sortie loadout. Reyes has the pickup idling near the gate—stop stalling, partner, every second counts!&quot;&gt;&gt;
+                    &lt;br&gt;&lt;br&gt;
+                    &lt;div style=&quot;background: rgba(0, 80, 150, 0.25); border: 1px solid var(--accent-blue); border-radius: 6px; padding: 12px; margin: 12px 0; font-size: 0.9em;&quot;&gt;
+                        &lt;b style=&quot;color:var(--accent-blue);&quot;&gt;✔ SORTIE PACKAGE LOCKED:&lt;/b&gt; &lt;&lt;print $sortie_package_chosen.toUpperCase()&gt;&gt; KIT EQUIPPED.
+                        &lt;br&gt;
+                        &lt;b style=&quot;color:var(--accent-green);&quot;&gt;✔ INVENTORY CAPACITY:&lt;/b&gt; &lt;&lt;print $inventory.length&gt;&gt; / &lt;&lt;print $bag_limit&gt;&gt; Slots in use.
+                        &lt;&lt;if $sanctuary_chest.length &gt; 0&gt;&gt;
+                            &lt;br&gt;
+                            &lt;b style=&quot;color:var(--accent-gold);&quot;&gt;📦 SANCTUARY CHEST:&lt;/b&gt; &lt;&lt;print $sanctuary_chest.length&gt;&gt; items safely stored in base locker.
+                        &lt;&lt;/if&gt;&gt;
+                    &lt;/div&gt;
+                &lt;&lt;/if&gt;&gt;
+            &lt;/span&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;choice-menu&quot;&gt;
+            &lt;!-- BASE STORAGE STASH &amp; RETRIEVE ACTIONS --&gt;
+            &lt;&lt;if $inventory.some(i =&gt; setup.items[i.id] &amp;&amp; setup.items[i.id].type !== &quot;weapon&quot; &amp;&amp; setup.items[i.id].type !== &quot;ammo&quot; &amp;&amp; !setup.items[i.id].desc.includes(&quot;Medical&quot;) &amp;&amp; !setup.items[i.id].desc.includes(&quot;heals&quot;) &amp;&amp; i.id !== &quot;First Aid Kit&quot; &amp;&amp; i.id !== &quot;Bandage&quot; &amp;&amp; i.id !== &quot;Antibiotics&quot; &amp;&amp; i.id !== &quot;Painkillers&quot;)&gt;&gt;
+                &lt;button style=&quot;border-left-color: var(--accent-gold) !important; background: rgba(80, 60, 0, 0.3); margin-bottom: 12px;&quot;&gt;
+                    &lt;&lt;link &quot;📦 Stash Non-Combat Clutter into Sanctuary Locker - ITEM BOX&quot;&gt;&gt;
+                        &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                        &lt;&lt;for _i to $inventory.length - 1; _i &gt;= 0; _i--&gt;&gt;
+                            &lt;&lt;set _id to $inventory[_i].id&gt;&gt;
+                            &lt;&lt;set _db to setup.items[_id]&gt;&gt;
+                            &lt;&lt;if _db and _db.type !== &quot;weapon&quot; and _db.type !== &quot;ammo&quot; and _id !== &quot;First Aid Kit&quot; and _id !== &quot;Bandage&quot; and _id !== &quot;Antibiotics&quot; and _id !== &quot;Painkillers&quot;&gt;&gt;
+                                &lt;&lt;run $sanctuary_chest.push($inventory[_i])&gt;&gt;
+                                &lt;&lt;run $inventory.splice(_i, 1)&gt;&gt;
+                            &lt;&lt;/if&gt;&gt;
+                        &lt;&lt;/for&gt;&gt;
+                        &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[RESIDENT EVIL ITEM BOX]&lt;/b&gt; Deposit non-essential trade goods, books, and scrap into Vance&#39;s locked locker so your bag is 100% combat-ready.&lt;/span&gt;
+                &lt;/button&gt;
+            &lt;&lt;/if&gt;&gt;
+
+            &lt;&lt;if def $sanctuary_chest and $sanctuary_chest.length &gt; 0&gt;&gt;
+                &lt;button style=&quot;border-left-color: var(--accent-gold) !important; background: rgba(80, 60, 0, 0.2); margin-bottom: 12px;&quot;&gt;
+                    &lt;&lt;link &quot;📦 Retrieve All Items from Sanctuary Locker - ITEM BOX&quot;&gt;&gt;
+                        &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                        &lt;&lt;run $inventory.push(...$sanctuary_chest)&gt;&gt;
+                        &lt;&lt;set $sanctuary_chest to []&gt;&gt;
+                        &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[ITEM BOX]&lt;/b&gt; Take back all items stored in Vance&#39;s lockbox.&lt;/span&gt;
+                &lt;/button&gt;
+            &lt;&lt;/if&gt;&gt;
+
+            &lt;!-- SORTIE PACKAGES: 1-TIME SELECTION ONLY --&gt;
+            &lt;&lt;if not $armory_gearup_done&gt;&gt;
+                &lt;!-- SORTIE PACKAGE 1: BREACHER (SHOTGUN) --&gt;
+                &lt;button style=&quot;border-left-color: var(--accent-red) !important;&quot;&gt;
+                    &lt;&lt;link &quot;💥 Requisition: Breacher Kit - REMINGTON 870 SHOTGUN + 12 SHELLS&quot;&gt;&gt;
+                        &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                        &lt;&lt;set $sortie_package_chosen to &quot;breacher&quot;&gt;&gt;
+                        &lt;&lt;set $armory_gearup_done to true&gt;&gt;
+                        &lt;&lt;run setup.addItem(&quot;Remington 870&quot;, 1)&gt;&gt;
+                        &lt;&lt;run setup.addItem(&quot;Shotgun Shells&quot;, 12)&gt;&gt;
+                        &lt;&lt;if $equip.weapon == &quot;none&quot;&gt;&gt;
+                            &lt;&lt;set $equip.weapon to &quot;Remington 870&quot;&gt;&gt;
+                        &lt;&lt;/if&gt;&gt;
+                        &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[CQB SPECIALIST]&lt;/b&gt; Devastating close-quarters stopping power inside the convenience store. Perfect for Front Assault.&lt;/span&gt;
+                &lt;/button&gt;
+
+                &lt;!-- SORTIE PACKAGE 2: MARKSMAN (M4A1 CARBINE) --&gt;
+                &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
+                    &lt;&lt;link &quot;🎯 Requisition: Marksman Kit - M4A1 ASSAULT RIFLE + 60 ROUNDS 5.56MM&quot;&gt;&gt;
+                        &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                        &lt;&lt;set $sortie_package_chosen to &quot;marksman&quot;&gt;&gt;
+                        &lt;&lt;set $armory_gearup_done to true&gt;&gt;
+                        &lt;&lt;run setup.addItem(&quot;M4A1&quot;, 1)&gt;&gt;
+                        &lt;&lt;run setup.addItem(&quot;5.56mm Ammo&quot;, 60)&gt;&gt;
+                        &lt;&lt;if $equip.weapon == &quot;none&quot;&gt;&gt;
+                            &lt;&lt;set $equip.weapon to &quot;M4A1&quot;&gt;&gt;
+                        &lt;&lt;/if&gt;&gt;
+                        &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-blue);&quot;&gt;[RAPID ACCURACY]&lt;/b&gt; Military carbine with superior range and armor piercing. Shreds hostile lines.&lt;/span&gt;
+                &lt;/button&gt;
+
+                &lt;!-- SORTIE PACKAGE 3: INFILTRATOR (BOW &amp; COMBAT KNIFE) --&gt;
+                &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
+                    &lt;&lt;link &quot;🥷 Requisition: Silent Infiltrator Kit - COMPOUND BOW + COMBAT KNIFE&quot;&gt;&gt;
+                        &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                        &lt;&lt;set $sortie_package_chosen to &quot;infiltrator&quot;&gt;&gt;
+                        &lt;&lt;set $armory_gearup_done to true&gt;&gt;
+                        &lt;&lt;run setup.addItem(&quot;Compound Bow&quot;, 1)&gt;&gt;
+                        &lt;&lt;run setup.addItem(&quot;Arrows&quot;, 15)&gt;&gt;
+                        &lt;&lt;run setup.addItem(&quot;Combat Knife&quot;, 1)&gt;&gt;
+                        &lt;&lt;if $equip.weapon == &quot;none&quot;&gt;&gt;
+                            &lt;&lt;set $equip.weapon to &quot;Compound Bow&quot;&gt;&gt;
+                        &lt;&lt;/if&gt;&gt;
+                        &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[STEALTH AMBUSH]&lt;/b&gt; Silent takedown weapons with reusable ammunition. Ideal for the rear alley flank.&lt;/span&gt;
+                &lt;/button&gt;
+
+                &lt;!-- SORTIE PACKAGE 4: FIELD MEDIC (SUPPLIES) --&gt;
+                &lt;button style=&quot;border-left-color: var(--accent-green) !important;&quot;&gt;
+                    &lt;&lt;link &quot;💉 Requisition: Field Trauma Kit - 2 FIRST AID KITS, 3 BANDAGES, 1 ANTIBIOTICS&quot;&gt;&gt;
+                        &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                        &lt;&lt;set $sortie_package_chosen to &quot;medic&quot;&gt;&gt;
+                        &lt;&lt;set $armory_gearup_done to true&gt;&gt;
+                        &lt;&lt;run setup.addItem(&quot;First Aid Kit&quot;, 2)&gt;&gt;
+                        &lt;&lt;run setup.addItem(&quot;Bandage&quot;, 3)&gt;&gt;
+                        &lt;&lt;run setup.addItem(&quot;Antibiotics&quot;, 1)&gt;&gt;
+                        &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[SURVIVAL &amp; MEDICINE]&lt;/b&gt; Heavy emergency medical supplies to keep you, Reyes, and the squad alive under fire.&lt;/span&gt;
+                &lt;/button&gt;
+
+                &lt;div style=&quot;margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid #444; border-radius: 4px; text-align: center; color: #aaa; font-size: 0.88em; font-style: italic;&quot;&gt;
+                    🔒 &lt;b&gt;Rescue Vehicle Locked:&lt;/b&gt; Select one of the four authorized sortie kits above to complete your preparations and unlock the departure vehicle.
+                &lt;/div&gt;
+            &lt;&lt;else&gt;&gt;
+                &lt;!-- MOUNT UP WITH REYES (UNLOCKED ONLY AFTER PACKAGE IS CHOSEN) --&gt;
+                &lt;div style=&quot;margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;&quot;&gt;
+                    &lt;button style=&quot;border-left-color: var(--accent-green) !important; background: rgba(0, 100, 0, 0.35); font-size: 1.05em;&quot;&gt;
+                        &lt;&lt;link &quot;🚗 Mount up with Reyes in the Pickup &amp; Roll Out - ROUTE 9 RESCUE&quot;&gt;&gt;
+                            &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                            &lt;&lt;set $currentLocation to &quot;seven_eleven_outskirts&quot;&gt;&gt;
+                            &lt;&lt;addTime 15&gt;&gt;
+                            &lt;&lt;goto &quot;Act3_7Eleven_Arrival&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-green);&quot;&gt;[DEPLOY SORTIE]&lt;/b&gt; Fully locked, loaded, and equipped. Ride out to Route 9 with Reyes!&lt;/span&gt;
+                    &lt;/button&gt;
+
+                    &lt;button style=&quot;border-left-color: var(--accent-blue) !important; margin-top: 10px;&quot;&gt;
+                        &lt;&lt;link &quot;🏫 Step back into Ground Floor Corridor - HUB&quot;&gt;&gt;
+                            &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                            &lt;&lt;set $currentLocation to &quot;hall_g_east_2&quot;&gt;&gt;
+                            &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
+                        &lt;&lt;/link&gt;&gt;
+                        &lt;span class=&quot;btn-sub&quot;&gt;Check on other survivors or visit the infirmary before departing.&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;&lt;/if&gt;&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="14" name="Act3_Arrival" tags="" position="450,1400" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* =====================================================================
      ACT 3: ARRIVAL — INITIALIZATION &amp; STATE CHECK
      =====================================================================
@@ -7712,7 +7985,7 @@ window.preloadAssets = function(assetList) {
             &lt;/span&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="14" name="Act3_ArrivalSchool" tags="" position="500,1600" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="Act3_ArrivalSchool" tags="" position="500,1600" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* =====================================================================
    ACT 3: ARRIVAL — INITIALIZATION &amp; STATE SETUP
    ===================================================================== */
@@ -7961,7 +8234,7 @@ window.preloadAssets = function(assetList) {
 &lt;&lt;/if&gt;&gt;
 
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="Act3_Arrival_Observe" tags="" position="550,1400" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="16" name="Act3_Arrival_Observe" tags="" position="550,1400" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* =====================================================================
      ACT 3: ARRIVAL - OBSERVATION RESOLUTION
    ===================================================================== */
@@ -8148,7 +8421,7 @@ window.preloadAssets = function(assetList) {
             &lt;/span&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="16" name="Act3_Home" tags="" position="550,1500" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="Act3_Home" tags="" position="550,1500" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;if ndef $home_phase&gt;&gt;
     &lt;&lt;set $home_phase       to 1&gt;&gt;
     &lt;&lt;set $looted_kitchen   to false&gt;&gt;
@@ -9241,7 +9514,7 @@ window.preloadAssets = function(assetList) {
 
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="17" name="Act3_Meeting_Evelyn" tags="" position="750,1750" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="18" name="Act3_Meeting_Evelyn" tags="" position="750,1750" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;if ndef $firstName or $firstName == &quot;???&quot;&gt;&gt;
     &lt;&lt;set $firstName to &quot;Neal&quot;&gt;&gt;
     &lt;&lt;set $lastName to &quot;Sage&quot;&gt;&gt;
@@ -9343,9 +9616,9 @@ window.preloadAssets = function(assetList) {
                 &lt;&lt;else&gt;&gt;
                     She looks up from the maps, assessing you with keen veteran scrutiny.
                     &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Reyes. I see you brought our new arrival up. Good. We don&#39;t carry dead weight here, but I hear they proved themselves downstairs.&quot;&gt;&gt;
+                    &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Officer Reyes. You&#39;re back in one piece. And this is the survivor who brought you in?&quot;&gt;&gt;
                     &lt;br&gt;&lt;br&gt;
-                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Where&#39;s Commander Hayes, Evelyn? I thought he was handling intake debriefings.&quot;&gt;&gt;
+                    &lt;&lt;chat &quot;Reyes&quot; &quot;image/avatars/reyes.gif&quot; &quot;right&quot; &quot;Yes, ma&#39;am. Handled the road like a seasoned pro. We need to speak with Commander Hayes immediately.&quot;&gt;&gt;
                     &lt;br&gt;&lt;br&gt;
                     &lt;&lt;chat &quot;Matriarch Evelyn&quot; &quot;image/avatars/matriarch_evelyn.gif&quot; &quot;right&quot; &quot;Hayes isn&#39;t here, Reyes. He couldn&#39;t wait. He mobilized a strike team down Route 9.&quot;&gt;&gt;
                 &lt;&lt;/if&gt;&gt;
@@ -9396,13 +9669,13 @@ window.preloadAssets = function(assetList) {
 
         &lt;div class=&quot;choice-menu&quot;&gt;
             &lt;button style=&quot;border-left-color: var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);&quot;&gt;
-                &lt;&lt;link &quot;🚗 Depart with Reyes for the Route 9 7-Eleven [IMMEDIATE RESCUE]&quot;&gt;&gt;
+                &lt;&lt;link &quot;🔫 Proceed to Armory with Reyes to Gear Up - RESCUE PREP&quot;&gt;&gt;
                     &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
-                    &lt;&lt;set $currentLocation to &quot;seven_eleven_outskirts&quot;&gt;&gt;
-                    &lt;&lt;addTime 15&gt;&gt;
-                    &lt;&lt;goto &quot;Act3_7Eleven_Arrival&quot;&gt;&gt;
+                    &lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
+                    &lt;&lt;addTime 5&gt;&gt;
+                    &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
                 &lt;&lt;/link&gt;&gt;
-                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Ride out with Reyes to rescue the Sanctuary Leader from the overrun 7-Eleven.&lt;/span&gt;
+                &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Unseal your confiscated weapons, requisition heavy ordnance, and roll out to Route 9.&lt;/span&gt;
             &lt;/button&gt;
             &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
                 &lt;&lt;link &quot;🎒 Prepare your gear in the Hub before departing&quot;&gt;&gt;
@@ -9414,7 +9687,7 @@ window.preloadAssets = function(assetList) {
             &lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="Act3_School1Floor" tags="" position="700,1600" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="Act3_School1Floor" tags="" position="700,1600" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $inSafehouse to true&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 
@@ -9447,6 +9720,9 @@ window.preloadAssets = function(assetList) {
 &lt;&lt;run setup.sound.play(&quot;upper_ambience&quot;, &quot;audio/bgm/fluorescent_buzz.mp3&quot;, true, 0.3)&gt;&gt;
 
 /* Calculate NPC talk &amp; mission count for Reyes briefing unlock */
+&lt;&lt;set _npcsVisited to [visited(&quot;Act3_School_Canteen&quot;), visited(&quot;Act3_School_Infirmary&quot;), visited(&quot;Act3_School_RadioRoom&quot;), visited(&quot;Act3_School_Screening&quot;), visited(&quot;Act3_School_SecurityRoom&quot;), visited(&quot;Act3_School_Foyer&quot;)].filter(Boolean).length&gt;&gt;
+&lt;&lt;set _completedMissions to ($objectives ? $objectives.filter(function(o) { return o.status === &quot;completed&quot;; }).length : 0)&gt;&gt;
+&lt;&lt;set _reyesUnlocked to ($act3_reyes_unlocked or _npcsVisited &gt;= 4 or _completedMissions &gt;= 2 or $act3_reyes_triggered)&gt;&gt;
 &lt;&lt;set _missionsHelped to [$helped_sadie, $helped_thorne, $helped_chloe].filter(Boolean).length&gt;&gt;
 &lt;&lt;set _npcsVisited to [visited(&quot;Act3_School_Canteen&quot;), visited(&quot;Act3_School_Infirmary&quot;), visited(&quot;Act3_School_RadioRoom&quot;), visited(&quot;Act3_School_Screening&quot;), visited(&quot;Act3_School_SecurityRoom&quot;), visited(&quot;Act3_School_Foyer&quot;), $sadie_met, $thorne_met, $chloe_met].filter(Boolean).length&gt;&gt;
 &lt;&lt;set _reyesUnlocked to ($act3_reyes_unlocked or _missionsHelped &gt;= 2 or _npcsVisited &gt;= 4 or $act3_reyes_triggered)&gt;&gt;
@@ -9766,7 +10042,7 @@ setTimeout(function() {
         window.updateMapGlow(State.variables.currentLocation);
     }
 }, 150); /* 150ms delay ensures the passage is fully rendered before zooming */
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="19" name="Act3_School_Canteen" tags="" position="600,1700" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="20" name="Act3_School_Canteen" tags="" position="600,1700" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;canteen&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
@@ -9917,7 +10193,7 @@ setTimeout(function() {
             &lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="20" name="Act3_School_ComputerLab" tags="" position="1000,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="21" name="Act3_School_ComputerLab" tags="" position="1000,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;computer_lab&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
@@ -9947,7 +10223,7 @@ Desktop terminals glow in standby power mode.
         &lt;/div&gt;
 
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="21" name="Act3_School_DeptOffices" tags="" position="700,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="22" name="Act3_School_DeptOffices" tags="" position="700,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;dept_offices&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
@@ -9991,7 +10267,10 @@ Desktop terminals glow in standby power mode.
             &lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="22" name="Act3_School_Foyer" tags="" position="800,1700" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="23" name="Act3_School_Foyer" tags="" position="800,1700" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;if ndef $firstName or $firstName == &quot;???&quot;&gt;&gt;
+    &lt;&lt;set $firstName to &quot;Neal&quot;&gt;&gt;
+&lt;&lt;/if&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;security_foyer&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
@@ -10022,14 +10301,14 @@ Desktop terminals glow in standby power mode.
         &lt;div class=&quot;choice-menu&quot;&gt;
             &lt;&lt;if hasObjective(&quot;rescue_leader_711&quot;) and not isObjectiveCompleted(&quot;rescue_leader_711&quot;)&gt;&gt;
                 &lt;button style=&quot;border-left-color:var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);&quot;&gt;
-                    &lt;&lt;link &quot;🚗 Depart for Route 9 7-Eleven [RESCUE LEADER]&quot;&gt;&gt;
-                        &lt;&lt;goto &quot;Act3_7Eleven_Arrival&quot;&gt;&gt;
+                    &lt;&lt;link &quot;🔫 Proceed to Armory with Reyes to Gear Up - RESCUE PREP&quot;&gt;&gt;
+                        &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
                     &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Drive out with Reyes to rescue the Sanctuary Leader at the 7-Eleven.&lt;/span&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Unseal your weapons, requisition heavy ordnance, and roll out with Reyes.&lt;/span&gt;
                 &lt;/button&gt;
             &lt;&lt;/if&gt;&gt;
             &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
-                &lt;&lt;link &quot;➡️ Enter Screening Room [EAST]&quot;&gt;&gt;
+                &lt;&lt;link &quot;➡️ Enter Screening Room - EAST&quot;&gt;&gt;
                     &lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
                     &lt;&lt;goto &quot;Act3_School_Screening&quot;&gt;&gt;
                 &lt;&lt;/link&gt;&gt;
@@ -10044,7 +10323,7 @@ Desktop terminals glow in standby power mode.
             &lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="23" name="Act3_SchoolGFloor" tags="" position="600,1600" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="24" name="Act3_SchoolGFloor" tags="" position="600,1600" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $inSafehouse to true&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 
@@ -10092,10 +10371,11 @@ Desktop terminals glow in standby power mode.
                 &lt;&lt;if hasObjective(&quot;rescue_leader_711&quot;) and not isObjectiveCompleted(&quot;rescue_leader_711&quot;)&gt;&gt;
                     &lt;div style=&quot;margin-bottom:15px;&quot;&gt;
                         &lt;button style=&quot;border-left-color:var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);&quot;&gt;
-                            &lt;&lt;link &quot;🚗 Depart for Route 9 7-Eleven [RESCUE LEADER]&quot;&gt;&gt;
-                                &lt;&lt;goto &quot;Act3_7Eleven_Arrival&quot;&gt;&gt;
+                            &lt;&lt;link &quot;🔫 Proceed to Armory with Reyes to Gear Up - RESCUE PREP&quot;&gt;&gt;
+                                &lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
+                                &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
-                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Drive out with Reyes to rescue the Sanctuary Leader at the 7-Eleven.&lt;/span&gt;
+                            &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Unseal your weapons, requisition heavy ordnance, and roll out with Reyes.&lt;/span&gt;
                         &lt;/button&gt;
                     &lt;/div&gt;
                 &lt;&lt;/if&gt;&gt;
@@ -10103,82 +10383,82 @@ Desktop terminals glow in standby power mode.
                 &lt;!-- DYNAMIC ROOM ENTRY BUTTONS BASED ON CURRENT NODE --&gt;
                 &lt;div class=&quot;choice-menu&quot; style=&quot;margin-bottom:20px;&quot;&gt;
 
-                    /* SQUARE 1: CANTEEN JUNCTION (FAR LEFT) */
+                    &lt;!-- SQUARE 1: CANTEEN JUNCTION (FAR LEFT) --&gt;
                     &lt;&lt;if $currentLocation == &quot;hall_g_west_2&quot;&gt;&gt;
                         &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-                            &lt;&lt;link &quot;🍔 ENTER CANTEEN [WEST]&quot;&gt;&gt;
+                            &lt;&lt;link &quot;🍔 ENTER CANTEEN - WEST&quot;&gt;&gt;
                                 &lt;&lt;goto &quot;Act3_School_Canteen&quot;&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
                             &lt;span class=&quot;btn-sub&quot;&gt;Sadie&#39;s ration prep line.&lt;/span&gt;
                         &lt;/button&gt;
                         &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-                            &lt;&lt;link &quot;🥫 ENTER FOOD PANTRY [SOUTH]&quot;&gt;&gt;
+                            &lt;&lt;link &quot;🥫 ENTER FOOD PANTRY - SOUTH&quot;&gt;&gt;
                                 &lt;&lt;goto &quot;Act3_School_Pantry&quot;&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
                             &lt;span class=&quot;btn-sub&quot;&gt;Ration storage crates behind the canteen.&lt;/span&gt;
                         &lt;/button&gt;
 
-                    /* SQUARE 2: SECURITY ROOM / WEST STAIRS JUNCTION (LEFT-CENTER) */
+                    &lt;!-- SQUARE 2: SECURITY ROOM / WEST STAIRS JUNCTION (LEFT-CENTER) --&gt;
                     &lt;&lt;elseif $currentLocation == &quot;hall_g_west_1&quot;&gt;&gt;
                         &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-                            &lt;&lt;link &quot;🛡️ ENTER SECURITY GUARD ROOM [SOUTH]&quot;&gt;&gt;
+                            &lt;&lt;link &quot;🛡️ ENTER SECURITY GUARD ROOM - SOUTH&quot;&gt;&gt;
                                 &lt;&lt;goto &quot;Act3_School_SecurityRoom&quot;&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
                             &lt;span class=&quot;btn-sub&quot;&gt;Camera monitors and security feeds.&lt;/span&gt;
                         &lt;/button&gt;
 
-                    /* SQUARE 3: CENTRAL JUNCTION (CENTER) */
+                    &lt;!-- SQUARE 3: CENTRAL JUNCTION (CENTER) --&gt;
                     &lt;&lt;elseif $currentLocation == &quot;hall_g_center&quot;&gt;&gt;
                         &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-                            &lt;&lt;link &quot;🚪 ENTER MAIN SECURITY FOYER [SOUTH]&quot;&gt;&gt;
+                            &lt;&lt;link &quot;🚪 ENTER MAIN SECURITY FOYER - SOUTH&quot;&gt;&gt;
                                 &lt;&lt;goto &quot;Act3_School_Foyer&quot;&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
                             &lt;span class=&quot;btn-sub&quot;&gt;Main Entrance / Refugee Intake Area.&lt;/span&gt;
                         &lt;/button&gt;
 
-                    /* SQUARE 4: SCREENING / EAST STAIRS JUNCTION (RIGHT-CENTER) */
+                    &lt;!-- SQUARE 4: SCREENING / EAST STAIRS JUNCTION (RIGHT-CENTER) --&gt;
                     &lt;&lt;elseif $currentLocation == &quot;hall_g_east_2&quot;&gt;&gt;
                         &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-                            &lt;&lt;link &quot;📋 ENTER SCREENING ROOM [SOUTH]&quot;&gt;&gt;
+                            &lt;&lt;link &quot;📋 ENTER SCREENING ROOM - SOUTH&quot;&gt;&gt;
                                 &lt;&lt;goto &quot;Act3_School_Screening&quot;&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
                             &lt;span class=&quot;btn-sub&quot;&gt;Sgt. Vance&#39;s inspection &amp; weapons desk.&lt;/span&gt;
                         &lt;/button&gt;
 
-                    /* SQUARE 5: INFIRMARY JUNCTION (FAR RIGHT) */
+                    &lt;!-- SQUARE 5: INFIRMARY JUNCTION (FAR RIGHT) --&gt;
                     &lt;&lt;elseif $currentLocation == &quot;hall_g_east_1&quot;&gt;&gt;
                         &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-                            &lt;&lt;link &quot;🏥 ENTER EMERGENCY INFIRMARY [EAST]&quot;&gt;&gt;
+                            &lt;&lt;link &quot;🏥 ENTER EMERGENCY INFIRMARY - EAST&quot;&gt;&gt;
                                 &lt;&lt;goto &quot;Act3_School_Infirmary&quot;&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
                             &lt;span class=&quot;btn-sub&quot;&gt;Dr. Thorne&#39;s triage ward.&lt;/span&gt;
                         &lt;/button&gt;
 
-                    /* SQUARE 6: CLASSROOMS 101/102 CORRIDOR (WEST UPPER) */
+                    &lt;!-- SQUARE 6: CLASSROOMS 101/102 CORRIDOR (WEST UPPER) --&gt;
                     &lt;&lt;elseif $currentLocation == &quot;hall_g_west_3&quot;&gt;&gt;
                         &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-                            &lt;&lt;link &quot;🚪 ENTER CLASSROOM 101 [WEST]&quot;&gt;&gt;
+                            &lt;&lt;link &quot;🚪 ENTER CLASSROOM 101 - WEST&quot;&gt;&gt;
                                 &lt;&lt;goto &quot;Act3_School_Room101&quot;&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
                             &lt;span class=&quot;btn-sub&quot;&gt;Refugee sleeping quarters.&lt;/span&gt;
                         &lt;/button&gt;
                         &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-                            &lt;&lt;link &quot;🚪 ENTER CLASSROOM 102 [NORTH-WEST]&quot;&gt;&gt;
+                            &lt;&lt;link &quot;🚪 ENTER CLASSROOM 102 - NORTH-WEST&quot;&gt;&gt;
                                 &lt;&lt;goto &quot;Act3_School_Room102&quot;&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
                             &lt;span class=&quot;btn-sub&quot;&gt;Temporary medical overflow / sleeping cots.&lt;/span&gt;
                         &lt;/button&gt;
 
-                    /* SQUARE 8: LOCKER ROOM CORRIDOR (EAST UPPER) */
+                    &lt;!-- SQUARE 8: LOCKER ROOM CORRIDOR (EAST UPPER) --&gt;
                     &lt;&lt;elseif $currentLocation == &quot;hall_g_east_3&quot;&gt;&gt;
                         &lt;button style=&quot;border-left-color:var(--accent-blue) !important;&quot;&gt;
-                            &lt;&lt;link &quot;🔒 ENTER ATHLETIC LOCKER ROOM [EAST]&quot;&gt;&gt;
+                            &lt;&lt;link &quot;🔒 ENTER ATHLETIC LOCKER ROOM - EAST&quot;&gt;&gt;
                                 &lt;&lt;goto &quot;Act3_School_LockerRoom&quot;&gt;&gt;
                             &lt;&lt;/link&gt;&gt;
                             &lt;span class=&quot;btn-sub&quot;&gt;Personal lockers and duffel storage.&lt;/span&gt;
                         &lt;/button&gt;
 
-                    /* FALLBACK SAFETY */
+                    &lt;!-- FALLBACK SAFETY --&gt;
                     &lt;&lt;else&gt;&gt;
                         &lt;button style=&quot;border-left-color: var(--accent-gold) !important;&quot;&gt;
                             &lt;&lt;link &quot;🔄 Return to Central Junction&quot;&gt;&gt;
@@ -10358,7 +10638,7 @@ setTimeout(function() {
         window.updateMapGlow(State.variables.currentLocation);
     }
 }, 150); /* 150ms delay ensures the passage is fully rendered before zooming */
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="24" name="Act3_School_Headmaster" tags="" position="600,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="25" name="Act3_School_Headmaster" tags="" position="600,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;if ndef $firstName or $firstName == &quot;???&quot;&gt;&gt;
     &lt;&lt;set $firstName to &quot;Neal&quot;&gt;&gt;
     &lt;&lt;set $lastName to &quot;Sage&quot;&gt;&gt;
@@ -10442,18 +10722,18 @@ setTimeout(function() {
         &lt;div class=&quot;choice-menu&quot;&gt;
             &lt;&lt;if not isObjectiveCompleted(&quot;rescue_leader_711&quot;)&gt;&gt;
                 &lt;button style=&quot;border-left-color: var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);&quot;&gt;
-                    &lt;&lt;link &quot;🚗 Depart with Reyes for Route 9 7-Eleven [RESCUE LEADER]&quot;&gt;&gt;
+                    &lt;&lt;link &quot;🔫 Proceed to Armory with Reyes to Gear Up - RESCUE PREP&quot;&gt;&gt;
                         &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
-                        &lt;&lt;set $currentLocation to &quot;seven_eleven_outskirts&quot;&gt;&gt;
-                        &lt;&lt;addTime 15&gt;&gt;
-                        &lt;&lt;goto &quot;Act3_7Eleven_Arrival&quot;&gt;&gt;
+                        &lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
+                        &lt;&lt;addTime 5&gt;&gt;
+                        &lt;&lt;goto &quot;Act3_Armory_GearUp&quot;&gt;&gt;
                     &lt;&lt;/link&gt;&gt;
-                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Ride out with Reyes to rescue the Sanctuary Leader from the 7-Eleven.&lt;/span&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-red);&quot;&gt;[ACTIVE RESCUE]&lt;/b&gt; Unseal your confiscated weapons, requisition heavy ordnance, and roll out to Route 9.&lt;/span&gt;
                 &lt;/button&gt;
             &lt;&lt;/if&gt;&gt;
 
             &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
-                &lt;&lt;link &quot;🚪 Exit Headmaster&#39;s Office to Hallway [NORTH]&quot;&gt;&gt;
+                &lt;&lt;link &quot;🚪 Exit Headmaster&#39;s Office to Hallway - NORTH&quot;&gt;&gt;
                     &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
                     &lt;&lt;set $currentLocation to &quot;hall_1_center&quot;&gt;&gt;
                     &lt;&lt;goto &quot;Act3_School1Floor&quot;&gt;&gt;
@@ -10464,7 +10744,7 @@ setTimeout(function() {
     &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="25" name="Act3_School_Infirmary" tags="" position="700,1700" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="26" name="Act3_School_Infirmary" tags="" position="700,1700" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;infirmary&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
@@ -10762,7 +11042,7 @@ setTimeout(function() {
             &lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="26" name="Act3_School_Library" tags="" position="900,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="27" name="Act3_School_Library" tags="" position="900,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;library&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
@@ -10826,7 +11106,7 @@ setTimeout(function() {
             &lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="27" name="Act3_School_LockerRoom" tags="" position="800,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="28" name="Act3_School_LockerRoom" tags="" position="800,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;locker_room&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
@@ -10886,7 +11166,7 @@ setTimeout(function() {
             &lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="28" name="Act3_School_MEP" tags="" position="900,1700" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="29" name="Act3_School_MEP" tags="" position="900,1700" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;mep_space&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
@@ -10939,7 +11219,7 @@ setTimeout(function() {
             &lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="29" name="Act3_School_Pantry" tags="" position="600,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="30" name="Act3_School_Pantry" tags="" position="600,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;pantry&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
@@ -10986,7 +11266,7 @@ setTimeout(function() {
         &lt;/div&gt;
 
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="30" name="Act3_School_RadioRoom" tags="" position="800,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="31" name="Act3_School_RadioRoom" tags="" position="800,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;radio_room&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
@@ -11123,7 +11403,7 @@ setTimeout(function() {
             &lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="31" name="Act3_School_RoofAccess" tags="" position="1400,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="32" name="Act3_School_RoofAccess" tags="" position="1400,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;roof_access&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
@@ -11153,7 +11433,7 @@ Heavy steel door leading out to the rooftop sniper overlook post.
         &lt;/div&gt;
 
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="32" name="Act3_School_Room101" tags="" position="900,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="33" name="Act3_School_Room101" tags="" position="900,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;room_101&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
@@ -11183,7 +11463,7 @@ Desks have been pushed aside to make room for sleeping bags. Refugees rest quiet
         &lt;/div&gt;
 
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="33" name="Act3_School_Room102" tags="" position="1000,1700" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="34" name="Act3_School_Room102" tags="" position="1000,1700" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;room_102&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
@@ -11213,7 +11493,7 @@ Overflow sleeping cots line the room. A few exhausted city survivors sit togethe
         &lt;/div&gt;
 
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="34" name="Act3_School_Room201" tags="" position="1200,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="35" name="Act3_School_Room201" tags="" position="1200,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;room_201&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
@@ -11243,7 +11523,7 @@ Classroom converted to ammunition and equipment storage.
         &lt;/div&gt;
 
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="35" name="Act3_School_Room202" tags="" position="1300,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="36" name="Act3_School_Room202" tags="" position="1300,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;room_202&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
@@ -11273,7 +11553,7 @@ Off-duty guard sleeping quarter.
         &lt;/div&gt;
 
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="36" name="Act3_School_Screening" tags="" position="700,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="37" name="Act3_School_Screening" tags="" position="700,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;screening&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;set _arrivedLate to (visited(&quot;Act2_5_MarcusCabin&quot;))&gt;&gt;
@@ -11301,15 +11581,26 @@ Off-duty guard sleeping quarter.
             &lt;/span&gt;
         &lt;/div&gt;
         &lt;div class=&quot;choice-menu&quot;&gt;
+            &lt;&lt;if def $sanctuary_chest and $sanctuary_chest.length &gt; 0&gt;&gt;
+                &lt;button style=&quot;border-left-color: var(--accent-gold) !important; background: rgba(80, 60, 0, 0.3); margin-bottom: 12px;&quot;&gt;
+                    &lt;&lt;link &quot;📦 Retrieve Stashed Items from Sanctuary Locker - ITEM BOX&quot;&gt;&gt;
+                        &lt;&lt;run $(&quot;.vn-dialogue-box&quot;).scrollTop(0)&gt;&gt;
+                        &lt;&lt;run $inventory.push(...$sanctuary_chest)&gt;&gt;
+                        &lt;&lt;set $sanctuary_chest to []&gt;&gt;
+                        &lt;&lt;goto &quot;Act3_School_Screening&quot;&gt;&gt;
+                    &lt;&lt;/link&gt;&gt;
+                    &lt;span class=&quot;btn-sub&quot;&gt;&lt;b style=&quot;color:var(--accent-gold);&quot;&gt;[ITEM BOX]&lt;/b&gt; Take back all items stored in Vance&#39;s base lockbox.&lt;/span&gt;
+                &lt;/button&gt;
+            &lt;&lt;/if&gt;&gt;
             &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
-                &lt;&lt;link &quot;🚪 Exit Screening to Foyer [WEST]&quot;&gt;&gt;
+                &lt;&lt;link &quot;🚪 Exit Screening to Foyer - WEST&quot;&gt;&gt;
                     &lt;&lt;set $currentLocation to &quot;security_foyer&quot;&gt;&gt;
                     &lt;&lt;goto &quot;Act3_School_Foyer&quot;&gt;&gt;
                 &lt;&lt;/link&gt;&gt;
                 &lt;span class=&quot;btn-sub&quot;&gt;Walk straight into the Main Security Foyer.&lt;/span&gt;
             &lt;/button&gt;
             &lt;button style=&quot;border-left-color: var(--accent-blue) !important;&quot;&gt;
-                &lt;&lt;link &quot;⬆️ Exit Screening to East Hallway [NORTH]&quot;&gt;&gt;
+                &lt;&lt;link &quot;⬆️ Exit Screening to East Hallway - NORTH&quot;&gt;&gt;
                     &lt;&lt;set $currentLocation to &quot;hall_g_east_2&quot;&gt;&gt;
                     &lt;&lt;goto &quot;Act3_SchoolGFloor&quot;&gt;&gt;
                 &lt;&lt;/link&gt;&gt;
@@ -11317,7 +11608,7 @@ Off-duty guard sleeping quarter.
             &lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="37" name="Act3_School_SecurityRoom" tags="" position="1000,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="38" name="Act3_School_SecurityRoom" tags="" position="1000,1800" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;security_room&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool Ground&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
@@ -11347,7 +11638,7 @@ Monitors display flickering static feeds from exterior cameras mounted along the
         &lt;/div&gt;
 
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="38" name="Act3_School_ServerRoom" tags="" position="1100,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="39" name="Act3_School_ServerRoom" tags="" position="1100,1900" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $currentLocation to &quot;server_room&quot;&gt;&gt;
 &lt;&lt;set $activeMap to &quot;Highschool 1st Floor&quot;&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
@@ -11377,7 +11668,7 @@ Server racks hum loudly in the air-conditioned enclosure.
         &lt;/div&gt;
 
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="39" name="Act3_Sheriff" tags="" position="450,1500" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="40" name="Act3_Sheriff" tags="" position="450,1500" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;if ndef $sheriff_phase&gt;&gt;
     &lt;&lt;set $sheriff_phase    to 1&gt;&gt;
     &lt;&lt;set $looted_booking   to false&gt;&gt;
@@ -12350,7 +12641,7 @@ Server racks hum loudly in the air-conditioned enclosure.
 
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="40" name="Create_FirstName" tags="" position="700,0" size="100,100">&lt;center&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="41" name="Create_FirstName" tags="" position="700,0" size="100,100">&lt;center&gt;
 &lt;h1&gt;IDENTITY: FIRST NAME&lt;/h1&gt;
 &lt;i&gt;&quot;What was your given name before the world fell silent?&quot;&lt;/i&gt;
 &lt;br&gt;&lt;br&gt;
@@ -12401,7 +12692,7 @@ Server racks hum loudly in the air-conditioned enclosure.
         &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
 &lt;/div&gt;
-&lt;/center&gt;</tw-passagedata><tw-passagedata pid="41" name="Create_Gender" tags="" position="600,0" size="100,100">&lt;&lt;script&gt;&gt;
+&lt;/center&gt;</tw-passagedata><tw-passagedata pid="42" name="Create_Gender" tags="" position="600,0" size="100,100">&lt;&lt;script&gt;&gt;
     setup.sound.stop(&quot;static&quot;);
     setup.sound.stop(&quot;siren&quot;);
 
@@ -12441,7 +12732,7 @@ Server racks hum loudly in the air-conditioned enclosure.
         &lt;&lt;goto &quot;Create_FirstName&quot;&gt;&gt; 
     &lt;&lt;/button&gt;&gt;
 &lt;/div&gt;
-&lt;/center&gt;</tw-passagedata><tw-passagedata pid="42" name="Create_LastName" tags="" position="800,0" size="100,100">&lt;center&gt;
+&lt;/center&gt;</tw-passagedata><tw-passagedata pid="43" name="Create_LastName" tags="" position="800,0" size="100,100">&lt;center&gt;
 &lt;h1&gt;IDENTITY: LAST NAME&lt;/h1&gt;
 &lt;i&gt;&quot;A name to carry through the chaos, or to be forgotten in a shallow grave.&quot;&lt;/i&gt;
 &lt;br&gt;&lt;br&gt;
@@ -12472,7 +12763,7 @@ Server racks hum loudly in the air-conditioned enclosure.
         &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
 &lt;/div&gt;
-&lt;/center&gt;</tw-passagedata><tw-passagedata pid="43" name="Debug_Combat" tags="" position="1425,0" size="100,100">&lt;center&gt;&lt;h1&gt;⚠️ COMBAT TEST ZONE&lt;/h1&gt;&lt;/center&gt;
+&lt;/center&gt;</tw-passagedata><tw-passagedata pid="44" name="Debug_Combat" tags="" position="1425,0" size="100,100">&lt;center&gt;&lt;h1&gt;⚠️ COMBAT TEST ZONE&lt;/h1&gt;&lt;/center&gt;
 
 &lt;div style=&quot;text-align:center; margin-bottom: 20px;&quot;&gt;
     &lt;&lt;if $horde.length &gt; 0&gt;&gt;
@@ -12516,7 +12807,7 @@ Server racks hum loudly in the air-conditioned enclosure.
 
 &lt;/div&gt;
 &lt;br&gt;
-&lt;center&gt;&lt;small&gt;&lt;i&gt;Note: Shotguns/SMGs will automatically hit targets other than Index 0.&lt;/i&gt;&lt;/small&gt;&lt;/center&gt;</tw-passagedata><tw-passagedata pid="44" name="Debug_Panel" tags="" position="875,425" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;center&gt;&lt;small&gt;&lt;i&gt;Note: Shotguns/SMGs will automatically hit targets other than Index 0.&lt;/i&gt;&lt;/small&gt;&lt;/center&gt;</tw-passagedata><tw-passagedata pid="45" name="Debug_Panel" tags="" position="875,425" size="100,100">&lt;&lt;nobr&gt;&gt;
     &lt;&lt;set $returnPassage to previous()&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 
@@ -13861,8 +14152,12 @@ Server racks hum loudly in the air-conditioned enclosure.
                     &lt;button class=&quot;db go&quot; id=&quot;nav-act3-arrival&quot;&gt;Act 3: Outskirts Arrival&lt;/button&gt;
                     &lt;button class=&quot;db go&quot; id=&quot;nav-act3-sheriff&quot;&gt;Substation 4&lt;/button&gt;
                     &lt;button class=&quot;db go&quot; id=&quot;nav-act3-home&quot;&gt;Suburban Home&lt;/button&gt;
-                    &lt;button class=&quot;db go&quot; id=&quot;nav-act3-safe&quot;&gt;High School Gates&lt;/button&gt;
-                    &lt;button class=&quot;db go&quot; id=&quot;nav-act3-hub&quot; style=&quot;border-color:var(--accent-gold); color:var(--accent-gold);&quot;&gt;Act 3: Ground Floor Hub&lt;/button&gt;
+                    &lt;button class=&quot;db go&quot; id=&quot;nav-act3-hub&quot; style=&quot;border-color:var(--accent-gold); color:var(--accent-gold);&quot;&gt;Ground Floor Corridor&lt;/button&gt;
+                    &lt;button class=&quot;db go&quot; id=&quot;nav-act3-hub1&quot; style=&quot;border-color:var(--accent-blue); color:var(--accent-blue);&quot;&gt;1st Floor Corridor&lt;/button&gt;
+                    &lt;button class=&quot;db go&quot; id=&quot;nav-act3-headmaster&quot;&gt;Headmaster&#39;s Office&lt;/button&gt;
+                    &lt;button class=&quot;db go&quot; id=&quot;nav-act3-meeting&quot; style=&quot;border-color:var(--accent-red); color:var(--accent-red);&quot;&gt;Command Briefing (Evelyn)&lt;/button&gt;
+                    &lt;button class=&quot;db go&quot; id=&quot;nav-act3-gearup&quot; style=&quot;border-color:var(--accent-gold); color:var(--accent-gold);&quot;&gt;Armory Gear-Up (Vance)&lt;/button&gt;
+                    &lt;button class=&quot;db go&quot; id=&quot;nav-act3-7eleven&quot;&gt;Route 9 7-Eleven&lt;/button&gt;
                 &lt;/div&gt;
 
                 &lt;div class=&quot;dsep&quot;&gt;&lt;/div&gt;
@@ -13880,7 +14175,7 @@ Server racks hum loudly in the air-conditioned enclosure.
     if (typeof window.initDebugPanel === &#39;function&#39;) {
         window.initDebugPanel(); 
     }
-}, 50)&gt;&gt;</tw-passagedata><tw-passagedata pid="45" name="Debug_Room" tags="" position="1300,0" size="100,100">DEBUG / CHEAT ROOM - WITH PERK SWAPPER
+}, 50)&gt;&gt;</tw-passagedata><tw-passagedata pid="46" name="Debug_Room" tags="" position="1300,0" size="100,100">DEBUG / CHEAT ROOM - WITH PERK SWAPPER
    ================================================================= */
 
 /* 1. FORCE GAME STATE VARIABLES */
@@ -14181,7 +14476,7 @@ Server racks hum loudly in the air-conditioned enclosure.
 
 &lt;center&gt;
     &lt;span style=&quot;color:#f1c40f; font-size:0.8em;&quot;&gt;⬇ CHECK FLOOR ITEMS BELOW ⬇&lt;/span&gt;
-&lt;/center&gt;</tw-passagedata><tw-passagedata pid="46" name="Disclaimer" tags="splash-screen" position="725,600" size="100,100">&lt;div class=&quot;disclaimer-container&quot; id=&quot;disclaimer-click-zone&quot;&gt;
+&lt;/center&gt;</tw-passagedata><tw-passagedata pid="47" name="Disclaimer" tags="splash-screen" position="850,600" size="100,100">&lt;div class=&quot;disclaimer-container&quot; id=&quot;disclaimer-click-zone&quot;&gt;
     
     &lt;div class=&quot;disclaimer-header&quot;&gt;CONTENT WARNING&lt;/div&gt;
     
@@ -14206,7 +14501,7 @@ Server racks hum loudly in the air-conditioned enclosure.
             Engine.play(&quot;Title&quot;); 
         });
     }, 500); 
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="47" name="Floor2_Hallway" tags="" position="300,800" size="100,100">&lt;&lt;set $activeMap to &quot;2F Hallway&quot;&gt;&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="48" name="Floor2_Hallway" tags="" position="300,800" size="100,100">&lt;&lt;set $activeMap to &quot;2F Hallway&quot;&gt;&gt;
 
 &lt;!-- ======================================================= --&gt;
 &lt;!-- 0. INITIALIZATION &amp; SETUP                               --&gt;
@@ -14860,7 +15155,7 @@ Server racks hum loudly in the air-conditioned enclosure.
 
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="48" name="Hallway" tags="" position="150,500" size="200,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="49" name="Hallway" tags="" position="150,500" size="200,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $droneFile to &quot;audio/bgm/hallway_drone.mp3&quot;&gt;&gt;
 
 &lt;&lt;set $ambientSounds to[
@@ -15043,7 +15338,7 @@ setTimeout(function() {
 
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="49" name="Help_Menu" tags="" position="0,200" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="50" name="Help_Menu" tags="" position="0,200" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;div style=&quot;font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; line-height: 1.2; padding: 10px;&quot;&gt;
 
     &lt;!-- SECTION 1 --&gt;
@@ -15078,7 +15373,7 @@ setTimeout(function() {
     &lt;/div&gt;
 
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="50" name="JobSelection" tags="" position="900,0" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="51" name="JobSelection" tags="" position="900,0" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;center&gt;
     &lt;h1&gt;SURVIVOR IDENTITY&lt;/h1&gt;
     &lt;div style=&quot;color:#888; font-style:italic; margin-bottom: 20px;&quot;&gt;
@@ -15242,7 +15537,7 @@ setTimeout(function() {
     &lt;/div&gt;
 
 &lt;/div&gt; &lt;!-- END job-grid --&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="51" name="Lobby_Entrance" tags="" position="400,800" size="100,100">&lt;&lt;set $activeMap to &quot;The Ascott Grand&#39;s Lobby&quot;&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="52" name="Lobby_Entrance" tags="" position="400,800" size="100,100">&lt;&lt;set $activeMap to &quot;The Ascott Grand&#39;s Lobby&quot;&gt;&gt;
 
 &lt;&lt;nobr&gt;&gt;
 
@@ -16627,7 +16922,7 @@ setTimeout(function() {
 
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="52" name="NextHobbyStep" tags="" position="1000,100" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="53" name="NextHobbyStep" tags="" position="1000,100" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;if $hobbyStep == 1&gt;&gt;
     &lt;&lt;set $hobbyStep to 2&gt;&gt;
     &lt;&lt;goto &quot;SelectHobby&quot;&gt;&gt;
@@ -16637,7 +16932,7 @@ setTimeout(function() {
 &lt;&lt;else&gt;&gt;
     &lt;&lt;goto &quot;Prologue&quot;&gt;&gt;
 &lt;&lt;/if&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="53" name="PDA_Overlay" tags="" position="700,425" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="54" name="PDA_Overlay" tags="" position="700,425" size="100,100">&lt;&lt;nobr&gt;&gt;
 
 &lt;!-- WRAP THE TABS IN A STICKY CONTAINER --&gt;
 &lt;div class=&quot;sticky-pda-tabs&quot;&gt;
@@ -16724,7 +17019,7 @@ setTimeout(function() {
     &lt;/button&gt;
 &lt;/div&gt;
 
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="54" name="PassageFooter" tags="" position="0,100" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="55" name="PassageFooter" tags="" position="0,100" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* =================================================================
    DYNAMIC FLOOR LOOT UI - SLIDING DRAWER OVERLAY
 ================================================================= */
@@ -16785,7 +17080,7 @@ setTimeout(function() {
     &lt;/div&gt; /* End floor-items-drawer */
 
 &lt;&lt;/if&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="55" name="PassageHeader" tags="" position="200,100" size="100,100">&lt;!-- This renders automatically at the top of every passage --&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="56" name="PassageHeader" tags="" position="200,100" size="100,100">&lt;!-- This renders automatically at the top of every passage --&gt;
 &lt;&lt;if not tags().includes(&quot;title-screen&quot;) and not tags().includes(&quot;splash-screen&quot;)&gt;&gt;
 &lt;div id=&quot;top-hud&quot;&gt;
     
@@ -16855,7 +17150,7 @@ setTimeout(function() {
     &lt;/div&gt;
 
 &lt;/div&gt;
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="56" name="PassageReady" tags="PassageReady" position="100,100" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="57" name="PassageReady" tags="PassageReady" position="100,100" size="100,100">&lt;&lt;nobr&gt;&gt;
 
 /* ====================================================================================
    MODULE 1: PASSIVE SURVIVAL DECAY (The Struggle)
@@ -16918,7 +17213,7 @@ setTimeout(function() {
 	&lt;&lt;addTime 1&gt;&gt;                                   /* Automatically add 1 minute per passage */
 &lt;&lt;/if&gt;&gt;
 
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="57" name="Prologue" tags="" position="200,300" size="100,100">&lt;&lt;set $inCharCreation to false&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="58" name="Prologue" tags="" position="200,300" size="100,100">&lt;&lt;set $inCharCreation to false&gt;&gt;
 &lt;&lt;set $stamina to $stamina_max&gt;&gt;
 &lt;&lt;set $hp to $hp_max&gt;&gt;
 &lt;&lt;set $hubStep to 1&gt;&gt;
@@ -17075,7 +17370,7 @@ setTimeout(function() {
             &lt;&lt;/link&gt;&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="58" name="Prologue_Hacking" tags="" position="300,400" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="59" name="Prologue_Hacking" tags="" position="300,400" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;div class=&quot;vn-container&quot;&gt;
     &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: center; align-items: center; max-height: 100vh !important; padding: 20px;&quot;&gt;
         
@@ -17201,7 +17496,7 @@ setTimeout(function() {
     }
 
     setTimeout(scrambleLine, 500);
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="59" name="Prologue_Menu" tags="" position="500,100" size="100,100">&lt;hr style=&quot;border-color: #333; margin: 0 0 15px 0;&quot;&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="60" name="Prologue_Menu" tags="" position="500,100" size="100,100">&lt;hr style=&quot;border-color: #333; margin: 0 0 15px 0;&quot;&gt;
 &lt;div class=&quot;choice-menu&quot;&gt;
     &lt;&lt;if !$hasPacked&gt;&gt;
         &lt;button&gt;
@@ -17295,7 +17590,7 @@ setTimeout(function() {
             &lt;span class=&quot;btn-sub&quot; style=&quot;color: #ff9999;&quot;&gt;Exit to the 4th Floor Hallway. Ready your weapon. There is no turning back.&lt;/span&gt;
         &lt;/button&gt;
     &lt;&lt;/if&gt;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="60" name="Prologue_Phone" tags="" position="100,400" size="100,100">&lt;div class=&quot;vn-container&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="61" name="Prologue_Phone" tags="" position="100,400" size="100,100">&lt;div class=&quot;vn-container&quot;&gt;
     &lt;div class=&quot;vn-dialogue-box&quot; style=&quot;justify-content: center; align-items: center; max-height: 100vh !important; padding: 20px;&quot;&gt;
         
         &lt;!-- NARRATIVE INTRO --&gt;
@@ -17398,7 +17693,7 @@ setTimeout(function() {
         &lt;/div&gt;
 
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="61" name="Prologue_Radio" tags="" position="200,400" size="100,100">&lt;div class=&quot;vn-container&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="62" name="Prologue_Radio" tags="" position="200,400" size="100,100">&lt;div class=&quot;vn-container&quot;&gt;
     &lt;&lt;script&gt;&gt;
         /* Memutar audio radio secara otomatis saat layar dimuat */
         setup.sound.play(&quot;police_radio&quot;, &quot;audio/sfx/police_radio.mp3&quot;, false, 0.9);
@@ -17475,7 +17770,7 @@ setTimeout(function() {
         &lt;/div&gt;
 
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="62" name="Prologue_WakeUp" tags="" position="500,0" size="100,100">&lt;&lt;set $inventory to []&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="63" name="Prologue_WakeUp" tags="" position="500,0" size="100,100">&lt;&lt;set $inventory to []&gt;&gt;
 &lt;&lt;set $gameClockActive to false&gt;&gt; /* Time is frozen during intro */
 &lt;&lt;set $step to 1&gt;&gt;
 
@@ -17563,7 +17858,7 @@ setTimeout(function() {
 /* Kick off the first line of text once the passage is fully rendered to the screen */
 &lt;&lt;done&gt;&gt;
     &lt;&lt;run VNEngine.startTypewriter(&quot;It was supposed to be a quiet Saturday night. You remember the warmth of the couch, the hum of the heater, and drifting off to the dull murmur of a late-night talk show.&quot;, 25)&gt;&gt;
-&lt;&lt;/done&gt;&gt;</tw-passagedata><tw-passagedata pid="63" name="SelectHobby" tags="" position="900,100" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/done&gt;&gt;</tw-passagedata><tw-passagedata pid="64" name="SelectHobby" tags="" position="900,100" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $hp to Math.min($hp, $hp_max)&gt;&gt;
 &lt;&lt;set $stamina to Math.min($stamina, $stamina_max)&gt;&gt;
 
@@ -18096,7 +18391,7 @@ setTimeout(function() {
 &lt;&lt;/if&gt;&gt;
 
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="64" name="Settings_Menu" tags="" position="200,200" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="65" name="Settings_Menu" tags="" position="200,200" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;div style=&quot;font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; padding: 10px;&quot;&gt;
     /* ============================================================
        SECTION 1: TEXT SIZE SETTINGS
@@ -18152,7 +18447,7 @@ setTimeout(function() {
 
 &lt;/div&gt;
 
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="65" name="Stairwell" tags="" position="200,700" size="100,100">&lt;&lt;completeObjective &quot;escape_building&quot;&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="66" name="Stairwell" tags="" position="200,700" size="100,100">&lt;&lt;completeObjective &quot;escape_building&quot;&gt;&gt;
 &lt;&lt;purgeCompleted&gt;&gt;
 
 &lt;!-- ======================================================= --&gt;
@@ -18508,7 +18803,7 @@ setTimeout(function() {
         &lt;&lt;/if&gt;&gt;
 
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="66" name="StoryCaption" tags="" position="100,0" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="67" name="StoryCaption" tags="" position="100,0" size="100,100">&lt;&lt;nobr&gt;&gt;
 
 /* ==========================================================
    SECTION 1: TAB NAVIGATION
@@ -18723,7 +19018,7 @@ setTimeout(function() {
     &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="67" name="StoryInit" tags="" position="0,0" size="100,100">/*  
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="68" name="StoryInit" tags="" position="0,0" size="100,100">/*  
     =================================================================
     STORYINIT: THE CORE ENGINE DATABASE
     Sunday&#39;s Last Breath - Twine Survival Horror
@@ -19293,7 +19588,7 @@ setTimeout(function() {
 &lt;&lt;set $objectives to [
     { id: &quot;pack_gear&quot;, desc: &quot;Gather your starter gear from the table&quot;, status: &quot;active&quot; },
     { id: &quot;leave_apt&quot;, desc: &quot;Leave your apartment and head outside&quot;, status: &quot;locked&quot; }
-]&gt;&gt;</tw-passagedata><tw-passagedata pid="68" name="Student_Exercise" tags="" position="800,100" size="100,100">&lt;&lt;nobr&gt;&gt;
+]&gt;&gt;</tw-passagedata><tw-passagedata pid="69" name="Student_Exercise" tags="" position="800,100" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* 1. DATA MAPPING: Converts short variable names to pretty labels for the UI */
 &lt;&lt;set _labelMap to {
     &quot;str&quot;: &quot;Strength&quot;,
@@ -19368,7 +19663,7 @@ setTimeout(function() {
             ⚠️ SPEND ALL POINTS TO CONTINUE
         &lt;/span&gt;
     &lt;&lt;/if&gt;&gt;
-&lt;/center&gt;</tw-passagedata><tw-passagedata pid="69" name="Student_Major" tags="" position="800,200" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/center&gt;</tw-passagedata><tw-passagedata pid="70" name="Student_Major" tags="" position="800,200" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;center&gt;
     &lt;h1&gt;UNIVERSITY TRANSCRIPT: MAJOR&lt;/h1&gt;
     &lt;div style=&quot;color:#888; font-style:italic; margin-bottom: 20px;&quot;&gt;
@@ -19449,7 +19744,7 @@ setTimeout(function() {
     &lt;/div&gt;
 
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="70" name="Student_Minor" tags="" position="1000,200" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="71" name="Student_Minor" tags="" position="1000,200" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;center&gt;
     &lt;h1&gt;UNIVERSITY TRANSCRIPT: MINOR&lt;/h1&gt;
     &lt;div style=&quot;color:#888; font-style:italic; margin-bottom: 20px;&quot;&gt;
@@ -19540,7 +19835,7 @@ setTimeout(function() {
     &lt;&lt;/if&gt;&gt;
 
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="71" name="StudioSplash" tags="splash-screen" position="300,100" size="100,100">&lt;div class=&quot;studio-splash-container&quot;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="72" name="StudioSplash" tags="splash-screen" position="300,100" size="100,100">&lt;div class=&quot;studio-splash-container&quot;&gt;
     &lt;img src=&quot;image/studio_logo.gif&quot; class=&quot;splash-logo&quot;&gt;
     &lt;h3 class=&quot;splash-presents&quot;&gt;P R E S E N T S&lt;/h3&gt;
 &lt;/div&gt;
@@ -19548,7 +19843,7 @@ setTimeout(function() {
 &lt;!-- Auto-forwards to the Disclaimer after 4 seconds --&gt;
 &lt;&lt;timed 4.2s&gt;&gt;
     &lt;&lt;goto &quot;Disclaimer&quot;&gt;&gt;
-&lt;&lt;/timed&gt;&gt;</tw-passagedata><tw-passagedata pid="72" name="System_Menu" tags="" position="100,200" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/timed&gt;&gt;</tw-passagedata><tw-passagedata pid="73" name="System_Menu" tags="" position="100,200" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;div style=&quot;font-family: &#39;Courier Prime&#39;, monospace; color: #ccc; padding: 10px;&quot;&gt;
 
 	&lt;!-- MENU HEADER --&gt;
@@ -19602,7 +19897,7 @@ setTimeout(function() {
 	&lt;/div&gt;
 
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="73" name="Title" tags="title-screen" position="400,0" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="74" name="Title" tags="title-screen" position="400,0" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* START MAIN MENU MUSIC */
 &lt;&lt;run window.playMenuMusic()&gt;&gt;
 
@@ -19644,7 +19939,7 @@ setTimeout(function() {
 &lt;/div&gt;
 
 &lt;&lt;run window.animateMainMenu()&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="74" name="Unit_401" tags="" position="300,625" size="100,100">&lt;!-- ================================================================= --&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="75" name="Unit_401" tags="" position="300,625" size="100,100">&lt;!-- ================================================================= --&gt;
 &lt;!-- 1. INITIALIZATION &amp; SETUP                                         --&gt;
 &lt;!-- ================================================================= --&gt;
 &lt;&lt;nobr&gt;&gt;
@@ -19959,7 +20254,7 @@ setTimeout(function() {
 
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="75" name="Unit_402" tags="" position="200,600" size="100,100">&lt;!-- ======================================================= --&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="76" name="Unit_402" tags="" position="200,600" size="100,100">&lt;!-- ======================================================= --&gt;
 &lt;!-- INITIALIZATION &amp; SETUP                                  --&gt;
 &lt;!-- ======================================================= --&gt;
 &lt;&lt;nobr&gt;&gt;
@@ -20297,7 +20592,7 @@ setTimeout(function() {
 
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="76" name="Unit_405" tags="" position="0,750" size="100,100">&lt;!-- ======================================================= --&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="77" name="Unit_405" tags="" position="0,750" size="100,100">&lt;!-- ======================================================= --&gt;
 &lt;!-- INITIALIZATION &amp; SETUP                                  --&gt;
 &lt;!-- ======================================================= --&gt;
 &lt;&lt;nobr&gt;&gt;
@@ -20569,7 +20864,7 @@ setTimeout(function() {
 
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="77" name="Unit_408" tags="" position="0,650" size="100,100">&lt;!-- ======================================================= --&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="78" name="Unit_408" tags="" position="0,650" size="100,100">&lt;!-- ======================================================= --&gt;
 &lt;!-- INITIALIZATION &amp; SETUP                                  --&gt;
 &lt;!-- ======================================================= --&gt;
 &lt;&lt;nobr&gt;&gt;
@@ -20969,7 +21264,7 @@ setTimeout(function() {
 
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="78" name="Utility_Closet" tags="" position="400,650" size="100,100">&lt;!-- ======================================================= --&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="79" name="Utility_Closet" tags="" position="400,650" size="100,100">&lt;!-- ======================================================= --&gt;
 &lt;!-- INITIALIZATION &amp; SETUP                                  --&gt;
 &lt;!-- ======================================================= --&gt;
 &lt;&lt;nobr&gt;&gt;
@@ -21247,7 +21542,7 @@ setTimeout(function() {
 
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="79" name="Widget" tags="widget" position="200,0" size="100,100">/* ========================================================================
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="80" name="Widget" tags="widget" position="200,0" size="100,100">/* ========================================================================
    WIDGET LIBRARY: CORE SYSTEMS
    Includes: UI, Survival Logic, Inventory, Time, Map, and Radar Systems
    ======================================================================== */
