@@ -1314,6 +1314,7 @@
                     <button class="db" data-flag="thorne_quest_active">Act 3: Thorne Quest Active</button>
                     <button class="db" data-flag="helped_chloe">Act 3: Helped Chloe (Comms)</button>
                     <button class="db" data-flag="chloe_quest_active">Act 3: Chloe Quest Active</button>
+                    <button class="db go" data-flag="act3_reyes_unlocked" style="font-weight:bold;">Act 3: Reyes Briefing Unlocked</button>
                 </div>
             </div>
 

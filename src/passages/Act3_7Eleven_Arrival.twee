@@ -1,59 +1,100 @@
 :: Act3_7Eleven_Arrival {"position":"750,1850","size":"100,100"}
 <<nobr>>
+<<if ndef $firstName or $firstName == "???">>
+    <<set $firstName to "Neal">>
+<</if>>
 <<set $currentLocation to "seven_eleven">>
 <<set $inSafehouse to false>>
 <<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
+
+/* DYNAMIC LEADER CONFIGURATION */
+<<set _leaderName to "Commander Hayes">>
+<<set _leaderAvatar to "image/avatars/leader_default_hayes.gif">>
+<<set _leaderRef to "Commander Hayes">>
+<<set _leaderPossessive to "Commander Hayes's">>
+
+<<if $anchor == "partner_f">>
+    <<set _leaderName to $anchor_name>>
+    <<set _leaderAvatar to "image/avatars/leader_f.gif">>
+    <<set _leaderRef to "your girlfriend, " + $anchor_name>>
+    <<set _leaderPossessive to $anchor_name + "'s">>
+<<elseif $anchor == "partner_m">>
+    <<set _leaderName to $anchor_name>>
+    <<set _leaderAvatar to "image/avatars/leader_m.gif">>
+    <<set _leaderRef to "your boyfriend, " + $anchor_name>>
+    <<set _leaderPossessive to $anchor_name + "'s">>
+<<elseif $anchor == "partner_nb">>
+    <<set _leaderName to $anchor_name>>
+    <<set _leaderAvatar to "image/avatars/leader_nb.gif">>
+    <<set _leaderRef to "your partner, " + $anchor_name>>
+    <<set _leaderPossessive to $anchor_name + "'s">>
+<<elseif $anchor == "parents">>
+    <<set _leaderName to "Dad">>
+    <<set _leaderAvatar to "image/avatars/leader_dad.gif">>
+    <<set _leaderRef to "your father">>
+    <<set _leaderPossessive to "your dad's">>
+<</if>>
 <</nobr>>
 
-<h2>ROUTE 9 — 7-ELEVEN COMMERCIAL STRIP</h2>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            ROUTE 9 — 7-ELEVEN COMMERCIAL STRIP
+        </div>
 
-<div style="margin-bottom: 15px; text-align: center;">
-    <img src="image/Act3_Timberline/screening.gif" style="max-width: 100%; border: 1px solid #333; filter: hue-rotate(330deg) contrast(1.2);">
-</div>
+        <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+            <img src="image/Act2GasStation/GasStation.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+        </div>
 
-The tires of Reyes' pickup screech to a halt behind a rusted delivery van across from the 7-Eleven gas station.
-<br><br>
-Shattered glass glints in the flickering fluorescent canopy lights. Black smoke billows from an overturned sedan near the gas pumps.
-<br><br>
-Inside the convenience store, rapid gunshot flashes illuminate the shattered windows. You can hear the guttural shrieks of infected mixed with angry shouting from armed scavengers!
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-711-arrival-main">
+                The tires of Reyes' pickup screech to a violent halt behind a rusted delivery van across from the commercial strip.
+                <br><br>
+                Shattered plate glass glints in the flickering fluorescent canopy lights. Thick black smoke billows from an overturned sedan near the diesel pumps.
+                <br><br>
+                Inside the convenience store, rapid muzzle flashes pierce the gloom. The guttural shrieks of infected echo over the harsh crack of hunting rifles and desperate shouts.
+                <br><br>
+                <<chat "Reyes" "image/avatars/reyes.gif" "right" "There's _leaderPossessive armored pickup truck smashed straight through the front entrance glass! Scavengers have them pinned against the beverage cooler at the back!">>
+                <br><br>
+                <<if _arrivedLate>>
+                    <span style="color:var(--accent-gold); font-weight:bold;">[DAYLIGHT ASSAULT — 09:30 AM]</span>
+                    Harsh morning daylight strips away any concealment, revealing dozens of shambling corpses drawn to the gunfire from adjacent strip mall parking lots.
+                <<else>>
+                    <span style="color:var(--accent-blue); font-weight:bold;">[PRE-DAWN ASSAULT — 02:45 AM]</span>
+                    Freezing rain cascades under the buzzing neon sign, shrouding the shattered storefront in pitch black shadows and rising steam.
+                <</if>>
+                <br><br>
+                <<chat "Reyes" "image/avatars/reyes.gif" "right" "We need to breach the store and relieve _leaderRef before they run out of ammo and get overrun! How do you want to handle this, $firstName?">>
+            </span>
+        </div>
 
-<br><br>
-<<chat "Reyes" "image/avatars/reyes.gif" "right" "There's Miller's armored pickup truck smashed straight through the front entrance glass! Scavengers have them pinned against the beverage cooler at the back!">>
+        <div class="choice-menu">
+            <button style="border-left-color: var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);">
+                <<link "💥 Breach through the shattered main entrance [COMBAT ASSAULT]">>
+                    <<run $(".vn-dialogue-box").scrollTop(0)>>
+                    <<set $seven_eleven_approach to "front">>
+                    <<addTime 2>>
+                    <<goto "Act3_7Eleven_Combat">>
+                <</link>>
+                <span class="btn-sub"><b style="color:var(--accent-red);">[COMBAT ASSAULT]</b> Charge straight through the shattered front glass with Reyes, weapons hot.</span>
+            </button>
 
-<br><br>
-<<if _arrivedLate>>
-    <span style="color:var(--accent-gold);">[DAYLIGHT ASSAULT]</span>
-    Bright morning daylight illuminates the chaos, but infected are spilling out from the alleyways behind the strip mall!
-<<else>>
-    <span style="color:var(--accent-blue);">[PRE-DAWN ASSAULT]</span>
-    Heavy mist and rain swirl under the flickering neon "7-ELEVEN" sign, casting eerie shadows across the parking lot.
-<</if>>
-
-<br><br>
-<<chat "Reyes" "image/avatars/reyes.gif" "right" "We need to breach the store and relieve Miller's team before they get overwhelmed! How do you want to play this?">>
-
-<br><br>
-<div class="choice-menu">
-    <button style="border-left-color: var(--accent-red) !important;">
-        <<link "💥 Breach through the main shattered double doors [FRONT ASSAULT]" "Act3_7Eleven_Combat">>
-            <<set $seven_eleven_approach to "front">>
-            <<addTime 2>>
-        <</link>>
-        <span class="btn-sub"><b style="color:var(--accent-red);">[COMBAT ASSAULT]</b> Charge straight through the front entrance with Reyes, weapons hot.</span>
-    </button>
-
-    <<if $skills.stealth >= 2 or hasTrait("STEALTH") or hasTrait("SCAVENGER")>>
-        <button style="border-left-color: var(--accent-gold) !important;">
-            <<link "🥷 Flank around the rear dumpster to the storage room door [STEALTH]" "Act3_7Eleven_Flank">>
-                <<set $seven_eleven_approach to "stealth">>
-                <<addTime 3>>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-gold);">[STEALTH / TRAIT CHECK]</b> Sneak around the back alley to catch the scavengers from behind.</span>
-        </button>
-    <<else>>
-        <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
-            <span style="text-decoration: line-through;">🥷 Flank around the rear dumpster [REQUIRES STEALTH 2]</span><br>
-            <span class="btn-sub" style="color: #666;">You need higher stealth to maneuver around the alley silently.</span>
-        </button>
-    <</if>>
+            <<if $skills.stealth >= 2 or hasTrait("STEALTH") or hasTrait("SCAVENGER")>>
+                <button style="border-left-color: var(--accent-gold) !important; background: rgba(100, 75, 0, 0.25);">
+                    <<link "🥷 Flank around the rear dumpster to the storage service door [STEALTH]">>
+                        <<run $(".vn-dialogue-box").scrollTop(0)>>
+                        <<set $seven_eleven_approach to "stealth">>
+                        <<addTime 3>>
+                        <<goto "Act3_7Eleven_Flank">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-gold);">[STEALTH / TRAIT CHECK]</b> Sneak down the rear service alley to ambush the scavengers from behind.</span>
+                </button>
+            <<else>>
+                <button disabled style="opacity: 0.4; cursor: not-allowed; border-color: #333;">
+                    <span style="text-decoration: line-through;">🥷 Flank around rear alley service door [REQUIRES STEALTH 2]</span><br>
+                    <span class="btn-sub" style="color: #666;">You need higher stealth or tactical traits to maneuver through the alley unseen.</span>
+                </button>
+            <</if>>
+        </div>
+    </div>
 </div>

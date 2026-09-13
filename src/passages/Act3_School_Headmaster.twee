@@ -1,63 +1,108 @@
 :: Act3_School_Headmaster {"position":"600,1900","size":"100,100"}
 <<nobr>>
+<<if ndef $firstName or $firstName == "???">>
+    <<set $firstName to "Neal">>
+    <<set $lastName to "Sage">>
+    <<set $name to "Neal Sage">>
+<</if>>
 <<set $currentLocation to "headmaster_office">>
 <<set $activeMap to "Highschool 1st Floor">>
+<<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
 
-<<set _leaderName to "Matriarch Evelyn">>
-<<if def $anchor_name and $anchor_name != "myself" and $anchor_name != "my folks">>
+/* DYNAMIC LEADER & AVATAR CONFIGURATION */
+<<set _leaderName to "Commander Hayes">>
+<<set _leaderAvatar to "image/avatars/leader_default_hayes.gif">>
+<<set _leaderRef to "Commander Hayes">>
+
+<<if $anchor == "partner_f">>
     <<set _leaderName to $anchor_name>>
+    <<set _leaderAvatar to "image/avatars/leader_f.gif">>
+    <<set _leaderRef to "your girlfriend, " + $anchor_name>>
+<<elseif $anchor == "partner_m">>
+    <<set _leaderName to $anchor_name>>
+    <<set _leaderAvatar to "image/avatars/leader_m.gif">>
+    <<set _leaderRef to "your boyfriend, " + $anchor_name>>
+<<elseif $anchor == "partner_nb">>
+    <<set _leaderName to $anchor_name>>
+    <<set _leaderAvatar to "image/avatars/leader_nb.gif">>
+    <<set _leaderRef to "your partner, " + $anchor_name>>
 <<elseif $anchor == "parents">>
-    <<set _leaderName to "Matriarch Evelyn & Dad">>
+    <<set _leaderName to "Dad">>
+    <<set _leaderAvatar to "image/avatars/leader_dad.gif">>
+    <<set _leaderRef to "your father">>
 <</if>>
 <</nobr>>
 
-<h2>1ST FLOOR — COMMAND & HEADMASTER'S OFFICE</h2>
-
-<div style="margin-bottom: 15px; text-align: center;">
-    <img src="image/Act3_Timberline/headmaster.gif" style="max-width: 100%; border: 1px solid #333;">
-</div>
-
-<<if def $anchor_name and $anchor_name != "myself" and $anchor_name != "my folks">>
-    <<chat _leaderName "image/avatars/matriarch_evelyn.gif" "right" "You made it! I knew you'd find a way out of the city. We're holding the school perimeter, but we need every capable hand to keep the sanctuary running.">>
-    <br><br>
-    <<print _leaderName>> stands at the headmaster's mahogany desk, coordinating logistics across the high school compound with radios and topographic maps.
-<<elseif $anchor == "parents">>
-    <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "Thank God you're safe! Your father and I mobilized the local block watch as soon as the emergency broadcasts went dark.">>
-    <br><br>
-    Your mother sits behind the desk surrounded by supply manifests, while your dad monitors the radio relay.
+/* If player enters office before triggering the briefing, route them directly into the story briefing */
+<<if not $act3_reyes_triggered and not isObjectiveCompleted("rescue_leader_711")>>
+    <<goto "Act3_Meeting_Evelyn">>
 <<else>>
-    <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "If you're staying under our roof, you contribute to the perimeter defense. We don't take free-loaders.">>
-    <br><br>
-    Evelyn sits behind a mahogany desk covered in topographic maps and supply registers.
-<</if>>
 
-<br><br>
-<div class="choice-menu">
-    <<if not isObjectiveCompleted("rescue_leader_711")>>
-        <button style="border-left-color:var(--accent-gold) !important; background: rgba(80, 60, 0, 0.25);">
-            <<link "📋 Report to Command with Officer Reyes [STORY EVENT]" "Act3_Meeting_Evelyn">>
-                <<set $act3_reyes_triggered to true>>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-gold);">[MAIN QUEST]</b> Debrief with Reyes and meet Sanctuary Command.</span>
-        </button>
-    <</if>>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            1ST FLOOR — COMMAND & HEADMASTER'S OFFICE
+        </div>
 
-    <<if not $met_evelyn>>
-        <button>
-            <<link "Offer your help to sanctuary command">>
-                <<addTime 10>>
-                <<set $met_evelyn to true>>
-                <<run window.gainTrust(10)>>
-                <<goto "Act3_School_Headmaster">>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-green);">[+10 TRUST]</b> Offer your services to keep Timberline Sanctuary running.</span>
-        </button>
-    <</if>>
+        <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+            <img src="image/Act3_Timberline/headmaster.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+        </div>
 
-    <button>
-        <<link "🚪 Exit Headmaster's Office to Hallway [NORTH]">>
-            <<set $currentLocation to "hall_1_center">>
-            <<goto "Act3_School1Floor">>
-        <</link>>
-    </button>
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-blue); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-headmaster-main">
+                <<if not isObjectiveCompleted("rescue_leader_711")>>
+                    <!-- STATE: LEADER IS TRAPPED AT 7-ELEVEN, EVELYN IS ANXIOUS -->
+                    Topographic maps and radio logs clutter the desk. The red emergency receiver light continues to pulse on the desk console.
+                    <br><br>
+                    Matriarch Evelyn looks up sharply as the doors swing open, her face etched with deep tension.
+                    <br><br>
+                    <<if $anchor == "parents">>
+                        <<chat "Mom (Evelyn)" "image/avatars/matriarch_evelyn.gif" "right" "$firstName! Why are you still in the building? Every minute that passes is another minute your father is trapped in that cooler! Please, get to Route 9!">>
+                    <<elseif $anchor == "partner_f" or $anchor == "partner_m" or $anchor == "partner_nb">>
+                        <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "$firstName, the clock is ticking. _leaderName and their team won't last long against that horde. Get down to the 7-Eleven with Reyes before it's too late!">>
+                    <<else>>
+                        <<chat "Matriarch Evelyn" "image/avatars/matriarch_evelyn.gif" "right" "Reyes and you need to roll out immediately. Commander Hayes is our chief tactical officer—we cannot afford to lose him on Route 9.">>
+                    <</if>>
+                <<else>>
+                    <!-- STATE: RESCUE COMPLETE, LEADER IS BACK SAFELY -->
+                    The command office is humming with coordinated purpose. Maps of the surrounding county are pinned with green clearance markers.
+                    <br><br>
+                    <<chat _leaderName _leaderAvatar "right" "Good to see you on your feet. Timberline High School stands today because you and Reyes broke through that ambush. We owe you our lives.">>
+                    <br><br>
+                    <<if $anchor == "parents">>
+                        Your mother and father stand together behind the mahogany desk. Your dad places a firm, proud hand on your shoulder while your mom reviews regional perimeter updates.
+                    <<elseif $anchor == "partner_f" or $anchor == "partner_m" or $anchor == "partner_nb">>
+                        _leaderName looks up from the supply manifests with a warm, intimate smile. Evelyn stands beside them, nodding in deep respect.
+                    <<else>>
+                        Commander Hayes and Matriarch Evelyn coordinate logistics across the compound with radios and defense manifests.
+                    <</if>>
+                <</if>>
+            </span>
+        </div>
+
+        <div class="choice-menu">
+            <<if not isObjectiveCompleted("rescue_leader_711")>>
+                <button style="border-left-color: var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);">
+                    <<link "🚗 Depart with Reyes for Route 9 7-Eleven [RESCUE LEADER]">>
+                        <<run $(".vn-dialogue-box").scrollTop(0)>>
+                        <<set $currentLocation to "seven_eleven_outskirts">>
+                        <<addTime 15>>
+                        <<goto "Act3_7Eleven_Arrival">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-red);">[ACTIVE RESCUE]</b> Ride out with Reyes to rescue the Sanctuary Leader from the 7-Eleven.</span>
+                </button>
+            <</if>>
+
+            <button style="border-left-color: var(--accent-blue) !important;">
+                <<link "🚪 Exit Headmaster's Office to Hallway [NORTH]">>
+                    <<run $(".vn-dialogue-box").scrollTop(0)>>
+                    <<set $currentLocation to "hall_1_center">>
+                    <<goto "Act3_School1Floor">>
+                <</link>>
+                <span class="btn-sub">Return to the Upper Hallway Center corridor.</span>
+            </button>
+        </div>
+    </div>
 </div>
+
+<</if>>

@@ -50,7 +50,7 @@
                             <<link "🚗 Depart for Route 9 7-Eleven [RESCUE LEADER]">>
                                 <<goto "Act3_7Eleven_Arrival">>
                             <</link>>
-                            <span class="btn-sub"><b style="color:var(--accent-red);">[ACTIVE RESCUE]</b> Drive out with Reyes to rescue Commander Miller at the 7-Eleven.</span>
+                            <span class="btn-sub"><b style="color:var(--accent-red);">[ACTIVE RESCUE]</b> Drive out with Reyes to rescue the Sanctuary Leader at the 7-Eleven.</span>
                         </button>
                     </div>
                 <</if>>

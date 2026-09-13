@@ -756,6 +756,13 @@
 <<widget "completeObjective">>
     <<nobr>>
         <<set _id to $args[0]>>
+        <<if ndef $completed_objectives>>
+            <<set $completed_objectives to []>>
+        <</if>>
+        <<if not $completed_objectives.includes(_id)>>
+            <<run $completed_objectives.push(_id)>>
+        <</if>>
+        <<set State.variables[_id + '_completed'] to true>>
         <<for _i to 0; _i < $objectives.length; _i++>>
             <<if $objectives[_i].id == _id>>
                 <<set $objectives[_i].status to "completed">>

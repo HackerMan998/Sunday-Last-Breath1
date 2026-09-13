@@ -2014,7 +2014,11 @@ window.initDebugPanel = function () {
         on('nav-act3-sheriff', 'click', function () { Engine.play('Act3_Sheriff'); });
         on('nav-act3-home',    'click', function () { Engine.play('Act3_Home');    });
         on('nav-act3-safe',    'click', function () { Engine.play('Act3_ArrivalSchool'); });
-        on('nav-act3-hub',     'click', function () { Engine.play('Act3_SchoolGFloor'); });
+        on('nav-act3-hub',        'click', function () { Engine.play('Act3_SchoolGFloor'); });
+        on('nav-act3-hub1',       'click', function () { Engine.play('Act3_School1Floor'); });
+        on('nav-act3-headmaster', 'click', function () { Engine.play('Act3_School_Headmaster'); });
+        on('nav-act3-meeting',    'click', function () { Engine.play('Act3_Meeting_Evelyn'); });
+        on('nav-act3-7eleven',    'click', function () { Engine.play('Act3_7Eleven_Arrival'); });
 
         on('nav-lobby', 'click', function () {
             setVar('lobby_phase',     1);
@@ -2067,9 +2071,145 @@ window.initDebugPanel = function () {
     initItems();
     initCompanions();
     initFlags();
-    initGroups();
     initNavigation();
     initTimeControl();
+    initPlayerIdentityControl();
+    initAnchorControl();
+    initTimelineControl();
+
+    // ─── Player Identity (Name) Control ───
+    function initPlayerIdentityControl() {
+        var firstInput = byId('input-player-first');
+        var lastInput = byId('input-player-last');
+        var applyBtn = byId('btn-player-name-apply');
+        var preview = byId('player-name-preview');
+
+        if (!firstInput || !lastInput || !applyBtn) return;
+
+        function refreshPlayerName() {
+            var first = getVar('firstName') || 'Neal';
+            var last = getVar('lastName') || '';
+            if (first === '???') first = 'Neal';
+            firstInput.value = first;
+            lastInput.value = last;
+            if (preview) {
+                preview.textContent = (first + (last ? ' ' + last : '')).trim();
+            }
+        }
+        refreshPlayerName();
+
+        function applyName(first, last) {
+            first = (first || '').trim() || 'Neal';
+            last = (last || '').trim();
+            setVar('firstName', first);
+            setVar('lastName', last);
+            setVar('name', (first + (last ? ' ' + last : '')).trim());
+            refreshPlayerName();
+        }
+
+        applyBtn.addEventListener('click', function() {
+            applyName(firstInput.value, lastInput.value);
+        });
+
+        on('btn-preset-name-neal', 'click', function() { applyName('Neal', 'Sage'); });
+        on('btn-preset-name-alex', 'click', function() { applyName('Alex', 'Chen'); });
+        on('btn-preset-name-sarah', 'click', function() { applyName('Sarah', 'Connor'); });
+        on('btn-preset-name-james', 'click', function() { applyName('James', 'Miller'); });
+    }
+
+    // ─── Anchor & Loved One Control ───
+    function initAnchorControl() {
+        var sel = byId('sel-anchor-type');
+        var input = byId('input-anchor-name');
+        var btn = byId('btn-anchor-apply');
+        var preview = byId('anchor-preview');
+
+        if (!sel || !input || !btn) return;
+
+        function refreshPreview() {
+            var aType = getVar('anchor') || 'none';
+            var aName = getVar('anchor_name') || 'myself';
+            var aRel = getVar('anchor_rel') || 'none';
+            sel.value = aType;
+            input.value = aName;
+            if (preview) {
+                var label = aName;
+                if (aType === 'parents') label = 'Mom: Evelyn, Dad: Leader';
+                else if (aType === 'none') label = 'Lone Wolf (No Anchor)';
+                else label = aName + ' (' + aRel + ')';
+                preview.textContent = label;
+            }
+        }
+        refreshPreview();
+
+        sel.addEventListener('change', function () {
+            var val = this.value;
+            if (val === 'partner_f') input.value = 'Sarah';
+            else if (val === 'partner_m') input.value = 'David';
+            else if (val === 'partner_nb') input.value = 'Alex';
+            else if (val === 'parents') input.value = 'my folks';
+            else input.value = 'myself';
+        });
+
+        btn.addEventListener('click', function () {
+            var aType = sel.value;
+            var aName = input.value.trim() || 'Sarah';
+            var aRel = 'none';
+
+            if (aType === 'partner_f') aRel = 'wife';
+            else if (aType === 'partner_m') aRel = 'husband';
+            else if (aType === 'partner_nb') aRel = 'partner';
+            else if (aType === 'parents') { aRel = 'parents'; aName = 'my folks'; }
+            else { aType = 'none'; aRel = 'none'; aName = 'myself'; }
+
+            setVar('anchor', aType);
+            setVar('anchor_name', aName);
+            setVar('anchor_rel', aRel);
+            refreshPreview();
+        });
+    }
+
+    // ─── Timeline (Night vs Morning) Control ───
+    function initTimelineControl() {
+        var nightBtn = byId('btn-timeline-night');
+        var morningBtn = byId('btn-timeline-morning');
+        var preview = byId('timeline-preview');
+
+        function updateTimelineUi() {
+            var isLate = Array.isArray(State.expired) && State.expired.indexOf('Act2_5_MarcusCabin') > -1;
+            if (nightBtn && morningBtn) {
+                if (isLate) {
+                    morningBtn.classList.add('on');
+                    nightBtn.classList.remove('on');
+                    if (preview) preview.textContent = '☀️ Late Morning (Aftermath)';
+                } else {
+                    nightBtn.classList.add('on');
+                    morningBtn.classList.remove('on');
+                    if (preview) preview.textContent = '🌙 Early Night (Outbreak)';
+                }
+            }
+        }
+        updateTimelineUi();
+
+        if (nightBtn) {
+            nightBtn.addEventListener('click', function () {
+                if (!Array.isArray(State.expired)) State.expired = [];
+                State.expired = State.expired.filter(function (t) { return t !== 'Act2_5_MarcusCabin'; });
+                updateTimelineUi();
+            });
+        }
+
+        if (morningBtn) {
+            morningBtn.addEventListener('click', function () {
+                if (!Array.isArray(State.expired)) State.expired = [];
+                if (State.expired.indexOf('Act2_5_MarcusCabin') === -1) {
+                    State.expired.push('Act2_5_MarcusCabin');
+                }
+                updateTimelineUi();
+            });
+        }
+    }
+
 
     function initSplitView() {
         var navItems = document.querySelectorAll('.dbg-nav-item');
@@ -2555,6 +2695,9 @@ if (typeof Macro !== 'undefined') {
     };
 
     window.isObjectiveCompleted = function(id) {
+        if (!id) return false;
+        if (State.variables[id + '_completed'] || State.variables['completed_' + id]) return true;
+        if (Array.isArray(State.variables.completed_objectives) && State.variables.completed_objectives.indexOf(id) > -1) return true;
         var objs = State.variables.objectives || [];
         return objs.some(function(o) { return o.id === id && o.status === 'completed'; });
     };

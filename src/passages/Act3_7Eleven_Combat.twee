@@ -1,93 +1,142 @@
 :: Act3_7Eleven_Combat {"position":"750,1950","size":"100,100"}
 <<nobr>>
+<<if ndef $firstName or $firstName == "???">>
+    <<set $firstName to "Neal">>
+<</if>>
 <<set $currentLocation to "seven_eleven_interior">>
 <<set _arrivedLate to (visited("Act2_5_MarcusCabin"))>>
 
-/* Initialize combat enemies */
+/* DYNAMIC LEADER CONFIGURATION */
+<<set _leaderName to "Commander Hayes">>
+<<set _leaderAvatar to "image/avatars/leader_default_hayes.gif">>
+<<set _leaderRef to "Commander Hayes">>
+
+<<if $anchor == "partner_f">>
+    <<set _leaderName to $anchor_name>>
+    <<set _leaderAvatar to "image/avatars/leader_f.gif">>
+    <<set _leaderRef to "your girlfriend, " + $anchor_name>>
+<<elseif $anchor == "partner_m">>
+    <<set _leaderName to $anchor_name>>
+    <<set _leaderAvatar to "image/avatars/leader_m.gif">>
+    <<set _leaderRef to "your boyfriend, " + $anchor_name>>
+<<elseif $anchor == "partner_nb">>
+    <<set _leaderName to $anchor_name>>
+    <<set _leaderAvatar to "image/avatars/leader_nb.gif">>
+    <<set _leaderRef to "your partner, " + $anchor_name>>
+<<elseif $anchor == "parents">>
+    <<set _leaderName to "Dad">>
+    <<set _leaderAvatar to "image/avatars/leader_dad.gif">>
+    <<set _leaderRef to "your father">>
+<</if>>
+
+/* Initialize combat enemies if not already set */
 <<if ndef $s711_enemies>>
     <<set $s711_enemies to [
-        { name: "Scavenger Enforcer", hp: 35, maxHp: 35, dmg: 12, ev: 10 },
-        { name: "Frenzied Runner", hp: 25, maxHp: 25, dmg: 10, ev: 20 },
-        { name: "Scavenger Shooter", hp: 30, maxHp: 30, dmg: 15, ev: 15 }
+        { name: "Scavenger Enforcer", hp: 35, maxHp: 35 },
+        { name: "Frenzied Runner", hp: 25, maxHp: 25 },
+        { name: "Scavenger Shooter", hp: 30, maxHp: 30 }
     ]>>
 <</if>>
 <</nobr>>
 
-<h2>7-ELEVEN — MAIN CONVENIENCE STORE FLOOR</h2>
+<div class="vn-container">
+    <div class="vn-dialogue-box" style="justify-content: flex-start; align-items: center; max-height: 100vh !important; padding: 20px; overflow-y: auto;">
+        <div style="text-align:center; color:#888; font-size:0.8em; margin-bottom:15px; letter-spacing:3px; font-family: 'Oswald', sans-serif;">
+            7-ELEVEN — INTERIOR BREACH &amp; COMBAT
+        </div>
 
-<<if $s711_enemies.length > 0>>
-    You and Reyes kick through the shattered double glass doors, firing into the smoke!
-    <br><br>
-    Toppled snack shelves, spilled soda cans, and bloodstained linoleum fill the store. Two armed scavengers and a snarling infected turn toward you with raised weapons!
-    <br><br>
-    Behind the thick glass of the walk-in beverage cooler at the back, Commander Miller and his surviving guard bleed on the floor, holding the steel door shut!
-    <br><br>
-    <<chat "Commander Miller (Cooler)" "image/avatars/quartermaster_sgtvance.gif" "right" "Reyes! Flank the shooters! Don't let them hit the fuel canisters!">>
+        <div style="width: 100%; max-width: 700px; margin: 0 auto 20px auto; border: 2px solid #333; overflow: hidden; position: relative; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);">
+            <img src="image/Act2GasStation/zombiegasstation.gif" style="width: 100%; height: auto; display: block; opacity: 0.9; filter: contrast(1.1) brightness(0.9);">
+        </div>
 
-    <br><br>
-    <div style="background: rgba(80,0,0,0.2); border: 1px solid #8a1c1c; padding: 15px; text-align:center;">
-        <h3 style="color:var(--accent-red); margin-top:0;">HOSTILES REMAINING: <<print $s711_enemies.length>></h3>
-        <div style="border:1px solid #333; background:#000; padding:10px; max-width:320px; margin:0 auto; text-align:left;">
-            <<for _i, _e range $s711_enemies>>
-                <div style="border-bottom:1px dashed #333; padding:5px; font-family: monospace;">
-                    TARGET: <span style="color:var(--accent-red)">_e.name</span> (HP: _e.hp/_e.maxHp)
-                </div>
-            <</for>>
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-left: 3px solid var(--accent-red); font-family: 'Courier Prime', monospace; color: #ccc; font-size: 0.95em; line-height: 1.5; margin: 0 auto 25px auto; max-width: 700px; width: 100%; box-sizing: border-box; text-align: left;">
+            <span id="vn-711-combat-main">
+                <<if $s711_enemies.length > 0>>
+                    You and Reyes kick straight through the jagged glass doorway, rolling behind toppled merchandise racks as automatic fire chews through the ceiling tiles!
+                    <br><br>
+                    Shattered snack jars, sticky syrup, and pools of blood coat the floor tiles. Armed scavengers scream in surprise while infected tear at the counter barricades!
+                    <br><br>
+                    Behind the bullet-pocked glass of the walk-in beverage cooler at the far wall, <<print _leaderRef>> and an injured scout are crouched low, holding the steel handle against the mob.
+                    <br><br>
+                    <<chat _leaderName _leaderAvatar "right" "Reyes! Flank the shooters near the snack aisle! Don't let them puncture the diesel drums!">>
+                    <br><br>
+                    <div style="background: rgba(60, 0, 0, 0.4); border: 1px solid #aa2222; border-radius: 6px; padding: 14px; text-align: center; margin: 15px 0;">
+                        <div style="color: var(--accent-red); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; margin-bottom: 10px;">
+                            HOSTILES ENGAGED: <<print $s711_enemies.length>> REMAINING
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px; max-width: 400px; margin: 0 auto; text-align: left;">
+                            <<for _i, _e range $s711_enemies>>
+                                <div style="background: #111; padding: 8px 12px; border-radius: 4px; border: 1px solid #333; font-family: monospace; font-size: 0.88em; display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="color: #ff8888; font-weight: bold;">_e.name</span>
+                                    <span style="color: var(--accent-gold);">HP: _e.hp / _e.maxHp</span>
+                                </div>
+                            <</for>>
+                        </div>
+                    </div>
+
+                <<else>>
+                    <!-- COMBAT VICTORY STATE -->
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <span style="font-size: 2.2em;">💀</span>
+                        <h2 style="color: var(--accent-green); margin: 6px 0 10px 0; letter-spacing: 2px;">ALL HOSTILES NEUTRALIZED</h2>
+                        <div style="color: var(--accent-gold); font-size: 1.05em; font-weight: bold;">
+                            [+50 XP] &bull; [+25 TRUST] &bull; COMBAT OBJECTIVE CLEARED
+                        </div>
+                    </div>
+
+                    The sharp crackle of gunfire fades, replaced by the low hiss of leaking refrigerator freon and the steady drizzle of rain outside.
+                    <br><br>
+                    With a metallic heave, the heavy walk-in cooler door clangs open. <<print _leaderName>> emerges into the smoke, a makeshift tourniquet tied around one arm, gripping a pump-action shotgun in one hand and a heavy jerrycan of diesel fuel in the other.
+                    <br><br>
+                    <<if $anchor == "parents">>
+                        <<chat "Dad" "image/avatars/leader_dad.gif" "right" "$firstName?! God Almighty... is that really you?! Your mother told me you were lost in the valley! You fought your way all the way out here for me!">>
+                    <<elseif $anchor == "partner_f" or $anchor == "partner_m" or $anchor == "partner_nb">>
+                        <<chat _leaderName _leaderAvatar "right" "$firstName?! Oh God... is that you?! I thought the fever or the smoke was making me see things... you came for me!">>
+                    <<else>>
+                        <<chat "Commander Hayes" "image/avatars/leader_default_hayes.gif" "right" "Outstanding shooting, $firstName. If you and Reyes hadn't breached when you did, we'd be dog meat in that cooler. Timberline owes you everything.">>
+                    <</if>>
+                    <br><br>
+                    <<if _arrivedLate>>
+                        <<chat _leaderName _leaderAvatar "right" "Pushing through the valley after sunrise and hitting this strip right on time... you've got ice in your veins. Let's get this diesel back to the sanctuary before more infected catch the scent.">>
+                    <<else>>
+                        <<chat _leaderName _leaderAvatar "right" "Reyes said you arrived before the night storm broke. Swift, decisive, and fearless under fire. Timberline High School has a real future with people like you.">>
+                    <</if>>
+
+                    /* REWARD LIFECYCLE */
+                    <<run window.gainXP(50)>>
+                    <<run window.gainTrust(25)>>
+                    <<completeObjective "rescue_leader_711">>
+                    <<set $leader_rescued to true>>
+                    <<purgeCompleted>>
+
+                <</if>>
+            </span>
+        </div>
+
+        <div class="choice-menu">
+            <<if $s711_enemies.length > 0>>
+                <button style="border-left-color: var(--accent-red) !important; background: rgba(100, 0, 0, 0.25);">
+                    <<link "💥 Open Fire on Hostiles [ATTACK]">>
+                        <<run $(".vn-dialogue-box").scrollTop(0)>>
+                        <<addTime 1>>
+                        <<set $s711_enemies[0].hp -= 20>>
+                        <<if $s711_enemies[0].hp <= 0>>
+                            <<run $s711_enemies.shift()>>
+                        <</if>>
+                        <<goto "Act3_7Eleven_Combat">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-red);">[TARGET ENGAGEMENT]</b> Concentrate fire with Reyes on the lead hostile pinning down the cooler.</span>
+                </button>
+            <<else>>
+                <button style="border-left-color: var(--accent-green) !important; background: rgba(0, 100, 0, 0.25);">
+                    <<link "🚗 Escort Leader & Fuel Back to Timberline High School [MISSION COMPLETE]">>
+                        <<run $(".vn-dialogue-box").scrollTop(0)>>
+                        <<addTime 15>>
+                        <<goto "Act3_7Eleven_RescueSuccess">>
+                    <</link>>
+                    <span class="btn-sub"><b style="color:var(--accent-green);">[VICTORY RETURN]</b> Load the fuel and escort the Sanctuary Leader safely back to command.</span>
+                </button>
+            <</if>>
         </div>
     </div>
-
-    <br><br>
-    <div class="choice-menu">
-        <button style="border-left-color: var(--accent-red) !important;">
-            <<link "💥 Open Fire on the Scavengers">>
-                <<addTime 1>>
-                /* Deal damage to first enemy */
-                <<set $s711_enemies[0].hp -= 20>>
-                <<if $s711_enemies[0].hp <= 0>>
-                    <<run $s711_enemies.shift()>>
-                <</if>>
-                <<goto "Act3_7Eleven_Combat">>
-            <</link>>
-            <span class="btn-sub">Engage the hostiles pinning down Commander Miller.</span>
-        </button>
-    </div>
-
-<<else>>
-    <div style="text-align:center; margin-bottom: 20px;">
-        <div style="font-size:3em;">💀</div>
-        <h2 style="color:var(--accent-green)">ALL HOSTILES ELIMINATED</h2>
-        <br>
-        <span style="color:var(--accent-gold); font-size: 1.2em; font-weight: bold;">[+50 XP] [+25 TRUST]</span>
-        <<run window.gainXP(50)>>
-        <<run window.gainTrust(25)>>
-    </div>
-
-    The gunshots die down, replaced by the hiss of leaking refrigerator freon and dying groans.
-    <br><br>
-    The heavy steel walk-in cooler door creaks open. Commander Miller steps out, a bloodied bandage wrapped tight around his shoulder, holding a shotgun in one hand and a heavy jerrycan of diesel fuel in the other.
-
-    <br><br>
-    <<chat "Commander Miller" "image/avatars/quartermaster_sgtvance.gif" "right" "Good shooting, kid. If you and Reyes hadn't breached when you did, we'd be dog meat in that cooler.">>
-
-    <br><br>
-    <<if _arrivedLate>>
-        <<chat "Commander Miller" "image/avatars/quartermaster_sgtvance.gif" "right" "I heard you got into Timberline late after sunrise. You've already proven your worth twice over.">>
-    <<else>>
-        <<chat "Commander Miller" "image/avatars/quartermaster_sgtvance.gif" "right" "I heard you arrived early before the rain started. Fast on your feet and steady under fire. Exactly what Timberline needs.">>
-    <</if>>
-
-    <br><br>
-    /* COMPLETE RESCUE OBJECTIVE */
-    <<completeObjective "rescue_leader_711">>
-    <<purgeCompleted>>
-
-    <br><br>
-    <div class="choice-menu">
-        <button style="border-left-color: var(--accent-green) !important;">
-            <<link "🚗 Escort Commander Miller back to Timberline Sanctuary" "Act3_7Eleven_RescueSuccess">>
-                <<addTime 15>>
-            <</link>>
-            <span class="btn-sub"><b style="color:var(--accent-green);">[MISSION COMPLETE]</b> Return triumphantly to the high school sanctuary.</span>
-        </button>
-    </div>
-<</if>>
+</div>
